@@ -93,10 +93,6 @@ int main()
   particleEL.resize(particles.size());
   masterEL.resize(particles.size());
   generateEvents(particles, particleEL, masterEL, neighbourList, neighbourCell); //generate the event list
-  std::cerr << "Master list at startup\n";
-  for (vector<eventTimes>::const_iterator iPtr = masterEL.begin();
-       iPtr != masterEL.end(); ++iPtr)
-    std::cerr << "Event t=" << iPtr->collisionTime << " p1=" << iPtr->particle1 << " p2=" << iPtr->particle2 << " type " << iPtr->_type << "\n";
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
@@ -104,10 +100,9 @@ int main()
   for(int n = 0; n < numberEvents; ++n)
     {
       bool validEvent = true;
-      vector<eventTimes> tempEL = masterEL; //create a temporary vector of event times for sorting
-      make_heap (tempEL.begin(),tempEL.end());
-      sort_heap (tempEL.begin(),tempEL.end());
-      double dt = tempEL[0].collisionTime - t; //find time to next collision
+      eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
+
+      double dt = next_event.collisionTime - t; //find time to next collision
 
       if((numberEvents - n) <=  noReadings) //take readings this step?
 	takeMeasurement = true;
@@ -118,21 +113,21 @@ int main()
 	  zeroMomentum(particles);
 	}
 
-      switch (tempEL[0]._type)
+      switch (next_event._type)
 	{
 	case eventTimes::IP_IN:
 	case eventTimes::IP_OUT:
 	  {
-	    if(tempEL[0].p2coll != particles[tempEL[0].particle2].collNo) //check if collision is valid
+	    if(next_event.p2coll != particles[next_event.particle2].collNo) //check if collision is valid
 	      {
 		validEvent = false;
 		int particleNo = 0;
-		if(tempEL[0].collisionTime == (particleEL[tempEL[0].particle1].front().collisionTime))
-		  particleNo = tempEL[0].particle1;
+		if(next_event.collisionTime == (particleEL[next_event.particle1].front().collisionTime))
+		  particleNo = next_event.particle1;
 		else
-		  particleNo = tempEL[0].particle2;
+		  particleNo = next_event.particle2;
 		updateEvents(particleNo, -1, particles, particleEL, masterEL, neighbourList, neighbourCell);
-		logger.outLog << "Invalid Collision between particles " << tempEL[0].particle1 << " & " << tempEL[0].particle2 << endl;
+		logger.outLog << "Invalid Collision between particles " << next_event.particle1 << " & " << next_event.particle2 << endl;
 		--n;
 	      }
 	    else //if a valid event
@@ -145,17 +140,20 @@ int main()
 		  }
 		if(writeOutLog == 1)
 		  {
-		    CVector3 rij = (particles[tempEL[0].particle1].r-particles[tempEL[0].particle2].r);
+		    CVector3 rij = (particles[next_event.particle1].r-particles[next_event.particle2].r);
 		    applyBC(rij);
-		    logger.outLog << "Collision no: " << n << " between particles: " << tempEL[0].particle1 << " & " << tempEL[0].particle2 <<
-		      " at time = " << t <<
-		      " at distance of = " << rij.length() <<  endl;
+		    logger.outLog << "Collision no: " << n << " between particles: " << next_event.particle1 << " & " << next_event.particle2
+				  << " at time = " << t
+				  << " at distance of = " << rij.length()
+				  << " UEnergy " << calcPotential()
+				  << " KEnergy " << calcKinetic(particles)
+				  << endl;
 		  }
-		calcVelocity(particles, tempEL[0]);
+		calcVelocity(particles, next_event);
 
-		updateEvents(tempEL[0].particle1,tempEL[0].particle2,particles, particleEL, masterEL, neighbourList, neighbourCell);
-		++particles[tempEL[0].particle1].collNo;
-		++particles[tempEL[0].particle2].collNo;
+		updateEvents(next_event.particle1,next_event.particle2,particles, particleEL, masterEL, neighbourList, neighbourCell);
+		++particles[next_event.particle1].collNo;
+		++particles[next_event.particle2].collNo;
 		//apply Andersen Thermostat
 		if(thermostat)
 		  for(int i = 0; i < numberParticles; ++i)
@@ -172,31 +170,32 @@ int main()
 	case eventTimes::SENTINAL:
 	  --n;
 	  if(writeOutLog == 1)
-	    logger.outLog << "Sentinal event for particle: " << tempEL[0].particle1 << " at time = "<< t<< endl;
+	    logger.outLog << "Sentinal event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
+
 	  t += dt; //update system time
-	  updatePositions(particles,dt);
-	  updateEvents(tempEL[0].particle1, -1, particles, particleEL, masterEL, neighbourList, neighbourCell);
+	  updatePositions(particles, dt);
+	  updateEvents(next_event.particle1, -1, particles, particleEL, masterEL, neighbourList, neighbourCell);
 	  break;
 	case eventTimes::NEIGHBOURCELL:
 	  {
 	    t += dt; //update system time
 	    updatePositions(particles,dt);
-	    CParticle p1 = particles[tempEL[0].particle1];
-	    neighbourList[p1.cellNo].erase(tempEL[0].particle1); //erase particle from previous cell
+	    CParticle p1 = particles[next_event.particle1];
+	    neighbourList[p1.cellNo].erase(next_event.particle1); //erase particle from previous cell
 	    int sign = -1;
 	    if(p1.v[p1.nextCell] >0)
 	      sign = 1;
 	    int newCell = lrint((p1.cellNo + sign * 1 ) / noCells) * noCells;
 	    neighbourList[newCell].insert(p1.particleNo);
 	    if(writeOutLog == 1)
-	      logger.outLog << "Particle "<< tempEL[0].particle1 << " changed cell from " << p1.cellNo <<
+	      logger.outLog << "Particle "<< next_event.particle1 << " changed cell from " << p1.cellNo <<
 		" to " << newCell <<  " at time = "<< t<< endl;
 	    p1.cellNo = newCell;
 	    break;
 	  }
 	case eventTimes::WALL:
 	  if(writeOutLog == 1)
-	    logger.outLog << "Wall event for particle: " << tempEL[0].particle1 << endl;
+	    logger.outLog << "Wall event for particle: " << next_event.particle1 << endl;
 	  break;
 	case eventTimes::NONE:
 	  cout << "Ran out of events!" << endl;
@@ -812,11 +811,9 @@ void generateEvents(vector<CParticle>& particle, //vector of particles
   for(size_t i = 0; i < particle.size(); ++i)
     {
       double t_min = calcSentinalTime(particle[i]);
-      std::cerr << "Sentinal p1=" << i << " time " << t_min << "\n";
-      pEvents[i].push_back(eventTimes(t_min, i, -1, eventTimes::SENTINAL));
+      pEvents[i].push_back(eventTimes(t_min, i, -1, 0, eventTimes::SENTINAL));
       //t_min = calcCellLeave(particle[i]);
       //pEvents[i].push_back(eventTimes(t_min,i ,-1, eventTimes::NEIGHBOURCELL));
-      //std::cerr << "Cells p1=" << i << " time=" << t_min << "\n";
 
       /*for(it_NC = NC[particle[i].cellNo].begin(); it_NC != NC[particle[i].cellNo].end(); ++it_NC)
 	for(it_NL = NL[*it_NC].begin(); it_NL != NL[*it_NC].end(); ++it_NL)*/
@@ -825,7 +822,6 @@ void generateEvents(vector<CParticle>& particle, //vector of particles
 	  calcStep(particle[i], particle[j]);
 	  eventTimes::EventType eventType;
 	  double t_min = calcCollisionTime(particle[i], particle[j], eventType);
-	  std::cerr << "Testing " << i << " " << j << "  time "<< t_min << " type " << eventType << "\n";
 	  pEvents[i].push_back(eventTimes(t_min, i, j,  particle[j].collNo, eventType));
 	}
       make_heap(pEvents[i].begin(), pEvents[i].end(), greater<eventTimes>());
@@ -886,7 +882,7 @@ void updateEvents(int particle1, int particle2,
   pEvents[particle1].clear();
 
   double t_min = calcSentinalTime(particle[particle1]);
-  pEvents[particle1].push_back(eventTimes(t_min, particle1, -1, eventTimes::SENTINAL));
+  pEvents[particle1].push_back(eventTimes(t_min, particle1, -1, 0, eventTimes::SENTINAL));
   //t_min = calcCellLeave(particle[particle1]);
   //pEvents[particle1].push_back(eventTimes(t_min, particle1 ,-1, eventTimes::NEIGHBOURCELL));
   /*for(it_NC = NC[particle[particle1].cellNo].begin(); it_NC != NC[particle[particle1].cellNo].end(); ++it_NC)
@@ -905,7 +901,7 @@ void updateEvents(int particle1, int particle2,
       pEvents[particle2].clear();
 
       double t_min = calcSentinalTime(particle[particle2]);
-      pEvents[particle2].push_back(eventTimes(t_min, particle2, -1, eventTimes::SENTINAL));
+      pEvents[particle2].push_back(eventTimes(t_min, particle2, -1, 0, eventTimes::SENTINAL));
       //t_min = calcCellLeave(particle[particle2]);
       //pEvents[particle2].push_back(eventTimes(t_min, particle2 ,-1, eventTimes::NEIGHBOURCELL));
 

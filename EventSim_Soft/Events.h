@@ -10,12 +10,20 @@ struct eventTimes
     NONE = 5
   } EventType;
 
-eventTimes(double dt = HUGE_VAL, int p1 = -1, int p2 = -1, int coll = 0, EventType type = NONE):
+eventTimes(double dt, int p1, int p2, int coll, EventType type):
   collisionTime(dt),
     particle1(p1),
     particle2(p2),
     p2coll(coll),
     _type(type)
+  {}
+
+eventTimes():
+  collisionTime(HUGE_VAL),
+    particle1(-1),
+    particle2(-1),
+    p2coll(0),
+    _type(NONE)
   {}
 
   double collisionTime;
