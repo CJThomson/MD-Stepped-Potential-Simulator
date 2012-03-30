@@ -26,7 +26,7 @@ const double sigma = 1;
 
 //Logging:
 const int psteps = 50; //frequency of output to file
-const int writeOutLog = 1; //level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
+const int writeOutLog = 2; //level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties:
 const int noReadings = 200000; //number of readings to take
@@ -138,7 +138,7 @@ int main()
 		  {
 		    //cout << "negative dt" << endl;
 		  }
-		if(writeOutLog == 1)
+		if(writeOutLog >= 1)
 		  {
 		    CVector3 rij = (particles[next_event.particle1].r-particles[next_event.particle2].r);
 		    applyBC(rij);
@@ -169,7 +169,7 @@ int main()
 	  }
 	case eventTimes::SENTINAL:
 	  --n;
-	  if(writeOutLog == 1)
+	  if(writeOutLog >= 1)
 	    logger.outLog << "Sentinal event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
 
 	  t += dt; //update system time
@@ -187,14 +187,14 @@ int main()
 	      sign = 1;
 	    int newCell = lrint((p1.cellNo + sign * 1 ) / noCells) * noCells;
 	    neighbourList[newCell].insert(p1.particleNo);
-	    if(writeOutLog == 1)
+	    if(writeOutLog >= 1)
 	      logger.outLog << "Particle "<< next_event.particle1 << " changed cell from " << p1.cellNo <<
 		" to " << newCell <<  " at time = "<< t<< endl;
 	    p1.cellNo = newCell;
 	    break;
 	  }
 	case eventTimes::WALL:
-	  if(writeOutLog == 1)
+	  if(writeOutLog >= 1)
 	    logger.outLog << "Wall event for particle: " << next_event.particle1 << endl;
 	  break;
 	case eventTimes::NONE:
@@ -321,10 +321,11 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 {
   double t_min_out = HUGE_VAL; //set minimum time to infinity
   double t_min_in = HUGE_VAL;
-  map<pair<int, int>, int>::iterator it_map;
+  map<pair<int, int>, int>::const_iterator it_map;
 
   int p1 = min(particle1.particleNo, particle2.particleNo);
   int p2 = max(particle1.particleNo, particle2.particleNo);
+
   CVector3 r12 = particle1.r - particle2.r;
   CVector3 v12 = particle1.v - particle2.v;
   applyBC(r12);
@@ -333,7 +334,7 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
   double vdotr = v12.dotProd(r12);
 
   //Output Logging
-  if(writeOutLog == 2 )
+  if(writeOutLog >= 2 )
     {
       logger.outLog << " = = = = NEW COLLISION = = = = " << endl;
       logger.outLog << "Particles involved: " << particle1.particleNo << " & " << particle2.particleNo << endl;
@@ -354,9 +355,9 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
     {
       double c = r12sqr - steps[steps.size() - 1].step_radius * steps[steps.size() - 1].step_radius;
       double arg = vdotr * vdotr - v12sqr * c;
-      if(arg >= 0) //if particles come near enough to each other
+      if((vdotr < 0) && (arg >= 0)) //if particles come near enough to each other
 	t_min_in = c / (-vdotr + sqrt(arg));
-      if(writeOutLog == 2)
+      if(writeOutLog >= 2)
 	{
 	  logger.outLog << "Particle is outside steps"<< endl;
 	  logger.outLog << "c: " << c << " arg: " << arg << endl;
@@ -370,7 +371,7 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
     }
   else
     {
-      if(it_map->second != -1) //if there is an innerstep to interact with
+      if(it_map->second != 0) //if there is an innerstep to interact with
 	{
 	  if(vdotr < 0)
 	    {
@@ -379,7 +380,7 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 	      double arg = vdotr * vdotr - v12sqr * c;
 	      if(arg >= 0) //if particles come near enough to each other
 		t_min_in = c / (-vdotr + sqrt(arg));
-	      if(writeOutLog == 2)
+	      if(writeOutLog >= 2)
 		{
 		  logger.outLog << "Inward Collision" << endl;
 		  logger.outLog << "Step Number: " << it_map->second << endl;
@@ -388,15 +389,25 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 		}
 	    }
 	}
+      if(it_map != collStep.end())
+	 std::cerr << "Checking for outward collision p1=" << p1 << " " << " it_map->second=" << it_map->second << "\n";
+      else
+	 std::cerr << "Checking for outward collision outside steps\n";
 
       //check for any outward steps
       double c = r12sqr - steps[it_map->second].step_radius * steps[it_map->second].step_radius;
       double arg = vdotr * vdotr - v12sqr * c;
 
+      if (c > 0)
+	std::cerr << "Testing for an outward collision with r=" << steps[it_map->second].step_radius << " and r12=" << sqrt(r12sqr) << "\n";
+	
+
       if(arg >= 0) //if particles come near enough to each other
 	t_min_out = (sqrt(arg) - vdotr) / v12sqr;
+      else //There's been a numerical error, so just collide at their nearest point
+	t_min_out = - vdotr / v12sqr;
 
-      if(writeOutLog == 2)
+      if(writeOutLog >= 2)
 	{
 	  logger.outLog << "Outward Collision" << endl;
 	  logger.outLog << "Step Number: " << it_map->second << endl;
@@ -500,10 +511,13 @@ void calcStep(CParticle& particle1, CParticle& particle2)
   CVector3 v12 = particle1.v - particle2.v;
   applyBC(r12);
   double distance = r12.length();
-  for(int i = 1; i < steps.size(); ++i)
+  for(int i = 0; i < steps.size(); ++i)
     {
-      if(distance <= steps[i].step_radius && distance > steps[i - 1].step_radius)
-	collStep.insert(pair<pair<int, int>, int> (pair<int, int> (p1, p2), i));
+      if(distance <= steps[i].step_radius)
+	{
+	  collStep.insert(pair<pair<int, int>, int> (pair<int, int> (p1, p2), i));
+	  break;
+	}
     }
 }
 
@@ -534,8 +548,8 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
   //variable definitions
   map<pair<int, int>, int>::iterator it_map; //iterator for accessing collision state map
   //set p1 to smaller particle number, and p2 to larger particle number
-  int p1 = min(particle[event.particle1].particleNo, particle[event.particle2].particleNo);
-  int p2 = max(particle[event.particle1].particleNo, particle[event.particle2].particleNo);
+  int p1 = min(event.particle1, event.particle2);
+  int p2 = max(event.particle1, event.particle2);
 
   CVector3 r12 = particle[p1].r - particle[p2].r;
   CVector3 v12 = particle[p1].v - particle[p2].v;
@@ -543,7 +557,7 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
   applyBC(r12);
   double vdotr = v12.dotProd(r12.normalise());
   //  =  =  Output Logging  =  =
-  if(writeOutLog == 2)
+  if(writeOutLog >= 2)
     {
       logger.outLog << " = = = = PROCESSING COLLISION = = = = " << endl;
       logger.outLog << "Particles involved: " << particle[event.particle1].particleNo << " & " << particle[event.particle2].particleNo << endl;
@@ -561,18 +575,15 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
     {
     case eventTimes::IP_IN:
       {
+	cerr << "IP_IN" << endl;
 	it_map = collStep.find(pair<int,int>(p1, p2)); //find collision state of particles
 	double dU = 0;
-	if(it_map == collStep.end() ) //if no collision state found then particles must be outside outer step
-	  {
-	    dU = -steps[steps.size() - 1].step_energy; //energy is the outermost step height
-	    collStep.insert(pair<pair<int, int>, int> (pair<int, int> (p1, p2), steps.size())); //insert pair into collStep map
-	    it_map = collStep.find(pair<int,int>(p1, p2)); //set iterator to new value
-	  }
+	if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
+	  dU = -steps.back().step_energy; //energy is the outermost step height
 	else //if not outside then energy change is the difference in step heights
 	  dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
 
-	if(writeOutLog == 2) //if writing full outlog
+	if(writeOutLog >= 2) //if writing full outlog
 	  {
 	    logger.outLog << "IP_IN" << endl;
 	    logger.outLog << "dU: " << dU << endl;
@@ -584,7 +595,7 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 	if((vdotr * vdotr + 4.0 / mass * dU) > 0) //if particles go over the step
 	  {
 	    double A = -0.5 / mass * (vdotr + sqrt(vdotr * vdotr +  4.0 / mass * dU)); //change in momentum
-	    if(writeOutLog == 2) {logger.outLog << "A: " << A << endl;}
+	    if(writeOutLog >= 2) {logger.outLog << "A: " << A << endl;}
 	    if(takeMeasurement) //if taking measurements
 	      {
 		TA_v += A / mass;
@@ -593,12 +604,16 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 	    //update particle velocities
 	    particle[p1].v += A / mass * r12.normalise();
 	    particle[p2].v -= A / mass * r12.normalise();
-	    if(it_map->second != 0)
-	      --(it_map->second); //move particles in one step
 
+	    cerr << "CAPTURE" << endl;	    
+	    if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
+	      collStep.insert(pair<pair<int, int>, int>(pair<int, int>(p1, p2), steps.size() - 1)); //insert pair into collStep map
+	    else
+	      --(it_map->second); //move particles in one step
 	  }
 	else //if bounce occurs
 	  {
+	    cerr << "BOUNCE" << endl;
 	    if(takeMeasurement) //if taking measurements
 	      TA_v -= vdotr;
 	    particle[p1].v -= vdotr * r12.normalise();
@@ -608,14 +623,15 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
       }
     case eventTimes::IP_OUT:
       {
-
+	cerr << "IP_OUT" << endl;
 	it_map = collStep.find(pair<int, int> (p1, p2));
 	double dU = 0;
 	if(it_map->second != steps.size() - 1)
 	  dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
 	else
 	  dU = steps[it_map->second].step_energy;
-	if(writeOutLog ==2)
+
+	if(writeOutLog >=2)
 	  {
 	    logger.outLog << "IP_OUT" << endl;
 	    logger.outLog << "Step being processed: " << it_map->second << endl;
@@ -625,7 +641,7 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 	if((vdotr * vdotr + 4.0 / mass * dU) > 0) //if particles go over the step
 	  {
 	    double A = -0.5 / mass * (vdotr - sqrt(vdotr * vdotr +  4.0 / mass * dU)); //change in momentum
-	    if(writeOutLog == 2) {logger.outLog << "A: " << A << endl;}
+	    if(writeOutLog >= 2) {logger.outLog << "A: " << A << endl;}
 	    if(takeMeasurement) //if taking measurements
 	      {
 		TA_v += A / mass;
@@ -634,9 +650,11 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 	    //update particle velocities
 	    particle[p1].v += A / mass * r12.normalise();
 	    particle[p2].v -= A / mass * r12.normalise();
-	    ++(it_map->second); //move particles in one step
-	    if(it_map->second == steps.size()) //if particle moves outside final step delete it's entry
+	    std::cerr << "calcVelocity checking for outward collision p1=" << p1 << " " << " it_map->second=" << it_map->second << "\n";
+	    if(it_map->second == steps.size() -1) //if particle is leaving outermost step
 	      collStep.erase(it_map);
+	    else
+	      ++(it_map->second); //move particles in one step
 	  }
 	else //if bounce occurs
 	  {
@@ -788,16 +806,17 @@ void initFromFile (vector<CParticle> &particle)
 void initSteps()
 {
   //Steps from Chepela et al, Case 6
-  steps.push_back(Steps(0.80,66.74)); //step 0
-  steps.push_back(Steps(0.85,27.55)); //step 1
-  steps.push_back(Steps(0.90, 10.95)); //step 3
-  steps.push_back(Steps(0.95, 3.81)); //step 4
-  steps.push_back(Steps(1.00, 0.76)); //step 5
-  steps.push_back(Steps(1.05, -0.47)); //step 6
-  steps.push_back(Steps(1.25,-0.98)); //step 7
-  steps.push_back(Steps(1.45,-0.55)); //step 8
-  steps.push_back(Steps(1.75,-0.22)); //step 9
-  steps.push_back(Steps(2.30,-0.06)); //step 10
+  steps.push_back(Steps(1.00,1.1)); //step 0
+//  steps.push_back(Steps(0.80,66.74)); //step 0
+//  steps.push_back(Steps(0.85,27.55)); //step 1
+//  steps.push_back(Steps(0.90, 10.95)); //step 3
+//  steps.push_back(Steps(0.95, 3.81)); //step 4
+//  steps.push_back(Steps(1.00, 0.76)); //step 5
+//  steps.push_back(Steps(1.05, -0.47)); //step 6
+//  steps.push_back(Steps(1.25,-0.98)); //step 7
+//  steps.push_back(Steps(1.45,-0.55)); //step 8
+//  steps.push_back(Steps(1.75,-0.22)); //step 9
+//  steps.push_back(Steps(2.30,-0.06)); //step 10
 }
 
 void generateEvents(vector<CParticle>& particle, //vector of particles
@@ -819,6 +838,7 @@ void generateEvents(vector<CParticle>& particle, //vector of particles
 	for(it_NL = NL[*it_NC].begin(); it_NL != NL[*it_NC].end(); ++it_NL)*/
       for(int j = 0; j < particle.size();++j)
 	{
+	  if (i==j) break;
 	  calcStep(particle[i], particle[j]);
 	  eventTimes::EventType eventType;
 	  double t_min = calcCollisionTime(particle[i], particle[j], eventType);
@@ -889,6 +909,7 @@ void updateEvents(int particle1, int particle2,
     for(it_NL = NL[*it_NC].begin(); it_NL !=NL[*it_NC].end(); ++it_NL)*/
   for(int j = 0; j < particle.size();++j)
     {
+      if (particle1==j) break;
       eventTimes::EventType eventType;
       double t_min = calcCollisionTime(particle[particle1], particle[j], eventType);
       pEvents[particle1].push_back(eventTimes(t_min, particle1, j, particle[j].collNo ,eventType));
@@ -909,6 +930,7 @@ void updateEvents(int particle1, int particle2,
 	for(it_NL = NL[*it_NC].begin(); it_NL !=NL[*it_NC].end(); ++it_NL)*/
       for(int j = 0; j < particle.size();++j)
 	{
+	  if (particle2==j) break;
 	  eventTimes::EventType eventType;
 	  double t_min = calcCollisionTime(particle[particle2], particle[j], eventType);
 	  pEvents[particle2].push_back(eventTimes(t_min, particle2, j, particle[j].collNo, eventType));
