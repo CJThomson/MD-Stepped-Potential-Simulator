@@ -469,7 +469,7 @@ double calcPotential()
   map<pair<int, int>, int>::iterator i;
   for(i = collStep.begin(); i != collStep.end(); ++i)
     {
-      potential += 2.0 * steps[i->second].step_energy;
+      potential += steps[i->second].step_energy;
     }
 
   return potential;

@@ -25,7 +25,7 @@ class CParticle
   //functions
   double kineticEnergy()//return the specific energy of the particle
   {
-    return v.dotProd(v)*mass;
+    return 0.5*v.dotProd(v)*mass;
   }
 };
 
