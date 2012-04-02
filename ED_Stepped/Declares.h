@@ -58,6 +58,13 @@ void generateEvents(std::vector<CParticle>&,
 
 void generateNeighbourCells(std::vector<std::set<int> >&);
 void generateNeighbourList(std::vector<std::set<int> >&,  std::vector<CParticle>&);
+void getEvent(CParticle&,
+	      std::vector<CParticle>&,
+	      std::vector<std::vector<eventTimes> >&,
+	      std::vector<eventTimes>&,
+	      std::vector<std::set<int> >&,
+	      std::vector<std::set<int> >&);
+
 void updateEvents(int particle1, int particle2,
 		  std::vector<CParticle>&,
 		  std::vector<std::vector<eventTimes> >&,
