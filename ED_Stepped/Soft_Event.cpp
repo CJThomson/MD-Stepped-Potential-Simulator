@@ -7,11 +7,11 @@ double ptail = 32.0 * M_PI * density * density / 9 * (1 / pow(2.3 , 6) - 1.5) / 
 //Simulation:
 int numberParticles = 256; //number of particles
 const int numberEvents = 500;
-//const double length = pow(numberParticles/density, 1.0 / 3.0);
-const double length = 6.0;
+const double length = pow(numberParticles/density, 1.0 / 3.0);
+//const double length = 6.0;
 const CVector3 systemSize(length,length,length); //size of the system
 double t = 0;
-const bool initFile = true; //use an init file instead of random generated values
+const bool initFile = false; //use an init file instead of random generated values
 const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 bool thermostat = false; //use a thermostat
@@ -26,7 +26,7 @@ const double sigma = 1;
 
 //Logging:
 const int psteps = 50; //frequency of output to file
-const int writeOutLog = 2;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
+const int writeOutLog = 1;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties:
 const int noReadings = 200000; //number of readings to take
@@ -92,9 +92,9 @@ int main()
   cout << "Generating event list..." << endl;
   particleEL.resize(particles.size());
   masterEL.resize(particles.size());
-  for(vector<CParticle>::iterator p1 = particles.begin(); p1 != particles.end(); ++p1)
-    getEvent(*p1, particles, particleEL, masterEL, neighbourList, neighbourCell);
-  generateEvents(particles, particleEL, masterEL, neighbourList, neighbourCell); //generate the event list
+  //for(vector<CParticle>::iterator p1 = particles.begin(); p1 != particles.end(); ++p1)
+  for(size_t i = 0; i < particles.size(); ++i)
+    getEvent(particles[i], particles, particleEL, masterEL, neighbourList, neighbourCell);
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
@@ -122,6 +122,7 @@ int main()
 	  {
 	    if(next_event.p2coll != particles[next_event.particle2].collNo) //check if collision is valid
 	      {
+		//cerr << "Invalid Collision between particles :" << next_event.particle1 << " & " << next_event.particle2 << endl;
 		validEvent = false;
 		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
@@ -131,11 +132,11 @@ int main()
 	    else //if a valid event
 	      {
 		t += dt; //update system time
-		updatePositions(particles,dt);
 		if(writeOutLog >= 1)
 		  {
 		    CVector3 rij = (particles[next_event.particle1].r-particles[next_event.particle2].r);
 		    applyBC(rij);
+		    //cerr << "Collision between particles: " << next_event.particle1 << " & " << next_event.particle2 << endl;
 		    logger.outLog << "Collision no: " << n << " between particles: " << next_event.particle1 << " & " << next_event.particle2
 				  << " at time = " << t
 				  << " at distance of = " << rij.length()
@@ -144,6 +145,7 @@ int main()
 				  << endl;
 		  }
 		calcVelocity(particles, next_event);
+		
 		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		++particles[next_event.particle1].collNo;
@@ -157,14 +159,12 @@ int main()
 	    logger.outLog << "Sentinal event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
 
 	  t += dt; //update system time
-	  updatePositions(particles, dt);
 	  getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 	  --n;
 	  break;
 	case eventTimes::NEIGHBOURCELL:
 	  {
 	    t += dt; //update system time
-	    updatePositions(particles,dt);
 	    CParticle p1 = particles[next_event.particle1];
 	    neighbourList[p1.cellNo].erase(next_event.particle1); //erase particle from previous cell
 	    int sign = -1;
@@ -388,6 +388,7 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 	}
       if(t_min_out < 0)
 	{
+	  //cerr << "Negative dt between particles: " << p1 << " and " << p2 << endl;
 	  logger.outLog << "INVALID COLLISION TIME" << endl;
 	  logger.outLog << "Particles involved: " << particle1.particleNo << " & " << particle2.particleNo << endl;
 	  logger.outLog << "Particle 1 :- r=(" << particle1.r.x << ","
@@ -782,17 +783,17 @@ void initFromFile (vector<CParticle> &particle)
 void initSteps()
 {
   //Steps from Chepela et al, Case 6
-  steps.push_back(Steps(1.00,0.8)); //step 0
-//  steps.push_back(Steps(0.80,66.74)); //step 0
-//  steps.push_back(Steps(0.85,27.55)); //step 1
-//  steps.push_back(Steps(0.90, 10.95)); //step 3
-//  steps.push_back(Steps(0.95, 3.81)); //step 4
-//  steps.push_back(Steps(1.00, 0.76)); //step 5
-//  steps.push_back(Steps(1.05, -0.47)); //step 6
-//  steps.push_back(Steps(1.25,-0.98)); //step 7
-//  steps.push_back(Steps(1.45,-0.55)); //step 8
-//  steps.push_back(Steps(1.75,-0.22)); //step 9
-//  steps.push_back(Steps(2.30,-0.06)); //step 10
+  //steps.push_back(Steps(1.00,0.8)); //step 0
+  steps.push_back(Steps(0.80,66.74)); //step 0
+  steps.push_back(Steps(0.85,27.55)); //step 1
+  steps.push_back(Steps(0.90, 10.95)); //step 3
+  steps.push_back(Steps(0.95, 3.81)); //step 4
+  steps.push_back(Steps(1.00, 0.76)); //step 5
+  steps.push_back(Steps(1.05, -0.47)); //step 6
+  steps.push_back(Steps(1.25,-0.98)); //step 7
+  steps.push_back(Steps(1.45,-0.55)); //step 8
+  steps.push_back(Steps(1.75,-0.22)); //step 9
+  steps.push_back(Steps(2.30,-0.06)); //step 10
 }
 
 void generateNeighbourCells(vector<set<int> >& NC)
@@ -845,26 +846,47 @@ void getEvent(CParticle& p1,
   set<int>::iterator it_NL;
   set<int>::iterator it_NC;
   pEvents[p1.particleNo].clear();
-
-  double t_min_sent = calcSentinalTime(p1);
+  updatePosition(p1);
+  double t_min_sent = calcSentinalTime(p1); 
   pEvents[p1.particleNo].push_back(eventTimes(t_min_sent, p1.particleNo, -1, 0, eventTimes::SENTINAL));
   //t_min = calcCellLeave(particle[particle1]);
   //pEvents[particle1].push_back(eventTimes(t_min, particle1 ,-1, eventTimes::NEIGHBOURCELL));
   /*for(it_NC = NC[particle[particle1].cellNo].begin(); it_NC != NC[particle[particle1].cellNo].end(); ++it_NC)
     for(it_NL = NL[*it_NC].begin(); it_NL !=NL[*it_NC].end(); ++it_NL)*/
-  for(vector<CParticle>::iterator p2 = particles.begin(); p2 != particles.end(); ++p2)
+  //for(vector<CParticle>::iterator p2 = particles.begin(); p2 != particles.end(); ++p2)
+  for(size_t j = 0; j < particles.size(); ++j)
     {
-      if (p1.particleNo == p2->particleNo) break;
+      
+      if (p1.particleNo == j) break;
+      /*if(j > p1.particleNo)
+	cerr << " p1 " << p1.particleNo << " p2 " << j << endl;*/
+      updatePosition(particles[j]);
+      eventTimes::EventType eventType;
+      double t_min_coll = calcCollisionTime(p1, particles[j], eventType);
+      pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, j, particles[j].collNo, eventType));
+      if (p1.particleNo == 27 || p1.particleNo == 15)
+	if(j == 27 || j == 15)
+	cerr << "t_min_coll" << t_min_coll << endl;
+      /*if (p1.particleNo == p2->particleNo) break;
+      if(j > p1.particleNo)
+	cerr << "yay p1 " << p1.particleNo << " p2 " << p2->particleNo << endl;
       eventTimes::EventType eventType;
       double t_min_coll = calcCollisionTime(p1, *p2, eventType);
       pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));
+      if (p1.particleNo == 111 || p1.particleNo == 62)
+	if(p2->particleNo == 111 || p2->particleNo == 62)
+	cerr << "t_min_coll" << t_min_coll << endl;*/
     }
   events[p1.particleNo] = *min_element(pEvents[p1.particleNo].begin(), pEvents[p1.particleNo].end());
 }
-void updatePositions(vector<CParticle>& particles, double dt)
+void updatePosition(CParticle& particle)
 {
-  for(vector<CParticle>::iterator particle = particles.begin(); particle !=  particles.end(); ++particle)
-    particle->r += particle->v * dt;
+  double delta_t = t - particle.updateTime;
+  if(delta_t != 0)
+    {
+      particle.r += delta_t * particle.v;
+      particle.updateTime = t; 
+    }
 }
 
 void zeroMomentum(vector<CParticle> &particles)

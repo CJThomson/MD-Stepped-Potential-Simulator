@@ -50,12 +50,6 @@ void correctVelocity(std::vector<CParticle>&);
 void initialise(std::vector<CParticle>&);
 void initFromFile (std::vector<CParticle>&);
 void initSteps();
-void generateEvents(std::vector<CParticle>&,
-                    std::vector<std::vector<eventTimes> >&,
-                    std::vector<eventTimes>&,
-                    std::vector<std::set<int> >&,
-                    std::vector<std::set<int> >&);
-
 void generateNeighbourCells(std::vector<std::set<int> >&);
 void generateNeighbourList(std::vector<std::set<int> >&,  std::vector<CParticle>&);
 void getEvent(CParticle&,
@@ -64,13 +58,5 @@ void getEvent(CParticle&,
 	      std::vector<eventTimes>&,
 	      std::vector<std::set<int> >&,
 	      std::vector<std::set<int> >&);
-
-void updateEvents(int particle1, int particle2,
-		  std::vector<CParticle>&,
-		  std::vector<std::vector<eventTimes> >&,
-		  std::vector<eventTimes>&,
-		  std::vector<std::set<int> >&,
-		  std::vector<std::set<int> >&);
-
-void updatePositions(std::vector<CParticle>&, double);
+void updatePosition(CParticle&);
 void zeroMomentum(std::vector<CParticle>&);

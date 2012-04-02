@@ -7,7 +7,7 @@ class CParticle
   //Constructors
  CParticle(CVector3 location, CVector3 velocity,
 	   double radius_in, double mass_in, int ID):
-  r(location), r0(location), v(velocity), radius(radius_in), mass(mass_in), particleNo(ID), collNo(0)
+  r(location), r0(location), v(velocity), radius(radius_in), mass(mass_in), particleNo(ID), collNo(0), updateTime(0)
     {}
 
   //vectors on particle
@@ -22,6 +22,7 @@ class CParticle
   int cellNo;
   int collNo;
   int nextCell;
+  double updateTime;
   //functions
   double kineticEnergy()//return the specific energy of the particle
   {
