@@ -224,7 +224,6 @@ int main()
 	}
 #endif
     }
-
   cout << "Simulation Complete" << endl;
   double deltaR = maxR / noBins; //width of each shell
 
@@ -465,9 +464,14 @@ void calcRadDist(vector<CParticle> &particle)
       {
 	CVector3 distance = particle[i].r - particle[j].r;
 	applyBC(distance);
-	if(distance.length() <= maxR)
+	if(distance.length() < maxR)
 	  {
 	    int index = floor(distance.length() * noBins/ maxR);
+	    if(index < 0 || index >= noBins)
+	      {
+		cerr << "invalid index reached in calcRadDist " << index << endl;
+		exit(1);
+	      }
 	    ++gVal[index];
 	  }
       }
@@ -858,8 +862,8 @@ void getEvent(CParticle& p1,
     {
       
       if (p1.particleNo == j) break;
-      /*if(j > p1.particleNo)
-	cerr << " p1 " << p1.particleNo << " p2 " << j << endl;*/
+      if(j > p1.particleNo)
+	cerr << " p1 " << p1.particleNo << " p2 " << j << endl;
       updatePosition(particles[j]);
       eventTimes::EventType eventType;
       double t_min_coll = calcCollisionTime(p1, particles[j], eventType);
