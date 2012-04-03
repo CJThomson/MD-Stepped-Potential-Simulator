@@ -6,7 +6,8 @@ const double temperature = 1.67; //temperature of the system
 double ptail = 32.0 * M_PI * density * density / 9 * (1 / pow(2.3 , 6) - 1.5) / pow(2.3,3);
 //Simulation:
 int numberParticles = 256; //number of particles
-const int numberEvents = 500;
+const int numberEvents = 50000;
+int eventCount = 0;
 const double length = pow(numberParticles/density, 1.0 / 3.0);
 //const double length = 6.0;
 const CVector3 systemSize(length,length,length); //size of the system
@@ -22,7 +23,6 @@ const int noCells = 3;
 //Reduced Unit Definitions
 const double mass = 1; //mass of a particlen
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
-const double sigma = 1;
 
 //Logging:
 const int psteps = 50; //frequency of output to file
@@ -34,7 +34,7 @@ const int noBins = 1000; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 bool takeMeasurement = false;
 double gVal[noBins]; //radial distribution values
-std::vector<Diffusion> coDiff; //coefficient of diffusion over time
+std::vector<Diffusion> coDiff; //coefficient of diffusion over
 
 //----Time Averages----
 double TA_gVal[noBins];
@@ -48,6 +48,7 @@ using namespace std;
 
 int main()
 {
+  srand(10);
   //variable declarations
   vector<CParticle> particles; //create a vector to store particle info
   vector<vector<eventTimes> > particleEL;
@@ -99,17 +100,17 @@ int main()
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
   cout << "Starting Simulation ..." << endl;
-  for(int n = 0; n < numberEvents; ++n)
+  for(;eventCount < numberEvents;)
     {
       bool validEvent = true;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
 
       double dt = next_event.collisionTime - t; //find time to next collision
 
-      if((numberEvents - n) <=  noReadings) //take readings this step?
+      if((numberEvents - eventCount) <=  noReadings) //take readings this step?
 	takeMeasurement = true;
 
-      if(n == thermoOff) //turn thermostat off?
+      if(eventCount == thermoOff) //turn thermostat off?
 	{
 	  thermostat = false;
 	  zeroMomentum(particles);
@@ -127,29 +128,31 @@ int main()
 		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		logger.outLog << "Invalid Collision between particles: " << next_event.particle1 << " & " << next_event.particle2 << endl;
-		--n;
 	      }
 	    else //if a valid event
 	      {
 		t += dt; //update system time
 		if(writeOutLog >= 1)
 		  {
+		    updatePosition(particles[next_event.particle1]);
+		    updatePosition(particles[next_event.particle2]);
 		    CVector3 rij = (particles[next_event.particle1].r-particles[next_event.particle2].r);
 		    applyBC(rij);
 		    //cerr << "Collision between particles: " << next_event.particle1 << " & " << next_event.particle2 << endl;
-		    logger.outLog << "Collision no: " << n << " between particles: " << next_event.particle1 << " & " << next_event.particle2
+		    logger.outLog << "Collision no: " << eventCount << " between particles: " << next_event.particle1 << " & " << next_event.particle2
 				  << " at time = " << t
 				  << " at distance of = " << rij.length()
 				  << " UEnergy " << calcPotential()
 				  << " KEnergy " << calcKinetic(particles)
 				  << endl;
 		  }
-		calcVelocity(particles, next_event);
-		
-		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
-		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
+		calcVelocity(particles, next_event);		
 		++particles[next_event.particle1].collNo;
 		++particles[next_event.particle2].collNo;
+
+		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
+		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
+		++eventCount;
 	      }
 
 	    break;
@@ -160,7 +163,6 @@ int main()
 
 	  t += dt; //update system time
 	  getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
-	  --n;
 	  break;
 	case eventTimes::NEIGHBOURCELL:
 	  {
@@ -191,23 +193,24 @@ int main()
 	  exit(1);
 	  break;
 	}
-      if((numberEvents - n) ==  noReadings)
+      if((numberEvents - eventCount) ==  noReadings)
 	{
 	  for(int i = 0; i < particles.size(); ++i)
 	    particles[i].r0 = particles[i].r;
 	}
 
-      if(n%psteps==0)
+      if(eventCount%psteps==0)
 	logger.write_Location(particles, t, systemSize);
 
       if(takeMeasurement && validEvent)
 	{
 	  ++readingsTaken;
-	  if(n%100 == 0)
+
+	  if(eventCount%100 == 0)
 	    coDiff.push_back(Diffusion(calcDiff(particles, t),t));
 	  TA_T += calcTemp(particles);
 	  TA_U += calcPotential();
-	  if(n%10 == 0)
+	  if(eventCount%10 == 0)
 	    {
 	      calcRadDist(particles);
 	      for(int i = 0; i < noBins; ++i)
@@ -224,6 +227,7 @@ int main()
 	}
 #endif
     }
+
   cout << "Simulation Complete" << endl;
   double deltaR = maxR / noBins; //width of each shell
 
@@ -237,7 +241,7 @@ int main()
   cout << "Mean free time: " << freeTime
        << " U: " << TA_U / (readingsTaken * numberParticles) / 2
        << " T: " << TA_T / readingsTaken
-       << " P: " << (density) * (TA_T + mass * sigma / (freeTime * 6.0) * TA_v) / readingsTaken + ptail
+       << " P: " << (density) * (TA_T + mass / (freeTime * 6.0) * TA_v) / readingsTaken + ptail
        << endl;
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
@@ -297,6 +301,8 @@ double calcCellLeave(CParticle& particle)
     particle.nextCell = 1;
   else if (t_min[2] == tMin)
     particle.nextCell = 2;
+
+  return tMin;
 }
 
 double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes::EventType& eventType)
@@ -304,9 +310,6 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
   double t_min_out = HUGE_VAL; //set minimum time to infinity
   double t_min_in = HUGE_VAL;
   map<pair<int, int>, int>::const_iterator it_map;
-
-  int p1 = min(particle1.particleNo, particle2.particleNo);
-  int p2 = max(particle1.particleNo, particle2.particleNo);
 
   CVector3 r12 = particle1.r - particle2.r;
   CVector3 v12 = particle1.v - particle2.v;
@@ -332,8 +335,9 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
       logger.outLog << "v.r = " << vdotr << endl;
     }
 
-  it_map = collStep.find(pair<int, int> (p1, p2));
-  if(it_map == collStep.end()) //if particle is outside steps
+  it_map = collStep.find(pair<int, int> (min(particle1.particleNo, particle2.particleNo), 
+					 max(particle1.particleNo, particle2.particleNo)));
+  if (it_map == collStep.end()) //if particle is outside steps
     {
       double c = r12sqr - steps[steps.size() - 1].step_radius * steps[steps.size() - 1].step_radius;
       double arg = vdotr * vdotr - v12sqr * c;
@@ -388,7 +392,7 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
       if(t_min_out < 0)
 	{
 	  //cerr << "Negative dt between particles: " << p1 << " and " << p2 << endl;
-	  logger.outLog << "INVALID COLLISION TIME" << endl;
+	  logger.outLog << "INVALID COLLISION TIME (event=" << eventCount << ")" << endl;
 	  logger.outLog << "Particles involved: " << particle1.particleNo << " & " << particle2.particleNo << endl;
 	  logger.outLog << "Particle 1 :- r=(" << particle1.r.x << ","
 			<< particle1.r.y << "," << particle1.r.z << ") - v=("
@@ -467,11 +471,6 @@ void calcRadDist(vector<CParticle> &particle)
 	if(distance.length() < maxR)
 	  {
 	    int index = floor(distance.length() * noBins/ maxR);
-	    if(index < 0 || index >= noBins)
-	      {
-		cerr << "invalid index reached in calcRadDist " << index << endl;
-		exit(1);
-	      }
 	    ++gVal[index];
 	  }
       }
@@ -517,10 +516,14 @@ double calcTemp(vector<CParticle> &particle)
   return mass/(3*particle.size())*sum;
 }
 
-void calcVelocity(vector<CParticle>& particle, eventTimes &event)
+void calcVelocity(vector<CParticle>& particle, eventTimes& event)
 {
   //variable definitions
   map<pair<int, int>, int>::iterator it_map; //iterator for accessing collision state map
+
+  updatePosition(particle[event.particle1]);
+  updatePosition(particle[event.particle2]);
+
 
   //set p1 to smaller particle number, and p2 to larger particle number
   int p1 = min(event.particle1, event.particle2);
@@ -578,7 +581,7 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 		logger.outLog << "Well Capture" << endl;
 	      }
 	    if(takeMeasurement) //if taking measurements
-	      TA_v += A / mass;
+	      TA_v += r12.length() * A / mass;
 
 	    //update particle velocities
 	    particle[p1].v += A / mass * r12.normalise();
@@ -594,7 +597,7 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 	    if(writeOutLog >= 2)
 	      logger.outLog << "Well Bounce" << endl;
 	    if(takeMeasurement) //if taking measurements
-	      TA_v -= vdotr;
+	      TA_v -= r12.length() * vdotr;
 	    particle[p1].v -= vdotr * r12.normalise();
 	    particle[p2].v += vdotr * r12.normalise();
 	  }
@@ -625,7 +628,7 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 		logger.outLog << "Well Release" << endl;
 	      }
 	    if(takeMeasurement) //if taking measurements
-	      TA_v += A / mass;
+	      TA_v += r12.length() * A / mass;
 
 	    //update particle velocities
 	    particle[p1].v += A / mass * r12.normalise();
@@ -640,12 +643,15 @@ void calcVelocity(vector<CParticle>& particle, eventTimes &event)
 	    if(writeOutLog >=2)
 	      logger.outLog << "Well Bounce" << endl;
 	    if(takeMeasurement) //if taking measurements
-	      TA_v -= vdotr;
+	      TA_v -= r12.length() * vdotr;
 	    particle[p1].v -= vdotr * r12.normalise();
 	    particle[p2].v += vdotr * r12.normalise();
 	  }
 	break;
       }
+    default:
+      std::cerr << "Unhandled calcVelocities type" << std::endl;
+      std::exit(1);
     }
 
 }
@@ -860,17 +866,13 @@ void getEvent(CParticle& p1,
   //for(vector<CParticle>::iterator p2 = particles.begin(); p2 != particles.end(); ++p2)
   for(size_t j = 0; j < particles.size(); ++j)
     {
-      
-      if (p1.particleNo == j) break;
-      if(j > p1.particleNo)
-	cerr << " p1 " << p1.particleNo << " p2 " << j << endl;
+      if (p1.particleNo == j) continue;
+      /*if(j > p1.particleNo)
+	cerr << " p1 " << p1.particleNo << " p2 " << j << endl;*/
       updatePosition(particles[j]);
       eventTimes::EventType eventType;
       double t_min_coll = calcCollisionTime(p1, particles[j], eventType);
       pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, j, particles[j].collNo, eventType));
-      if (p1.particleNo == 27 || p1.particleNo == 15)
-	if(j == 27 || j == 15)
-	cerr << "t_min_coll" << t_min_coll << endl;
       /*if (p1.particleNo == p2->particleNo) break;
       if(j > p1.particleNo)
 	cerr << "yay p1 " << p1.particleNo << " p2 " << p2->particleNo << endl;
