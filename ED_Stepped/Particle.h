@@ -6,7 +6,7 @@ class CParticle
  public:
   //Constructors
  CParticle(CVector3 location, CVector3 velocity,
-	   double radius_in, double mass_in, int ID):
+	   double radius_in, double mass_in, size_t ID):
   r(location), r0(location), v(velocity), radius(radius_in), mass(mass_in), particleNo(ID), collNo(0), updateTime(0)
     {}
 
@@ -26,7 +26,7 @@ class CParticle
   //functions
   double kineticEnergy()//return the specific energy of the particle
   {
-    return 0.5*v.dotProd(v)*mass;
+    return 0.5 * v.dotProd(v) * mass;
   }
 };
 

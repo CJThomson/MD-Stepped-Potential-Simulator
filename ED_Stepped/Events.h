@@ -6,8 +6,9 @@ struct eventTimes
     IP_IN = 1,
     SENTINAL = 2,
     NEIGHBOURCELL = 3,
-    WALL = 4,
-    NONE = 5
+    THERMOSTAT = 4,
+    WALL = 5,
+    NONE = 6
   } EventType;
 
 eventTimes(double dt, int p1, int p2, int coll, EventType type):

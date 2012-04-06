@@ -23,15 +23,14 @@ Steps(double r, double h) : step_radius(r), step_energy(h) {}
 #include <cstdlib> //allows use of random numbers
 #include <algorithm> //allows use of sort function
 #include <string> //allows use of strings
-//include boost libraries for random numbers
-#include <boost/random/normal_distribution.hpp>
-#include <boost/random/mersenne_twister.hpp>
-#include <boost/random/variate_generator.hpp>
-#include <boost/random/uniform_real.hpp>
 #include "Vector3.h" //allows use of vector mathematics
 #include "Particle.h" //Event particle Class
 #include "Events.h" //Event class
 #include "Logger.h" //allows logging
+#include "Random.h" //allows use of random numbers
+//----TypeDef----
+typedef std::vector<CParticle>::iterator it_particle;
+
 //----Function Declarations----
 void applyBC(CVector3&);
 int calcCell(CVector3);
@@ -45,9 +44,10 @@ void calcRadDist(std::vector<CParticle> &);
 void calcStep(CParticle& ,CParticle&);
 double calcSentinalTime(CParticle&);
 double calcTemp(std::vector<CParticle>&);
+double calcThermoTime(CRandom&, int&);
 void calcVelocity(std::vector<CParticle>&, eventTimes&);
 void correctVelocity(std::vector<CParticle>&);
-void initialise(std::vector<CParticle>&);
+void initialise(std::vector<CParticle>&, CRandom&);
 void initFromFile (std::vector<CParticle>&);
 void initSteps();
 void generateNeighbourCells(std::vector<std::set<int> >&);
@@ -58,5 +58,6 @@ void getEvent(CParticle&,
 	      std::vector<eventTimes>&,
 	      std::vector<std::set<int> >&,
 	      std::vector<std::set<int> >&);
+void runThermostat(CParticle&, CRandom&, std::vector<eventTimes>&);
 void updatePosition(CParticle&);
 void zeroMomentum(std::vector<CParticle>&);

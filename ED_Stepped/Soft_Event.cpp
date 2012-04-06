@@ -2,11 +2,12 @@
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
 const double density = 0.85;
-const double temperature = 1.67; //temperature of the system
-double ptail = 32.0 * M_PI * density * density / 9 * (1 / pow(2.3 , 6) - 1.5) / pow(2.3,3);
+const double temperature = 2.35; //temperature of the system
+double ptail = 32.0 * M_PI * density * density / 9 * (1 / pow(2.3, 6) - 1.5) / pow(2.3, 3);
+//double ptail = 0;
 //Simulation:
 int numberParticles = 256; //number of particles
-const int numberEvents = 50000;
+const int numberEvents = 4.5e+6;
 int eventCount = 0;
 const double length = pow(numberParticles/density, 1.0 / 3.0);
 //const double length = 6.0;
@@ -14,22 +15,27 @@ const CVector3 systemSize(length,length,length); //size of the system
 double t = 0;
 const bool initFile = false; //use an init file instead of random generated values
 const bool overwriteInit = false; //create a new init file
-std::vector<Steps> steps; //create a vector to store step propeties
-bool thermostat = false; //use a thermostat
-const double thermoFreq = 0.0001; //update frequency of thermostat
-const int thermoOff = 10000;
+std::vector<Steps> steps; //create a vectOr to store step propeties
 const int noCells = 3;
 
+//Thermostat:
+bool thermostat = true; //use a thermostat
+const size_t thermoFreq = 200; //frequency thermostat rate is updated
+size_t thermoCount = 0; //counter to change thermostat rate
+size_t thermoLastUpdate = 0;
+double thermoMeanFreeTime = 0.0005;
+const int thermoOff =3.5e+6;
+double thermoSetting = 0.1;
 //Reduced Unit Definitions
-const double mass = 1; //mass of a particlen
+const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
 
 //Logging:
 const int psteps = 50; //frequency of output to file
-const int writeOutLog = 1;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
+const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
-//Measuring Properties:
-const int noReadings = 200000; //number of readings to take
+//Measuring Properties
+const int noReadings = 5e+5; //number of readings to take
 const int noBins = 1000; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 bool takeMeasurement = false;
@@ -56,14 +62,20 @@ int main()
   vector<set<int> > neighbourList; //create a vector of sets to hold particles in  neighbour cell
   vector<set<int> > neighbourCell; //create a vector of sets to hold the cells neighbouring each cell
   int readingsTaken = 0;
-  cout << "Initialising Simulation with ";
+  cout << "Initialising Random Number Generators" << endl;
+  CRandom RNG;
+
+  cout << "Initialising ";
   //Initialise the simulation
   if(initFile)
     initFromFile(particles);
   else
-    initialise(particles); // initialise the system
+    initialise(particles, RNG ); // initialise the system
   cout << particles.size() << " particles..." << endl;
   numberParticles = particles.size();
+  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
+    for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
+      calcStep(*p1,*p2);
 
   cout << "Initialising neighbour lists" << endl;
   int cells3 = pow(noCells, 3);
@@ -80,22 +92,23 @@ int main()
   logger.initialise(Logger::LOCATIONS); //initialise location logger
   logger.initialise(Logger::OUTPUTLOG);
 
-  cout << "Initialising Random Number Generators" << endl;
-  //Initialise random number generator
-  boost::mt19937 eng;
-  //initialise normally distributed random numbers
-  boost::normal_distribution <double> nd(0.0, sqrt(3.0 * temperature));
-  boost::variate_generator<boost::mt19937&, boost::normal_distribution<double> > var_nor(eng,nd);
-  //initialise uniformly distributed random numbers
-  boost::uniform_real<double> ud(0.0, 1.0);
-  boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > var_uni(eng, ud);
 
   cout << "Generating event list..." << endl;
-  particleEL.resize(particles.size());
-  masterEL.resize(particles.size());
-  //for(vector<CParticle>::iterator p1 = particles.begin(); p1 != particles.end(); ++p1)
-  for(size_t i = 0; i < particles.size(); ++i)
-    getEvent(particles[i], particles, particleEL, masterEL, neighbourList, neighbourCell);
+  particleEL.resize(particles.size()); 
+  masterEL.resize(particles.size() + 1);//one event for each particle plus thermostat
+  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
+    getEvent(*p1, particles, particleEL, masterEL, neighbourList, neighbourCell);
+
+  int particleNo = -1;
+  double t_min_thermo = calcThermoTime(RNG, particleNo);
+  if(!thermostat)
+    t_min_thermo = HUGE_VAL;
+  if(particleNo == -1)
+    {
+      cerr << "calcThermoTime has not returned a valid particle No" << endl;
+      exit(1);
+    }
+  masterEL[particles.size()] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
@@ -103,6 +116,7 @@ int main()
   for(;eventCount < numberEvents;)
     {
       bool validEvent = true;
+      bool collEvent = false;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
 
       double dt = next_event.collisionTime - t; //find time to next collision
@@ -113,6 +127,7 @@ int main()
       if(eventCount == thermoOff) //turn thermostat off?
 	{
 	  thermostat = false;
+	  masterEL.back().collisionTime = HUGE_VAL;
 	  zeroMomentum(particles);
 	}
 
@@ -131,6 +146,7 @@ int main()
 	      }
 	    else //if a valid event
 	      {
+		collEvent = true;
 		t += dt; //update system time
 		if(writeOutLog >= 1)
 		  {
@@ -180,6 +196,16 @@ int main()
 	    p1.cellNo = newCell;
 	    break;
 	  }
+	case eventTimes::THERMOSTAT:
+	  {
+	    if(writeOutLog >= 1)
+	      logger.outLog << "Thermostat event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
+	    t += dt; //update system time
+	    runThermostat(particles[next_event.particle1], RNG, masterEL);
+	    ++particles[next_event.particle1].collNo;
+	    getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
+	    break;
+	  }
 	case eventTimes::WALL:
 	  if(writeOutLog >= 1)
 	    logger.outLog << "Wall event for particle: " << next_event.particle1 << endl;
@@ -193,16 +219,14 @@ int main()
 	  exit(1);
 	  break;
 	}
-      if((numberEvents - eventCount) ==  noReadings)
-	{
-	  for(int i = 0; i < particles.size(); ++i)
-	    particles[i].r0 = particles[i].r;
-	}
+      if((numberEvents - eventCount) ==  noReadings && collEvent)
+	for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
+	    particle->r0 = particle->r;
 
       if(eventCount%psteps==0)
 	logger.write_Location(particles, t, systemSize);
 
-      if(takeMeasurement && validEvent)
+      if(takeMeasurement && collEvent)
 	{
 	  ++readingsTaken;
 
@@ -213,19 +237,17 @@ int main()
 	  if(eventCount%10 == 0)
 	    {
 	      calcRadDist(particles);
-	      for(int i = 0; i < noBins; ++i)
+	      for(size_t i = 0; i < noBins; ++i)
 		TA_gVal[i] += gVal[i];
 	    }
 
 	}
-#if(numberEvents >= 100)
-      if(n%(numberEvents / 100) == 0 && validEvent)
+      if(eventCount%(numberEvents / 100) == 0 && collEvent)
 	{
-	  cout << n << " of " << numberEvents << " events simulated"
+	  cout << eventCount << " of " << numberEvents << " events simulated"
 	       << " T: " << calcTemp(particles)
 	       << " TE: " << calcPotential() + calcKinetic(particles) << endl;
 	}
-#endif
     }
 
   cout << "Simulation Complete" << endl;
@@ -236,12 +258,12 @@ int main()
       double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
       TA_gVal[i] /= (0.5 * numberParticles * (readingsTaken/10) * volShell * density);
     }
-  double freeTime = t * numberParticles / (2 * numberEvents);
+  double freeTime = t * numberParticles / (2 * eventCount);
   cout << "Time Averages" << endl;
   cout << "Mean free time: " << freeTime
        << " U: " << TA_U / (readingsTaken * numberParticles) / 2
        << " T: " << TA_T / readingsTaken
-       << " P: " << (density) * (TA_T + mass / (freeTime * 6.0) * TA_v) / readingsTaken + ptail
+       << " P: " << density * (TA_T + mass / (freeTime * 6.0) * TA_v) / readingsTaken + ptail
        << endl;
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
@@ -434,11 +456,11 @@ double calcDiff(vector<CParticle>& particles, double time)
   return sumDiff / particles.size();
 }
 
-double calcKinetic(vector<CParticle>& particle)
+double calcKinetic(vector<CParticle>& particles)
 {
   double kinetic = 0;
-  for(int i = 0; i < particle.size(); ++i)
-    kinetic += particle[i].kineticEnergy();
+  for(vector<CParticle>::iterator particle = particles.begin(); particle != particles.end(); ++particle)
+    kinetic += particle->kineticEnergy();
 
   return kinetic;
 }
@@ -458,22 +480,31 @@ double calcPotential()
   return potential;
 }
 
-void calcRadDist(vector<CParticle> &particle)
+void calcRadDist(vector<CParticle> &particles)
 {
-  for(int i = 0; i < noBins; ++i)
+  for(size_t i (0); i < noBins; ++i)
     gVal[i] = 0; //rezero array
 
-  for(int i = 0; i < particle.size(); ++i)
-    for(int j = i + 1; j < particle.size(); ++j)
-      {
-	CVector3 distance = particle[i].r - particle[j].r;
-	applyBC(distance);
-	if(distance.length() < maxR)
-	  {
-	    int index = floor(distance.length() * noBins/ maxR);
-	    ++gVal[index];
-	  }
-      }
+  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
+    {
+      updatePosition(*p1);
+      for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
+	{
+	  updatePosition(*p2);
+	  CVector3 distance = p1->r - p2->r;
+	  applyBC(distance);
+	  if(distance.length() < maxR)
+	    {
+	      int index = floor(distance.length() * noBins/ maxR);
+	      if(index < 0 || index >= noBins)
+		{
+		  cerr << "ERROR: Invalid index is calcRadDist: " << index << endl;
+		  exit(1);
+		}
+	      ++gVal[index];
+	    }
+	}
+    }
 }
 
 void calcStep(CParticle& particle1, CParticle& particle2)
@@ -508,12 +539,12 @@ double calcSentinalTime(CParticle& particle)
   return t + t_min;
 }
 
-double calcTemp(vector<CParticle> &particle)
+double calcTemp(vector<CParticle> &particles)
 {
   double sum = 0;
-  for(unsigned int i=0; i < particle.size(); ++i)
-    sum += particle[i].v.dotProd(particle[i].v);
-  return mass/(3*particle.size())*sum;
+  for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
+    sum += particle->v.dotProd();
+  return mass / (3 * particles.size()) * sum;
 }
 
 void calcVelocity(vector<CParticle>& particle, eventTimes& event)
@@ -656,48 +687,23 @@ void calcVelocity(vector<CParticle>& particle, eventTimes& event)
 
 }
 
-void correctVelocity(vector<CParticle> &particle)
+void correctVelocity(vector<CParticle> &particles)
 {
-  zeroMomentum(particle);
-  double temp = calcTemp(particle); //calculate temp of system
+  zeroMomentum(particles);
+  double temp = calcTemp(particles); //calculate temp of system
   double factor = sqrt(temperature / temp); //calculated correction factor
-  for(int i = 0; i < numberParticles; ++i)
-    for(int j = 0; j < 3; ++j)
-      particle[i].v[j] *= factor; //scale velocity
+  for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
+    for(size_t dim (0); dim < 3; ++dim)
+      particle->v[dim] *= factor; //scale velocity
 }
 
-void initialise(vector<CParticle> &particle)
+void initialise(vector<CParticle> &particles, CRandom& RNG)
 {
   int n = ceil(pow(numberParticles/4,(double)1/3)); //find cubic root of number of particles
-  double scale = 1;
-  double a = length / (n);
+  double a = length / n;
   int j = 0, x = 0, y = 0, z = 0;
-  for(int i = 0; i < numberParticles; ++i)
+  for(size_t i (0); i < numberParticles; ++i)
     {
-      //create two uniformly distrubuted random numbers
-      double u = double(rand()%200)/100-1;
-      double v = double(rand()%200)/100-1;
-      double s = u*u + v*v;
-      while(s>=1) //if u^2 + v^2 is creater than zero, ie point lies outside a circle radius 1
-	{
-	  //generate some new random numbers
-	  u = double(rand()%200)/100-1;
-	  v = double(rand()%200)/100-1;
-	  s = u*u + v*v;
-	}
-      double u2 = double(rand()%200)/100-1;
-      double v2= double(rand()%200)/100-1;
-      double s2= u*u + v*v;
-      while(s2>=1) //if u^2 + v^2 is creater than zero, ie point lies outside a circle radius 1
-	{
-	  //generate some new random numbers
-	  u2 = double(rand()%200)/100-1;
-	  v2 = double(rand()%200)/100-1;
-	  s2 = u2*u2 + v2*v2;
-	}
-
-      double R = sqrt(-1 * log(s) / s);
-      double R2 = sqrt(-1 * log(s2) / s2);
       CVector3 location;
       switch (j)
 	{
@@ -716,7 +722,7 @@ void initialise(vector<CParticle> &particle)
 	  break;
 	}
       ++j;
-      if(j==0)
+      if(j == 0)
 	++x;
       if(x >= n)
 	{
@@ -729,11 +735,14 @@ void initialise(vector<CParticle> &particle)
 	  ++z;
 	}
 
-      CVector3 velocity(u*R, v*R, u2*R2); //assign a random unit vector to the velocity
-      particle.push_back(CParticle(location, velocity, radius, mass, i));
+      CVector3 velocity; //assign a random unit vector to the velocity
+      for(size_t dim(0); dim < 3; ++dim)
+	velocity[dim] = RNG.var_normal();
+
+      particles.push_back(CParticle(location, velocity, radius, mass, i));
     }
 
-  correctVelocity(particle);
+  correctVelocity(particles);
 }
 
 void initFromFile (vector<CParticle> &particle)
@@ -810,7 +819,7 @@ void generateNeighbourCells(vector<set<int> >& NC)
 {
   int cells2 = noCells * noCells;
 
-  for(int i = 0; i < NC.size(); ++i)
+  for(size_t i (0); i < NC.size(); ++i)
     {
       int xmain = floor(i / cells2);
       int ymain = floor((i % cells2) / noCells);
@@ -838,7 +847,7 @@ void generateNeighbourCells(vector<set<int> >& NC)
 
 void generateNeighbourList(vector<set<int> >& NL, vector<CParticle>& particles)
 {
-  for(vector<CParticle>::iterator particle = particles.begin(); particle != particles.end(); ++particle)
+  for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
     {
       int cell = calcCell(particle->r);
       NL[cell].insert(particle->particleNo);
@@ -863,28 +872,61 @@ void getEvent(CParticle& p1,
   //pEvents[particle1].push_back(eventTimes(t_min, particle1 ,-1, eventTimes::NEIGHBOURCELL));
   /*for(it_NC = NC[particle[particle1].cellNo].begin(); it_NC != NC[particle[particle1].cellNo].end(); ++it_NC)
     for(it_NL = NL[*it_NC].begin(); it_NL !=NL[*it_NC].end(); ++it_NL)*/
-  //for(vector<CParticle>::iterator p2 = particles.begin(); p2 != particles.end(); ++p2)
-  for(size_t j = 0; j < particles.size(); ++j)
+  for(it_particle p2 = particles.begin(); p2 != particles.end(); ++p2)
     {
-      if (p1.particleNo == j) continue;
-      /*if(j > p1.particleNo)
-	cerr << " p1 " << p1.particleNo << " p2 " << j << endl;*/
-      updatePosition(particles[j]);
-      eventTimes::EventType eventType;
-      double t_min_coll = calcCollisionTime(p1, particles[j], eventType);
-      pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, j, particles[j].collNo, eventType));
-      /*if (p1.particleNo == p2->particleNo) break;
-      if(j > p1.particleNo)
-	cerr << "yay p1 " << p1.particleNo << " p2 " << p2->particleNo << endl;
+      if (p1.particleNo == p2->particleNo) continue;
+      updatePosition(*p2);
       eventTimes::EventType eventType;
       double t_min_coll = calcCollisionTime(p1, *p2, eventType);
       pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));
-      if (p1.particleNo == 111 || p1.particleNo == 62)
-	if(p2->particleNo == 111 || p2->particleNo == 62)
-	cerr << "t_min_coll" << t_min_coll << endl;*/
     }
   events[p1.particleNo] = *min_element(pEvents[p1.particleNo].begin(), pEvents[p1.particleNo].end());
 }
+double calcThermoTime(CRandom& RNG, int& particleNo)
+{
+  particleNo = RNG.var_uniformInt(0, numberParticles - 1); //generate particle to 'collide' with thermostat
+  //cerr << particleNo << endl;
+  double t_min = -thermoMeanFreeTime * log(RNG.var_01());
+  //cerr << t_min << endl;
+  return t + t_min;
+
+}
+
+void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events)
+{
+  CVector3 oldv = particle.v;
+  ++thermoCount;
+  if(thermoCount > thermoFreq)
+    {
+      if((eventCount - thermoLastUpdate != 0)) //check divisior is not zero
+	{
+	  thermoMeanFreeTime *= (double) thermoCount 
+	    / ((eventCount - thermoLastUpdate) * thermoSetting);
+	  thermoLastUpdate = eventCount;
+	  thermoCount = 0;
+	}
+    }
+
+ 
+  updatePosition(particle); //update particle's position
+  double factor = sqrt(temperature);
+  //assign values for each component of the particle's velocity from Gaussian
+  for(size_t dim (0); dim < 3; ++dim) 
+      particle.v[dim] = RNG.var_normal() * factor;
+  //cerr << "old v = (" << oldv.x << ", " << oldv.y << ", " << oldv.z << " ) "
+  //     << "new v = (" << particle.v.x << ", " << particle.v.y << ", " << particle.v.z << ")" << endl;
+  //cerr << "Change in kinetic energy of system " << 0.5 * particle.mass * (particle.v.dotProd(particle.v)-oldv.dotProd(oldv)) << endl;
+  int particleNo = -1;
+  double t_min_thermo = calcThermoTime(RNG, particleNo);
+  if(particleNo == -1)
+    {
+      cerr << "calcThermoTime has not returned a valid particle No" << endl;
+      exit(1);
+    }
+  events[numberParticles] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
+
+}
+
 void updatePosition(CParticle& particle)
 {
   double delta_t = t - particle.updateTime;
@@ -898,12 +940,12 @@ void updatePosition(CParticle& particle)
 void zeroMomentum(vector<CParticle> &particles)
 {
   double sum[3] = {0, 0, 0};
-  for (vector<CParticle>::iterator particle = particles.begin(); particle < particles.end(); ++particle) //loop through particles and calculate sum of x and y velocites
-    for(size_t j (0); j < 3; ++j)
-      sum[j] += particle->v[j];
+  for(it_particle particle = particles.begin(); particle < particles.end(); ++particle) //loop through particles and calculate sum of x and y velocites
+    for(size_t dim (0); dim < 3; ++dim)
+      sum[dim] += particle->v[dim];
   
-  for (vector<CParticle>::iterator particle = particles.begin(); particle < particles.end(); ++particle) //loop through particles and calculate sum of x and y velocites
-    for(size_t j (0); j < 3; ++j)
-      particle->v[j] -= sum[j]/particles.size(); //reduce velocity by 1/number of particles of the total sum
+  for(it_particle particle = particles.begin(); particle < particles.end(); ++particle) //loop through particles and calculate sum of x and y velocites
+    for(size_t dim (0); dim < 3; ++dim)
+      particle->v[dim] -= sum[dim] / particles.size(); //reduce velocity by 1/number of particles of the total sum
 
 }

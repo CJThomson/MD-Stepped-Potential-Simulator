@@ -89,6 +89,11 @@ class CVector3
   {
     return x * v.x + y * v.y + z * v.z;
   }
+
+ double dotProd()
+  {
+    return x * x + y * y + z * z;
+  }
   CVector3 crossProd(const CVector3 &v)
   {
     double x1 = y*v.z-z*v.y;
