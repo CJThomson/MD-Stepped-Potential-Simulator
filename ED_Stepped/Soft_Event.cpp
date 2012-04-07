@@ -1,13 +1,11 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-const double density = 0.85;
-const double temperature = 2.35; //temperature of the system
-double ptail = 32.0 * M_PI * density * density / 9 * (1 / pow(2.3, 6) - 1.5) / pow(2.3, 3);
-//double ptail = 0;
+const double density = 0.8;
+const double temperature = 1; //temperature of the system
 //Simulation:
-int numberParticles = 256; //number of particles
-const int numberEvents = 4.5e+6;
+int numberParticles = 864; //number of particles
+const int numberEvents = 5e+6;
 int eventCount = 0;
 const double length = pow(numberParticles/density, 1.0 / 3.0);
 //const double length = 6.0;
@@ -19,13 +17,14 @@ std::vector<Steps> steps; //create a vectOr to store step propeties
 const int noCells = 3;
 
 //Thermostat:
-bool thermostat = true; //use a thermostat
+bool thermostat = false; //use a thermostat
 const size_t thermoFreq = 200; //frequency thermostat rate is updated
 size_t thermoCount = 0; //counter to change thermostat rate
 size_t thermoLastUpdate = 0;
 double thermoMeanFreeTime = 0.0005;
-const int thermoOff =3.5e+6;
-double thermoSetting = 0.1;
+//const int thermoOff =3.5e+6;
+const int thermoOff = numberEvents;
+double thermoSetting = 0.05;
 //Reduced Unit Definitions
 const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
@@ -185,15 +184,13 @@ int main()
 	    t += dt; //update system time
 	    CParticle p1 = particles[next_event.particle1];
 	    neighbourList[p1.cellNo].erase(next_event.particle1); //erase particle from previous cell
-	    int sign = -1;
-	    if(p1.v[p1.nextCell] >0)
-	      sign = 1;
-	    int newCell = lrint((p1.cellNo + sign * 1 ) / noCells) * noCells;
+	    int newCell = calcNewCell(p1);
 	    neighbourList[newCell].insert(p1.particleNo);
 	    if(writeOutLog >= 1)
 	      logger.outLog << "Particle "<< next_event.particle1 << " changed cell from " << p1.cellNo
 			    << " to " << newCell <<  " at time = "<< t<< endl;
 	    p1.cellNo = newCell;
+	    getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 	    break;
 	  }
 	case eventTimes::THERMOSTAT:
@@ -242,7 +239,7 @@ int main()
 	    }
 
 	}
-      if(eventCount%(numberEvents / 100) == 0 && collEvent)
+      if(eventCount%(numberEvents / 1000) == 0 && collEvent)
 	{
 	  cout << eventCount << " of " << numberEvents << " events simulated"
 	       << " T: " << calcTemp(particles)
@@ -263,7 +260,8 @@ int main()
   cout << "Mean free time: " << freeTime
        << " U: " << TA_U / (readingsTaken * numberParticles) / 2
        << " T: " << TA_T / readingsTaken
-       << " P: " << density * (TA_T + mass / (freeTime * 6.0) * TA_v) / readingsTaken + ptail
+       << " P: " << density * (TA_T + mass / (freeTime * 6.0) * TA_v) / readingsTaken
+       << " <r.v> " << TA_v / readingsTaken
        << endl;
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
@@ -292,8 +290,27 @@ int calcCell(CVector3 r)
   return cell[0] * noCells * noCells + cell[1] * noCells + cell[2];
 }
 
+int calcNewCell(CParticle& particle)
+{
+  cerr << "here" << endl;
+  int cells2 = noCells * noCells;
+  int cell[3];
+  cell[0] = floor(particle.cellNo / cells2);
+  cell[1] = floor((particle.cellNo % cells2) / noCells);
+  cell[2] = particle.cellNo % noCells;
+  int sign = (particle.v[particle.nextCell] < 0) ? -1 : 1;
+  cell[particle.nextCell] += sign;
+  cerr << cell[particle.nextCell] << endl;
+  cerr << lrint(cell[particle.nextCell] / noCells) << endl;
+  cell[particle.nextCell] -= floor((double)cell[particle.nextCell] / noCells) * noCells;
+  cerr << cell[particle.nextCell] << endl;
+  return cell[0] * noCells * noCells + cell[1] * noCells + cell[2];
+}
 double calcCellLeave(CParticle& particle)
 {
+  updatePosition(particle);
+  CVector3 location = particle.r;
+  applyBC(location);
   double t_min[3] = {HUGE_VAL, HUGE_VAL, HUGE_VAL};
   double boundary[3] = {0,0,0};
   double cellLength = length / noCells;
@@ -302,7 +319,10 @@ double calcCellLeave(CParticle& particle)
   cell[0] = floor(particle.cellNo / cells2);
   cell[1] = floor((particle.cellNo % cells2) / noCells);
   cell[2] = particle.cellNo % noCells;
-
+   cerr << " = = = START = = =" << endl;
+  cerr << particle.cellNo << endl;
+  cerr << cellLength << endl;
+  cerr << "(" << cell[0] << ", " << cell[1] << ", " << cell[2] << ")" << endl;
   for(size_t i(0); i < 3; ++i)
     {
       if(particle.v[i] < 0)
@@ -312,10 +332,14 @@ double calcCellLeave(CParticle& particle)
 
       if(particle.v[i] !=0)
 	{
-	  double distance = boundary[i] - particle.r[i];
-	  t_min[i] = distance / fabs(particle.v[i]);
+	  double distance = boundary[i] - location[i];
+	  t_min[i] = distance / particle.v[i];
 	}
     }
+  cerr << "b=(" << boundary[0] << ", " << boundary[1] << ", " << boundary[2] << ")" << endl;
+  cerr << "l=(" << location[0] << ", " << location[1] << ", " << location[2] << ")" << endl;
+  cerr << "v=(" << particle.v[0] << ", " << particle.v[1] << ", " << particle.v[2] << ")" << endl;
+  cerr << "v=(" << t_min[0] << ", " << t_min[1] << ", " << t_min[2] << ")" << endl;
   double tMin =  min(t_min[0], min(t_min[1], t_min[2]));
   if(t_min[0] == tMin)
     particle.nextCell = 0;
@@ -802,8 +826,8 @@ void initFromFile (vector<CParticle> &particle)
 void initSteps()
 {
   //Steps from Chepela et al, Case 6
-  //steps.push_back(Steps(1.00,0.8)); //step 0
-  steps.push_back(Steps(0.80,66.74)); //step 0
+  steps.push_back(Steps(1.00,500)); //step 0
+  /*steps.push_back(Steps(0.80,66.74)); //step 0
   steps.push_back(Steps(0.85,27.55)); //step 1
   steps.push_back(Steps(0.90, 10.95)); //step 3
   steps.push_back(Steps(0.95, 3.81)); //step 4
@@ -812,7 +836,7 @@ void initSteps()
   steps.push_back(Steps(1.25,-0.98)); //step 7
   steps.push_back(Steps(1.45,-0.55)); //step 8
   steps.push_back(Steps(1.75,-0.22)); //step 9
-  steps.push_back(Steps(2.30,-0.06)); //step 10
+  steps.push_back(Steps(2.30,-0.06)); //step 10*/
 }
 
 void generateNeighbourCells(vector<set<int> >& NC)
@@ -862,16 +886,16 @@ void getEvent(CParticle& p1,
 	      vector<set<int> >& NL, //the particles in each cell
 	      vector<set<int> >& NC) //the cells neighbouring each cell )
 {
-  set<int>::iterator it_NL;
+  set<int>::iterator p2;
   set<int>::iterator it_NC;
   pEvents[p1.particleNo].clear();
   updatePosition(p1);
   double t_min_sent = calcSentinalTime(p1); 
   pEvents[p1.particleNo].push_back(eventTimes(t_min_sent, p1.particleNo, -1, 0, eventTimes::SENTINAL));
-  //t_min = calcCellLeave(particle[particle1]);
-  //pEvents[particle1].push_back(eventTimes(t_min, particle1 ,-1, eventTimes::NEIGHBOURCELL));
-  /*for(it_NC = NC[particle[particle1].cellNo].begin(); it_NC != NC[particle[particle1].cellNo].end(); ++it_NC)
-    for(it_NL = NL[*it_NC].begin(); it_NL !=NL[*it_NC].end(); ++it_NL)*/
+  /*uble t_min_NL = calcCellLeave(p1);
+  pEvents[p1.particleNo].push_back(eventTimes(t_min_NL, p1.particleNo ,-1,0, eventTimes::NEIGHBOURCELL));
+  for(it_NC = NC[p1.cellNo].begin(); it_NC != NC[p1.cellNo].end(); ++it_NC)
+  for(p2 = NL[*it_NC].begin(); p2 !=NL[*it_NC].end(); ++p2)*/
   for(it_particle p2 = particles.begin(); p2 != particles.end(); ++p2)
     {
       if (p1.particleNo == p2->particleNo) continue;
@@ -879,6 +903,12 @@ void getEvent(CParticle& p1,
       eventTimes::EventType eventType;
       double t_min_coll = calcCollisionTime(p1, *p2, eventType);
       pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));
+      /*if (p1.particleNo == *p2) continue;
+      updatePosition(particles[*p2]);
+      eventTimes::EventType eventType;
+      double t_min_coll = calcCollisionTime(p1, particles[*p2], eventType);
+      pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, *p2, particles[*p2].collNo, eventType));
+      */
     }
   events[p1.particleNo] = *min_element(pEvents[p1.particleNo].begin(), pEvents[p1.particleNo].end());
 }

@@ -34,6 +34,7 @@ typedef std::vector<CParticle>::iterator it_particle;
 //----Function Declarations----
 void applyBC(CVector3&);
 int calcCell(CVector3);
+int calcNewCell(CParticle&);
 double calcCellLeave(CParticle&);
 double calcCollisionTime(CParticle&, CParticle&, eventTimes::EventType&);
 double calcDiff(std::vector<CParticle>&, double);
