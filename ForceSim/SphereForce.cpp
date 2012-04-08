@@ -2,19 +2,28 @@
 #include "Declares.h" //declarations for this program
 
 //Physical Properties:
-const double density = 0.85;
-const double temperature = 1.3; //temperature of the system
+const double density = 0.776;
+const double temperature = 0.85; //temperature of the system
 
 //Simulation:
-const int numberParticles =256; //number of particles
-const double simTime = 550; //length of the Simulation
-const double dt = 0.005; //length of time interval
+int numberParticles = 864; //number of particles
+const int simTime = 60000; //length of the Simulation
+const double dt = 0.005; //length of ticme interval
 const double length = pow(numberParticles / density, 1.0 / 3.0);
+const double r_cut = 3.0;
 const CVector3 systemSize(length, length, length); //size of the system
 const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
+const int NL_update = 10;
+
+const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
+const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
+
+//Thermostat
 bool thermostat = true; //use a thermostat
 const double thermoFreq = 0.05; //update frequency of thermostat
+const int thermoOff = 10000;
+
 //Reduced Unit Definitions:
 const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
@@ -22,11 +31,14 @@ const double epsilon = 1; //minimum energy of Lennard Jones Potential
 const double sigma = 1; //distance for Lennard Jones root
 
 //Logging:
-const int psteps = 20; //frequency of output to file
+const int out_interval = 20; //frequency of output to file
+const int diff_interval = 10;
+const int rdf_interval = 10;
+const int sample_interval = 10;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int noReadings = 30000; //number of readings to take
+const int startSampling = 20000; //number of readings to take
 double readingTime = 0;
 const int noBins = 500; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
@@ -48,143 +60,148 @@ int main()
   //variable declarations
   Logger log; //create instance of the logger class
   vector<CParticle> particles;
+  int noReadings = 0;
+  cout << "Initialising random number generator..." << endl;
+  CRandom RNG;
+
   //Initialise the simulation
   if(initFile)
     initFromFile(particles); //initialise the system from file
   else
-    initialise(particles); // initialise the system
-
+    initialise(particles, RNG); // initialise the system
+  numberParticles = particles.size();
+  cout << "Initialising " << numberParticles << " particles with density "
+       << density << " is a box of side length " << length << endl;
   vector<int> neighbourList;
   int listPos[particles.size()];
 
+  cout << "Initialising Log files..." << endl;
   if(writeLoc) { log.initialise(Logger::LOCATIONS); } //initialise location logger
-  //log.initialise(Logger::BOLTZMANN_H); //initialise logging of Boltzmann H value
+
+  cout << "Initialising neighbour lists..." << endl;
   calcNeighbourList(particles, neighbourList, listPos);
   calcAllForces(particles, neighbourList, listPos); //calculate all forces on system
+
   if(writeLoc) { log.write_Location(particles, 0, systemSize); } //write initial values to log
 
-  //Initialise random number generator
-  boost::mt19937 eng;
-  //initialise normally distributed random numbers
-  boost::normal_distribution <double> nd(0.0, sqrt(3 * temperature));
-  boost::variate_generator<boost::mt19937&, boost::normal_distribution<double> > var_nor(eng,nd);
-  //initialise uniformly distributed random numbers
-  boost::uniform_real<double> ud(0.0, 1.0);
-  boost::variate_generator<boost::mt19937&, boost::uniform_real<double> > var_uni(eng, ud);
-
-  for (double t = dt; t < simTime; t += dt)
+  cout << "Starting Simulation..." << endl;
+  double t = 0;
+  for (size_t timeStep (0); timeStep < simTime; ++timeStep)
     {
+      t += dt;
       //move all particles forward
-      for(int i = 0; i < numberParticles; ++i)
+      for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
 	{
 	  //move particles in space using Velocity Verlet
-	  particles[i].r += dt * (particles[i].v + particles[i].a * dt * 0.5);
-	  particles[i].v += dt * particles[i].a * 0.5; //calculate part of velcity
-	  particles[i].a = CVector3(0,0,0); //zero acceleration
+	  particle->r += dt * (particle->v + particle->a * dt * 0.5);
+	  particle->v += dt * particle->a * 0.5; //calculate part of velcity
+	  (particle->a).zero(); //zero acceleration
 	}
 
       calcAllForces(particles, neighbourList, listPos); //calculate forces (and accelerations)
 
-      for(int i = 0; i < numberParticles; ++i)
-	particles[i].v += dt * particles[i].a * 0.5; //calculate remainder of velocity
+      for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+	particle->v += dt * particle->a * 0.5; //calculate remainder of velocity
 
       //apply Andersen Thermostat
       if(thermostat)
 	{
-	  for(int i = 0; i < numberParticles; ++i)
-	    {
-	      if(var_uni() < thermoFreq)
-		{
-		  /*for(int j = 0; j < 3; ++j)
-		    particles[i].v[j] = var_nor();*/
-		    particles[i].v = particles[i].v.normalise() * var_nor();
-		}
-	    }
+	  double factor = sqrt(temperature);
+	  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+	    if(RNG.var_01() < thermoFreq)
+	      {
+		for(int j = 0; j < 3; ++j)
+		  particle->v[j] = RNG.var_normal() * factor;
+	      }
 	}
 
-      int readNo = (t - simTime) / dt + noReadings;
       //update particle
-      if(int(t/dt)%psteps==0)
-	{
-	  log.write_Location(particles, t, systemSize); //write locations to output file
-	  //log.write_BoltzH(t, calcBoltzmannH(particles));
-	  if(readNo >0)
-	    {
-	      double D = calcDiff(particles, t); //calculate value of diffusion coefficient
-	      coDiff.push_back(Diffusion(D,t)); //add value to vector
-	    }
+      if(timeStep % out_interval == 0)
+	log.write_Location(particles, t, systemSize); //write locations to output file
 
-	}
-      if(int(t/dt)%5 == 0)
+      if(timeStep % NL_update == 0)
 	calcNeighbourList(particles, neighbourList, listPos);
-      if(int(t/dt)%100==0) //write a screen output every 100 timesteps
+
+      if(timeStep % 100 == 0) //write a screen output every 100 timesteps
 	{
-	  double rc=3.0;
-	  double irc3 = 1.0/(rc*rc*rc), irc6 = irc3*irc3;
-	  double ptail = 32*M_PI*density*density/9*(irc6 - 1.5)*irc3;
-
 	  double pshort = (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3)) + ptail;
-
-      	  cout << fixed << setprecision(2) << t/simTime * 100 << "% complete" << "\t" <<
-	    " t: " << setprecision(2) << t << "\t" <<
-	    " T: " << setprecision(4) << calcTemp(particles) << "\t" <<
-	    " P: " << setprecision(3) << pshort + ptail  <<
-	    " U: " << setprecision(3) << calcPotential(particles,neighbourList, listPos)  <<
-	    endl;
+      	  cout << fixed << setprecision(2) << (double) timeStep / simTime * 100 << "% complete" << "\t"
+	       << " t: " << setprecision(2) << t << "\t"
+	       << " T: " << setprecision(4) << calcTemp(particles) << "\t"
+	       << " P: " << setprecision(3) << pshort << "\t"
+	       << " P + LR: " << setprecision(3) << pshort + ptail << "\t"
+	       << " U: " << setprecision(3) << calcPotential(particles,neighbourList, listPos) << "\t"
+	       << endl;
 	}
 
-      if(readNo + 20000 >= 0 && thermostat)
+      if(timeStep == thermoOff && thermostat)
       {
-        thermostat = false;  //turn off thermostat just prior to taking readings
-        zeroMomentum(particles); //zero linear momentum in the system
+	thermostat = false;  //turn off thermostat just prior to taking readings
+	zeroMomentum(particles); //zero linear momentum in the system
 
       }
-
-      if(readNo == 0)
+      if(timeStep == startSampling)
 	{
 	  readingTime = t;
 	  for(int i = 0; i < particles.size(); ++i)
 	    particles[i].r0 = particles[i].r;
 	}
 
-      if(readNo > 0 && readNo%4 == 0) //only take a reading during final noReadings timesteps and only 1 every 4 steps
+      if(timeStep < startSampling)
 	{
-	  calcRadDist(particles); //calculate radial distribution
-	  for(int i = 0; i < noBins; ++i)
-	    TA_gVal[i]+=gVal[i]; //calculate running total
+	  ++noReadings;
+	  if(timeStep % diff_interval == 0)
+	    {
+	      double D = calcDiff(particles, t); //calculate value of diffusion coefficient
+	      coDiff.push_back(Diffusion(D,t)); //add value to vector
+	    }
 
-	  TA_Pressure += (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3)); //add current pressure to TA
-	  TA_Temp += calcTemp(particles); //add current temp to TA
-	  TA_U += calcPotential(particles, neighbourList, listPos); //add current potential energy to TA
+	  if(timeStep % rdf_interval == 0)
+	    {
+	      calcRadDist(particles); //calculate radial distribution
+	      for(int i = 0; i < noBins; ++i)
+		TA_gVal[i] += gVal[i]; //calculate running total
+	    }
+
+	  if(timeStep % sample_interval == 0)
+	    {
+	      TA_Pressure += (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3)); //add current pressure to TA
+	      TA_Temp += calcTemp(particles); //add current temp to TA
+	      TA_U += calcPotential(particles, neighbourList, listPos); //add current potential energy to TA
+	    }
 	}
+
     }
+
+  cout << "Simulation Complete" << endl;
   //After Simulation
   double deltaR = maxR / noBins; //width of each shell
-  for(int i = 0; i < noBins; ++i)
+  for(size_t i(0); i < noBins; ++i)
     {
-      double volShell = 4.0 / 3.0 * PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
-      TA_gVal[i]/=(0.5 * numberParticles * noReadings * 0.25 * volShell * density);
+      double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
+      TA_gVal[i]/=(0.5 * numberParticles * noReadings / rdf_interval * volShell * density);
     }
-
+  cout << "write output files..." << endl;
   log.write_Location(particles, simTime, systemSize);
   log.write_RadDist(TA_gVal,noBins, deltaR); //write radial gdistribution file
   log.write_Diff(coDiff); //write coefficient of diffusion file
   if(overwriteInit)
     log.write_Init(particles);
 
-  double rc=3.0;
-  double irc3 = 1.0/(rc*rc*rc), irc6 = irc3*irc3;
-  double ptail = 32*M_PI*density*density/9*(irc6 - 1.5)*irc3;
-
   //output Time Averaged system properties
-  cout << "Time Averages:- Temp: " << TA_Temp / (noReadings * 0.25) <<
-    " Pressure(Total): " << TA_Pressure / (noReadings * 0.25) + ptail  <<
-    " U: " << TA_U / (numberParticles * noReadings * 0.25 ) << endl;
+  cout << setprecision(5)
+       << "Time Averages:- Temp: " << TA_Temp * sample_interval / noReadings
+       << " P: " << TA_Pressure * sample_interval / noReadings
+       << " P+LR: " << TA_Pressure * sample_interval / noReadings + ptail 
+       << " U: " << TA_U * sample_interval / (numberParticles * noReadings) 
+       << " U+LR: " << TA_U * sample_interval / (numberParticles * noReadings) + utail
+       << endl;
   return 0;
 }
+								    
 void initFromFile (vector<CParticle> &particle)
 {
-  ifstream initLog ("init86.dat");
+  ifstream initLog ("init.dat");
   string line;
   int strpos = 1;
   while(initLog.good() )
@@ -194,7 +211,7 @@ void initFromFile (vector<CParticle> &particle)
       CVector3 init_v;
       getline(initLog, line); //get next line of log
       vector<CParticle> p;
-      for(int i = 0; i < line.size(); ++i)
+      for(size_t i (0); i < line.size(); ++i)
         {
 	  if(line[i] == '\t')
             {
@@ -234,70 +251,56 @@ void initFromFile (vector<CParticle> &particle)
     }
 }
 
-void initialise(vector<CParticle>& particle)
+void initialise(vector<CParticle>& particle, CRandom& rng)
 {
-  int n = ceil(pow(numberParticles/4,(double)1/3)); //find cubic root of number of particles
-  double a = length / (n);
+  int n = ceil(pow(numberParticles / 4, (double) 1 / 3)); //find cubic root of number of particles
+  double a = length / n;
   int j = 0, x = 0, y = 0, z = 0;
   for(int i = 0; i < numberParticles; ++i)
     {
-      //create two uniformly distrubuted random numbers
-      double u = double(rand()%200)/100-1;
-      double v = double(rand()%200)/100-1;
-      double s = u*u + v*v;
-      while(s>=1) //if u^2 + v^2 is creater than zero, ie point lies outside a circle radius 1
-        {
-	  //generate some new random numbers
-	  u = double(rand()%200)/100-1;
-	  v = double(rand()%200)/100-1;
-	  s = u*u + v*v;
-        }
-      double u2 = double(rand()%200)/100-1;
-      double v2 = double(rand()%200)/100-1;
-      double s2 = u*u + v*v;
-      while(s2>=1) //if u^2 + v^2 is creater than zero, ie point lies outside a circle radius 1
-        {
-	  //generate some new random numbers
-	  u2 = double(rand()%200)/100-1;
-	  v2 = double(rand()%200)/100-1;
-	  s2 = u2*u2 + v2*v2;
-        }
-
-      double R = sqrt(-1*log(s)/s);
-      double R2 = sqrt(-1*log(s2)/s2);
       CVector3 location;
       switch (j) //set particles in a FCC structure
-        {
-        case 0:
-	  location = CVector3(x * a - length * 0.5, y * a - length * 0.5, z * a - length * 0.5);
+	{
+	case 0:
+	  location = CVector3(x * a - length * 0.5,
+			      y * a - length * 0.5,
+			      z * a - length * 0.5);
 	  break;
-        case 1:
-	  location = CVector3(x* a - length * 0.5, (y + 0.5) * a - length * 0.5, (z + 0.5) * a - length * 0.5);
+	case 1:
+	  location = CVector3(x * a - length * 0.5,
+			      (y + 0.5) * a - length * 0.5,
+			      (z + 0.5) * a - length * 0.5);
 	  break;
-        case 2:
-	  location = CVector3((x + 0.5) * a - length * 0.5, y * a - length * 0.5, (z + 0.5) * a - length * 0.5);
+	case 2:
+	  location = CVector3((x + 0.5) * a - length * 0.5,
+			      y * a - length * 0.5,
+			      (z + 0.5) * a - length * 0.5);
 	  break;
-        case 3:
-	  location = CVector3((x + 0.5) * a - length * 0.5, (y + 0.5) * a - length * 0.5, z * a - length * 0.5);
+	case 3:
+	  location = CVector3((x + 0.5) * a - length * 0.5,
+			      (y + 0.5) * a - length * 0.5,
+			      z * a - length * 0.5);
 	  j = -1;
 	  break;
-        }
+	}
       ++j;
       if(j==0)
 	++x;
-
+  
       if(x >= n)
-        {
+	{
 	  x=0;
 	  ++y;
-        }
+	}
       if(y >= n)
-        {
+	{
 	  y=0;
 	  ++z;
-        }
-
-      CVector3 velocity(u*R, v*R, u2*R2); //assign a random unit vector to the velocity
+	}
+      
+      CVector3 velocity(rng.var_normal(),
+			rng.var_normal(),
+			rng.var_normal()); //assign a random unit vector to the velocity
       particle.push_back(CParticle(location, velocity, radius, mass, i));
     }
 
@@ -335,7 +338,7 @@ void calcRadDist(vector<CParticle> &particle)
 	{
 	  CVector3 distance = particle[i].r - particle[j].r;
 	  applyBC(distance);
-	  if(distance.length() <= maxR)
+	  if(distance.length() < maxR)
 	    {
 	      int index = floor(distance.length() * noBins/ maxR);
 	      ++gVal[index];
@@ -448,42 +451,7 @@ void zeroMomentum(vector<CParticle> &particle)
       particle[i].v[j] -= sum[j]/particle.size(); //reduce velocity by 1/number of particles of the total sum
 
 }
-double calcBoltzmannH(vector<CParticle> &particle)
-{
-  const double vmax = 20;
-  const int noBins = 1000;
-  const double dv = vmax / noBins;
-  double H[3] = {0, 0, 0};
-  int bin[3][noBins];
 
-  for(int i = 0; i < noBins; ++i)
-    {
-      for(int k = 0; k < 3; ++k)
-	bin[k][i] = 0;
-      for(int j = 0; j < particle.size(); ++j)
-	{
-	  double v = i * 2 * dv - vmax;
-	  for(int k = 0; k < 3; ++k)
-	    {
-	      if(particle[j].v[k] > v - dv && particle[j].v[k] < v + dv)
-		++bin[k][i];
-	    }
-	}
-      for(int k = 0; k < 3; ++k)
-	{
-	  if(bin[k][i] !=0)
-	    {
-	      double f = (double) bin[k][i] / particle.size();
-	      H[k] += f * log(f) * dv;
-	    }
-
-
-	}
-
-    }
-
-  return (H[0] + H[1] + H[2]) / 3.0;
-}
 void calcNeighbourList(vector<CParticle> &particle, vector<int> &NL, int NLpos[])
 {
   int count = 0;
