@@ -1,6 +1,5 @@
 #pragma once
 #include<math.h> //allows use of mathematical functions
-#include<cstdlib> //allows use of random numbers
 #include "Vector3.h" //allows use of vector mathematics
 class CParticle
 {

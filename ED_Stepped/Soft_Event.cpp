@@ -240,7 +240,8 @@ int main()
 
 	  if(eventCount > startSampling)
 	    {
-	      if(eventCount % sample_interval)
+	      if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
+	      if(eventCount % sample_interval == 0)
 		{
 		  ++readingsTaken;
 		  double deltaT = t - lastSampleTime;
@@ -263,6 +264,7 @@ int main()
 		  double temp_pressure = (density * temp_temperature + temp_pFlux * mass * density / (3.0 * particles.size() * deltaT));
 		  TA_p += temp_pressure * deltaT;
 		  TA_p2 += temp_pressure * temp_pressure * deltaT;
+		  lastSampleTime = t;
 		}
 	      if(eventCount % diff_interval == 0)
 		coDiff.push_back(Diffusion(calcDiff(particles, t),t));
@@ -290,7 +292,7 @@ int main()
   for(int i = 0; i < noBins; ++i)
     {
       double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
-      TA_gVal[i] /= (0.5 * numberParticles * (readingsTaken/10) * volShell * density);
+      TA_gVal[i] /= (0.5 * numberParticles * (readingsTaken/ rdf_interval) * volShell * density);
     }
   //Output time averages
   cout << "Time Averages:" << endl;

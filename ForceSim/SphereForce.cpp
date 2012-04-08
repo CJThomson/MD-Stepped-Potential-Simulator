@@ -3,11 +3,11 @@
 
 //Physical Properties:
 const double density = 0.85;
-const double temperature = 0.8; //temperature of the system
+const double temperature = 0.9; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 60000; //length of the Simulation
-const double dt = 0.005; //length of ticme interval
+const int simTime = 300000; //length of the Simulation
+const double dt = 0.001; //length of ticme interval
 const double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
 const CVector3 systemSize(length, length, length); //size of the system
@@ -17,11 +17,10 @@ const int NL_update = 10;
 
 const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
 const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
-
 //Thermostat
 bool thermostat = true; //use a thermostat
 const double thermoFreq = 0.1; //update frequency of thermostat
-const int thermoOff = HUGE_VAL;
+const int thermoOff = simTime;
 
 //Reduced Unit Definitions:
 const double mass = 1; //mass of a particle
@@ -37,7 +36,7 @@ const int sample_interval = 4;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 20000; //number of readings to take
+const int startSampling = 100000; //number of readings to take
 double readingTime = 0;
 const int noBins = 500; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
@@ -63,6 +62,7 @@ int main()
   Logger log; //create instance of the logger class
   vector<CParticle> particles;
   int noReadings = 0;
+
   cout << "Initialising random number generator..." << endl;
   CRandom RNG;
   RNG.seed();
@@ -72,19 +72,22 @@ int main()
   else
     initialise(particles, RNG); // initialise the system
   numberParticles = particles.size();
+
   cout << "Initialising " << numberParticles << " particles with density "
-       << density << " is a box of side length " << length << endl;
-  vector<int> neighbourList;
-  int listPos[particles.size()];
+       << density << " in a box of side length " << length << endl;
+
+
 
   cout << "Initialising Log files..." << endl;
   if(writeLoc) { log.initialise(Logger::LOCATIONS); } //initialise location logger
+  if(writeLoc) { log.write_Location(particles, 0, systemSize); } //write initial values to log
 
   cout << "Initialising neighbour lists..." << endl;
+  vector<int> neighbourList;
+  int listPos[particles.size()];
   calcNeighbourList(particles, neighbourList, listPos);
   calcAllForces(particles, neighbourList, listPos); //calculate all forces on system
 
-  if(writeLoc) { log.write_Location(particles, 0, systemSize); } //write initial values to log
 
   cout << "Starting Simulation..." << endl;
   double t = 0;
@@ -275,7 +278,7 @@ void initialise(vector<CParticle>& particle, CRandom& rng)
   int n = ceil(pow(numberParticles / 4, (double) 1 / 3)); //find cubic root of number of particles
   double a = length / n;
   int j = 0, x = 0, y = 0, z = 0;
-  for(int i = 0; i < numberParticles; ++i)
+  for(size_t i (0); i < numberParticles; ++i)
     {
       CVector3 location;
       switch (j) //set particles in a FCC structure
@@ -326,104 +329,104 @@ void initialise(vector<CParticle>& particle, CRandom& rng)
   correctVelocity(particle);
 }
 
-double calcDiff(vector<CParticle>& particle, double time)
+double calcDiff(vector<CParticle>& particles, double time)
 {
   double sumDiff = 0;
-  for(int i = 0; i < particle.size(); ++i)
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
     {
-      CVector3 distTravelled = particle[i].r - particle[i].r0;
-      sumDiff += distTravelled.dotProd(distTravelled);
+      CVector3 distTravelled = particle->r - particle->r0;
+      sumDiff += distTravelled.dotProd();
     }
 
-
-  return sumDiff / particle.size();
-  //return sumDiff / (6 * particle.size() * (time -readingTime));
+  return sumDiff / particles.size();
 }
-double calcTemp(vector<CParticle> &particle)
+
+double calcTemp(vector<CParticle> &particles)
 {
   double sum = 0;
-  for(int i = 0; i < particle.size(); ++i)
-    sum += particle[i].v.dotProd(particle[i].v);
-  return mass/(3*particle.size())*sum;
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+    sum += particle->v.dotProd();
+  return mass / ( 3 * particles.size()) * sum;
 }
-void calcRadDist(vector<CParticle> &particle)
-{
-  for(int i = 0; i < noBins; ++i)
-    gVal[i] = 0; //rezero array
 
-  for(int i = 0; i < particle.size(); ++i)
-    {
-      for(int j = i + 1; j < particle.size(); ++j)
-	{
-	  CVector3 distance = particle[i].r - particle[j].r;
-	  applyBC(distance);
-	  if(distance.length() < maxR)
-	    {
-	      int index = floor(distance.length() * noBins/ maxR);
-	      ++gVal[index];
-	    }
-	}
-    }
+void calcRadDist(vector<CParticle> &particles)
+{
+  for(size_t i (0); i < noBins; ++i)
+    gVal[i] = 0; //rezero array
+  
+  for(it_part p1 = particles.begin(); p1 != particles.end(); ++p1)
+    for(it_part p2 = p1 + 1; p2 != particles.end(); ++p2)
+      {
+	CVector3 distance = p1->r - p2->r;
+	applyBC(distance);
+	if(distance.length() < maxR)
+	  {
+	    int index = floor(distance.length() * noBins / maxR);
+	    ++gVal[index];
+	  }
+      }
 }
 
 CVector3 calcForce(CVector3 rij)
 {
-  return 24.0 * epsilon / sigma * (2.0 * pow(sigma / rij.length(), 13) - pow(sigma / rij.length(), 7)) * rij.normalise();
+  return 24.0 * epsilon / sigma * (2.0 * pow((sigma / rij.length()), 13) - pow((sigma / rij.length()), 7)) * rij.normalise();
 }
-double calcKinetic(vector<CParticle> &particle)
+double calcKinetic(vector<CParticle> &particles)
 {
-  double kinetic=0;
-  for(int i = 0; i < numberParticles; i++)
-    kinetic += particle[i].kineticEnergy();
+  double kinetic = 0;
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+    kinetic += particle->kineticEnergy();
   return kinetic;
 }
-double calcPotential(vector<CParticle> &particle, vector<int> &NL, int NLpos[])
+
+double calcPotential(vector<CParticle> &particles, vector<int> &NL, int NLpos[])
 {
   double potential = 0;
   //loop through each pair of particles
-  for(int i = 0; i < particle.size(); ++i)
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
     {
       int max_length = NL.size();
-      if(i+1 < particle.size())
-        max_length = NLpos[i+1];
-      for(int j = NLpos[i]; j < max_length; ++j)
+      if(particle->particleNo + 1 < particles.size())
+        max_length = NLpos[particle->particleNo + 1];
+      for(size_t j = NLpos[particle->particleNo]; j < max_length; ++j)
 	{
-	  CVector3 distance = particle[i].r - particle[NL[j]].r; //vector between particles
+	  CVector3 distance = particle->r - particles[NL[j]].r; //vector between particles
 	  applyBC(distance);
 	  if(distance.length() <= 6 * radius)
-      potential += 4.0 * epsilon*(pow(sigma/distance.length(),12)-pow(sigma/distance.length(),6));
+	    potential += 4.0 * epsilon * (pow(sigma / distance.length(), 12) - pow(sigma / distance.length(), 6));
 	}
     }
-  return potential / particle.size();
+  return potential / particles.size();
 }
-void correctVelocity(vector<CParticle> &particle)
+
+void correctVelocity(vector<CParticle> &particles)
 {
-  zeroMomentum(particle); //zero linear momentum of the system
-  double temp = calcTemp(particle); //calculate temperature of system
+  zeroMomentum(particles); //zero linear momentum of the system
+  double temp = calcTemp(particles); //calculate temperature of system
   double factor = sqrt(temperature/temp); //calculate correction factor to set system to correct temp
-  for (int i = 0; i < numberParticles; ++i)
-    for(int j = 0; j < 3; ++j)
-      particle[i].v[j] *= factor;
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+    for(size_t dim (0); dim < 3; ++dim)
+      particle->v[dim] *= factor;
 }
 
 void applyBC(CVector3& pos)
 {
-  for (int i = 0; i < 3; ++i)
-    pos[i] -= lrint(pos[i] / systemSize[i]) * systemSize[i];
+  for (size_t dim (0); dim < 3; ++dim)
+    pos[dim] -= lrint(pos[dim] / systemSize[dim]) * systemSize[dim];
 }
-double calcVirial(vector<CParticle> &particle, vector<int> &NL, int NLpos[])
+double calcVirial(vector<CParticle> &particles, vector<int> &NL, int NLpos[])
 {
   double virial = 0;
 
   //loop through each pair of particles
-  for(int i = 0; i < particle.size(); ++i)
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
     {
       int max_length = NL.size();
-      if(i + 1 < particle.size())
-        max_length = NLpos[i + 1];
-      for(int j = NLpos[i]; j < max_length; ++j)
+      if(particle->particleNo + 1 < particles.size())
+        max_length = NLpos[particle->particleNo + 1];
+      for(size_t j = NLpos[particle->particleNo]; j < max_length; ++j)
 	{
-	  CVector3 distance = particle[i].r - particle[NL[j]].r; //vector between particles
+	  CVector3 distance = particle->r - particles[NL[j]].r; //vector between particles
 	  applyBC(distance);
 	  //calculate virial component
 	  if(distance.length() <= 6 * radius)
@@ -437,55 +440,58 @@ double calcVirial(vector<CParticle> &particle, vector<int> &NL, int NLpos[])
 
   return virial;
 }
+
 void calcAllForces(vector<CParticle>& particles, vector<int>& NL, int NLpos[])
 {
-  for(int i = 0; i < particles.size(); ++i)
+
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
     {
       int max_length = NL.size();
-      if(i + 1 < particles.size())
-        max_length = NLpos[i + 1];
-      for(int j = NLpos[i]; j < max_length; ++j)
+      if(particle->particleNo + 1 < particles.size())
+        max_length = NLpos[particle->particleNo + 1];
+      for(size_t j = NLpos[particle->particleNo]; j < max_length; ++j)
 	{
-      //cout << i << " " << j << endl;
-	  CVector3 distance = particles[i].r - particles[NL[j]].r;
+	  CVector3 distance = particle->r - particles[NL[j]].r; //vector between particles
 	  applyBC(distance);
-	  if(distance.length() <= 6 * radius) //truncate the lennard jones potential at 3 diameters
+	  if(distance.length() <= 6 * radius)
 	    {
 	      CVector3 force = calcForce(distance); //calculate the force on the particle
 	      //change particle accelerations
-	      particles[i].a += force / mass;
+	      particle->a += force / mass;
 	      particles[NL[j]].a -= force / mass;
 	    }
 	}
     }
 }
-void zeroMomentum(vector<CParticle> &particle)
+
+void zeroMomentum(vector<CParticle> &particles)
 {
   double sum[3] = {0, 0, 0};
-  for (int i = 0; i < particle.size(); ++i) //loop through particles and calculate sum of x and y velocites
-    for(int j = 0; j < 3; ++j)
-      sum[j] += particle[i].v[j];
-  for (int i = 0; i < particle.size(); ++i)
-    for(int j = 0; j < 3; ++j)
-      particle[i].v[j] -= sum[j]/particle.size(); //reduce velocity by 1/number of particles of the total sum
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+    for(size_t dim = 0; dim < 3; ++dim)
+      sum[dim] += particle->v[dim];
+
+  for(it_part particle = particles.begin(); particle != particles.end(); ++particle)
+    for(size_t dim = 0; dim < 3; ++dim)
+      particle->v[dim] -= sum[dim]/particles.size(); //reduce velocity by 1/number of particles of the total sum
 
 }
 
-void calcNeighbourList(vector<CParticle> &particle, vector<int> &NL, int NLpos[])
+void calcNeighbourList(vector<CParticle> &particles, vector<int> &NL, int NLpos[])
 {
   int count = 0;
   NL.clear(); //clear any old neighbour list
-  for(int i = 0; i < particle.size(); ++i)
+  for(it_part p1 = particles.begin(); p1 != particles.end(); ++p1)
     {
-      NLpos[i] = count; // set position of i's neighbours in neighbour list
-      for(int j = i + 1; j < particle.size(); ++j)
+      NLpos[p1->particleNo] = count; // set position of i's neighbours in neighbour list
+      for(it_part p2 = p1 + 1; p2 != particles.end(); ++p2)
 	{
-	  CVector3 distance = particle[i].r - particle[j].r;
+	  CVector3 distance = p1->r - p2->r;
 	  applyBC(distance);
 	  if(distance.length() <= 6.6 * radius) //if particles are close together
 	    {
 	      ++count; //increment counter
-	      NL.push_back(j); //add particle j to particle i's neighbour list
+	      NL.push_back(p2->particleNo); //add particle j to particle i's neighbour list
 	    }
 	}
     }
