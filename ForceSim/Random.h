@@ -5,6 +5,7 @@
 #include <boost/random/variate_generator.hpp>
 #include <boost/random/uniform_int.hpp>
 #include <boost/random/uniform_real.hpp>
+#include <time.h>
 class CRandom
 {
 
@@ -32,5 +33,9 @@ class CRandom
     boost::uniform_int<int> ud_int(lower, upper);
     boost::variate_generator<boost::mt19937&, boost::uniform_int<int> > uni_int(randomNumberGenerator, ud_int);
     return uni_int();
+  }
+  void seed()
+  {
+    randomNumberGenerator.seed(time(NULL));
   }
 };

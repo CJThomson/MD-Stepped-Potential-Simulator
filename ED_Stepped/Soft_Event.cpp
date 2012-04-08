@@ -1,10 +1,10 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-const double density = 0.8;
-const double temperature = 1; //temperature of the system
+const double density = 0.85;
+const double temperature = 1.34; //temperature of the system
 //Simulation:
-int numberParticles = 864; //number of particles
+int numberParticles = 256; //number of particles
 const int numberEvents = 5e+6;
 int eventCount = 0;
 const double length = pow(numberParticles/density, 1.0 / 3.0);
@@ -17,7 +17,7 @@ std::vector<Steps> steps; //create a vectOr to store step propeties
 const int noCells = 3;
 
 //Thermostat:
-bool thermostat = false; //use a thermostat
+bool thermostat = true; //use a thermostat
 const size_t thermoFreq = 200; //frequency thermostat rate is updated
 size_t thermoCount = 0; //counter to change thermostat rate
 size_t thermoLastUpdate = 0;
@@ -25,6 +25,7 @@ double thermoMeanFreeTime = 0.0005;
 //const int thermoOff =3.5e+6;
 const int thermoOff = numberEvents;
 double thermoSetting = 0.05;
+
 //Reduced Unit Definitions
 const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
@@ -34,10 +35,14 @@ const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties
-const int noReadings = 5e+5; //number of readings to take
-const int noBins = 1000; //number of radial bins
+const int startSampling = 4e+6; //number of readings to take
+const int sample_interval = 1;
+const int rdf_interval = 100;
+const int diff_interval = 20;
+double lastSampleTime = 0;
+double startSampleTime = -1;
+const int noBins = 500; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
-bool takeMeasurement = false;
 double gVal[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over
 
@@ -46,6 +51,12 @@ double TA_gVal[noBins];
 double TA_v = 0;
 double TA_U = 0;
 double TA_T = 0;
+double TA_p = 0;
+double TA_v2 = 0;
+double TA_U2 = 0;
+double TA_T2 = 0;
+double TA_p2 = 0;
+double TA_tavg2 = 0;
 Logger logger; //create an instance of the logger class
 
 std::map<std::pair<int, int>, int> collStep;
@@ -114,14 +125,11 @@ int main()
   cout << "Starting Simulation ..." << endl;
   for(;eventCount < numberEvents;)
     {
-      bool validEvent = true;
       bool collEvent = false;
+      double temp_pFlux = 0;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
 
       double dt = next_event.collisionTime - t; //find time to next collision
-
-      if((numberEvents - eventCount) <=  noReadings) //take readings this step?
-	takeMeasurement = true;
 
       if(eventCount == thermoOff) //turn thermostat off?
 	{
@@ -138,7 +146,6 @@ int main()
 	    if(next_event.p2coll != particles[next_event.particle2].collNo) //check if collision is valid
 	      {
 		//cerr << "Invalid Collision between particles :" << next_event.particle1 << " & " << next_event.particle2 << endl;
-		validEvent = false;
 		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		logger.outLog << "Invalid Collision between particles: " << next_event.particle1 << " & " << next_event.particle2 << endl;
@@ -147,6 +154,7 @@ int main()
 	      {
 		collEvent = true;
 		t += dt; //update system time
+
 		if(writeOutLog >= 1)
 		  {
 		    updatePosition(particles[next_event.particle1]);
@@ -161,7 +169,7 @@ int main()
 				  << " KEnergy " << calcKinetic(particles)
 				  << endl;
 		  }
-		calcVelocity(particles, next_event);		
+		temp_pFlux = calcVelocity(particles, next_event);		
 		++particles[next_event.particle1].collNo;
 		++particles[next_event.particle2].collNo;
 
@@ -216,38 +224,67 @@ int main()
 	  exit(1);
 	  break;
 	}
-      if((numberEvents - eventCount) ==  noReadings && collEvent)
-	for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
-	    particle->r0 = particle->r;
 
-      if(eventCount%psteps==0)
-	logger.write_Location(particles, t, systemSize);
-
-      if(takeMeasurement && collEvent)
+      if(collEvent)
 	{
-	  ++readingsTaken;
+	  if(eventCount % psteps == 0) //output file logging
+	    logger.write_Location(particles, t, systemSize);
 
-	  if(eventCount%100 == 0)
-	    coDiff.push_back(Diffusion(calcDiff(particles, t),t));
-	  TA_T += calcTemp(particles);
-	  TA_U += calcPotential();
-	  if(eventCount%10 == 0)
+	  if(eventCount == startSampling)
 	    {
-	      calcRadDist(particles);
-	      for(size_t i = 0; i < noBins; ++i)
-		TA_gVal[i] += gVal[i];
+	      // store particle positions when starting to take readings
+	      for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
+		particle->r0 = particle->r;
+	      startSampleTime = t;
 	    }
 
-	}
-      if(eventCount%(numberEvents / 1000) == 0 && collEvent)
-	{
-	  cout << eventCount << " of " << numberEvents << " events simulated"
-	       << " T: " << calcTemp(particles)
-	       << " TE: " << calcPotential() + calcKinetic(particles) << endl;
+	  if(eventCount > startSampling)
+	    {
+	      if(eventCount % sample_interval)
+		{
+		  ++readingsTaken;
+		  double deltaT = t - lastSampleTime;
+		  TA_tavg2 += deltaT * deltaT;
+		  // = Temperature
+		  double temp_temperature = calcTemp(particles);
+		  TA_T += temp_temperature * deltaT;
+		  TA_T2 += temp_temperature * temp_temperature * deltaT;
+
+		  // = Potential
+		  double temp_potential = calcPotential();
+		  TA_U += temp_potential * deltaT;
+		  TA_U2 += temp_potential * temp_potential * deltaT;
+
+		  // = Momentum Flux
+		  TA_v += temp_pFlux * deltaT;
+		  TA_v2 += temp_pFlux * temp_pFlux * deltaT;
+
+		  // = Pressure
+		  double temp_pressure = (density * temp_temperature + temp_pFlux * mass * density / (3.0 * particles.size() * deltaT));
+		  TA_p += temp_pressure * deltaT;
+		  TA_p2 += temp_pressure * temp_pressure * deltaT;
+		}
+	      if(eventCount % diff_interval == 0)
+		coDiff.push_back(Diffusion(calcDiff(particles, t),t));
+
+	      if(eventCount % rdf_interval == 0)
+		{
+		  calcRadDist(particles);
+		  for(size_t i = 0; i < noBins; ++i)
+		    TA_gVal[i] += gVal[i];
+		}
+	      
+	    }
+	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
+	    {
+	      cout << "\r" << eventCount << " of " << numberEvents << " events simulated"
+		   << " T: " << calcTemp(particles)
+		   << " TE: " << calcPotential() + calcKinetic(particles) << flush;
+	    }
 	}
     }
 
-  cout << "Simulation Complete" << endl;
+  cout << endl << "Simulation Complete" << endl;
   double deltaR = maxR / noBins; //width of each shell
 
   for(int i = 0; i < noBins; ++i)
@@ -255,14 +292,34 @@ int main()
       double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
       TA_gVal[i] /= (0.5 * numberParticles * (readingsTaken/10) * volShell * density);
     }
-  double freeTime = t * numberParticles / (2 * eventCount);
-  cout << "Time Averages" << endl;
-  cout << "Mean free time: " << freeTime
-       << " U: " << TA_U / (readingsTaken * numberParticles) / 2
-       << " T: " << TA_T / readingsTaken
-       << " P: " << density * (TA_T + mass / (freeTime * 6.0) * TA_v) / readingsTaken
-       << " <r.v> " << TA_v / readingsTaken
-       << endl;
+  //Output time averages
+  cout << "Time Averages:" << endl;
+  {
+    // = Mean free time
+    double freeTime = t * numberParticles / (2 * eventCount);
+    double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
+    cout << "Mean free time: " << freeTime << " (" << freeTime2 - freeTime * freeTime << ")" << endl;
+    
+    // = Potential Energy
+    double E_pot = TA_U / t;
+    double E_pot2 = TA_U2 / t;
+    cout << " U: " << E_pot << "(" << E_pot2 - E_pot * E_pot << ")" << endl;
+    
+    // = Temperature
+    double E_temp = TA_T / t;
+    double E_temp2 = TA_T2 / t;
+    cout << " T: " << E_temp << "(" << E_temp2 - E_temp * E_temp << ")" << endl;
+    
+    // = Pressure
+    double E_press = TA_p / t;
+    double E_press2 = TA_p2 / t;
+    cout << " P: " << E_press << "(" << E_press2 - E_press * E_press << ")" << endl;
+    
+    // = Momentum flux
+    double E_mf = TA_v / t;
+    double E_mf2 = TA_v2 / t;
+    cout << " <r.v> " << E_mf << "(" << E_mf2 - E_mf * E_mf << ")" << endl << endl;;
+  }
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
@@ -486,7 +543,7 @@ double calcKinetic(vector<CParticle>& particles)
   for(vector<CParticle>::iterator particle = particles.begin(); particle != particles.end(); ++particle)
     kinetic += particle->kineticEnergy();
 
-  return kinetic;
+  return kinetic / particles.size();
 }
 
 double calcPressure(double Temp,double t)
@@ -501,7 +558,7 @@ double calcPotential()
   for(i = collStep.begin(); i != collStep.end(); ++i)
     potential += steps[i->second].step_energy;
 
-  return potential;
+  return potential / numberParticles;
 }
 
 void calcRadDist(vector<CParticle> &particles)
@@ -571,7 +628,7 @@ double calcTemp(vector<CParticle> &particles)
   return mass / (3 * particles.size()) * sum;
 }
 
-void calcVelocity(vector<CParticle>& particle, eventTimes& event)
+double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 {
   //variable definitions
   map<pair<int, int>, int>::iterator it_map; //iterator for accessing collision state map
@@ -635,8 +692,6 @@ void calcVelocity(vector<CParticle>& particle, eventTimes& event)
 		logger.outLog << "A: " << A << endl;
 		logger.outLog << "Well Capture" << endl;
 	      }
-	    if(takeMeasurement) //if taking measurements
-	      TA_v += r12.length() * A / mass;
 
 	    //update particle velocities
 	    particle[p1].v += A / mass * r12.normalise();
@@ -646,15 +701,16 @@ void calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	      collStep.insert(pair<pair<int, int>, int>(pair<int, int>(p1, p2), steps.size() - 1)); //insert pair into collStep map
 	    else
 	      --(it_map->second); //move particles in one step
+
+	    return r12.length() * A / mass;
 	  }
 	else //if bounce occurs
 	  {
 	    if(writeOutLog >= 2)
 	      logger.outLog << "Well Bounce" << endl;
-	    if(takeMeasurement) //if taking measurements
-	      TA_v -= r12.length() * vdotr;
 	    particle[p1].v -= vdotr * r12.normalise();
 	    particle[p2].v += vdotr * r12.normalise();
+	    return -vdotr;
 	  }
 	break;
       }
@@ -682,8 +738,6 @@ void calcVelocity(vector<CParticle>& particle, eventTimes& event)
 		logger.outLog << "A: " << A << endl;
 		logger.outLog << "Well Release" << endl;
 	      }
-	    if(takeMeasurement) //if taking measurements
-	      TA_v += r12.length() * A / mass;
 
 	    //update particle velocities
 	    particle[p1].v += A / mass * r12.normalise();
@@ -692,15 +746,15 @@ void calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	      collStep.erase(it_map);
 	    else
 	      ++(it_map->second); //move particles in one step
+	    return r12.length() * A / mass;
 	  }
 	else //if bounce occurs
 	  {
 	    if(writeOutLog >=2)
 	      logger.outLog << "Well Bounce" << endl;
-	    if(takeMeasurement) //if taking measurements
-	      TA_v -= r12.length() * vdotr;
 	    particle[p1].v -= vdotr * r12.normalise();
 	    particle[p2].v += vdotr * r12.normalise();
+	    return -vdotr;
 	  }
 	break;
       }
@@ -826,8 +880,8 @@ void initFromFile (vector<CParticle> &particle)
 void initSteps()
 {
   //Steps from Chepela et al, Case 6
-  steps.push_back(Steps(1.00,500)); //step 0
-  /*steps.push_back(Steps(0.80,66.74)); //step 0
+  //steps.push_back(Steps(1.00,500)); //step 0
+  steps.push_back(Steps(0.80,66.74)); //step 0
   steps.push_back(Steps(0.85,27.55)); //step 1
   steps.push_back(Steps(0.90, 10.95)); //step 3
   steps.push_back(Steps(0.95, 3.81)); //step 4
@@ -836,7 +890,7 @@ void initSteps()
   steps.push_back(Steps(1.25,-0.98)); //step 7
   steps.push_back(Steps(1.45,-0.55)); //step 8
   steps.push_back(Steps(1.75,-0.22)); //step 9
-  steps.push_back(Steps(2.30,-0.06)); //step 10*/
+  steps.push_back(Steps(2.30,-0.06)); //step 10
 }
 
 void generateNeighbourCells(vector<set<int> >& NC)

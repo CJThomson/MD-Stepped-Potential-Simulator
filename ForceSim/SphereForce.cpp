@@ -2,9 +2,8 @@
 #include "Declares.h" //declarations for this program
 
 //Physical Properties:
-const double density = 0.776;
-const double temperature = 0.85; //temperature of the system
-
+const double density = 0.85;
+const double temperature = 0.8; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
 const int simTime = 60000; //length of the Simulation
@@ -21,8 +20,8 @@ const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / 
 
 //Thermostat
 bool thermostat = true; //use a thermostat
-const double thermoFreq = 0.05; //update frequency of thermostat
-const int thermoOff = 10000;
+const double thermoFreq = 0.1; //update frequency of thermostat
+const int thermoOff = HUGE_VAL;
 
 //Reduced Unit Definitions:
 const double mass = 1; //mass of a particle
@@ -34,7 +33,7 @@ const double sigma = 1; //distance for Lennard Jones root
 const int out_interval = 20; //frequency of output to file
 const int diff_interval = 10;
 const int rdf_interval = 10;
-const int sample_interval = 10;
+const int sample_interval = 4;
 const bool writeLoc = false;
 
 //Measuring Properties:
@@ -49,9 +48,12 @@ std::vector<Diffusion> coDiff; //coefficient of diffusion over time
 
 //----Time Averages----
 double TA_gVal[noBins];
-double TA_Temp;
-double TA_U;
-double TA_Pressure;
+double TA_Temp = 0;
+double TA_U = 0;
+double TA_Pressure = 0;
+double TA_Temp2 = 0;
+double TA_U2 = 0;
+double TA_Pressure2 = 0;
 
 using namespace std;
 
@@ -63,7 +65,7 @@ int main()
   int noReadings = 0;
   cout << "Initialising random number generator..." << endl;
   CRandom RNG;
-
+  RNG.seed();
   //Initialise the simulation
   if(initFile)
     initFromFile(particles); //initialise the system from file
@@ -125,13 +127,13 @@ int main()
       if(timeStep % 100 == 0) //write a screen output every 100 timesteps
 	{
 	  double pshort = (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3)) + ptail;
-      	  cout << fixed << setprecision(2) << (double) timeStep / simTime * 100 << "% complete" << "\t"
+      	  cout << "\r" << fixed << setprecision(2) << (double) timeStep / simTime * 100 << "% complete" << "\t"
 	       << " t: " << setprecision(2) << t << "\t"
 	       << " T: " << setprecision(4) << calcTemp(particles) << "\t"
 	       << " P: " << setprecision(3) << pshort << "\t"
 	       << " P + LR: " << setprecision(3) << pshort + ptail << "\t"
 	       << " U: " << setprecision(3) << calcPotential(particles,neighbourList, listPos) << "\t"
-	       << endl;
+	       << flush;
 	}
 
       if(timeStep == thermoOff && thermostat)
@@ -165,9 +167,16 @@ int main()
 
 	  if(timeStep % sample_interval == 0)
 	    {
-	      TA_Pressure += (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3)); //add current pressure to TA
-	      TA_Temp += calcTemp(particles); //add current temp to TA
-	      TA_U += calcPotential(particles, neighbourList, listPos); //add current potential energy to TA
+	      double temp_virial = calcVirial(particles, neighbourList, listPos);
+	      double temp_kinetic = calcKinetic(particles); 
+	      TA_Pressure += (2.0 * temp_kinetic + temp_virial) / (3.0 * pow(length,3)); //add current pressure to TA
+	      TA_Pressure2 += pow((2.0 * temp_kinetic + temp_virial) / (3.0 * pow(length,3)),2); 
+	      double temp_T = calcTemp(particles);
+	      TA_Temp += temp_T; //add current temp to TA
+	      TA_Temp2 += temp_T * temp_T;
+	      double temp_potential = calcPotential(particles, neighbourList, listPos);
+	      TA_U += temp_potential; //add current potential energy to TA
+	      TA_U2 += temp_potential * temp_potential;
 	    }
 	}
 
@@ -189,13 +198,23 @@ int main()
     log.write_Init(particles);
 
   //output Time Averaged system properties
-  cout << setprecision(5)
-       << "Time Averages:- Temp: " << TA_Temp * sample_interval / noReadings
-       << " P: " << TA_Pressure * sample_interval / noReadings
-       << " P+LR: " << TA_Pressure * sample_interval / noReadings + ptail 
-       << " U: " << TA_U * sample_interval / (numberParticles * noReadings) 
-       << " U+LR: " << TA_U * sample_interval / (numberParticles * noReadings) + utail
-       << endl;
+  cout << setprecision(5) << "Time Averages:" << endl;
+  // = Tempature
+  double E_Temp = TA_Temp * sample_interval / noReadings;
+  double E_Temp2 = TA_Temp2 * sample_interval / noReadings;
+  cout << "Temp: " << E_Temp << "(" << sqrt(E_Temp2 - E_Temp * E_Temp) << ")" << endl;
+
+  // = Pressure
+  double E_Press = TA_Pressure * sample_interval / noReadings;
+  double E_Press2 = TA_Pressure2 * sample_interval / noReadings;
+  cout << "P: " << E_Press << "(" << sqrt(E_Press2 - E_Press * E_Press) << ")" << endl;
+  cout << "P+LR: " << E_Press + ptail << endl;
+
+  // = Potential Energy
+  double E_U = TA_U * sample_interval / noReadings;
+  double E_U2 = TA_U2 * sample_interval / noReadings;
+  cout << "U: " << E_U << "(" << sqrt(E_U2 - E_U * E_U) << ")" << endl;
+  cout << "U+LR: " << E_U + utail << endl;
   return 0;
 }
 								    
@@ -375,7 +394,7 @@ double calcPotential(vector<CParticle> &particle, vector<int> &NL, int NLpos[])
       potential += 4.0 * epsilon*(pow(sigma/distance.length(),12)-pow(sigma/distance.length(),6));
 	}
     }
-  return potential;
+  return potential / particle.size();
 }
 void correctVelocity(vector<CParticle> &particle)
 {
