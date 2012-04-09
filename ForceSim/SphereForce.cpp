@@ -6,7 +6,7 @@ const double density = 0.85;
 const double temperature = 0.7; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 60000; //length of the Simulation
+const int simTime = 100000; //length of the Simulation
 const double dt = 0.001; //length of ticme interval
 const double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
@@ -20,7 +20,7 @@ const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / 
 //Thermostat
 bool thermostat = true; //use a thermostat
 const double thermoFreq = 0.1; //update frequency of thermostat
-const int thermoOff = 10000;
+const int thermoOff = 20000;
 
 //Reduced Unit Definitions:
 const double mass = 1; //mass of a particle
@@ -36,7 +36,7 @@ const int sample_interval = 4;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 200000; //number of readings to take
+const int startSampling = 40000; //number of readings to take
 double readingTime = 0;
 const int noBins = 500; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
