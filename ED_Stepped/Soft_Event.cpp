@@ -5,7 +5,7 @@ const double density = 0.85;
 const double temperature = 1.34; //temperature of the system
 //Simulation:
 int numberParticles = 256; //number of particles
-const int numberEvents = 5e+6;
+const int numberEvents = 1e+6;
 int eventCount = 0;
 const double length = pow(numberParticles/density, 1.0 / 3.0);
 //const double length = 6.0;
@@ -18,13 +18,13 @@ const int noCells = 3;
 
 //Thermostat:
 bool thermostat = true; //use a thermostat
-const size_t thermoFreq = 200; //frequency thermostat rate is updated
+const size_t thermoFreq = 100; //frequency thermostat rate is updated
 size_t thermoCount = 0; //counter to change thermostat rate
 size_t thermoLastUpdate = 0;
 double thermoMeanFreeTime = 0.0005;
 //const int thermoOff =3.5e+6;
 const int thermoOff = numberEvents;
-double thermoSetting = 0.05;
+double thermoSetting = 0.1;
 
 //Reduced Unit Definitions
 const double mass = 1; //mass of a particle
@@ -35,12 +35,14 @@ const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties
-const int startSampling = 4e+6; //number of readings to take
+const int startSampling = 5e+5; //step number to start taking samples
 const int sample_interval = 1;
 const int rdf_interval = 100;
 const int diff_interval = 20;
-double lastSampleTime = 0;
+int readingsTaken = 0;
 double startSampleTime = -1;
+double currentK = 0;
+double currentU = 0;
 const int noBins = 500; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 double gVal[noBins]; //radial distribution values
@@ -56,6 +58,7 @@ double TA_v2 = 0;
 double TA_U2 = 0;
 double TA_T2 = 0;
 double TA_p2 = 0;
+double TA_tavg = 0;
 double TA_tavg2 = 0;
 Logger logger; //create an instance of the logger class
 
@@ -64,14 +67,13 @@ using namespace std;
 
 int main()
 {
-  srand(10);
   //variable declarations
   vector<CParticle> particles; //create a vector to store particle info
   vector<vector<eventTimes> > particleEL;
   vector<eventTimes> masterEL; //create a vector to store collision times
   vector<set<int> > neighbourList; //create a vector of sets to hold particles in  neighbour cell
   vector<set<int> > neighbourCell; //create a vector of sets to hold the cells neighbouring each cell
-  int readingsTaken = 0;
+
   cout << "Initialising Random Number Generators" << endl;
   CRandom RNG;
 
@@ -83,10 +85,7 @@ int main()
     initialise(particles, RNG ); // initialise the system
   cout << particles.size() << " particles..." << endl;
   numberParticles = particles.size();
-  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
-    for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
-      calcStep(*p1,*p2);
-
+  currentK = calcKinetic(particles);
   cout << "Initialising neighbour lists" << endl;
   int cells3 = pow(noCells, 3);
   neighbourList.resize(cells3);
@@ -98,6 +97,13 @@ int main()
   initSteps(); //step up system steps
   if(length * 0.5 < steps[steps.size()-1].step_radius)
     cout << "Warning system size less than cut-off radius" << endl;
+  
+  cout << "Populating initial capture map" << endl;
+  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
+    for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
+      calcStep(*p1,*p2);
+
+  checkCaptureMap(particles);
   cout << "Initialising Output Logs..." << endl;
   logger.initialise(Logger::LOCATIONS); //initialise location logger
   logger.initialise(Logger::OUTPUTLOG);
@@ -122,11 +128,11 @@ int main()
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
-  cout << "Starting Simulation ..." << endl;
+  cout << "Starting Simulation with " << numberParticles << "particles with a density of "
+       << density << " in a box with side length of " << length << endl;
   for(;eventCount < numberEvents;)
     {
       bool collEvent = false;
-      double temp_pFlux = 0;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
 
       double dt = next_event.collisionTime - t; //find time to next collision
@@ -153,8 +159,7 @@ int main()
 	    else //if a valid event
 	      {
 		collEvent = true;
-		t += dt; //update system time
-
+		freeStream(dt);
 		if(writeOutLog >= 1)
 		  {
 		    updatePosition(particles[next_event.particle1]);
@@ -169,7 +174,11 @@ int main()
 				  << " KEnergy " << calcKinetic(particles)
 				  << endl;
 		  }
-		temp_pFlux = calcVelocity(particles, next_event);		
+		
+		double temp_pFlux = calcVelocity(particles, next_event);		
+		TA_v += temp_pFlux;
+		TA_v2 += temp_pFlux * temp_pFlux;
+
 		++particles[next_event.particle1].collNo;
 		++particles[next_event.particle2].collNo;
 
@@ -184,12 +193,12 @@ int main()
 	  if(writeOutLog >= 1)
 	    logger.outLog << "Sentinal event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
 
-	  t += dt; //update system time
+	  freeStream(dt);
 	  getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 	  break;
 	case eventTimes::NEIGHBOURCELL:
 	  {
-	    t += dt; //update system time
+	    freeStream(dt);
 	    CParticle p1 = particles[next_event.particle1];
 	    neighbourList[p1.cellNo].erase(next_event.particle1); //erase particle from previous cell
 	    int newCell = calcNewCell(p1);
@@ -203,9 +212,9 @@ int main()
 	  }
 	case eventTimes::THERMOSTAT:
 	  {
+	    freeStream(dt);
 	    if(writeOutLog >= 1)
 	      logger.outLog << "Thermostat event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
-	    t += dt; //update system time
 	    runThermostat(particles[next_event.particle1], RNG, masterEL);
 	    ++particles[next_event.particle1].collNo;
 	    getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
@@ -236,59 +245,45 @@ int main()
 	      for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
 		particle->r0 = particle->r;
 	      startSampleTime = t;
+	      TA_v = 0; 
 	    }
 
-	  if(eventCount > startSampling)
+	  if(eventCount % diff_interval == 0)
+	    coDiff.push_back(Diffusion(calcDiff(particles, t),t));
+
+	  if(eventCount % rdf_interval == 0)
 	    {
-	      if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
-	      if(eventCount % sample_interval == 0)
-		{
-		  ++readingsTaken;
-		  double deltaT = t - lastSampleTime;
-		  TA_tavg2 += deltaT * deltaT;
-		  // = Temperature
-		  double temp_temperature = calcTemp(particles);
-		  TA_T += temp_temperature * deltaT;
-		  TA_T2 += temp_temperature * temp_temperature * deltaT;
-
-		  // = Potential
-		  double temp_potential = calcPotential();
-		  TA_U += temp_potential * deltaT;
-		  TA_U2 += temp_potential * temp_potential * deltaT;
-
-		  // = Momentum Flux
-		  TA_v += temp_pFlux * deltaT;
-		  TA_v2 += temp_pFlux * temp_pFlux * deltaT;
-
-		  // = Pressure
-		  double temp_pressure = (density * temp_temperature + temp_pFlux * mass * density / (3.0 * particles.size() * deltaT));
-		  TA_p += temp_pressure * deltaT;
-		  TA_p2 += temp_pressure * temp_pressure * deltaT;
-		  lastSampleTime = t;
-		}
-	      if(eventCount % diff_interval == 0)
-		coDiff.push_back(Diffusion(calcDiff(particles, t),t));
-
-	      if(eventCount % rdf_interval == 0)
-		{
-		  calcRadDist(particles);
-		  for(size_t i = 0; i < noBins; ++i)
-		    TA_gVal[i] += gVal[i];
-		}
-	      
+	      calcRadDist(particles);
+	      for(size_t i = 0; i < noBins; ++i)
+		TA_gVal[i] += gVal[i];
 	    }
+	      
 	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
 	    {
+	      double E_temp = TA_T / (t - startSampleTime);
+	      double E_pot = TA_U / (t - startSampleTime);
+	      double E_press_ideal = density * E_temp;
+	      double E_press_coll = mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
+
+
 	      cout << "\r" << eventCount << " of " << numberEvents << " events simulated"
-		   << " T: " << calcTemp(particles)
-		   << " TE: " << calcPotential() + calcKinetic(particles) << flush;
+		   << " T: " << currentK / (1.5 * numberParticles)
+		   << " <T>: " << E_temp
+		   << " U: " << currentU
+		   << " <U>: " << E_pot
+		   << " <P>: " << E_press_ideal + E_press_coll
+		   << " <P_coll>: " << E_press_coll
+		   << " TE: " << currentK + currentU
+		   << flush;
+	      
 	    }
 	}
     }
 
   cout << endl << "Simulation Complete" << endl;
+  checkCaptureMap(particles);
   double deltaR = maxR / noBins; //width of each shell
-
+  
   for(int i = 0; i < noBins; ++i)
     {
       double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
@@ -301,26 +296,32 @@ int main()
     double freeTime = t * numberParticles / (2 * eventCount);
     double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
     cout << "Mean free time: " << freeTime << " (" << freeTime2 - freeTime * freeTime << ")" << endl;
-    
+    double mft = TA_tavg * numberParticles / (2 * readingsTaken);
+    cout << "Mean free time: " << mft << " (" << freeTime2 - mft * mft << ")" << endl;
     // = Potential Energy
-    double E_pot = TA_U / t;
-    double E_pot2 = TA_U2 / t;
+    double E_pot = TA_U / (t - startSampleTime);
+    double E_pot2 = TA_U2 / (t - startSampleTime);
     cout << " U: " << E_pot << "(" << E_pot2 - E_pot * E_pot << ")" << endl;
     
     // = Temperature
-    double E_temp = TA_T / t;
-    double E_temp2 = TA_T2 / t;
+    double E_temp = TA_T / (t - startSampleTime);
+    double E_temp2 = TA_T2 / (t - startSampleTime);
     cout << " T: " << E_temp << "(" << E_temp2 - E_temp * E_temp << ")" << endl;
     
-    // = Pressure
-    double E_press = TA_p / t;
-    double E_press2 = TA_p2 / t;
-    cout << " P: " << E_press << "(" << E_press2 - E_press * E_press << ")" << endl;
-    
     // = Momentum flux
-    double E_mf = TA_v / t;
-    double E_mf2 = TA_v2 / t;
+    double E_mf = TA_v / readingsTaken;
+    double E_mf2 = TA_v2 / readingsTaken;
     cout << " <r.v> " << E_mf << "(" << E_mf2 - E_mf * E_mf << ")" << endl << endl;;
+
+    // = Pressure
+    double E_press = density * E_temp 
+      + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
+    //double E_press2 = TA_2 / (t - startSampleTime);
+    cout << " P: " << E_press  << endl; //<< "(" << E_press2 - E_press * E_press << ")" << endl;
+    // = Pressure
+    double E_press2 = (density * E_temp + mass * density / (6.0 * mft) * E_mf);
+    //double E_press2 = TA_p2 / (t - startSampleTime);
+    cout << " P: " << E_press2  << endl;; //<< "(" << E_press2 - E_press * E_press << ")" << endl;
   }
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
@@ -545,12 +546,7 @@ double calcKinetic(vector<CParticle>& particles)
   for(vector<CParticle>::iterator particle = particles.begin(); particle != particles.end(); ++particle)
     kinetic += particle->kineticEnergy();
 
-  return kinetic / particles.size();
-}
-
-double calcPressure(double Temp,double t)
-{
-  return density * Temp * (1 + Temp / ( 3 * numberParticles * t) * TA_v);
+  return kinetic;
 }
 
 double calcPotential()
@@ -602,6 +598,7 @@ void calcStep(CParticle& particle1, CParticle& particle2)
     {
       if(distance <= steps[i].step_radius)
 	{
+	  currentU += steps[i].step_energy;
 	  collStep.insert(pair<pair<int, int>, int> (pair<int, int> (p1, p2), i));
 	  break;
 	}
@@ -637,7 +634,6 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 
   updatePosition(particle[event.particle1]);
   updatePosition(particle[event.particle2]);
-
 
   //set p1 to smaller particle number, and p2 to larger particle number
   int p1 = min(event.particle1, event.particle2);
@@ -696,23 +692,26 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	      }
 
 	    //update particle velocities
-	    particle[p1].v += A / mass * r12.normalise();
-	    particle[p2].v -= A / mass * r12.normalise();
+	    CVector3 deltav1 = (A / mass) * r12.normalise();
+	    particle[p1].v += deltav1;
+	    particle[p2].v -= deltav1;
 
 	    if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
 	      collStep.insert(pair<pair<int, int>, int>(pair<int, int>(p1, p2), steps.size() - 1)); //insert pair into collStep map
 	    else
 	      --(it_map->second); //move particles in one step
-
-	    return r12.length() * A / mass;
+	    currentU -= dU;
+	    currentK += dU;
+	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
 	  {
 	    if(writeOutLog >= 2)
 	      logger.outLog << "Well Bounce" << endl;
-	    particle[p1].v -= vdotr * r12.normalise();
-	    particle[p2].v += vdotr * r12.normalise();
-	    return -vdotr;
+	    CVector3 deltav1 = - vdotr * r12.normalise();
+	    particle[p1].v += deltav1;
+	    particle[p2].v -= deltav1;
+	    return r12.dotProd(deltav1);
 	  }
 	break;
       }
@@ -742,21 +741,25 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	      }
 
 	    //update particle velocities
-	    particle[p1].v += A / mass * r12.normalise();
-	    particle[p2].v -= A / mass * r12.normalise();
+	    CVector3 deltav1 = A / mass * r12.normalise();
+	    particle[p1].v += deltav1;
+	    particle[p2].v -= deltav1;
 	    if(it_map->second == steps.size() -1) //if particle is leaving outermost step
 	      collStep.erase(it_map);
 	    else
 	      ++(it_map->second); //move particles in one step
-	    return r12.length() * A / mass;
+	    currentU -= dU;
+	    currentK += dU;
+	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
 	  {
 	    if(writeOutLog >=2)
 	      logger.outLog << "Well Bounce" << endl;
-	    particle[p1].v -= vdotr * r12.normalise();
-	    particle[p2].v += vdotr * r12.normalise();
-	    return -vdotr;
+	    CVector3 deltav1 = - vdotr * r12.normalise();
+	    particle[p1].v += deltav1;
+	    particle[p2].v -= deltav1; 
+	    return r12.dotProd(deltav1);
 	  }
 	break;
       }
@@ -1002,6 +1005,7 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
   //cerr << "old v = (" << oldv.x << ", " << oldv.y << ", " << oldv.z << " ) "
   //     << "new v = (" << particle.v.x << ", " << particle.v.y << ", " << particle.v.z << ")" << endl;
   //cerr << "Change in kinetic energy of system " << 0.5 * particle.mass * (particle.v.dotProd(particle.v)-oldv.dotProd(oldv)) << endl;
+  currentK += 0.5 * particle.mass * (particle.v.dotProd()-oldv.dotProd());
   int particleNo = -1;
   double t_min_thermo = calcThermoTime(RNG, particleNo);
   if(particleNo == -1)
@@ -1012,7 +1016,27 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
   events[numberParticles] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
 
 }
+void freeStream(double dt)
+{
+  t += dt; //update system time
+  if(eventCount > startSampling)
+    {
+      if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
+      // = Mean Free Time
+      TA_tavg += dt;
+      TA_tavg2 += dt * dt;
+      // = Temperature
+      double temp_temperature = currentK / (1.5 * numberParticles);
+      TA_T += temp_temperature * dt;
+      TA_T2 += temp_temperature * temp_temperature * dt;
 
+      // = Potential
+      TA_U += currentU / numberParticles * dt;
+      TA_U2 += pow((currentU / numberParticles),2) * dt;
+      ++readingsTaken;
+
+    }
+}
 void updatePosition(CParticle& particle)
 {
   double delta_t = t - particle.updateTime;
@@ -1034,4 +1058,42 @@ void zeroMomentum(vector<CParticle> &particles)
     for(size_t dim (0); dim < 3; ++dim)
       particle->v[dim] -= sum[dim] / particles.size(); //reduce velocity by 1/number of particles of the total sum
 
+}
+void checkCaptureMap(vector<CParticle> &particles)
+{
+  //CAPTURE TEST
+  cout << "Checking the capture map";
+  for(int i = 0; i < particles.size();++i)
+    for(int j = i + 1; j < particles.size(); ++j)
+      {
+	CVector3 r12 = particles[i].r - particles[j].r;
+	CVector3 v12 = particles[i].v - particles[j].v;
+	applyBC(r12);
+	map<pair<int, int>, int>::const_iterator it_map = collStep.find(pair<int,int>(i, j)); //find collision state of particles
+	double distance = r12.length();
+	int step = steps.size();
+	for(int k = 0; k < steps.size(); ++k)
+	  {
+	    if(distance <= steps[k].step_radius)
+	      { step = k; break; }
+	  }
+	
+	{
+	  if(it_map == collStep.end())
+	    {
+	      if (step < steps.size())
+		cerr << "particles " << i << " and " << j << ", step=" << step << ", are not in capture map" << endl;
+	    }
+	  else
+	    {
+	      if (step == steps.size())
+		cerr << "particles " << i << " and " << j << ",map_step=" << it_map->second << ", should not be in capture map" << endl;
+	      else if (it_map->second != step)
+		cerr << "particles " << i << " and " << j << ", step=" << step << ",map_step=" << it_map->second << ", are in wrong step" << endl;
+	    }
+	  
+	  break;
+	}
+
+      }
 }

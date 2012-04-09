@@ -47,6 +47,7 @@ double calcSentinalTime(CParticle&);
 double calcTemp(std::vector<CParticle>&);
 double calcThermoTime(CRandom&, int&);
 double calcVelocity(std::vector<CParticle>&, eventTimes&);
+void checkCaptureMap(std::vector<CParticle> &);
 void correctVelocity(std::vector<CParticle>&);
 void initialise(std::vector<CParticle>&, CRandom&);
 void initFromFile (std::vector<CParticle>&);
@@ -59,6 +60,7 @@ void getEvent(CParticle&,
 	      std::vector<eventTimes>&,
 	      std::vector<std::set<int> >&,
 	      std::vector<std::set<int> >&);
+void freeStream(double);
 void runThermostat(CParticle&, CRandom&, std::vector<eventTimes>&);
 void updatePosition(CParticle&);
 void zeroMomentum(std::vector<CParticle>&);
