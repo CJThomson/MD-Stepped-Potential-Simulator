@@ -5,7 +5,7 @@ const double density = 0.85;
 const double temperature = 1.34; //temperature of the system
 //Simulation:
 int numberParticles = 256; //number of particles
-const int numberEvents = 1e+6;
+const int numberEvents = 1.5e+6;
 int eventCount = 0;
 const double length = pow(numberParticles/density, 1.0 / 3.0);
 //const double length = 6.0;
@@ -24,7 +24,7 @@ size_t thermoLastUpdate = 0;
 double thermoMeanFreeTime = 0.0005;
 //const int thermoOff =3.5e+6;
 const int thermoOff = numberEvents;
-double thermoSetting = 0.1;
+double thermoSetting = 0.05;
 
 //Reduced Unit Definitions
 const double mass = 1; //mass of a particle
@@ -76,7 +76,7 @@ int main()
 
   cout << "Initialising Random Number Generators" << endl;
   CRandom RNG;
-
+  RNG.seed();
   cout << "Initialising ";
   //Initialise the simulation
   if(initFile)
@@ -103,7 +103,6 @@ int main()
     for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
       calcStep(*p1,*p2);
 
-  checkCaptureMap(particles);
   cout << "Initialising Output Logs..." << endl;
   logger.initialise(Logger::LOCATIONS); //initialise location logger
   logger.initialise(Logger::OUTPUTLOG);
@@ -246,6 +245,8 @@ int main()
 		particle->r0 = particle->r;
 	      startSampleTime = t;
 	      TA_v = 0; 
+	      TA_T = 0;
+	      TA_U = 0;
 	    }
 
 	  if(eventCount % diff_interval == 0)
@@ -272,8 +273,8 @@ int main()
 		   << " U: " << currentU
 		   << " <U>: " << E_pot
 		   << " <P>: " << E_press_ideal + E_press_coll
-		   << " <P_coll>: " << E_press_coll
-		   << " TE: " << currentK + currentU
+		//<< " <P_coll>: " << E_press_coll
+		// << " TE: " << currentK + currentU
 		   << flush;
 	      
 	    }
@@ -295,33 +296,35 @@ int main()
     // = Mean free time
     double freeTime = t * numberParticles / (2 * eventCount);
     double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
-    cout << "Mean free time: " << freeTime << " (" << freeTime2 - freeTime * freeTime << ")" << endl;
-    double mft = TA_tavg * numberParticles / (2 * readingsTaken);
-    cout << "Mean free time: " << mft << " (" << freeTime2 - mft * mft << ")" << endl;
+    double sd_freeTime = sqrt(fabs(freeTime2 - freeTime * freeTime));
+    cout << "Mean free time: " << freeTime << " (" << sd_freeTime << ")" << endl;
+
     // = Potential Energy
     double E_pot = TA_U / (t - startSampleTime);
     double E_pot2 = TA_U2 / (t - startSampleTime);
-    cout << " U: " << E_pot << "(" << E_pot2 - E_pot * E_pot << ")" << endl;
+    double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
+    cout << " U: " << E_pot << "(" << sd_pot << ")" << endl;
     
     // = Temperature
     double E_temp = TA_T / (t - startSampleTime);
     double E_temp2 = TA_T2 / (t - startSampleTime);
-    cout << " T: " << E_temp << "(" << E_temp2 - E_temp * E_temp << ")" << endl;
+    double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
+    cout << " T: " << E_temp << "(" << sd_temp << ")" << endl;
     
     // = Momentum flux
     double E_mf = TA_v / readingsTaken;
     double E_mf2 = TA_v2 / readingsTaken;
-    cout << " <r.v> " << E_mf << "(" << E_mf2 - E_mf * E_mf << ")" << endl << endl;;
+    double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
+    cout << " <r.v> " << E_mf << "(" << sd_mf << ")" << endl << endl;;
 
     // = Pressure
     double E_press = density * E_temp 
       + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-    //double E_press2 = TA_2 / (t - startSampleTime);
-    cout << " P: " << E_press  << endl; //<< "(" << E_press2 - E_press * E_press << ")" << endl;
-    // = Pressure
-    double E_press2 = (density * E_temp + mass * density / (6.0 * mft) * E_mf);
-    //double E_press2 = TA_p2 / (t - startSampleTime);
-    cout << " P: " << E_press2  << endl;; //<< "(" << E_press2 - E_press * E_press << ")" << endl;
+    double sd_press = sqrt( pow(density * sd_temp, 2) 
+			    + pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
+      
+    cout << " P: " << E_press  << "(" << sd_press << ")" << endl;
+
   }
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
@@ -1019,19 +1022,18 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
 void freeStream(double dt)
 {
   t += dt; //update system time
+  double temp_temperature = currentK / (1.5 * numberParticles);
+  TA_T += temp_temperature * dt;
+  TA_U += currentU / numberParticles * dt;
   if(eventCount > startSampling)
     {
       if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
       // = Mean Free Time
-      TA_tavg += dt;
       TA_tavg2 += dt * dt;
       // = Temperature
-      double temp_temperature = currentK / (1.5 * numberParticles);
-      TA_T += temp_temperature * dt;
       TA_T2 += temp_temperature * temp_temperature * dt;
 
       // = Potential
-      TA_U += currentU / numberParticles * dt;
       TA_U2 += pow((currentU / numberParticles),2) * dt;
       ++readingsTaken;
 
@@ -1062,7 +1064,7 @@ void zeroMomentum(vector<CParticle> &particles)
 void checkCaptureMap(vector<CParticle> &particles)
 {
   //CAPTURE TEST
-  cout << "Checking the capture map";
+  cout << "Checking the capture map" << endl;
   for(int i = 0; i < particles.size();++i)
     for(int j = i + 1; j < particles.size(); ++j)
       {
