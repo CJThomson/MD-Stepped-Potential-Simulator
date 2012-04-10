@@ -48,6 +48,7 @@ double calcTemp(std::vector<CParticle>&);
 double calcThermoTime(CRandom&, int&);
 double calcVelocity(std::vector<CParticle>&, eventTimes&);
 void checkCaptureMap(std::vector<CParticle> &);
+void continuousRDF(double);
 void correctVelocity(std::vector<CParticle>&);
 void initialise(std::vector<CParticle>&, CRandom&);
 void initFromFile (std::vector<CParticle>&);

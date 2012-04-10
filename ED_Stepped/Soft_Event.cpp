@@ -1,8 +1,8 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-const double density = 0.85;
-const double temperature = 1.34; //temperature of the system
+const double density = 0.65;
+const double temperature = 2.61; //temperature of the system
 //Simulation:
 int numberParticles = 256; //number of particles
 const int numberEvents = 1.5e+6;
@@ -29,6 +29,9 @@ double thermoSetting = 0.05;
 //Reduced Unit Definitions
 const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
+const double lj_sigma = 1.0;
+const double lj_epsilon = 1.0;
+
 
 //Logging:
 const int psteps = 50; //frequency of output to file
@@ -40,16 +43,18 @@ const int sample_interval = 1;
 const int rdf_interval = 100;
 const int diff_interval = 20;
 int readingsTaken = 0;
+int rdfReadings = 0;
 double startSampleTime = -1;
 double currentK = 0;
 double currentU = 0;
 const int noBins = 500; //number of radial bins
 const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
-double gVal[noBins]; //radial distribution values
+double rdf_d[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over
 
 //----Time Averages----
-double TA_gVal[noBins];
+double TA_rdf_d[noBins];
+double TA_rdf_c[noBins];
 double TA_v = 0;
 double TA_U = 0;
 double TA_T = 0;
@@ -73,19 +78,18 @@ int main()
   vector<eventTimes> masterEL; //create a vector to store collision times
   vector<set<int> > neighbourList; //create a vector of sets to hold particles in  neighbour cell
   vector<set<int> > neighbourCell; //create a vector of sets to hold the cells neighbouring each cell
-
   cout << "Initialising Random Number Generators" << endl;
   CRandom RNG;
   RNG.seed();
-  cout << "Initialising ";
+  cout << "Initialising Particles ...";
   //Initialise the simulation
   if(initFile)
     initFromFile(particles);
   else
     initialise(particles, RNG ); // initialise the system
-  cout << particles.size() << " particles..." << endl;
   numberParticles = particles.size();
   currentK = calcKinetic(particles);
+
   cout << "Initialising neighbour lists" << endl;
   int cells3 = pow(noCells, 3);
   neighbourList.resize(cells3);
@@ -254,9 +258,10 @@ int main()
 
 	  if(eventCount % rdf_interval == 0)
 	    {
+	      ++rdfReadings;
 	      calcRadDist(particles);
 	      for(size_t i = 0; i < noBins; ++i)
-		TA_gVal[i] += gVal[i];
+		TA_rdf_d[i] += rdf_d[i];
 	    }
 	      
 	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
@@ -288,8 +293,12 @@ int main()
   for(int i = 0; i < noBins; ++i)
     {
       double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
-      TA_gVal[i] /= (0.5 * numberParticles * (readingsTaken/ rdf_interval) * volShell * density);
+      TA_rdf_d[i] /= (0.5 * numberParticles * rdfReadings * volShell * density);
     }
+
+  cout << "Generating Continuous g(r)" << endl;
+  continuousRDF(TA_T / (t - startSampleTime));
+  
   //Output time averages
   cout << "Time Averages:" << endl;
   {
@@ -327,7 +336,7 @@ int main()
 
   }
   cout << "Writing Results..." << endl;
-  logger.write_RadDist(TA_gVal,noBins, deltaR); //write radial distribution file
+  logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
   if(overwriteInit)
@@ -565,7 +574,7 @@ double calcPotential()
 void calcRadDist(vector<CParticle> &particles)
 {
   for(size_t i (0); i < noBins; ++i)
-    gVal[i] = 0; //rezero array
+    rdf_d[i] = 0; //rezero array
 
   for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
     {
@@ -583,7 +592,7 @@ void calcRadDist(vector<CParticle> &particles)
 		  cerr << "ERROR: Invalid index is calcRadDist: " << index << endl;
 		  exit(1);
 		}
-	      ++gVal[index];
+	      ++rdf_d[index];
 	    }
 	}
     }
@@ -1098,4 +1107,21 @@ void checkCaptureMap(vector<CParticle> &particles)
 	}
 
       }
+}
+
+void continuousRDF(double T)
+{
+  for(size_t i(0); i < noBins; ++i)
+    {
+      double distance = i * maxR / noBins;
+      double potential_c = 4.0 * lj_epsilon * (pow(lj_sigma/distance, 12) - pow(lj_sigma/distance, 6)); 
+      double potential_d = 0;
+      for(size_t j (0); j < steps.size(); ++j)
+	{
+	  if(distance <= steps[j].step_radius)
+	    { potential_d = steps[j].step_energy; break; }
+	}
+      TA_rdf_c[i] = TA_rdf_d[i] * exp( (potential_d - potential_c) / T);
+      
+    }
 }

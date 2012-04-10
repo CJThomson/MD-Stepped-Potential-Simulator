@@ -53,12 +53,12 @@ class Logger
     diffLog.close(); //close the file
   }
 
-  void write_RadDist (double gVals[], int index, double deltaR)
+  void write_RadDist (double rdfd[],double rdfc[], int index, double deltaR)
   {
     std::ofstream grLog;
     grLog.open("grLog.dat");
     for(int i = 0; i < index; ++i)
-      grLog << i * deltaR << "\t" << gVals[i] << std::endl;
+      grLog << i * deltaR << "\t" << rdfd[i] << "\t" << rdfc[i] << std::endl;
     grLog.close();
   }
 
