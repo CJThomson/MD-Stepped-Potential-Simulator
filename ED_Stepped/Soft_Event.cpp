@@ -1,8 +1,8 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-const double density = 0.65;
-const double temperature = 2.61; //temperature of the system
+const double density = 0.85;
+const double temperature = 1.34; //temperature of the system
 //Simulation:
 int numberParticles = 256; //number of particles
 const int numberEvents = 1.5e+6;
@@ -44,11 +44,12 @@ const int rdf_interval = 100;
 const int diff_interval = 20;
 int readingsTaken = 0;
 int rdfReadings = 0;
-double startSampleTime = -1;
+double startSampleTime = 0;
 double currentK = 0;
 double currentU = 0;
-const int noBins = 500; //number of radial bins
-const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
+const int noBins = 600; //number of radial bins
+//const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
+const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over
 
@@ -131,7 +132,7 @@ int main()
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
-  cout << "Starting Simulation with " << numberParticles << "particles with a density of "
+  cout << "Starting Simulation with " << numberParticles << " particles with a density of "
        << density << " in a box with side length of " << length << endl;
   for(;eventCount < numberEvents;)
     {
@@ -296,9 +297,10 @@ int main()
       TA_rdf_d[i] /= (0.5 * numberParticles * rdfReadings * volShell * density);
     }
 
-  cout << "Generating Continuous g(r)" << endl;
+  cout << "Generating Continuous g(r), U, P" << endl;
   continuousRDF(TA_T / (t - startSampleTime));
-  
+  double cont_P = continuousP(TA_T / (t - startSampleTime));
+  double cont_U = continuousU();
   //Output time averages
   cout << "Time Averages:" << endl;
   {
@@ -312,19 +314,20 @@ int main()
     double E_pot = TA_U / (t - startSampleTime);
     double E_pot2 = TA_U2 / (t - startSampleTime);
     double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
-    cout << " U: " << E_pot << "(" << sd_pot << ")" << endl;
+    cout << "Ud: " << E_pot << "(" << sd_pot << ")" << endl;
+    cout << "Uc: " << cont_U << endl;
     
     // = Temperature
     double E_temp = TA_T / (t - startSampleTime);
     double E_temp2 = TA_T2 / (t - startSampleTime);
     double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
-    cout << " T: " << E_temp << "(" << sd_temp << ")" << endl;
+    cout << "T: " << E_temp << "(" << sd_temp << ")" << endl;
     
     // = Momentum flux
     double E_mf = TA_v / readingsTaken;
     double E_mf2 = TA_v2 / readingsTaken;
     double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
-    cout << " <r.v> " << E_mf << "(" << sd_mf << ")" << endl << endl;;
+    cout << "<r.v> " << E_mf << "(" << sd_mf << ")" << endl;
 
     // = Pressure
     double E_press = density * E_temp 
@@ -332,8 +335,8 @@ int main()
     double sd_press = sqrt( pow(density * sd_temp, 2) 
 			    + pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
       
-    cout << " P: " << E_press  << "(" << sd_press << ")" << endl;
-
+    cout << "Pd: " << E_press  << "(" << sd_press << ")" << endl;
+    cout << "Pc: " << cont_P << endl;
   }
   cout << "Writing Results..." << endl;
   logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR); //write radial distribution file
@@ -1118,10 +1121,44 @@ void continuousRDF(double T)
       double potential_d = 0;
       for(size_t j (0); j < steps.size(); ++j)
 	{
-	  if(distance <= steps[j].step_radius)
+	  if(distance < steps[j].step_radius)
 	    { potential_d = steps[j].step_energy; break; }
 	}
       TA_rdf_c[i] = TA_rdf_d[i] * exp( (potential_d - potential_c) / T);
-      
     }
+  TA_rdf_c[0] = 0;
+}
+
+double continuousU()
+{
+
+  double utail = -8 * M_PI * density / (3.0 * pow(maxR, 3)) * (1.0 - 1.0 / (3.0 * pow(maxR,6))); 
+  double sum = 0;
+  double h = (maxR -TA_rdf_c[1]) / (noBins - 1);
+  for(size_t i(1); i < noBins; ++i)
+    {
+      double d0 = i * maxR / noBins;
+      double u0 = 4.0 * lj_epsilon * (pow(lj_sigma/d0, 12) - pow(lj_sigma/d0, 6)); 
+      double factor = (i != 1 && i != (noBins  -1)) ? 2.0 : 1.0;
+      //calculate integral using trapezoidal rule
+      //      sum += factor * u0 * TA_rdf_c[i] * d0 * d0;
+      sum += TA_rdf_c[i] * u0 * d0 * d0;
+    }
+  return 2 * M_PI * density * sum * h + utail;
+}
+
+double continuousP(double T)
+{
+  const double ptail = -16 * M_PI * density * density / (3.0 * pow(maxR, 3)) * (1.0 - 2.0 / (3.0 * pow(maxR,6))); 
+  double sum = 0;
+  double h = (maxR -TA_rdf_c[1]) / (noBins - 1);
+  for(size_t i(1); i < noBins; ++i)
+    {
+      double d0 = i * maxR / noBins;
+      double f0 = -24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma / d0, 13) - pow(lj_sigma / d0, 7)); 
+      //double factor = (i != 1 && i != noBins - 1) ? 2.0 : 1.0;
+      double factor = 1.0;
+      sum -= factor * f0 * TA_rdf_c[i] * d0 * d0 * d0;
+    }
+  return density * T + 2.0 / 3.0 * M_PI * density * density * sum * h  + ptail;
 }
