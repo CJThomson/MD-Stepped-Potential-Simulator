@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream> //allows output to files
 #include <vector> //allows use of vector structures
+#include <string>
 #include "Declares.h" //includes declares for main program
 #include "Particle.h" //allows use of particle class
 class Logger
@@ -53,10 +54,15 @@ class Logger
     diffLog.close(); //close the file
   }
 
-  void write_RadDist (double rdfd[],double rdfc[], int index, double deltaR)
+  void write_RadDist (double rdfd[],double rdfc[], int index, double deltaR,
+		      double rho, double T)
   {
     std::ofstream grLog;
-    grLog.open("grLog.dat");
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "grLog " << rho << " - " << T << "-stepped.dat"; 
+    outfileName = fileName.str();
+    grLog.open(outfileName.c_str());
     for(int i = 0; i < index; ++i)
       grLog << i * deltaR << "\t" << rdfd[i] << "\t" << rdfc[i] << std::endl;
     grLog.close();
@@ -77,6 +83,33 @@ class Logger
     initLog.close();
   }
 
+  void write_Results (std::vector<Results>& results, double rho, double T)
+  {
+    std::ofstream resultLog;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "Results " << rho << " - " << T << "-stepped.dat"; 
+    outfileName = fileName.str();
+    resultLog.open(outfileName.c_str());
+    Results avgResults;
+    for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
+      {
+	
+	resultLog << result->temperature << "\t"
+		  << result->pressure_d << "\t"
+		  << result->pressure_c << "\t"
+		  << result->potential_d << "\t"
+		  << result->potential_c<< endl;
+	avgResults += *result;
+      }
+    avgResults *= 1.0 / results.size();
+    resultLog << avgResults.temperature << "\t"
+	      << avgResults.pressure_d << "\t"
+	      << avgResults.pressure_c << "\t"
+	      << avgResults.potential_d << "\t"
+	      << avgResults.potential_c << endl;
+    resultLog.close();
+  }
   void write_Location (std::vector<CParticle>& particles, double sysTime, CVector3 systemSize)
   {
     if(locLog.is_open())
@@ -98,4 +131,5 @@ class Logger
  private:
   std::ofstream locLog;
   bool startLoc;
+  
 };

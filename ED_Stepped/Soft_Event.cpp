@@ -1,19 +1,20 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-const double density = 0.85;
-const double temperature = 1.34; //temperature of the system
+double density = 0.65;
+double temperature =3.79; //temperature of the system
 //Simulation:
 int numberParticles = 256; //number of particles
 const int numberEvents = 1.5e+6;
 int eventCount = 0;
-const double length = pow(numberParticles/density, 1.0 / 3.0);
+double length = pow(numberParticles/density, 1.0 / 3.0);
+int number_of_runs = 5;
 //const double length = 6.0;
-const CVector3 systemSize(length,length,length); //size of the system
+CVector3 systemSize(length,length,length); //size of the system
 double t = 0;
 const bool initFile = false; //use an init file instead of random generated values
 const bool overwriteInit = false; //create a new init file
-std::vector<Steps> steps; //create a vectOr to store step propeties
+std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
 
 //Thermostat:
@@ -31,7 +32,6 @@ const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
 const double lj_sigma = 1.0;
 const double lj_epsilon = 1.0;
-
 
 //Logging:
 const int psteps = 50; //frequency of output to file
@@ -70,8 +70,100 @@ Logger logger; //create an instance of the logger class
 
 std::map<std::pair<int, int>, int> collStep;
 using namespace std;
-
 int main()
+{
+  string input;
+  cout << " - - - Stepped Potential ED Simulator - - - " << endl;
+  while(true)
+    {
+      cout << "input: ";
+      cin >> input;
+      if(input == "exit")
+	exit(0);
+      else if(input == "run")
+	{
+	  vector<Results> results;
+	  results.resize(number_of_runs);
+	  for(size_t i (0); i < number_of_runs; ++i)
+	    {
+	      cout << "Run number: " << i << endl;
+	      resetSim();
+	      runSimulation(results, i);
+	    }
+	  Results avgResults;
+	  for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
+	    avgResults += *result;
+	  avgResults *= 1.0 / number_of_runs;
+	  cout << "Average Results" << endl;
+	  cout << "Temperature: " << avgResults.temperature << endl;
+	  cout << "Pressure (discont): " << avgResults.pressure_d << endl;
+	  cout << "Pressure (cont): " << avgResults.pressure_c << endl;
+	  cout << "Potential Energy (discont): " << avgResults.potential_d << endl;
+	  cout << "Potential Energy (cont): " << avgResults.potential_c << endl;
+	  logger.write_results(results, density, temperature);
+	}
+      else if(input == "temperature")
+	cin >> temperature;
+      else if(input == "density")
+	cin >> density;
+      else
+	cout << "Invalid input" << endl;
+    }
+}
+void initSettings(vector<pair<double, double> >& settings)
+{
+  settings.push_back(pair<double, double> (0.85, 0.72));
+  settings.push_back(pair<double, double> (0.85, 1.34));  
+  settings.push_back(pair<double, double> (0.85, 2.35));
+  settings.push_back(pair<double, double> (0.85, 3.37));
+  settings.push_back(pair<double, double> (0.85, 4.60));  
+  settings.push_back(pair<double, double> (0.75, 0.81));
+  settings.push_back(pair<double, double> (0.75, 1.31));
+  settings.push_back(pair<double, double> (0.75, 2.49));
+  settings.push_back(pair<double, double> (0.75, 3.59));
+  settings.push_back(pair<double, double> (0.65, 1.31));
+  settings.push_back(pair<double, double> (0.65, 2.61));
+  settings.push_back(pair<double, double> (0.65, 3.79));
+}
+void resetSim()
+{
+  eventCount = 0;
+  length = pow(numberParticles/density, 1.0 / 3.0);
+  number_of_runs = 5;
+  systemSize = CVector3(length,length,length); //size of the system
+  t = 0;
+  thermostat = true; //use a thermostat
+  thermoCount = 0; //counter to change thermostat rate
+  thermoLastUpdate = 0;
+  thermoMeanFreeTime = 0.0005;
+  thermoSetting = 0.05;
+
+  readingsTaken = 0;
+  rdfReadings = 0;
+  startSampleTime = 0;
+  currentK = 0;
+  currentU = 0;
+
+  coDiff.clear();
+  for(size_t i(0); i < noBins; ++i)
+    {
+      TA_rdf_d[i] = 0;
+      TA_rdf_c[i] = 0;
+    }
+  TA_rdf_d[noBins];
+  TA_rdf_c[noBins];
+  TA_v = 0;
+  TA_U = 0;
+  TA_T = 0;
+  TA_p = 0;
+  TA_v2 = 0;
+  TA_U2 = 0;
+  TA_T2 = 0;
+  TA_p2 = 0;
+  TA_tavg = 0;
+  TA_tavg2 = 0;
+}
+void runSimulation(vector<Results>& results, size_t runNumber)
 {
   //variable declarations
   vector<CParticle> particles; //create a vector to store particle info
@@ -79,10 +171,10 @@ int main()
   vector<eventTimes> masterEL; //create a vector to store collision times
   vector<set<int> > neighbourList; //create a vector of sets to hold particles in  neighbour cell
   vector<set<int> > neighbourCell; //create a vector of sets to hold the cells neighbouring each cell
-  cout << "Initialising Random Number Generators" << endl;
+  cout << "Initialising Random Number Generators";
   CRandom RNG;
   RNG.seed();
-  cout << "Initialising Particles ...";
+  cout << "\rInitialising Particles ...";
   //Initialise the simulation
   if(initFile)
     initFromFile(particles);
@@ -91,29 +183,30 @@ int main()
   numberParticles = particles.size();
   currentK = calcKinetic(particles);
 
-  cout << "Initialising neighbour lists" << endl;
+  cout << "\rInitialising neighbour lists";
   int cells3 = pow(noCells, 3);
   neighbourList.resize(cells3);
   neighbourCell.resize(cells3);
   generateNeighbourCells(neighbourCell);
   generateNeighbourList(neighbourList, particles);
 
-  cout << "Initialising Steps..." << endl;
+  cout << "\rInitialising Steps...";
   initSteps(); //step up system steps
   if(length * 0.5 < steps[steps.size()-1].step_radius)
     cout << "Warning system size less than cut-off radius" << endl;
   
-  cout << "Populating initial capture map" << endl;
+  cout << "\rPopulating initial capture map";
+  collStep.clear();
   for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
     for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
       calcStep(*p1,*p2);
 
-  cout << "Initialising Output Logs..." << endl;
+  cout << "\rInitialising Output Logs...";
   logger.initialise(Logger::LOCATIONS); //initialise location logger
   logger.initialise(Logger::OUTPUTLOG);
 
 
-  cout << "Generating event list..." << endl;
+  cout << "\rGenerating event list...";
   particleEL.resize(particles.size()); 
   masterEL.resize(particles.size() + 1);//one event for each particle plus thermostat
   for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
@@ -132,8 +225,8 @@ int main()
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
-  cout << "Starting Simulation with " << numberParticles << " particles with a density of "
-       << density << " in a box with side length of " << length << endl;
+  cout << endl << "Starting Simulation with " << numberParticles << " particles with a density of "
+       << density << " at a target temperature of " << temperature << " in a box with side length of " << length << endl;
   for(;eventCount < numberEvents;)
     {
       bool collEvent = false;
@@ -287,7 +380,7 @@ int main()
 	}
     }
 
-  cout << endl << "Simulation Complete" << endl;
+  cout << "\rSimulation Complete";
   checkCaptureMap(particles);
   double deltaR = maxR / noBins; //width of each shell
   
@@ -297,55 +390,62 @@ int main()
       TA_rdf_d[i] /= (0.5 * numberParticles * rdfReadings * volShell * density);
     }
 
-  cout << "Generating Continuous g(r), U, P" << endl;
-  continuousRDF(TA_T / (t - startSampleTime));
-  double cont_P = continuousP(TA_T / (t - startSampleTime));
+  cout << "\rGenerating Continuous g(r), U, P";
+  double E_temp = TA_T / (t - startSampleTime);
+  continuousRDF(E_temp);
+  double cont_P = continuousP(E_temp);
   double cont_U = continuousU();
+  double E_pot = TA_U / (t - startSampleTime);
+  double E_press = density * E_temp 
+    + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
+  results[runNumber] = Results(E_temp, E_press, cont_P, E_pot, cont_U);
   //Output time averages
-  cout << "Time Averages:" << endl;
-  {
-    // = Mean free time
-    double freeTime = t * numberParticles / (2 * eventCount);
-    double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
-    double sd_freeTime = sqrt(fabs(freeTime2 - freeTime * freeTime));
-    cout << "Mean free time: " << freeTime << " (" << sd_freeTime << ")" << endl;
-
-    // = Potential Energy
-    double E_pot = TA_U / (t - startSampleTime);
-    double E_pot2 = TA_U2 / (t - startSampleTime);
-    double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
-    cout << "Ud: " << E_pot << "(" << sd_pot << ")" << endl;
-    cout << "Uc: " << cont_U << endl;
-    
-    // = Temperature
-    double E_temp = TA_T / (t - startSampleTime);
-    double E_temp2 = TA_T2 / (t - startSampleTime);
-    double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
-    cout << "T: " << E_temp << "(" << sd_temp << ")" << endl;
-    
-    // = Momentum flux
-    double E_mf = TA_v / readingsTaken;
-    double E_mf2 = TA_v2 / readingsTaken;
-    double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
-    cout << "<r.v> " << E_mf << "(" << sd_mf << ")" << endl;
-
-    // = Pressure
-    double E_press = density * E_temp 
-      + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-    double sd_press = sqrt( pow(density * sd_temp, 2) 
-			    + pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
-      
-    cout << "Pd: " << E_press  << "(" << sd_press << ")" << endl;
-    cout << "Pc: " << cont_P << endl;
-  }
-  cout << "Writing Results..." << endl;
-  logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR); //write radial distribution file
+  if(false)
+    {
+      cout << "Time Averages:" << endl;
+      {
+	// = Mean free time
+	double freeTime = t * numberParticles / (2 * eventCount);
+	double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
+	double sd_freeTime = sqrt(fabs(freeTime2 - freeTime * freeTime));
+	cout << "Mean free time: " << freeTime << " (" << sd_freeTime << ")" << endl;
+	
+	// = Potential Energy
+	double E_pot = TA_U / (t - startSampleTime);
+	double E_pot2 = TA_U2 / (t - startSampleTime);
+	double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
+	cout << "Ud: " << E_pot << "(" << sd_pot << ")" << endl;
+	cout << "Uc: " << cont_U << endl;
+	
+	// = Temperature
+	double E_temp = TA_T / (t - startSampleTime);
+	double E_temp2 = TA_T2 / (t - startSampleTime);
+	double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
+	cout << "T: " << E_temp << "(" << sd_temp << ")" << endl;
+	
+	// = Momentum flux
+	double E_mf = TA_v / readingsTaken;
+	double E_mf2 = TA_v2 / readingsTaken;
+	double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
+	cout << "<r.v> " << E_mf << "(" << sd_mf << ")" << endl;
+	
+	// = Pressure
+	double E_press = density * E_temp 
+	  + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
+	double sd_press = sqrt( pow(density * sd_temp, 2) 
+				+ pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
+	
+	cout << "Pd: " << E_press  << "(" << sd_press << ")" << endl;
+	cout << "Pc: " << cont_P << endl;
+      }
+    }
+  cout << "\rWriting Results...";
+  logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR, density, temperature); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
   if(overwriteInit)
     logger.write_Init(particles); //write final values to log to allow
-  cout << "All Tasks Complete" << endl;
-  return 0;
+  cout << "\rAll Tasks Complete";
 }
 
 void applyBC(CVector3& pos)
@@ -899,6 +999,7 @@ void initFromFile (vector<CParticle> &particle)
 
 void initSteps()
 {
+  steps.clear();
   //Steps from Chepela et al, Case 6
   //steps.push_back(Steps(1.00,500)); //step 0
   steps.push_back(Steps(0.80,66.74)); //step 0
@@ -1076,7 +1177,7 @@ void zeroMomentum(vector<CParticle> &particles)
 void checkCaptureMap(vector<CParticle> &particles)
 {
   //CAPTURE TEST
-  cout << "Checking the capture map" << endl;
+  cout << "\rChecking the capture map";
   for(int i = 0; i < particles.size();++i)
     for(int j = i + 1; j < particles.size(); ++j)
       {
