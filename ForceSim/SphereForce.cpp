@@ -3,30 +3,30 @@
 
 //Physical Properties:
 const double density = 0.85;
-const double temperature = 0.7; //temperature of the system
+const double temperature = 4.6; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
 const int simTime = 100000; //length of the Simulation
-const double dt = 0.001; //length of ticme interval
+const double dt = 0.0005; //length of ticme interval
 const double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
 const CVector3 systemSize(length, length, length); //size of the system
 const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
-const int NL_update = 10;
+const int NL_update = 5;
 
 const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
 const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
 //Thermostat
 bool thermostat = true; //use a thermostat
-const double thermoFreq = 0.1; //update frequency of thermostat
-const int thermoOff = 20000;
+const double thermoFreq = 0.05; //update frequency of thermostat
+const int thermoOff = simTime;
 
 //Reduced Unit Definitions:
-const double mass = 1; //mass of a particle
+const double mass = 1.0; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
-const double epsilon = 1; //minimum energy of Lennard Jones Potential
-const double sigma = 1; //distance for Lennard Jones root
+const double epsilon = 1.0; //minimum energy of Lennard Jones Potential
+const double sigma = 1.0; //distance for Lennard Jones root
 
 //Logging:
 const int out_interval = 20; //frequency of output to file
@@ -36,10 +36,11 @@ const int sample_interval = 4;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 40000; //number of readings to take
+const int startSampling = 20000; //number of readings to take
 double readingTime = 0;
-const int noBins = 500; //number of radial bins
-const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
+const int noBins = 300; //number of radial bins
+const double maxR = 3.0;
+//const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 bool calcP = true;
 
 double gVal[noBins]; //radial distribution values
@@ -49,10 +50,10 @@ std::vector<Diffusion> coDiff; //coefficient of diffusion over time
 double TA_gVal[noBins];
 double TA_Temp = 0;
 double TA_U = 0;
-double TA_Pressure = 0;
+double TA_Virial = 0;
 double TA_Temp2 = 0;
 double TA_U2 = 0;
-double TA_Pressure2 = 0;
+double TA_Virial2 = 0;
 
 using namespace std;
 
@@ -171,9 +172,9 @@ int main()
 	  if(timeStep % sample_interval == 0)
 	    {
 	      double temp_virial = calcVirial(particles, neighbourList, listPos);
-	      double temp_kinetic = calcKinetic(particles); 
-	      TA_Pressure += (2.0 * temp_kinetic + temp_virial) / (3.0 * pow(length,3)); //add current pressure to TA
-	      TA_Pressure2 += pow((2.0 * temp_kinetic + temp_virial) / (3.0 * pow(length,3)),2); 
+	      double temp_kinetic = calcKinetic(particles);
+	      TA_Virial += temp_virial;
+	      TA_Virial2 += temp_virial * temp_virial;
 	      double temp_T = calcTemp(particles);
 	      TA_Temp += temp_T; //add current temp to TA
 	      TA_Temp2 += temp_T * temp_T;
@@ -204,19 +205,22 @@ int main()
   cout << setprecision(5) << "Time Averages:" << endl;
   // = Tempature
   double E_Temp = TA_Temp * sample_interval / noReadings;
-  double E_Temp2 = TA_Temp2 * sample_interval / noReadings;
-  cout << "Temp: " << E_Temp << "(" << sqrt(E_Temp2 - E_Temp * E_Temp) << ")" << endl;
+  double temp_sd = sqrt(fabs((TA_Temp2 * sample_interval / noReadings) - E_Temp * E_Temp));
+  cout << "Temp: " << E_Temp << "(" << temp_sd << ")" << endl;
 
   // = Pressure
-  double E_Press = TA_Pressure * sample_interval / noReadings;
-  double E_Press2 = TA_Pressure2 * sample_interval / noReadings;
-  cout << "P: " << E_Press << "(" << sqrt(E_Press2 - E_Press * E_Press) << ")" << endl;
+  double pshort = (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3));
+  double E_Press = density * E_Temp
+    + TA_Virial * density  * sample_interval/ (3.0 * numberParticles * noReadings);
+  double press_sd = sqrt( pow( density * temp_sd, 2) 
+			  + pow( density * sample_interval / (3.0 * numberParticles * noReadings), 2));
+  cout << "P: " << E_Press << "(" << press_sd << ")" << endl;
   cout << "P+LR: " << E_Press + ptail << endl;
 
   // = Potential Energy
   double E_U = TA_U * sample_interval / noReadings;
-  double E_U2 = TA_U2 * sample_interval / noReadings;
-  cout << "U: " << E_U << "(" << sqrt(E_U2 - E_U * E_U) << ")" << endl;
+  double U_sd = sqrt(fabs(TA_U2 * sample_interval / noReadings - E_U * E_U));
+  cout << "U: " << E_U << "(" << U_sd << ")" << endl;
   cout << "U+LR: " << E_U + utail << endl;
   return 0;
 }
