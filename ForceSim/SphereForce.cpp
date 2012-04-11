@@ -2,19 +2,19 @@
 #include "Declares.h" //declarations for this program
 
 //Physical Properties:
-const double density = 0.85;
-const double temperature = 4.6; //temperature of the system
+double density = 0.85;
+double temperature = 4.6; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 100000; //length of the Simulation
-const double dt = 0.0005; //length of ticme interval
-const double length = pow(numberParticles / density, 1.0 / 3.0);
+const int simTime = 60000; //length of the Simulation
+const double dt = 0.005; //length of ticme interval
+double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
-const CVector3 systemSize(length, length, length); //size of the system
+CVector3 systemSize(length, length, length); //size of the system
 const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
 const int NL_update = 5;
-
+int number_of_runs = 10;
 const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
 const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
 //Thermostat
@@ -29,6 +29,7 @@ const double epsilon = 1.0; //minimum energy of Lennard Jones Potential
 const double sigma = 1.0; //distance for Lennard Jones root
 
 //Logging:
+Logger logger; //create instance of the logger class
 const int out_interval = 20; //frequency of output to file
 const int diff_interval = 10;
 const int rdf_interval = 10;
@@ -41,7 +42,7 @@ double readingTime = 0;
 const int noBins = 300; //number of radial bins
 const double maxR = 3.0;
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
-bool calcP = true;
+bool suppressOutput = true;
 
 double gVal[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over time
@@ -56,15 +57,76 @@ double TA_U2 = 0;
 double TA_Virial2 = 0;
 
 using namespace std;
-
 int main()
 {
+  string input;
+  cout << " - - - Force-Driven Simulator - - - " << endl;
+  while(true)
+    {
+      cout << "input: ";
+      cin >> input;
+      if(input == "exit")
+	exit(0);
+      else if(input == "start")
+	{
+	  vector<Results> results;
+	  results.resize(number_of_runs);
+	  for(size_t i (0); i < number_of_runs; ++i)
+	    {
+	      cout << "Run number: " << i << endl;
+	      resetSim();
+	      runSimulation(results, i);
+	    }
+	  Results avgResults;
+	  for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
+	    avgResults += *result;
+	  avgResults *= 1.0 / number_of_runs;
+	  cout << "Average Results" << endl;
+	  cout << "Temperature: " << avgResults.temperature << endl;
+	  cout << "Pressure: " << avgResults.pressure << endl;
+	  cout << "Potential Energy: " << avgResults.potential << endl;
+	  logger.write_Results(results, density, temperature);
+	}
+      else if(input == "temperature")
+	cin >> temperature;
+      else if(input == "density")
+	cin >> density;
+      else if(input == "particles")
+	cin >> numberParticles;
+      else if(input == "runs")
+	cin >> number_of_runs;
+      else
+	cout << "Invalid input" << endl;
+    }
+}
+void resetSim()
+{
+  length = pow(numberParticles / density, 1.0 / 3.0);
+  for(size_t i(0); i < 3; ++i)
+    systemSize[i] = length; 
+  thermostat = true;
+  readingTime = 0;
+  coDiff.clear(); 
+  //----Time Averages----
+  for(size_t i(0); i < noBins; ++i)
+    TA_gVal[i] = 0;      
+  TA_Temp = 0;
+  TA_U = 0;
+  TA_Virial = 0;
+  TA_Temp2 = 0;
+  TA_U2 = 0;
+  TA_Virial2 = 0;
+
+}
+
+void runSimulation(vector<Results>& results, size_t runNumber)
+{
   //variable declarations
-  Logger log; //create instance of the logger class
+
   vector<CParticle> particles;
   int noReadings = 0;
 
-  cout << "Initialising random number generator..." << endl;
+  cout << "Initialising random number generator...";
   CRandom RNG;
   RNG.seed();
   //Initialise the simulation
@@ -74,23 +136,23 @@ int main()
     initialise(particles, RNG); // initialise the system
   numberParticles = particles.size();
 
-  cout << "Initialising " << numberParticles << " particles with density "
-       << density << " in a box of side length " << length << endl;
+  cout << "\rInitialising particles" << flush;
 
 
 
-  cout << "Initialising Log files..." << endl;
-  if(writeLoc) { log.initialise(Logger::LOCATIONS); } //initialise location logger
-  if(writeLoc) { log.write_Location(particles, 0, systemSize); } //write initial values to log
+  cout << "\rInitialising Log files..." << flush;
+  if(writeLoc) { logger.initialise(Logger::LOCATIONS); } //initialise location logger
+  if(writeLoc) { logger.write_Location(particles, 0, systemSize); } //write initial values to log
 
-  cout << "Initialising neighbour lists..." << endl;
+  cout << "\rInitialising neighbour lists..." << flush;
   vector<int> neighbourList;
   int listPos[particles.size()];
   calcNeighbourList(particles, neighbourList, listPos);
   calcAllForces(particles, neighbourList, listPos); //calculate all forces on system
 
 
-  cout << "Starting Simulation..." << endl;
+  cout << "\rStarting Simulation with " << numberParticles
+       << " at a density of " << density << " and a temperature of " << temperature << " in a box of length " << length << endl;
   double t = 0;
   for (size_t timeStep (0); timeStep < simTime; ++timeStep)
     {
@@ -123,7 +185,7 @@ int main()
 
       //update particle
       if(timeStep % out_interval == 0)
-	log.write_Location(particles, t, systemSize); //write locations to output file
+	logger.write_Location(particles, t, systemSize); //write locations to output file
 
       if(timeStep % NL_update == 0)
 	calcNeighbourList(particles, neighbourList, listPos);
@@ -186,7 +248,7 @@ int main()
 
     }
 
-  cout << "Simulation Complete" << endl;
+  cout << "\rSimulation Complete" << flush;
   //After Simulation
   double deltaR = maxR / noBins; //width of each shell
   for(size_t i(0); i < noBins; ++i)
@@ -194,35 +256,42 @@ int main()
       double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
       TA_gVal[i]/=(0.5 * numberParticles * noReadings / rdf_interval * volShell * density);
     }
-  cout << "write output files..." << endl;
-  log.write_Location(particles, simTime, systemSize);
-  log.write_RadDist(TA_gVal,noBins, deltaR); //write radial gdistribution file
-  log.write_Diff(coDiff); //write coefficient of diffusion file
+  cout << "\rwrite output files..." << flush;
+  logger.write_Location(particles, simTime, systemSize);
+  logger.write_RadDist(TA_gVal,noBins, deltaR, density, temperature); //write radial gdistribution file
+  logger.write_Diff(coDiff); //write coefficient of diffusion file
   if(overwriteInit)
-    log.write_Init(particles);
+    logger.write_Init(particles);
 
-  //output Time Averaged system properties
-  cout << setprecision(5) << "Time Averages:" << endl;
-  // = Tempature
   double E_Temp = TA_Temp * sample_interval / noReadings;
-  double temp_sd = sqrt(fabs((TA_Temp2 * sample_interval / noReadings) - E_Temp * E_Temp));
-  cout << "Temp: " << E_Temp << "(" << temp_sd << ")" << endl;
-
-  // = Pressure
-  double pshort = (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3));
   double E_Press = density * E_Temp
     + TA_Virial * density  * sample_interval/ (3.0 * numberParticles * noReadings);
-  double press_sd = sqrt( pow( density * temp_sd, 2) 
-			  + pow( density * sample_interval / (3.0 * numberParticles * noReadings), 2));
-  cout << "P: " << E_Press << "(" << press_sd << ")" << endl;
-  cout << "P+LR: " << E_Press + ptail << endl;
-
-  // = Potential Energy
   double E_U = TA_U * sample_interval / noReadings;
-  double U_sd = sqrt(fabs(TA_U2 * sample_interval / noReadings - E_U * E_U));
-  cout << "U: " << E_U << "(" << U_sd << ")" << endl;
-  cout << "U+LR: " << E_U + utail << endl;
-  return 0;
+  results[runNumber] = Results(E_Temp, E_Press + ptail, E_U +utail);
+  //output Time Averaged system properties
+  if(!suppressOutput)
+    {
+      cout << setprecision(5) << "Time Averages:" << endl;
+      // = Tempature
+      double E_Temp = TA_Temp * sample_interval / noReadings;
+      double temp_sd = sqrt(fabs((TA_Temp2 * sample_interval / noReadings) - E_Temp * E_Temp));
+      cout << "Temp: " << E_Temp << "(" << temp_sd << ")" << endl;
+      
+      // = Pressure
+      double pshort = (2.0 * calcKinetic(particles) + calcVirial(particles, neighbourList, listPos)) / (3.0 * pow(length,3));
+      double E_Press = density * E_Temp
+	+ TA_Virial * density  * sample_interval/ (3.0 * numberParticles * noReadings);
+      double press_sd = sqrt( pow( density * temp_sd, 2) 
+			      + pow( density * sample_interval / (3.0 * numberParticles * noReadings), 2));
+      cout << "P: " << E_Press << "(" << press_sd << ")" << endl;
+      cout << "P+LR: " << E_Press + ptail << endl;
+      
+      // = Potential Energy
+      double E_U = TA_U * sample_interval / noReadings;
+      double U_sd = sqrt(fabs(TA_U2 * sample_interval / noReadings - E_U * E_U));
+      cout << "U: " << E_U << "(" << U_sd << ")" << endl;
+      cout << "U+LR: " << E_U + utail << endl;
+    }
 }
 								    
 void initFromFile (vector<CParticle> &particle)

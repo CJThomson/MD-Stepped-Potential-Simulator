@@ -17,6 +17,7 @@ struct Diffusion {
 
 #include "Vector3.h" //allows use of vector mathematics
 #include "Particle.h" //allows use of the particle class
+#include "Results.h" //results structure
 #include "Logger.h" //allows logging of files
 #include "Random.h" //Random Number Generation
 
@@ -37,5 +38,7 @@ void correctVelocity(std::vector<CParticle>&);
 void initialise(std::vector<CParticle>&, CRandom&);
 void initFromFile(std::vector<CParticle>&);
 double calcBoltzmannH(std::vector<CParticle> &);
+void resetSim();
+void runSimulation(std::vector<Results>&, size_t);
 void zeroMomentum(std::vector<CParticle> &);
 void calcNeighbourList(std::vector<CParticle> &, std::vector<int> &, int []);

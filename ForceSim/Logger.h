@@ -1,6 +1,7 @@
 #pragma once
 #include <fstream> //allows output to files
 #include <vector> //allows use of vector structures
+#include <sstream> //allows use of ostreamstreams
 #include "Declares.h" //includes declares for main program
 #include "Particle.h" //allows use of particle class
 class Logger
@@ -57,14 +58,37 @@ class Logger
       diffLog << diffusion[i].time << "\t" << diffusion[i].coDiff << std::endl; //output all diffusion coeffcients
     diffLog.close(); //close the file
   }
-
-  void write_RadDist (double gVals[], int index, double deltaR)
+  
+  void write_RadDist(double rdfd[], int index, double deltaR,
+		      double rho, double T)
   {
     std::ofstream grLog;
-    grLog.open("grLog.dat");
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "grLog " << rho << " - " << T << "-forcesim.dat"; 
+    outfileName = fileName.str();
+    grLog.open(outfileName.c_str());
     for(int i = 0; i < index; ++i)
-      grLog << i * deltaR << "\t" << gVals[i] << std::endl;
+      grLog << i * deltaR << "\t" << rdfd[i] << "\t" <<  std::endl;
     grLog.close();
+  }
+
+  void write_Results(std::vector<Results>& results, double rho, double T)
+  {
+    std::ofstream resultLog;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "Results " << rho << " - " << T << "-forcesim.dat"; 
+    outfileName = fileName.str();
+    resultLog.open(outfileName.c_str());
+    for(std::vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
+      {
+	
+	resultLog << result->temperature << "\t"
+		  << result->pressure << "\t"
+		  << result->potential<< std::endl;
+      }
+    resultLog.close();
   }
 
   void write_Init (std::vector<CParticle>& particles)
