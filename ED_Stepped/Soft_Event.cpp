@@ -4,8 +4,8 @@
 double density = 0.85;
 double temperature = 1.34; //temperature of the system
 //Simulation:
-int numberParticles = 256; //number of particles
-const int numberEvents = 1.5e+6;
+int numberParticles = 108; //number of particles
+const int numberEvents = 1.0e+2;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
 int number_of_runs = 10;
@@ -347,7 +347,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 		TA_rdf_d[i] += rdf_d[i];
 	    }
 	      
-	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
+	  //if(eventCount % (int) ceil(numberEvents / 1000) == 0)
+	  if(eventCount % 1 == 0)
 	    {
 	      double E_temp = TA_T / (t - startSampleTime);
 	      double E_pot = TA_U / (t - startSampleTime);
