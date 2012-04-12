@@ -55,12 +55,12 @@ class Logger
   }
 
   void write_RadDist (double rdfd[],double rdfc[], int index, double deltaR,
-		      double rho, double T)
+		      double rho, double T, double n)
   {
     std::ofstream grLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "grLog " << rho << " - " << T << "-stepped.dat"; 
+    fileName << "grLog " << rho << " - " << T << " - " << n << "-stepped.dat"; 
     outfileName = fileName.str();
     grLog.open(outfileName.c_str());
     for(int i = 0; i < index; ++i)
@@ -83,31 +83,26 @@ class Logger
     initLog.close();
   }
 
-  void write_Results (std::vector<Results>& results, double rho, double T)
+  void write_Results(std::vector<Results>& results, double rho, double T, int n)
   {
     std::ofstream resultLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "Results " << rho << " - " << T << "-stepped.dat"; 
+    fileName << "Results " << rho << " - " << T << "-" << n << "-stepped.dat";
     outfileName = fileName.str();
     resultLog.open(outfileName.c_str());
     Results avgResults;
-    for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
+    for(std::vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
       {
-	
+
 	resultLog << result->temperature << "\t"
 		  << result->pressure_d << "\t"
 		  << result->pressure_c << "\t"
 		  << result->potential_d << "\t"
-		  << result->potential_c<< endl;
+		  << result->potential_c<< std::endl;
 	avgResults += *result;
       }
-    avgResults *= 1.0 / results.size();
-    resultLog << avgResults.temperature << "\t"
-	      << avgResults.pressure_d << "\t"
-	      << avgResults.pressure_c << "\t"
-	      << avgResults.potential_d << "\t"
-	      << avgResults.potential_c << endl;
+
     resultLog.close();
   }
   void write_Location (std::vector<CParticle>& particles, double sysTime, CVector3 systemSize)

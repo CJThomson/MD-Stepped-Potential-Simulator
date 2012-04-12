@@ -1,14 +1,14 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-double density = 0.65;
-double temperature =3.79; //temperature of the system
+double density = 0.85;
+double temperature = 1.34; //temperature of the system
 //Simulation:
 int numberParticles = 256; //number of particles
 const int numberEvents = 1.5e+6;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
-int number_of_runs = 5;
+int number_of_runs = 10;
 //const double length = 6.0;
 CVector3 systemSize(length,length,length); //size of the system
 double t = 0;
@@ -80,56 +80,45 @@ int main()
       cin >> input;
       if(input == "exit")
 	exit(0);
-      else if(input == "run")
+      else if(input == "start")
 	{
 	  vector<Results> results;
-	  results.resize(number_of_runs);
-	  for(size_t i (0); i < number_of_runs; ++i)
+	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
+	  for(size_t runs (0); runs < number_of_runs; ++runs)
 	    {
-	      cout << "Run number: " << i << endl;
-	      resetSim();
-	      runSimulation(results, i);
+	      cout << "\rRun number: " << runs << " of " << number_of_runs << endl;
+	      
+	      //resetSim();
+	      runSimulation(results, runs);
 	    }
 	  Results avgResults;
 	  for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
 	    avgResults += *result;
 	  avgResults *= 1.0 / number_of_runs;
-	  cout << "Average Results" << endl;
+	  cout << "\rAverage Results" << endl;
 	  cout << "Temperature: " << avgResults.temperature << endl;
 	  cout << "Pressure (discont): " << avgResults.pressure_d << endl;
 	  cout << "Pressure (cont): " << avgResults.pressure_c << endl;
 	  cout << "Potential Energy (discont): " << avgResults.potential_d << endl;
 	  cout << "Potential Energy (cont): " << avgResults.potential_c << endl;
-	  logger.write_results(results, density, temperature);
+	  logger.write_Results(results, density, temperature, numberParticles);
 	}
       else if(input == "temperature")
 	cin >> temperature;
       else if(input == "density")
 	cin >> density;
+      else if(input == "particles")
+	cin >> numberParticles;
+      else if(input == "runs")
+	cin >> number_of_runs;
       else
 	cout << "Invalid input" << endl;
     }
-}
-void initSettings(vector<pair<double, double> >& settings)
-{
-  settings.push_back(pair<double, double> (0.85, 0.72));
-  settings.push_back(pair<double, double> (0.85, 1.34));  
-  settings.push_back(pair<double, double> (0.85, 2.35));
-  settings.push_back(pair<double, double> (0.85, 3.37));
-  settings.push_back(pair<double, double> (0.85, 4.60));  
-  settings.push_back(pair<double, double> (0.75, 0.81));
-  settings.push_back(pair<double, double> (0.75, 1.31));
-  settings.push_back(pair<double, double> (0.75, 2.49));
-  settings.push_back(pair<double, double> (0.75, 3.59));
-  settings.push_back(pair<double, double> (0.65, 1.31));
-  settings.push_back(pair<double, double> (0.65, 2.61));
-  settings.push_back(pair<double, double> (0.65, 3.79));
 }
 void resetSim()
 {
   eventCount = 0;
   length = pow(numberParticles/density, 1.0 / 3.0);
-  number_of_runs = 5;
   systemSize = CVector3(length,length,length); //size of the system
   t = 0;
   thermostat = true; //use a thermostat
@@ -150,8 +139,6 @@ void resetSim()
       TA_rdf_d[i] = 0;
       TA_rdf_c[i] = 0;
     }
-  TA_rdf_d[noBins];
-  TA_rdf_c[noBins];
   TA_v = 0;
   TA_U = 0;
   TA_T = 0;
@@ -163,6 +150,7 @@ void resetSim()
   TA_tavg = 0;
   TA_tavg2 = 0;
 }
+
 void runSimulation(vector<Results>& results, size_t runNumber)
 {
   //variable declarations
@@ -225,7 +213,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
-  cout << endl << "Starting Simulation with " << numberParticles << " particles with a density of "
+  cout << "Starting Simulation with " << numberParticles << " particles with a density of "
        << density << " at a target temperature of " << temperature << " in a box with side length of " << length << endl;
   for(;eventCount < numberEvents;)
     {
@@ -251,7 +239,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 		//cerr << "Invalid Collision between particles :" << next_event.particle1 << " & " << next_event.particle2 << endl;
 		getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 		getEvent(particles[next_event.particle2], particles, particleEL, masterEL, neighbourList, neighbourCell);
-		logger.outLog << "Invalid Collision between particles: " << next_event.particle1 << " & " << next_event.particle2 << endl;
+		if(writeOutLog >= 1)
+		  logger.outLog << "Invalid Collision between particles: " << next_event.particle1 << " & " << next_event.particle2 << endl;
 	      }
 	    else //if a valid event
 	      {
@@ -398,7 +387,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   double E_pot = TA_U / (t - startSampleTime);
   double E_press = density * E_temp 
     + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-  results[runNumber] = Results(E_temp, E_press, cont_P, E_pot, cont_U);
+  results.push_back(Results(E_temp, E_press, cont_P, E_pot, cont_U));
   //Output time averages
   if(false)
     {
@@ -440,7 +429,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
       }
     }
   cout << "\rWriting Results...";
-  logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR, density, temperature); //write radial distribution file
+  logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR, density, temperature, numberParticles); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
   if(overwriteInit)

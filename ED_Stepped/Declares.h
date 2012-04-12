@@ -13,7 +13,8 @@ Steps(double r, double h) : step_radius(r), step_energy(h) {}
 };
 struct Results
 {
-  Results() {}
+  Results() {
+    temperature = 0; pressure_d = 0; pressure_c = 0; potential_d =0; potential_c = 0;}
 Results(double T, double Pd, double Pc, double Ud, double Uc) :
   temperature(T), pressure_d(Pd), pressure_c(Pc), potential_d(Ud), potential_c(Uc) {}
   const Results& operator += (const Results &r)
