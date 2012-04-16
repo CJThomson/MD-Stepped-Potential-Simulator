@@ -1,0 +1,94 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.4 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Frenkel2002}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Frenkel}{F.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smit}{S.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+  }
+  \name{editor}{1}{}{%
+    {{}%
+     {Edition}{E.}%
+     {Second}{S.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Academic Press}%
+  }
+  \strng{namehash}{FDSB1}
+  \strng{fullhash}{FDSB1}
+  \verb{doi}
+  \verb 10.1016/B978-012267351-1/50006-7
+  \endverb
+  \field{title}{Understanding Molecular Simulations}
+  \field{year}{2002}
+\endentry
+
+\entry{Lennard-Jones1924}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Lennard-Jones}{L.-J.}%
+     {J.E.}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LJJ1}
+  \strng{fullhash}{LJJ1}
+  \verb{doi}
+  \verb 10.1098/rspa.1924.0081
+  \endverb
+  \field{pages}{441\bibrangedash 477}
+  \field{title}{The Determination of Molecular Fields I \& II}
+  \field{volume}{106A}
+  \field{journaltitle}{Proc. R. Soc. Lon. Ser-A}
+  \field{year}{1924}
+\endentry
+
+\entry{Rahman1964}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Rahman}{R.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{RA1}
+  \strng{fullhash}{RA1}
+  \verb{doi}
+  \verb 10.1103/PhysRev.136.A405
+  \endverb
+  \field{pages}{A405\bibrangedash A411}
+  \field{title}{Correlations in the Motion of Atoms in Liquid Argon}
+  \field{volume}{136}
+  \field{journaltitle}{Phys. Rev.}
+  \field{year}{1964}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput
