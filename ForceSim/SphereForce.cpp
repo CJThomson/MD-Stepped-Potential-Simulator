@@ -6,14 +6,14 @@ double density = 0.85;
 double temperature = 4.6; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 60000; //length of the Simulation
-const double dt = 0.005; //length of ticme interval
+const int simTime = 300000; //length of the Simulation
+const double dt = 0.001; //length of ticme interval
 double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
 CVector3 systemSize(length, length, length); //size of the system
 const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
-const int NL_update = 5;
+const int NL_update = 20;
 int number_of_runs = 10;
 const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
 const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
@@ -31,13 +31,13 @@ const double sigma = 1.0; //distance for Lennard Jones root
 //Logging:
 Logger logger; //create instance of the logger class
 const int out_interval = 20; //frequency of output to file
-const int diff_interval = 10;
-const int rdf_interval = 10;
-const int sample_interval = 4;
+const int diff_interval = simTime;
+const int rdf_interval = 200;
+const int sample_interval = 10;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 20000; //number of readings to take
+const int startSampling = 100000; //number of readings to take
 double readingTime = 0;
 const int noBins = 300; //number of radial bins
 const double maxR = 3.0;
@@ -197,8 +197,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	       << " t: " << setprecision(2) << t << "\t"
 	       << " T: " << setprecision(4) << calcTemp(particles) << "\t"
 	       << " P: " << setprecision(3) << pshort << "\t"
-	       << " P + LR: " << setprecision(3) << pshort + ptail << "\t"
 	       << " U: " << setprecision(3) << calcPotential(particles,neighbourList, listPos) << "\t"
+	       << " TE: " << calcPotential(particles, neighbourList, listPos) + calcKinetic(particles)
 	       << flush;
 	}
 

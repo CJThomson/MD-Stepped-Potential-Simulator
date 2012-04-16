@@ -16,6 +16,8 @@ const bool initFile = false; //use an init file instead of random generated valu
 const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
+int no_of_steps = 10;
+double r_cutoff = 2.3;
 
 //Thermostat:
 bool thermostat = true; //use a thermostat
@@ -32,6 +34,9 @@ const double mass = 1; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
 const double lj_sigma = 1.0;
 const double lj_epsilon = 1.0;
+double Stepper::lj_eps = 1.0;
+double Stepper::lj_sig = 1.0;
+double Stepper::beta = 1.0 / temperature;
 
 //Logging:
 const int psteps = 50; //frequency of output to file
@@ -82,13 +87,20 @@ int main()
 	exit(0);
       else if(input == "start")
 	{
+
+	  Stepper::beta = 1.0 / temperature;
+	  Stepper stepper;
+	  cout << "Generating " << no_of_steps << " Steps...";
+	  initSteps(); //step up system steps
+	  //stepper.generateSteps(no_of_steps, r_cutoff, Stepper::PROBABILITY, steps);
+	  cout << " Complete" << endl;
 	  vector<Results> results;
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
 	  for(size_t runs (0); runs < number_of_runs; ++runs)
 	    {
-	      cout << "\rRun number: " << runs << " of " << number_of_runs << endl;
+	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;
 	      
-	      //resetSim();
+	      resetSim();
 	      runSimulation(results, runs);
 	    }
 	  Results avgResults;
@@ -111,6 +123,10 @@ int main()
 	cin >> numberParticles;
       else if(input == "runs")
 	cin >> number_of_runs;
+      else if(input == "cutoff")
+	cin >> r_cutoff;
+      else if(input == "nosteps")
+	cin >> no_of_steps;
       else
 	cout << "Invalid input" << endl;
     }
@@ -179,7 +195,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   generateNeighbourList(neighbourList, particles);
 
   cout << "\rInitialising Steps...";
-  initSteps(); //step up system steps
+
   if(length * 0.5 < steps[steps.size()-1].step_radius)
     cout << "Warning system size less than cut-off radius" << endl;
   
@@ -188,9 +204,9 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
     for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
       calcStep(*p1,*p2);
-
+  checkCaptureMap(particles);
   cout << "\rInitialising Output Logs...";
-  logger.initialise(Logger::LOCATIONS); //initialise location logger
+  //logger.initialise(Logger::LOCATIONS); //initialise location logger
   logger.initialise(Logger::OUTPUTLOG);
 
 
@@ -355,7 +371,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	      double E_press_coll = mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
 
 
-	      cout << "\r" << eventCount << " of " << numberEvents << " events simulated"
+	      cout << "\rN:" << eventCount << "/" << numberEvents 
 		   << " T: " << currentK / (1.5 * numberParticles)
 		   << " <T>: " << E_temp
 		   << " U: " << currentU
@@ -678,7 +694,7 @@ void calcRadDist(vector<CParticle> &particles)
 	  applyBC(distance);
 	  if(distance.length() < maxR)
 	    {
-	      int index = floor(distance.length() * noBins/ maxR);
+	      int index = floor(distance.length() * noBins/ maxR - 0.5 * maxR / noBins);
 	      if(index < 0 || index >= noBins)
 		{
 		  cerr << "ERROR: Invalid index is calcRadDist: " << index << endl;
@@ -1001,6 +1017,30 @@ void initSteps()
   steps.push_back(Steps(1.45,-0.55)); //step 8
   steps.push_back(Steps(1.75,-0.22)); //step 9
   steps.push_back(Steps(2.30,-0.06)); //step 10
+
+  /*steps.push_back(Steps(0.966872, 4.7605 )); //step 0
+  steps.push_back(Steps(1.20474, -0.75868)); //step 1
+  steps.push_back(Steps(1.38391, -0.670859)); //step 3
+  steps.push_back(Steps(1.55901, -0.358529)); //step 4
+  steps.push_back(Steps(1.7183, -0.19731)); //step 5
+  steps.push_back(Steps(1.86003, -0.118788)); //step 6
+  steps.push_back(Steps(1.98651, -0.0777275)); //step 7
+  steps.push_back(Steps(2.10054, -0.0542997)); //step 8
+  steps.push_back(Steps(2.20443, -0.0398837)); //step 9
+  steps.push_back(Steps(2.3, -0.0304544)); //step 10*/
+
+  /*steps.push_back(Steps(0.966872, 2.08615)); //step 0
+  steps.push_back(Steps(1.20474, -0.813607)); //step 1
+  steps.push_back(Steps(1.38391,   -0.675784)); //step 3
+  steps.push_back(Steps(1.55901, -0.360147)); //step 4
+  steps.push_back(Steps(1.7183, -0.197681)); //step 5
+  steps.push_back(Steps(1.86003, -0.118882)); //step 6
+  steps.push_back(Steps(1.98651, -0.0777557)); //step 7
+  steps.push_back(Steps(2.10054,-0.0543097)); //step 8
+  steps.push_back(Steps(2.20443, -0.0304544)); //step 9
+  steps.push_back(Steps(2.3, -0.0304544)); //step 10*/
+
+
 }
 
 void generateNeighbourCells(vector<set<int> >& NC)
@@ -1206,13 +1246,26 @@ void continuousRDF(double T)
 {
   for(size_t i(0); i < noBins; ++i)
     {
-      double distance = i * maxR / noBins;
+      double distance = (i + 0.5) * maxR / noBins;
       double potential_c = 4.0 * lj_epsilon * (pow(lj_sigma/distance, 12) - pow(lj_sigma/distance, 6)); 
       double potential_d = 0;
       for(size_t j (0); j < steps.size(); ++j)
 	{
 	  if(distance < steps[j].step_radius)
-	    { potential_d = steps[j].step_energy; break; }
+	    { 
+	      double distance2 = (i + 1.5) * maxR / noBins;
+	      if(distance2 > steps[j].step_radius && j < steps.size() - 1) //if between two rdf points
+		{
+		  double position = (steps[j].step_radius - distance) / (distance2 - distance);
+		  double vol1 = 4.0 / 3.0 * M_PI * (pow(distance2, 3) - pow(steps[j].step_radius, 3));
+		  double vol2 = 4.0 / 3.0 * M_PI * (pow(steps[j].step_radius, 3) - pow(distance, 3));
+		  double volT = vol1 + vol2;
+		    potential_d = steps[j].step_energy * vol1 / volT + steps[j+1].step_energy * vol2 / volT;
+		}
+	      else
+		potential_d = steps[j].step_energy;
+	      break; 
+	    }
 	}
       TA_rdf_c[i] = TA_rdf_d[i] * exp( (potential_d - potential_c) / T);
     }

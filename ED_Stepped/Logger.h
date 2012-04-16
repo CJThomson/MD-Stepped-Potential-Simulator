@@ -64,7 +64,7 @@ class Logger
     outfileName = fileName.str();
     grLog.open(outfileName.c_str());
     for(int i = 0; i < index; ++i)
-      grLog << i * deltaR << "\t" << rdfd[i] << "\t" << rdfc[i] << std::endl;
+      grLog << (i + 0.5) * deltaR << "\t" << rdfd[i] << "\t" << rdfc[i] << std::endl;
     grLog.close();
   }
 

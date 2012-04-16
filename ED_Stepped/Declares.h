@@ -5,12 +5,7 @@ Diffusion(double D, double t):time(t),coDiff(D){ } //Constructor
   double time;
   double coDiff;
 };
-struct Steps
-{
-Steps(double r, double h) : step_radius(r), step_energy(h) {}
-  double step_energy;
-  double step_radius;
-};
+
 struct Results
 {
   Results() {
@@ -53,6 +48,7 @@ Results(double T, double Pd, double Pc, double Ud, double Uc) :
 #include <algorithm> //allows use of sort function
 #include <string> //allows use of strings
 #include <sstream> //allows use of ostreamstream
+#include "Stepper.h" //allows the generation of stepped potentials
 #include "Vector3.h" //allows use of vector mathematics
 #include "Particle.h" //Event particle Class
 #include "Events.h" //Event class
