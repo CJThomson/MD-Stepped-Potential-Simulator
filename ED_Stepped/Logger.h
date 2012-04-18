@@ -54,18 +54,61 @@ class Logger
     diffLog.close(); //close the file
   }
 
-  void write_RadDist (double rdfd[],double rdfc[], int index, double deltaR,
+  void write_RadDist (double rdfd[], int index, double deltaR,
 		      double rho, double T, double n)
   {
     std::ofstream grLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "grLog " << rho << " - " << T << " - " << n << "-stepped.dat"; 
+    fileName << "grLog " << rho << " - " << T << " - " << n << "-stepped.dat";
     outfileName = fileName.str();
     grLog.open(outfileName.c_str());
     for(int i = 0; i < index; ++i)
-      grLog << (i + 0.5) * deltaR << "\t" << rdfd[i] << "\t" << rdfc[i] << std::endl;
+      grLog << i * deltaR << "\t" << rdfd[i] << std::endl;
     grLog.close();
+  }
+
+  void write_Steps(std::vector<Steps>& steps, double T, double rho, double n, Stepper::StepType type)
+  {
+    std::ofstream stepLog;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "stepLog " << rho << " - " << T << " - " << n << " - " << type << "-stepped.dat";
+    outfileName = fileName.str();
+    stepLog.open(outfileName.c_str());
+    for(std::vector<Steps>::iterator i = steps.begin(); i != steps.end(); ++i)
+      {
+	stepLog << i->step_radius << "\t" << i->step_energy << std::endl;
+      }
+    stepLog.close();
+  }
+  void write_contRDF(std::vector<std::pair<double, double> >& contRDF, double rho, double T, double n)
+  {
+    std::ofstream grLog;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "contRDFLog " << rho << " - " << T << " - " << n << "-stepped.dat";
+    outfileName = fileName.str();
+    grLog.open(outfileName.c_str());
+    for(std::vector<std::pair<double, double> >::iterator i = contRDF.begin(); i != contRDF.end(); ++i)
+      {
+	grLog << i->first << "\t" << i->second << std::endl;
+      }
+    grLog.close();
+  }
+  void write_ICF(std::vector<std::pair<double, double> >& icf, double rho, double T, double n)
+  {
+    std::ofstream icfLog;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "ICFLog " << rho << " - " << T << " - " << n << "-stepped.dat";
+    outfileName = fileName.str();
+    icfLog.open(outfileName.c_str());
+    for(std::vector<std::pair<double, double> >::iterator i = icf.begin(); i != icf.end(); ++i)
+      {
+	icfLog << i->first << "\t" << i->second << std::endl;
+      }
+    icfLog.close();
   }
 
   void write_Init (std::vector<CParticle>& particles)

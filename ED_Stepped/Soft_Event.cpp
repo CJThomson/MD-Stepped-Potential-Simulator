@@ -5,7 +5,7 @@ double density = 0.85;
 double temperature = 1.34; //temperature of the system
 //Simulation:
 int numberParticles = 108; //number of particles
-const int numberEvents = 1.0e+2;
+const int numberEvents = 1.5e+6;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
 int number_of_runs = 10;
@@ -37,7 +37,7 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-
+Stepper::StepType stepType = Stepper::PROBABILITY;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
@@ -52,7 +52,7 @@ int rdfReadings = 0;
 double startSampleTime = 0;
 double currentK = 0;
 double currentU = 0;
-const int noBins = 600; //number of radial bins
+const int noBins = 3000; //number of radial bins
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
@@ -60,7 +60,8 @@ std::vector<Diffusion> coDiff; //coefficient of diffusion over
 
 //----Time Averages----
 double TA_rdf_d[noBins];
-double TA_rdf_c[noBins];
+std::vector<std::pair<double, double> > icf;
+std::vector<std::pair<double, double> > rdf_c;
 double TA_v = 0;
 double TA_U = 0;
 double TA_T = 0;
@@ -91,8 +92,9 @@ int main()
 	  Stepper::beta = 1.0 / temperature;
 	  Stepper stepper;
 	  cout << "Generating " << no_of_steps << " Steps...";
-	  initSteps(); //step up system steps
-	  //stepper.generateSteps(no_of_steps, r_cutoff, Stepper::PROBABILITY, steps);
+	  //initSteps(); //step up system steps
+	  stepper.generateSteps(no_of_steps, r_cutoff, stepType, steps);
+	  logger.write_Steps(steps, temperature, density, numberParticles, stepType);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
@@ -148,13 +150,10 @@ void resetSim()
   startSampleTime = 0;
   currentK = 0;
   currentU = 0;
-
-  coDiff.clear();
+  rdf_c.clear();
+  icf.clear();
   for(size_t i(0); i < noBins; ++i)
-    {
-      TA_rdf_d[i] = 0;
-      TA_rdf_c[i] = 0;
-    }
+    TA_rdf_d[i] = 0;
   TA_v = 0;
   TA_U = 0;
   TA_T = 0;
@@ -363,8 +362,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 		TA_rdf_d[i] += rdf_d[i];
 	    }
 	      
-	  //if(eventCount % (int) ceil(numberEvents / 1000) == 0)
-	  if(eventCount % 1 == 0)
+	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
+	    //if(eventCount % 1 == 0)
 	    {
 	      double E_temp = TA_T / (t - startSampleTime);
 	      double E_pot = TA_U / (t - startSampleTime);
@@ -398,6 +397,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 
   cout << "\rGenerating Continuous g(r), U, P";
   double E_temp = TA_T / (t - startSampleTime);
+  indirectCorr(E_temp);
   continuousRDF(E_temp);
   double cont_P = continuousP(E_temp);
   double cont_U = continuousU();
@@ -446,7 +446,9 @@ void runSimulation(vector<Results>& results, size_t runNumber)
       }
     }
   cout << "\rWriting Results...";
-  logger.write_RadDist(TA_rdf_d, TA_rdf_c, noBins, deltaR, density, temperature, numberParticles); //write radial distribution file
+  logger.write_contRDF(rdf_c, density, temperature, numberParticles);
+  logger.write_ICF(icf, density, temperature, numberParticles);
+  logger.write_RadDist(TA_rdf_d, noBins, deltaR, density, temperature, numberParticles); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
   if(overwriteInit)
@@ -695,7 +697,7 @@ void calcRadDist(vector<CParticle> &particles)
 	  applyBC(distance);
 	  if(distance.length() < maxR)
 	    {
-	      int index = floor(distance.length() * noBins/ maxR - 0.5 * maxR / noBins);
+	      int index = floor(distance.length() * noBins/ maxR);
 	      if(index < 0 || index >= noBins)
 		{
 		  cerr << "ERROR: Invalid index is calcRadDist: " << index << endl;
@@ -1243,66 +1245,76 @@ void checkCaptureMap(vector<CParticle> &particles)
       }
 }
 
-void continuousRDF(double T)
+void indirectCorr(double T)
 {
   for(size_t i(0); i < noBins; ++i)
     {
-      double distance = (i + 0.5) * maxR / noBins;
-      double potential_c = 4.0 * lj_epsilon * (pow(lj_sigma/distance, 12) - pow(lj_sigma/distance, 6)); 
+      double distance = i * maxR / noBins;
       double potential_d = 0;
-      for(size_t j (0); j < steps.size(); ++j)
+      double stepEnergy = 0;
+      double stepRad = 0;
+      for(size_t j(0); j < steps.size(); ++j)
+	if(distance <= steps[j].step_radius)
+	  {
+	    stepRad = steps[j].step_radius;
+	    stepEnergy = steps[j].step_energy;
+	    break;
+	  }
+      if(distance < stepRad && (i+1) * maxR / noBins < stepRad)
 	{
-	  if(distance < steps[j].step_radius)
-	    { 
-	      double distance2 = (i + 1.5) * maxR / noBins;
-	      if(distance2 > steps[j].step_radius && j < steps.size() - 1) //if between two rdf points
-		{
-		  double position = (steps[j].step_radius - distance) / (distance2 - distance);
-		  double vol1 = 4.0 / 3.0 * M_PI * (pow(distance2, 3) - pow(steps[j].step_radius, 3));
-		  double vol2 = 4.0 / 3.0 * M_PI * (pow(steps[j].step_radius, 3) - pow(distance, 3));
-		  double volT = vol1 + vol2;
-		    potential_d = steps[j].step_energy * vol1 / volT + steps[j+1].step_energy * vol2 / volT;
-		}
-	      else
-		potential_d = steps[j].step_energy;
-	      break; 
-	    }
+	  //	  cerr << distance << " - " << stepRad << " - " << (i+1) * maxR / noBins << endl;
+	  icf.push_back(pair<double, double> (distance, TA_rdf_d[i] * exp(stepEnergy / T)));
 	}
-      TA_rdf_c[i] = TA_rdf_d[i] * exp( (potential_d - potential_c) / T);
     }
-  TA_rdf_c[0] = 0;
+  icf[0] = pair<double, double>(0,0);
+
+}
+void continuousRDF(double T)
+{
+  for(vector<pair<double, double> >::iterator i = icf.begin(); i != icf.end(); ++i)
+    {
+      double distance = i->first;
+      double potential_c = 4.0 * lj_epsilon * (pow(lj_sigma/distance, 12) - pow(lj_sigma/distance, 6)); 
+      rdf_c.push_back(pair<double, double> (distance, i->second / exp(potential_c / T)));
+    }
+  rdf_c[0].second = 0;
 }
 
 double continuousU()
 {
-
+  //integration using trapezoidal rule
   double utail = -8 * M_PI * density / (3.0 * pow(maxR, 3)) * (1.0 - 1.0 / (3.0 * pow(maxR,6))); 
   double sum = 0;
-  double h = (maxR -TA_rdf_c[1]) / (noBins - 1);
-  for(size_t i(1); i < noBins; ++i)
+  for(vector<pair<double, double> >::iterator i = rdf_c.begin(); i != rdf_c.end() - 1; ++i)
     {
-      double d0 = i * maxR / noBins;
-      double u0 = 4.0 * lj_epsilon * (pow(lj_sigma/d0, 12) - pow(lj_sigma/d0, 6)); 
-      double factor = (i != 1 && i != (noBins  -1)) ? 2.0 : 1.0;
-      //calculate integral using trapezoidal rule
-      //      sum += factor * u0 * TA_rdf_c[i] * d0 * d0;
-      sum += TA_rdf_c[i] * u0 * d0 * d0;
+      vector<pair<double, double> >::iterator j = i + 1;
+      if(j == rdf_c.end())
+	cerr<< "ERROR in continuous U" << endl;
+      double u1 = 4.0 * lj_epsilon * (pow(lj_sigma/i->first, 12) - pow(lj_sigma/i->first, 6)); 
+      double u2 = 4.0 * lj_epsilon * (pow(lj_sigma/j->first, 12) - pow(lj_sigma/j->first, 6)); 
+
+      double f1 = u1 * i->second * i->first * i->first;
+      double f2 = u2 * j->second * j->first * j->first;
+      sum += (j->first - i->first) * (f1 + f2);
     }
-  return 2 * M_PI * density * sum * h + utail;
+  return M_PI * density * sum + utail;
 }
 
 double continuousP(double T)
 {
   const double ptail = -16 * M_PI * density * density / (3.0 * pow(maxR, 3)) * (1.0 - 2.0 / (3.0 * pow(maxR,6))); 
   double sum = 0;
-  double h = (maxR -TA_rdf_c[1]) / (noBins - 1);
-  for(size_t i(1); i < noBins; ++i)
+  for(vector<pair<double, double> >::iterator i = rdf_c.begin(); i != rdf_c.end() - 1; ++i)
     {
-      double d0 = i * maxR / noBins;
-      double f0 = -24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma / d0, 13) - pow(lj_sigma / d0, 7)); 
-      //double factor = (i != 1 && i != noBins - 1) ? 2.0 : 1.0;
-      double factor = 1.0;
-      sum -= factor * f0 * TA_rdf_c[i] * d0 * d0 * d0;
+      vector<pair<double, double> >::iterator j = i + 1;
+      if(j == rdf_c.end())
+	cerr<< "ERROR in continuous U" << endl;
+      double u1 = 24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma/i->first, 13) - pow(lj_sigma/i->first, 7)); 
+      double u2 = 24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma/j->first, 13) - pow(lj_sigma/j->first, 7)); 
+
+      double f1 = u1 * i->second * i->first * i->first * i->first;
+      double f2 = u2 * j->second * j->first * j->first * i->first;
+      sum += (j->first - i->first) * (f1 + f2);
     }
-  return density * T + 2.0 / 3.0 * M_PI * density * density * sum * h  + ptail;
+  return density * T + 1.0 / 3.0 * M_PI * density * density * sum  + ptail;
 }

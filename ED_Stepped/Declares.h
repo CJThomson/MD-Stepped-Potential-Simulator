@@ -9,7 +9,8 @@ Diffusion(double D, double t):time(t),coDiff(D){ } //Constructor
 struct Results
 {
   Results() {
-    temperature = 0; pressure_d = 0; pressure_c = 0; potential_d =0; potential_c = 0;}
+    temperature = 0; pressure_d = 0; pressure_c = 0; potential_d =0; potential_c = 0;
+  }
 Results(double T, double Pd, double Pc, double Ud, double Uc) :
   temperature(T), pressure_d(Pd), pressure_c(Pc), potential_d(Ud), potential_c(Uc) {}
   const Results& operator += (const Results &r)
@@ -78,6 +79,7 @@ double continuousP(double);
 void continuousRDF(double);
 double continuousU();
 void correctVelocity(std::vector<CParticle>&);
+void indirectCorr(double);
 void initialise(std::vector<CParticle>&, CRandom&);
 void initFromFile (std::vector<CParticle>&);
 void initSettings(std::vector<std::pair<double, double> >&);

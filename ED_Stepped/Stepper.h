@@ -31,11 +31,11 @@ class Stepper
       genSteps.clear();
 
       //calculate the equivalent hard core
-      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      double r_core = 0.8;
       genSteps.push_back(Steps(r_core, 0));
       //calculate total partition funciton
       double totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-
       double r_lower = r_core;
       for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
 	{
@@ -167,8 +167,8 @@ class Stepper
     double b = upper_bound;
     while(iterations < max_iterations)
       {
-	double integral = integrator_Simpson(&Stepper::partition_Function,
-					     b, lower_bound, integrator_intervals);
+	double integral = integrator_Simpson(&partition_Function,
+						  b, lower_bound, integrator_intervals);
 	double root = integral - target_area;
 	if(root - tolerance < 0 &&  root + tolerance > 0)
 	  return b;
@@ -179,6 +179,5 @@ class Stepper
       }
     std::cerr << "ERROR: Maximum number of steps exceeded in limit_solver" << std::endl;
     return 0;
-  }
-
+    }
 };

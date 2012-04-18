@@ -39,7 +39,7 @@ const bool writeLoc = false;
 //Measuring Properties:
 const int startSampling = 100000; //number of readings to take
 double readingTime = 0;
-const int noBins = 300; //number of radial bins
+const int noBins = 100; //number of radial bins
 const double maxR = 3.0;
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 bool suppressOutput = true;
