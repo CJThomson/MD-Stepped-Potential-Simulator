@@ -1,6 +1,18 @@
 % This file was created with JabRef 2.7b.
 % Encoding: ISO8859_1
 
+@ARTICLE{Alder1959,
+  author = {Alder, B. J. and Wainwright, T. E.},
+  title = {Studies in Molecular Dynamics. I. General Method},
+  journal = {J. Chem. Phys.},
+  year = {1959},
+  volume = {31},
+  pages = {459-466},
+  doi = {10.1063/1.173037},
+  owner = {chris},
+  timestamp = {2012.04.14}
+}
+
 @BOOK{Frenkel2002,
   title = {Understanding Molecular Simulations},
   publisher = {Academic Press},
@@ -12,16 +24,74 @@
   timestamp = {2012.03.26}
 }
 
+@BOOK{Gear1971,
+  title = {Numerical Initial Value Problems in Ordinary Differential Equations},
+  publisher = {Prentice-Hall},
+  year = {1971},
+  editor = {George Forsythe},
+  author = {Gear, C. W.},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@BOOK{Haile1997,
+  title = {Molecular Dynamics Simulation: Elementary Methods},
+  publisher = {Wiley-Interscience},
+  year = {1997},
+  author = {J M Haile},
+  owner = {chris},
+  timestamp = {2012.02.27}
+}
+
+@ARTICLE{Hairer2003,
+  author = {Hairer, Ernst and Lubich, Christian and Wanner, Gerhard},
+  title = {Geometric numerical integration illustrated by the Stormer-Verlet
+	method},
+  journal = {Acta Numerica},
+  year = {2003},
+  volume = {12},
+  pages = {399-450},
+  doi = {10.1017/S0962492902000144},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@ARTICLE{Khakimov2002,
+  author = {Khakimov, Z.M.},
+  title = {New integrator for molecular dynamics simulations},
+  journal = {Computer Physics Communications},
+  year = {2002},
+  volume = {147},
+  pages = {733-736},
+  doi = {10.1016/S0010-4655(02)00387-9},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
 @ARTICLE{Lennard-Jones1924,
   author = {Lennard-Jones, J.E.},
   title = {The Determination of Molecular Fields I \& II},
-  journal = {Proc. R. Soc. (Lond.)},
+  journal = {Proc. R. Soc. Lon. Ser-A},
   year = {1924},
   volume = {106A},
   pages = {441-477},
   doi = {10.1098/rspa.1924.0081},
   owner = {chris},
   timestamp = {2012.03.26}
+}
+
+@ARTICLE{Lue2005,
+  author = {Lue, L.},
+  title = {Collision statistics, thermodynamics, and transport coeffiecients
+	of hard hyperspheres in three, four, and five dimensions},
+  journal = {Journal of Chemical Physics},
+  year = {2005},
+  volume = {122},
+  pages = {044513},
+  number = {4},
+  doi = {10.1063/1.1834498},
+  owner = {chris},
+  timestamp = {2012.04.15}
 }
 
 @ARTICLE{Maginn2010,
@@ -37,6 +107,19 @@
   timestamp = {2012.03.19}
 }
 
+@ARTICLE{Mazur1997,
+  author = {Mazur, Alexey K.},
+  title = {Common Molecular Dynamics Algorithms Revisited: Accuracy and Optimal
+	Time Steps of Stormer-Leapfrog Integrators},
+  journal = {J. Comput. Phys.},
+  year = {1997},
+  volume = {136},
+  pages = {354-365},
+  doi = {10.1006/jcph.1997.5740},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
 @ARTICLE{Rahman1964,
   author = {A Rahman},
   title = {Correlations in the Motion of Atoms in Liquid Argon},
@@ -47,5 +130,33 @@
   doi = {10.1103/PhysRev.136.A405},
   owner = {chris},
   timestamp = {2012.03.26}
+}
+
+@ARTICLE{Swope1982,
+  author = {Swope, William C. and Andersen Hans, C. and Berens, Peter B. and
+	Wilson, Kent R.},
+  title = {A computer simulation method for the calculation of equilibrium contants
+	for the formation of physical clusters of molecultes: Application
+	to small water clusters},
+  journal = {J. Chem. Phys.},
+  year = {1982},
+  volume = {76},
+  pages = {637-649},
+  doi = {10.1063/1.442716},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@ARTICLE{Verlet1967,
+  author = {Verlet, Loup},
+  title = {Computer "Experiments" on Classical Fluids. I. Thermodynamical Properties
+	of Lennard-Jones Molecules},
+  journal = {Phys. Rev.},
+  year = {1967},
+  volume = {159},
+  pages = {98-103},
+  doi = {10.1103/PhysRev.159.98},
+  owner = {chris},
+  timestamp = {2012.04.12}
 }
 

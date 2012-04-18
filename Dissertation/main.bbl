@@ -88,6 +88,252 @@
   \field{year}{1964}
 \endentry
 
+\entry{Haile1997}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Haile}{H.}%
+     {J~M}{J.~M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Wiley-Interscience}%
+  }
+  \strng{namehash}{HJM1}
+  \strng{fullhash}{HJM1}
+  \field{title}{Molecular Dynamics Simulation: Elementary Methods}
+  \field{year}{1997}
+\endentry
+
+\entry{Verlet1967}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Verlet}{V.}%
+     {Loup}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{VL1}
+  \strng{fullhash}{VL1}
+  \verb{doi}
+  \verb 10.1103/PhysRev.159.98
+  \endverb
+  \field{pages}{98\bibrangedash 103}
+  \field{title}{Computer "Experiments" on Classical Fluids. I. Thermodynamical
+  Properties of Lennard-Jones Molecules}
+  \field{volume}{159}
+  \field{journaltitle}{Phys. Rev.}
+  \field{year}{1967}
+\endentry
+
+\entry{Hairer2003}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Hairer}{H.}%
+     {Ernst}{E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lubich}{L.}%
+     {Christian}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wanner}{W.}%
+     {Gerhard}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{HELCWG1}
+  \strng{fullhash}{HELCWG1}
+  \verb{doi}
+  \verb 10.1017/S0962492902000144
+  \endverb
+  \field{pages}{399\bibrangedash 450}
+  \field{title}{Geometric numerical integration illustrated by the
+  Stormer-Verlet method}
+  \field{volume}{12}
+  \field{journaltitle}{Acta Numerica}
+  \field{year}{2003}
+\endentry
+
+\entry{Swope1982}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Swope}{S.}%
+     {William~C.}{W.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Andersen~Hans}{A.~H.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Berens}{B.}%
+     {Peter~B.}{P.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wilson}{W.}%
+     {Kent~R.}{K.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SWC+1}
+  \strng{fullhash}{SWCAHCBPBWKR1}
+  \verb{doi}
+  \verb 10.1063/1.442716
+  \endverb
+  \field{pages}{637\bibrangedash 649}
+  \field{title}{A computer simulation method for the calculation of equilibrium
+  contants for the formation of physical clusters of molecultes: Application to
+  small water clusters}
+  \field{volume}{76}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1982}
+\endentry
+
+\entry{Khakimov2002}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Khakimov}{K.}%
+     {Z.M.}{Z.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KZ1}
+  \strng{fullhash}{KZ1}
+  \verb{doi}
+  \verb 10.1016/S0010-4655(02)00387-9
+  \endverb
+  \field{pages}{733\bibrangedash 736}
+  \field{title}{New integrator for molecular dynamics simulations}
+  \field{volume}{147}
+  \field{journaltitle}{Computer Physics Communications}
+  \field{year}{2002}
+\endentry
+
+\entry{Gear1971}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Gear}{G.}%
+     {C.~W.}{C.~W.}%
+     {}{}%
+     {}{}}%
+  }
+  \name{editor}{1}{}{%
+    {{}%
+     {Forsythe}{F.}%
+     {George}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Prentice-Hall}%
+  }
+  \strng{namehash}{GCW1}
+  \strng{fullhash}{GCW1}
+  \field{title}{Numerical Initial Value Problems in Ordinary Differential
+  Equations}
+  \field{year}{1971}
+\endentry
+
+\entry{Alder1959}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Alder}{A.}%
+     {B.~J.}{B.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wainwright}{W.}%
+     {T.~E.}{T.~E.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{ABJWTE1}
+  \strng{fullhash}{ABJWTE1}
+  \verb{doi}
+  \verb 10.1063/1.173037
+  \endverb
+  \field{pages}{459\bibrangedash 466}
+  \field{title}{Studies in Molecular Dynamics. I. General Method}
+  \field{volume}{31}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1959}
+\endentry
+
+\entry{Lue2005}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Lue}{L.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LL1}
+  \strng{fullhash}{LL1}
+  \verb{doi}
+  \verb 10.1063/1.1834498
+  \endverb
+  \field{number}{4}
+  \field{pages}{044513}
+  \field{title}{Collision statistics, thermodynamics, and transport
+  coeffiecients of hard hyperspheres in three, four, and five dimensions}
+  \field{volume}{122}
+  \field{journaltitle}{Journal of Chemical Physics}
+  \field{year}{2005}
+\endentry
+
+\entry{Chapela1989}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Scriven}{S.}%
+     {L.~E.}{L.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {H.~T.}{H.~T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CGSLEDHT1}
+  \strng{fullhash}{CGSLEDHT1}
+  \field{abstract}{%
+  Argon, represented as a Lennard-Jones fluid, is simulated using a
+  discontinuous version of the potential. The effect of discretization is
+  thoroughly investigated in terms of the number of discontinuities and the
+  cutoff diameter. Radial distribution functions, pressure, energy,
+  self-diffusion coefficients, and velocity autocorrelation functions are used
+  in order to evaluate this effect. A reduction of five times on computing time
+  can be achieved by varying the cutoff radius and the number of
+  discontinuities without much departure from the physical representation of
+  Lennard-Jonesium atoms. The results indicate that discontinuous molecular
+  dynamics is a viable alternative method to Monte Carlo and continuous
+  molecular dynamics in simulating the properties of simple fluids. The Journal
+  of Chemical Physics is copyrighted by The American Institute of Physics.%
+  }
+  \verb{doi}
+  \verb 10.1063/1.456811
+  \endverb
+  \field{pages}{4307}
+  \field{title}{Molecular dynamics for discontinuous potential. IV.
+  {L}ennard-{J}onesium}
+  \field{volume}{91}
+  \verb{file}
+  \verb Chapela_etal_1989.pdf:Chapela_etal_1989.pdf:PDF
+  \endverb
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1989}
+\endentry
+
 \lossort
 \endlossort
 

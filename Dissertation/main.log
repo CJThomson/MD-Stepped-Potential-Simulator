@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.15)  9 APR 2012 13:39
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.15)  17 APR 2012 18:13
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -660,14 +660,34 @@ File: hpdftex.def 2009/10/09 v6.79a Hyperref driver for pdfTeX
 
 
 Writing nomenclature file main.nlo
+) (/usr/share/texmf-texlive/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen150
+\lightrulewidth=\dimen151
+\cmidrulewidth=\dimen152
+\belowrulesep=\dimen153
+\belowbottomsep=\dimen154
+\aboverulesep=\dimen155
+\abovetopsep=\dimen156
+\cmidrulesep=\dimen157
+\cmidrulekern=\dimen158
+\defaultaddspace=\dimen159
+\@cmidla=\count283
+\@cmidlb=\count284
+\@aboverulesep=\dimen160
+\@belowrulesep=\dimen161
+\@thisruleclass=\count285
+\@lastruleclass=\count286
+\@thisrulewidth=\dimen162
 )
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
- (/usr/share/texmf/tex/latex/biblatex/lbx/english.lbx
+
+(/usr/share/texmf/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2011/05/12 v1.4c biblatex localization
 )
-\@quotelevel=\count283
-\@quotereset=\count284
+\@quotelevel=\count287
+\@quotereset=\count288
 
 
 LaTeX Warning: Unused global option(s):
@@ -676,21 +696,21 @@ LaTeX Warning: Unused global option(s):
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 13.
-LaTeX Font Info:    ... okay on input line 13.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 13.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 14.
+LaTeX Font Info:    ... okay on input line 14.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 14.
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -744,27 +764,27 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 13.
-Package biblatex Info: Reference segment=0 on input line 13.
+Package biblatex Info: Reference section=0 on input line 14.
+Package biblatex Info: Reference segment=0 on input line 14.
  (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count285
-\scratchdimen=\dimen150
+\scratchcounter=\count289
+\scratchdimen=\dimen163
 \scratchbox=\box58
-\nofMPsegments=\count286
-\nofMParguments=\count287
+\nofMPsegments=\count290
+\nofMParguments=\count291
 \everyMPshowfont=\toks25
-\MPscratchCnt=\count288
-\MPscratchDim=\dimen151
-\MPnumerator=\count289
+\MPscratchCnt=\count292
+\MPscratchDim=\dimen164
+\MPnumerator=\count293
 \everyMPtoPDFconversion=\toks26
 ) ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
 Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
-LaTeX Info: Redefining \subref on input line 13.
+LaTeX Info: Redefining \subref on input line 14.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 13.
+Package hyperref Info: Link coloring ON on input line 14.
 
 (/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
@@ -772,10 +792,10 @@ Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 (/usr/share/texmf-texlive/tex/latex/oberdiek/refcount.sty
 Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
-\c@section@level=\count290
+\c@section@level=\count294
 )
-LaTeX Info: Redefining \ref on input line 13.
-LaTeX Info: Redefining \pageref on input line 13.
+LaTeX Info: Redefining \ref on input line 14.
+LaTeX Info: Redefining \pageref on input line 14.
  (./main.out)
 (./main.out)
 \@outlinefile=\write5
@@ -786,18 +806,18 @@ LaTeX Info: Redefining \pageref on input line 13.
 
 pdfTeX warning: pdflatex (file ./figures/UoALogo.pdf): PDF inclusion: found PDF
  version <1.5>, but at most version <1.4> allowed
-<figures/UoALogo.pdf, id=67, 375.16461pt x 140.45314pt>
+<figures/UoALogo.pdf, id=107, 375.16461pt x 140.45314pt>
 File: figures/UoALogo.pdf Graphic file (type pdf)
 
 <use figures/UoALogo.pdf>
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 13--13
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 14--14
 [][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 13.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 14.
 LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
-(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 13.
+(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 14.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figures/UoALogo.pdf>]
@@ -829,67 +849,84 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
 
 
 
-] (./main.nls)
+] (./main.nls
 [6
 
+
+
+]) [7
 
 
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 65.
-[7
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 66.
+[8
 
 
 
 ]
 Chapter 2.
-
-LaTeX Warning: Reference `eq:pairwise' on page 8 undefined on input line 99.
-
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 111.
-[8
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 117.
+[9
 
 
-] [9]
+] (./figures/ljPot.tex
+\plotpoint=\box60
+) [10] [11] [12] [13]
 Chapter 3.
-[10
+[14
 
 
-]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 207.
+] [15]
+Chapter 4.
+
+Overfull \hbox (8.1801pt too wide) in paragraph at lines 388--412
+ [] 
+ []
+
+[16
+
+
+] [17]
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 435.
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-) [11] (./main.aux)
+)
+Overfull \hbox (14.79451pt too wide) in paragraph at lines 435--435
+[]  \T1/ptm/m/n/12 J M Haile.     \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-
+la-tion: El-e-men-tary Meth-ods\T1/ptm/m/n/12 .   Wiley-Interscience,
+ []
 
-LaTeX Warning: There were undefined references.
-
+[18] (./main.aux)
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12459 strings out of 495061
- 191567 string characters out of 1182620
- 379885 words of memory out of 3000000
- 15344 multiletter control sequences out of 15000+50000
+ 12603 strings out of 495061
+ 193529 string characters out of 1182620
+ 422617 words of memory out of 3000000
+ 15433 multiletter control sequences out of 15000+50000
  54350 words of font info for 62 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 51i,11n,49p,878b,1173s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,12n,49p,865b,1169s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/ty
 pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/
 amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
-/cmr12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></
-usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/t
-exmf-texlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts
-/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utm
-r8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/
-texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (11 pages, 208298 bytes).
+/cmmi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/te
+xmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive
+/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-texlive/fonts/type1
+/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.
+pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texm
+f-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type
+1/urw/times/utmri8a.pfb>
+Output written on main.pdf (18 pages, 277884 bytes).
 PDF statistics:
- 219 PDF objects out of 1000 (max. 8388607)
- 44 named destinations out of 1000 (max. 500000)
- 140 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 386 PDF objects out of 1000 (max. 8388607)
+ 92 named destinations out of 1000 (max. 500000)
+ 220 words of extra memory for PDF output out of 10000 (max. 10000000)
 
