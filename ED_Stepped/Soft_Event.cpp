@@ -8,7 +8,7 @@ int numberParticles = 108; //number of particles
 const int numberEvents = 1.5e+6;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
-int number_of_runs = 10;
+int number_of_runs = 1;
 //const double length = 6.0;
 CVector3 systemSize(length,length,length); //size of the system
 double t = 0;
@@ -45,7 +45,7 @@ const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions
 //Measuring Properties
 const int startSampling = 5e+5; //step number to start taking samples
 const int sample_interval = 1;
-const int rdf_interval = 100;
+const double rdf_interval = 0.05;
 const int diff_interval = 20;
 int readingsTaken = 0;
 int rdfReadings = 0;
@@ -211,7 +211,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 
   cout << "\rGenerating event list...";
   particleEL.resize(particles.size()); 
-  masterEL.resize(particles.size() + 1);//one event for each particle plus thermostat
+  masterEL.resize(particles.size() + 2);//one event for each particle plus thermostat
   for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
     getEvent(*p1, particles, particleEL, masterEL, neighbourList, neighbourCell);
 
@@ -224,7 +224,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
       cerr << "calcThermoTime has not returned a valid particle No" << endl;
       exit(1);
     }
-  masterEL[particles.size()] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
+  masterEL[particles.size()] = eventTimes(rdf_interval, -1, -1, -1, eventTimes::RDF);
+  masterEL[particles.size() + 1] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
   
   logger.write_Location(particles, 0, systemSize); //write initial values to the log
 
@@ -236,7 +237,6 @@ void runSimulation(vector<Results>& results, size_t runNumber)
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
 
       double dt = next_event.collisionTime - t; //find time to next collision
-
       if(eventCount == thermoOff) //turn thermostat off?
 	{
 	  thermostat = false;
@@ -321,6 +321,21 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	    getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 	    break;
 	  }
+	case eventTimes::RDF:
+	  {
+	    freeStream(dt);
+	    if(eventCount > startSampling)
+	      {
+		if(writeOutLog >=1)
+		  logger.outLog << "Measuring RDF at time " << t << endl;
+		++rdfReadings;
+		calcRadDist(particles);
+		for(size_t i = 0; i < noBins; ++i)
+		  TA_rdf_d[i] += rdf_d[i];
+	      }
+	    masterEL[particles.size()] = eventTimes(t + rdf_interval, -1, -1, -1, eventTimes::RDF);
+	    break;
+	  }
 	case eventTimes::WALL:
 	  if(writeOutLog >= 1)
 	    logger.outLog << "Wall event for particle: " << next_event.particle1 << endl;
@@ -354,14 +369,6 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  if(eventCount % diff_interval == 0)
 	    coDiff.push_back(Diffusion(calcDiff(particles, t),t));
 
-	  if(eventCount % rdf_interval == 0)
-	    {
-	      ++rdfReadings;
-	      calcRadDist(particles);
-	      for(size_t i = 0; i < noBins; ++i)
-		TA_rdf_d[i] += rdf_d[i];
-	    }
-	      
 	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
 	    //if(eventCount % 1 == 0)
 	    {
@@ -1161,7 +1168,7 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
       cerr << "calcThermoTime has not returned a valid particle No" << endl;
       exit(1);
     }
-  events[numberParticles] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
+  events[numberParticles + 1] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
 
 }
 void freeStream(double dt)
@@ -1292,7 +1299,8 @@ double continuousU()
 	cerr<< "ERROR in continuous U" << endl;
       double u1 = 4.0 * lj_epsilon * (pow(lj_sigma/i->first, 12) - pow(lj_sigma/i->first, 6)); 
       double u2 = 4.0 * lj_epsilon * (pow(lj_sigma/j->first, 12) - pow(lj_sigma/j->first, 6)); 
-
+      if(i->first == 0)
+	u1 = 0;
       double f1 = u1 * i->second * i->first * i->first;
       double f2 = u2 * j->second * j->first * j->first;
       sum += (j->first - i->first) * (f1 + f2);
@@ -1310,6 +1318,8 @@ double continuousP(double T)
       if(j == rdf_c.end())
 	cerr<< "ERROR in continuous U" << endl;
       double u1 = 24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma/i->first, 13) - pow(lj_sigma/i->first, 7)); 
+      if(i->first == 0)
+	u1 = 0;
       double u2 = 24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma/j->first, 13) - pow(lj_sigma/j->first, 7)); 
 
       double f1 = u1 * i->second * i->first * i->first * i->first;

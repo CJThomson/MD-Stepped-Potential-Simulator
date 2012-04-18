@@ -123,7 +123,7 @@ class Stepper
   // = Partition Function
    static inline double partition_Function(double r)
    {
-    return 4 * M_PI * exp(-beta * potential(r)) * r * r;
+     return 4 * M_PI * (1 - exp(-beta * potential(r))) * r * r;
    }
   // = Internal Energy Integral
    static inline double internal_Energy(double r)
