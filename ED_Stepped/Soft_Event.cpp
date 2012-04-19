@@ -16,7 +16,7 @@ const bool initFile = false; //use an init file instead of random generated valu
 const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
-int no_of_steps = 9;
+int no_of_steps = 10;
 double r_cutoff =2.3;
 
 //Thermostat:
@@ -37,8 +37,8 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::ENERGY;
-Stepper::StepWidth width_type = Stepper::EVEN;
+Stepper::StepHeight height_type = Stepper::VIRIAL;
+Stepper::StepWidth width_type = Stepper::PROBABILITY;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full

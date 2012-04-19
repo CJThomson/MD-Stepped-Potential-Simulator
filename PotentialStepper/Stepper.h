@@ -29,6 +29,10 @@ class Stepper
   static double lj_sig; // lennard jones distance of root
   static double beta; // inverse reduced temperature
   //Functions
+  double generatePlot(double r, double r0)
+  {
+    return integrator_Simpson(&expected_Force, r, r0, 1000);
+  }
   void generateSteps(unsigned int number_of_steps,
 		     double r_cutoff,
 		     StepHeight step_energy,
@@ -40,10 +44,11 @@ class Stepper
       //calculate the equivalent hard core
       double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
       //double r_core = 0.8;
-
+      genSteps.push_back(Steps(r_core,0));
       double totalEF = integrator_Simpson(&expected_Force, r_cutoff, r_core, 1000);
+      std::cout << totalEF << std::endl;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      number_of_steps -= 4;
+      --number_of_steps;
       switch(step_radius)
 	{
 	case EVEN:
@@ -181,6 +186,8 @@ class Stepper
 	    }
 	}
     }
+
+
  private:
   double totalZ;
   // = = Functions
@@ -214,7 +221,6 @@ class Stepper
   {
     return 24.0 * lj_eps / lj_sig * (2.0 * pow(lj_sig / r, 13) - pow(lj_sig / r, 7));
   }
-
   // = Numerical Integrator using Simpson's Rule
   double integrator_Simpson(double (*function)(double),
 			    double upper_Bound, double lower_Bound, int intervals)
@@ -236,7 +242,7 @@ class Stepper
       }
     return  h / 3.0 * sum;
   }
-
+ 
   // = Function to calculate limits of integrals
   double limit_solver(double (*function)(double), double target_area,
 		      double upper_bound, double lower_bound,
@@ -247,9 +253,11 @@ class Stepper
     double b = upper_bound;
     while(iterations < max_iterations)
       {
+	
 	double integral = integrator_Simpson(function,
 						  b, lower_bound, integrator_intervals);
 	double root = integral - target_area;
+	std::cerr << b << " - " << integral << " - " << target_area << std::endl; 
 	if(root - tolerance < 0 &&  root + tolerance > 0)
 	  return b;
 
@@ -260,4 +268,29 @@ class Stepper
     std::cerr << "ERROR: Maximum number of steps exceeded in limit_solver" << std::endl;
     return 0;
     }
+  // = Function to calculate limits of integrals
+  /*double limit_solver_bisection(double (*function)(double), double target_area,
+				double upper_bound, double lower_bound,
+				size_t integrator_intervals, size_t max_iterations, double tolerance)
+  {
+    size_t iterations(0);
+    double interval = upper_bound - lower_bound
+    double b = lower_bound;
+    while(iterations < max_iterations)
+      {
+	interval *= 0.5;
+	double integral = integrator_Simpson(function,
+					     b + interval, lower_bound, integrator_intervals);
+	double root = integral - target_area;
+	std::cerr << "\r" << b << " - " << integral << " - " << target_area << std::endl; 
+	if(root - tolerance < 0 &&  root + tolerance > 0)
+	  return b;
+
+	if(integral > target_area)
+	  b
+	++iterations;
+      }
+    std::cerr << "ERROR: Maximum number of steps exceeded in limit_solver" << std::endl;
+    return 0;
+    }*/
 };
