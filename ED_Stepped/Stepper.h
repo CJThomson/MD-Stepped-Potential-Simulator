@@ -12,11 +12,17 @@ class Stepper
 #define ZERO 1e-16
  public:
   typedef enum {
-    CHAPELA,
-    PROBABILITY,
-    ENERGY
-  } StepType;
+    VIRIAL,
+    ENERGY,
+    MID,
+    AREA
+  } StepHeight;
 
+  typedef enum {
+    EVEN,
+    PROBABILITY,
+    EXPECTEDFORCE
+  } StepWidth;
   //Constructors:
   // = = variables
   static double lj_eps; // lennard jones minimum energy
@@ -25,39 +31,73 @@ class Stepper
   //Functions
   void generateSteps(unsigned int number_of_steps,
 		     double r_cutoff,
-		     StepType step_type,
+		     StepHeight step_energy,
+		     StepWidth step_radius,
 		     std::vector<Steps>& genSteps)
     {
       genSteps.clear();
 
       //calculate the equivalent hard core
-      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      double r_core = 0.8;
+      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      //double r_core = 0.8;
+      totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
+      double totalEF = integrator_Simpson(&expected_Force, r_cutoff, r_core, 1000);
       genSteps.push_back(Steps(r_core, 0));
-      //calculate total partition funciton
-      double totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      double r_lower = r_core;
-      for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
+      switch(step_radius)
 	{
-	  double step = limit_solver(totalZ / number_of_steps, r_cutoff, r_lower, 100, 1e6, 1e-10);
-	  if(step == 0)
+	case EVEN:
+	  {
+	    for(size_t i(1); i <= number_of_steps; ++i) //generate step lengths
+	      {
+		double step = i * (r_cutoff - r_core) / number_of_steps + r_core;
+		genSteps.push_back(Steps(step,0));
+	      }
+	    break;
+	  }
+	case PROBABILITY:
+	  {
+	    //calculate total partition funciton
+
+	    double r_lower = r_core;
+	    for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
+	      {
+		double step = limit_solver(&partition_Function, totalZ / number_of_steps, r_cutoff, r_lower, 100, 1e6, 1e-10);
+		if(step == 0)
+		  break;
+		else
+		  {
+		    genSteps.push_back(Steps(step,0));
+		    r_lower = step;
+		  }
+	      }
+	  }
+	  break;
+	case EXPECTEDFORCE:
+	  //calculate total partition funciton
+
+	  double r_lower = r_core;
+	  for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
 	    {
-	      break;
+	      double step = limit_solver(&expected_Force, totalEF / number_of_steps, r_cutoff, r_lower, 100, 1e6, 1e-10);
+	      if(step == 0)
+		break;
+	      else
+		{
+		  genSteps.push_back(Steps(step,0));
+		  r_lower = step;
+		}
 	    }
-	  else
-	    {
-	      genSteps.push_back(Steps(step,0));
-	      r_lower = step;
-	    }
+	  break;
 	}
+
 
       for(std::vector<Steps>::iterator step_i = genSteps.begin();
 	  step_i != genSteps.end(); ++step_i) //generate step lengths
 	{
 	  double energy = 0;
-	  switch(step_type)
+	  switch(step_radius)
 	    {
-	    case PROBABILITY:
+	    case VIRIAL:
 
 	      if(step_i != genSteps.begin())
 		{
@@ -71,17 +111,17 @@ class Stepper
 		}
 	      else
 		{
-		  energy = - 1.0 / beta
+		  /* energy = - 1.0 / beta
 		    * log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3)))
 			  * integrator_Simpson(&partition_Function,
 					     step_i->step_radius,
 					     ZERO,
-					     100));
+					     100));*/
+		  energy = 100;
 		}
 	      step_i->step_energy = energy;
 	      break;
 	    case ENERGY:
-
 	      if(step_i != genSteps.begin())
 		{
 		  std::vector<Steps>::iterator step_j = step_i - 1;
@@ -89,7 +129,7 @@ class Stepper
 		    * 1.0 / integrator_Simpson(&partition_Function,
 					       step_i->step_radius,
 					       step_j->step_radius,
-					       1000)
+					       100)
 		    * integrator_Simpson(&internal_Energy,
 					 step_i->step_radius,
 					 step_j->step_radius,
@@ -101,7 +141,7 @@ class Stepper
 		    * 1.0 / integrator_Simpson(&partition_Function,
 					       step_i->step_radius,
 					       ZERO,
-					       1000)
+					       100)
 		    * integrator_Simpson(&internal_Energy,
 					 step_i->step_radius,
 					 ZERO,
@@ -109,35 +149,71 @@ class Stepper
 		}
 	      step_i->step_energy = energy;
 	      break;
+	    case MID:
+
+	      if(step_i != genSteps.begin())
+		{
+		  std::vector<Steps>::iterator step_j = step_i - 1;
+		  energy = potential((step_i->step_radius + step_j->step_radius) * 0.5);
+		}
+	      else
+		{
+		  energy = potential(step_i->step_radius);
+		}
+	      step_i->step_energy = energy;
+	      break;
+	    case AREA:
+	       if(step_i != genSteps.begin())
+		{
+		  std::vector<Steps>::iterator step_j = step_i - 1;
+		  double area = integrator_Simpson(&potential, step_i->step_radius, step_j->step_radius, 100);
+		  energy = area / (step_i->step_radius - step_j->step_radius);
+		}
+	      else
+		{
+		  energy = 100;
+		}
+	      step_i->step_energy = energy;
+	      break;
 	    }
 	}
     }
  private:
-
+  double totalZ;
   // = = Functions
   // = Function to calcualte Baker Henderson Equivalent Hard Sphere Diameter =
-   static inline double BHequivalentDiameter(double z)
-   {
-     return (1.0 - exp(-beta * potential(z)));
-   }
+  static inline double BHequivalentDiameter(double z)
+  {
+    return (1.0 - exp(-beta * potential(z)));
+  }
+  // = Expected force function thing
+  static inline double expected_Force(double r)
+  {
+    return fabs(force(r) * partition_Function(r));
+  }
   // = Partition Function
-   static inline double partition_Function(double r)
-   {
-     return 4 * M_PI * (1 - exp(-beta * potential(r))) * r * r;
-   }
+  static inline double partition_Function(double r)
+  {
+    return 4 * M_PI * exp(-beta * potential(r)) * r * r;
+  }
   // = Internal Energy Integral
-   static inline double internal_Energy(double r)
-   {
+  static inline double internal_Energy(double r)
+  {
     return potential(r) * exp(-beta * potential(r)) * r * r;
-   }
+  }
   // = Lennard Jones Potential
-   static inline double potential(double r)
-   {
-     return  4.0 * lj_eps * (pow(lj_sig / r, 12) - pow(lj_sig / r, 6));
-   }
+  static inline double potential(double r)
+  {
+    return 4.0 * lj_eps * (pow(lj_sig / r, 12) - pow(lj_sig / r, 6));
+  }
+  // = Lennard Jones Force
+  static inline double force(double r)
+  {
+    return 24.0 * lj_eps / lj_sig * (2.0 * pow(lj_sig / r, 13) - pow(lj_sig / r, 7));
+  }
 
   // = Numerical Integrator using Simpson's Rule
-   double integrator_Simpson(double (*function)(double),
+  double integrator_Simpson(double (*function)(double),
 			    double upper_Bound, double lower_Bound, int intervals)
   {
     if(intervals % 2 != 0)
@@ -159,7 +235,8 @@ class Stepper
   }
 
   // = Function to calculate limits of integrals
-  double limit_solver(double target_area, double upper_bound, double lower_bound,
+  double limit_solver(double (*function)(double), double target_area,
+		      double upper_bound, double lower_bound,
 		      size_t integrator_intervals, size_t max_iterations, double tolerance)
   {
     size_t iterations(0);
@@ -167,13 +244,13 @@ class Stepper
     double b = upper_bound;
     while(iterations < max_iterations)
       {
-	double integral = integrator_Simpson(&partition_Function,
+	double integral = integrator_Simpson(function,
 						  b, lower_bound, integrator_intervals);
 	double root = integral - target_area;
 	if(root - tolerance < 0 &&  root + tolerance > 0)
 	  return b;
 
-	double differential = partition_Function(b);
+	double differential = function(b);
 	b -= root / differential;
 	++iterations;
       }

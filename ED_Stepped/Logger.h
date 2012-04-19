@@ -68,7 +68,7 @@ class Logger
     grLog.close();
   }
 
-  void write_Steps(std::vector<Steps>& steps, double T, double rho, double n, Stepper::StepType type)
+  void write_Steps(std::vector<Steps>& steps, double T, double rho, double n, Stepper::StepHeight type)
   {
     std::ofstream stepLog;
     std::ostringstream fileName;

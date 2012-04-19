@@ -4,7 +4,7 @@
 double density = 0.85;
 double temperature = 1.34; //temperature of the system
 //Simulation:
-int numberParticles = 108; //number of particles
+int numberParticles = 256; //number of particles
 const int numberEvents = 1.5e+6;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
@@ -16,8 +16,8 @@ const bool initFile = false; //use an init file instead of random generated valu
 const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
-int no_of_steps = 10;
-double r_cutoff = 2.3;
+int no_of_steps = 9;
+double r_cutoff =2.3;
 
 //Thermostat:
 bool thermostat = true; //use a thermostat
@@ -37,7 +37,8 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepType stepType = Stepper::PROBABILITY;
+Stepper::StepHeight height_type = Stepper::ENERGY;
+Stepper::StepWidth width_type = Stepper::EVEN;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
@@ -52,7 +53,7 @@ int rdfReadings = 0;
 double startSampleTime = 0;
 double currentK = 0;
 double currentU = 0;
-const int noBins = 3000; //number of radial bins
+const int noBins = 300; //number of radial bins
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
@@ -93,8 +94,8 @@ int main()
 	  Stepper stepper;
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  //initSteps(); //step up system steps
-	  stepper.generateSteps(no_of_steps, r_cutoff, stepType, steps);
-	  logger.write_Steps(steps, temperature, density, numberParticles, stepType);
+	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
+	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
@@ -1261,13 +1262,13 @@ void indirectCorr(double T)
       double stepEnergy = 0;
       double stepRad = 0;
       for(size_t j(0); j < steps.size(); ++j)
-	if(distance <= steps[j].step_radius)
+	if(distance < steps[j].step_radius)
 	  {
 	    stepRad = steps[j].step_radius;
 	    stepEnergy = steps[j].step_energy;
 	    break;
 	  }
-      if(distance < stepRad && (i+1) * maxR / noBins < stepRad)
+            if(distance < stepRad && (i+1) * maxR / noBins < stepRad)
 	{
 	  //	  cerr << distance << " - " << stepRad << " - " << (i+1) * maxR / noBins << endl;
 	  icf.push_back(pair<double, double> (distance, TA_rdf_d[i] * exp(stepEnergy / T)));
