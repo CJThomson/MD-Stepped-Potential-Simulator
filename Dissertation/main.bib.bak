@@ -13,6 +13,32 @@
   timestamp = {2012.04.14}
 }
 
+@ARTICLE{Chapela1989,
+  author = {Chapela, G. and Scriven, L. E. and Davis, H. T.},
+  title = {Molecular dynamics for discontinuous potential. IV. {L}ennard-{J}onesium},
+  journal = {J. Chem. Phys.},
+  year = {1989},
+  volume = {91},
+  pages = {4307},
+  abstract = {Argon, represented as a Lennard-Jones fluid, is simulated using a
+	discontinuous version of the potential. The effect of discretization
+	is thoroughly investigated in terms of the number of discontinuities
+	and the cutoff diameter. Radial distribution functions, pressure,
+	energy, self-diffusion coefficients, and velocity autocorrelation
+	functions are used in order to evaluate this effect. A reduction
+	of five times on computing time can be achieved by varying the cutoff
+	radius and the number of discontinuities without much departure from
+	the physical representation of Lennard-Jonesium atoms. The results
+	indicate that discontinuous molecular dynamics is a viable alternative
+	method to Monte Carlo and continuous molecular dynamics in simulating
+	the properties of simple fluids. The Journal of Chemical Physics
+	is copyrighted by The American Institute of Physics.},
+  doi = {10.1063/1.456811},
+  file = {Chapela_etal_1989.pdf:Chapela_etal_1989.pdf:PDF},
+  owner = {mjki2mb2},
+  timestamp = {2009.03.30}
+}
+
 @BOOK{Frenkel2002,
   title = {Understanding Molecular Simulations},
   publisher = {Academic Press},

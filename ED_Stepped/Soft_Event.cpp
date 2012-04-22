@@ -17,7 +17,7 @@ const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
 int no_of_steps = 10;
-double r_cutoff =2.3;
+double r_cutoff = 3.0;
 
 //Thermostat:
 bool thermostat = true; //use a thermostat
@@ -37,8 +37,8 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::VIRIAL;
-Stepper::StepWidth width_type = Stepper::PROBABILITY;
+Stepper::StepHeight height_type = Stepper::AREA;
+Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
@@ -53,7 +53,7 @@ int rdfReadings = 0;
 double startSampleTime = 0;
 double currentK = 0;
 double currentU = 0;
-const int noBins = 300; //number of radial bins
+const int noBins = 600; //number of radial bins
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
@@ -93,8 +93,8 @@ int main()
 	  Stepper::beta = 1.0 / temperature;
 	  Stepper stepper;
 	  cout << "Generating " << no_of_steps << " Steps...";
-	  //initSteps(); //step up system steps
-	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
+	  initSteps(); //step up system steps
+	  //stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
@@ -1317,7 +1317,7 @@ double continuousP(double T)
     {
       vector<pair<double, double> >::iterator j = i + 1;
       if(j == rdf_c.end())
-	cerr<< "ERROR in continuous U" << endl;
+	cerr<< "ERROR in continuous P" << endl;
       double u1 = 24.0 * lj_epsilon / lj_sigma * (2.0 * pow(lj_sigma/i->first, 13) - pow(lj_sigma/i->first, 7)); 
       if(i->first == 0)
 	u1 = 0;

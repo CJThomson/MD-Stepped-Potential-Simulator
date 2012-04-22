@@ -15,7 +15,8 @@ class Stepper
     VIRIAL,
     ENERGY,
     MID,
-    AREA
+    AREA,
+    E_ACTION
   } StepHeight;
 
   typedef enum {
@@ -42,13 +43,13 @@ class Stepper
       genSteps.clear();
 
       //calculate the equivalent hard core
-      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      //double r_core = 0.8;
-      genSteps.push_back(Steps(r_core,0));
-      double totalEF = integrator_Simpson(&expected_Force, r_cutoff, r_core, 1000);
+      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      double r_core = 0.8;
+      //genSteps.push_back(Steps(r_core,0));
+      double totalEF = integrator_Simpson(&expected_Force,r_cutoff,  ZERO, 1000);
       std::cout << totalEF << std::endl;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      --number_of_steps;
+      //--number_of_steps;
       switch(step_radius)
 	{
 	case EVEN:
@@ -81,10 +82,10 @@ class Stepper
 	case EXPECTEDFORCE:
 	  //calculate total partition funciton
 
-	  double r_lower = r_core;
-	  for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
+	  double r_lower = ZERO;
+	  for(size_t i(0); i < number_of_steps - 1; ++i) //generate step lengths
 	    {
-	      double step = limit_solver(&expected_Force, totalEF / number_of_steps, r_cutoff, r_lower, 100, 1e6, 1e-10);
+	      double step = limit_solver_bisection(&expected_Force, totalEF / number_of_steps, r_cutoff, r_lower, 1000, 1e6, 1e-5);
 	      if(step == 0)
 		break;
 	      else
@@ -93,11 +94,12 @@ class Stepper
 		  r_lower = step;
 		}
 	    }
+	  genSteps.push_back(Steps(r_cutoff,0));
 	  break;
 	}
 
 
-      for(std::vector<Steps>::iterator step_i = genSteps.begin() + 3;
+      for(std::vector<Steps>::iterator step_i = genSteps.begin();
 	  step_i != genSteps.end(); ++step_i) //generate step lengths
 	{
 	  double energy = 0;
@@ -183,6 +185,18 @@ class Stepper
 		}
 	      step_i->step_energy = energy;
 	      break;
+	    case E_ACTION:
+	      if(step_i != genSteps.begin())
+		{
+		  std::vector<Steps>::iterator step_j = step_i - 1;
+		  energy = expected_Force((step_i->step_radius + step_j->step_radius) * 0.5);
+		}
+	      else
+		{
+		  energy = expected_Force(step_i->step_radius);
+		}
+	      step_i->step_energy = energy;
+	      break;
 	    }
 	}
     }
@@ -242,7 +256,7 @@ class Stepper
       }
     return  h / 3.0 * sum;
   }
- 
+
   // = Function to calculate limits of integrals
   double limit_solver(double (*function)(double), double target_area,
 		      double upper_bound, double lower_bound,
@@ -253,7 +267,7 @@ class Stepper
     double b = upper_bound;
     while(iterations < max_iterations)
       {
-	
+
 	double integral = integrator_Simpson(function,
 						  b, lower_bound, integrator_intervals);
 	double root = integral - target_area;
@@ -269,12 +283,12 @@ class Stepper
     return 0;
     }
   // = Function to calculate limits of integrals
-  /*double limit_solver_bisection(double (*function)(double), double target_area,
+  double limit_solver_bisection(double (*function)(double), double target_area,
 				double upper_bound, double lower_bound,
 				size_t integrator_intervals, size_t max_iterations, double tolerance)
   {
     size_t iterations(0);
-    double interval = upper_bound - lower_bound
+    double interval = upper_bound - lower_bound;
     double b = lower_bound;
     while(iterations < max_iterations)
       {
@@ -282,15 +296,15 @@ class Stepper
 	double integral = integrator_Simpson(function,
 					     b + interval, lower_bound, integrator_intervals);
 	double root = integral - target_area;
-	std::cerr << "\r" << b << " - " << integral << " - " << target_area << std::endl; 
+	std::cerr  << b+interval << " - " << integral << " - " << target_area << std::endl;
 	if(root - tolerance < 0 &&  root + tolerance > 0)
-	  return b;
+	  return b + interval;
 
-	if(integral > target_area)
-	  b
+	if(integral < target_area)
+	  b += interval;
 	++iterations;
       }
     std::cerr << "ERROR: Maximum number of steps exceeded in limit_solver" << std::endl;
     return 0;
-    }*/
+    }
 };

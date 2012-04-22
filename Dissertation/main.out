@@ -1,26 +1,25 @@
-\BOOKMARK [0][-]{FrontCover.0}{Front Cover}{}
-\BOOKMARK [0][-]{chapter*.2}{Abstract}{}
-\BOOKMARK [0][-]{Contents.0}{Contents}{}
-\BOOKMARK [0][-]{TableoffiguresPg.0}{List of Figures}{}
-\BOOKMARK [0][-]{TableoftablesPg.0}{List of Tables}{}
-\BOOKMARK [0][-]{section*.9}{Nomenclature}{}
-\BOOKMARK [0][-]{chapter*.11}{Acknowledgements}{}
-\BOOKMARK [0][-]{chapter.1}{1 Introduction}{}
-\BOOKMARK [0][-]{chapter.2}{2 Molecular Dynamics}{}
-\BOOKMARK [1][-]{section.2.1}{2.1 Introduction}{chapter.2}
-\BOOKMARK [2][-]{subsection.2.1.1}{2.1.1 Potentials}{section.2.1}
-\BOOKMARK [1][-]{section.2.2}{2.2 Force-Driven Simulators}{chapter.2}
-\BOOKMARK [2][-]{subsection.2.2.1}{2.2.1 Introduction}{section.2.2}
-\BOOKMARK [2][-]{subsection.2.2.2}{2.2.2 Integrators}{section.2.2}
-\BOOKMARK [1][-]{section.2.3}{2.3 Event-Driven Simulators}{chapter.2}
-\BOOKMARK [2][-]{subsection.2.3.1}{2.3.1 Introduction}{section.2.3}
-\BOOKMARK [0][-]{chapter.3}{3 Methodology}{}
-\BOOKMARK [1][-]{section.3.1}{3.1 Introduction}{chapter.3}
-\BOOKMARK [1][-]{section.3.2}{3.2 Force-driven Simulator}{chapter.3}
-\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Initialisation}{section.3.2}
-\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Running Simulation}{section.3.2}
-\BOOKMARK [0][-]{chapter.4}{4 Results}{}
-\BOOKMARK [1][-]{section.4.1}{4.1 Benchmarking}{chapter.4}
-\BOOKMARK [2][-]{subsection.4.1.1}{4.1.1 Introduction}{section.4.1}
-\BOOKMARK [2][-]{subsection.4.1.2}{4.1.2 Event-Driven Simulator}{section.4.1}
-\BOOKMARK [1][-]{section.4.2}{4.2 References}{chapter.4}
+\BOOKMARK [0][-]{FrontCover.0}{Front Cover}{}% 1
+\BOOKMARK [0][-]{chapter*.2}{Abstract}{}% 2
+\BOOKMARK [0][-]{Contents.0}{Contents}{}% 3
+\BOOKMARK [0][-]{TableoffiguresPg.0}{List of Figures}{}% 4
+\BOOKMARK [0][-]{TableoftablesPg.0}{List of Tables}{}% 5
+\BOOKMARK [0][-]{section*.9}{Nomenclature}{}% 6
+\BOOKMARK [0][-]{chapter*.11}{Acknowledgements}{}% 7
+\BOOKMARK [0][-]{chapter.1}{1 Introduction}{}% 8
+\BOOKMARK [0][-]{chapter.2}{2 Molecular Dynamics}{}% 9
+\BOOKMARK [1][-]{section.2.1}{2.1 Introduction}{chapter.2}% 10
+\BOOKMARK [2][-]{subsection.2.1.1}{2.1.1 Potentials}{section.2.1}% 11
+\BOOKMARK [2][-]{subsection.2.1.2}{2.1.2 Introduction}{section.2.1}% 12
+\BOOKMARK [2][-]{subsection.2.1.3}{2.1.3 Integrators}{section.2.1}% 13
+\BOOKMARK [1][-]{section.2.2}{2.2 Event-Driven Simulators}{chapter.2}% 14
+\BOOKMARK [2][-]{subsection.2.2.1}{2.2.1 Introduction}{section.2.2}% 15
+\BOOKMARK [0][-]{chapter.3}{3 Methodology}{}% 16
+\BOOKMARK [1][-]{section.3.1}{3.1 Introduction}{chapter.3}% 17
+\BOOKMARK [1][-]{section.3.2}{3.2 Force-driven Simulator}{chapter.3}% 18
+\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Initialisation}{section.3.2}% 19
+\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Running Simulation}{section.3.2}% 20
+\BOOKMARK [0][-]{chapter.4}{4 Results}{}% 21
+\BOOKMARK [1][-]{section.4.1}{4.1 Benchmarking}{chapter.4}% 22
+\BOOKMARK [2][-]{subsection.4.1.1}{4.1.1 Introduction}{section.4.1}% 23
+\BOOKMARK [2][-]{subsection.4.1.2}{4.1.2 Event-Driven Simulator}{section.4.1}% 24
+\BOOKMARK [1][-]{section.4.2}{4.2 References}{chapter.4}% 25
