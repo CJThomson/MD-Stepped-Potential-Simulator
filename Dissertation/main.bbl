@@ -1,5 +1,5 @@
 % $ biblatex auxiliary file $
-% $ biblatex version 1.7 $
+% $ biblatex version 1.4 $
 % Do not modify the above lines!
 %
 % This is an auxiliary file used by the 'biblatex' package.
@@ -210,7 +210,7 @@
   \field{pages}{733\bibrangedash 736}
   \field{title}{New integrator for molecular dynamics simulations}
   \field{volume}{147}
-  \field{journaltitle}{Computer Physics Communications}
+  \field{journaltitle}{Comput. Phys. Commun.}
   \field{year}{2002}
 \endentry
 
@@ -282,7 +282,7 @@
   \field{title}{Collision statistics, thermodynamics, and transport
   coeffiecients of hard hyperspheres in three, four, and five dimensions}
   \field{volume}{122}
-  \field{journaltitle}{Journal of Chemical Physics}
+  \field{journaltitle}{J. Chem. Phys.}
   \field{year}{2005}
 \endentry
 

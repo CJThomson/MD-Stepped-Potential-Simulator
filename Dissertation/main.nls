@@ -2,6 +2,7 @@
 
  \nomgroup{A}
 
-  \item [{A}]\begingroup FCC\nomeqref {3.2.0}\nompageref{15}
+  \item [{FCC}]\begingroup Face Centered Cubic\nomeqref {3.2.0}
+		\nompageref{15}
 
 \end{thenomenclature}

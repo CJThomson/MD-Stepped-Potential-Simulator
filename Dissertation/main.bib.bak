@@ -85,7 +85,7 @@
 @ARTICLE{Khakimov2002,
   author = {Khakimov, Z.M.},
   title = {New integrator for molecular dynamics simulations},
-  journal = {Computer Physics Communications},
+  journal = {Comput. Phys. Commun.},
   year = {2002},
   volume = {147},
   pages = {733-736},
@@ -110,7 +110,7 @@
   author = {Lue, L.},
   title = {Collision statistics, thermodynamics, and transport coeffiecients
 	of hard hyperspheres in three, four, and five dimensions},
-  journal = {Journal of Chemical Physics},
+  journal = {J. Chem. Phys.},
   year = {2005},
   volume = {122},
   pages = {044513},
