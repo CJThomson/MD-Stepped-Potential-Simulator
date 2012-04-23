@@ -6,14 +6,14 @@ double density = 0.85;
 double temperature = 4.6; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 300000; //length of the Simulation
-const double dt = 0.001; //length of ticme interval
+const int simTime = 50000; //length of the Simulation
+const double dt = 0.005; //length of ticme interval
 double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
 CVector3 systemSize(length, length, length); //size of the system
 const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
-const int NL_update = 20;
+const int NL_update = 10;
 int number_of_runs = 10;
 const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
 const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
@@ -32,14 +32,14 @@ const double sigma = 1.0; //distance for Lennard Jones root
 Logger logger; //create instance of the logger class
 const int out_interval = 20; //frequency of output to file
 const int diff_interval = simTime;
-const int rdf_interval = 200;
+const int rdf_interval = 10;
 const int sample_interval = 10;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 100000; //number of readings to take
+const int startSampling = 20000; //number of readings to take
 double readingTime = 0;
-const int noBins = 300; //number of radial bins
+const int noBins = 600; //number of radial bins
 const double maxR = 3.0;
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 bool suppressOutput = true;
@@ -71,9 +71,10 @@ int main()
 	{
 	  vector<Results> results;
 	  results.resize(number_of_runs);
+	  cout << endl;
 	  for(size_t i (0); i < number_of_runs; ++i)
 	    {
-	      cout << "Run number: " << i << endl;
+	      cout << "\rRun number: " << i + 1 << " of " << number_of_runs << endl;
 	      resetSim();
 	      runSimulation(results, i);
 	    }
@@ -86,6 +87,14 @@ int main()
 	  cout << "Pressure: " << avgResults.pressure << endl;
 	  cout << "Potential Energy: " << avgResults.potential << endl;
 	  logger.write_Results(results, density, temperature);
+	  //After Simulation
+	  double deltaR = maxR / noBins; //width of each shell
+	  for(size_t i(0); i < noBins; ++i)
+	    {
+	      double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
+	      TA_gVal[i]/=(0.5 * numberParticles * (simTime - startSampling) * number_of_runs / rdf_interval * volShell * density);
+	    }
+	  logger.write_RadDist(TA_gVal,noBins, deltaR, density, temperature); //write radial gdistribution file
 	}
       else if(input == "temperature")
 	cin >> temperature;
@@ -107,9 +116,6 @@ void resetSim()
   thermostat = true;
   readingTime = 0;
   coDiff.clear(); 
-  //----Time Averages----
-  for(size_t i(0); i < noBins; ++i)
-    TA_gVal[i] = 0;      
   TA_Temp = 0;
   TA_U = 0;
   TA_Virial = 0;
@@ -215,7 +221,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	    particles[i].r0 = particles[i].r;
 	}
 
-      if(timeStep < startSampling)
+      if(timeStep > startSampling)
 	{
 	  ++noReadings;
 	  if(timeStep % diff_interval == 0)
@@ -250,15 +256,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 
   cout << "\rSimulation Complete" << flush;
   //After Simulation
-  double deltaR = maxR / noBins; //width of each shell
-  for(size_t i(0); i < noBins; ++i)
-    {
-      double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
-      TA_gVal[i]/=(0.5 * numberParticles * noReadings / rdf_interval * volShell * density);
-    }
-  cout << "\rwrite output files..." << flush;
+   cout << "\rwrite output files..." << flush;
   logger.write_Location(particles, simTime, systemSize);
-  logger.write_RadDist(TA_gVal,noBins, deltaR, density, temperature); //write radial gdistribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   if(overwriteInit)
     logger.write_Init(particles);
