@@ -44,10 +44,10 @@ class Stepper
 
       //calculate the equivalent hard core
       //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      double r_core = 0.95;
-      genSteps.push_back(Steps(r_core,0));
+      double r_core = ZERO;
+      //genSteps.push_back(Steps(r_core,0));
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      --number_of_steps;
+      //--number_of_steps;
       switch(step_radius)
 	{
 	case EVEN:
@@ -118,13 +118,12 @@ class Stepper
 		    }
 		  else
 		    {
-		      /* energy = - 1.0 / beta
-		       * log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3)))
-		       * integrator_Simpson(&partition_Function,
-		       step_i->step_radius,
-		       ZERO,
-		       100));*/
-		      energy = 100;
+ 		      energy = - 1.0 / beta
+			* log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3)))
+			      * integrator_Simpson(&partition_Function,
+						   step_i->step_radius,
+						   ZERO,
+						   100));
 		    }
 		  step_i->step_energy = energy;
 		}

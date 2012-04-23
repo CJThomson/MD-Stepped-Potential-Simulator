@@ -37,7 +37,7 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::AREA;
+Stepper::StepHeight height_type = Stepper::VIRIAL;
 Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
 //Logging:
 const int psteps = 50; //frequency of output to file
@@ -89,9 +89,11 @@ int main()
 	exit(0);
       else if(input == "start")
 	{
-
 	  Stepper::beta = 1.0 / temperature;
 	  Stepper stepper;
+	  time_t startTime;
+	  time(&startTime);
+	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  initSteps(); //step up system steps
 	  //stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
@@ -106,6 +108,10 @@ int main()
 	      resetSim();
 	      runSimulation(results, runs);
 	    }
+	  time_t endTime;
+	  time(&endTime);
+	  cout << "Simulation finished at " << asctime(localtime(&endTime)) 
+	       << " and took " << round(difftime(endTime, startTime) / 60.0) << " mins" <<endl;
 	  Results avgResults;
 	  for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
 	    avgResults += *result;
@@ -1262,13 +1268,15 @@ void indirectCorr(double T)
       double stepEnergy = 0;
       double stepRad = 0;
       for(size_t j(0); j < steps.size(); ++j)
-	if(distance < steps[j].step_radius)
-	  {
-	    stepRad = steps[j].step_radius;
-	    stepEnergy = steps[j].step_energy;
-	    break;
-	  }
-            if(distance < stepRad && (i+1) * maxR / noBins < stepRad)
+	{
+	  if(distance < steps[j].step_radius)
+	    {
+	      stepRad = steps[j].step_radius;
+	      stepEnergy = steps[j].step_energy;
+	      break;
+	    }
+	}
+      if((distance < stepRad && (i+1) * maxR / noBins < stepRad) || stepRad == 0)
 	{
 	  //	  cerr << distance << " - " << stepRad << " - " << (i+1) * maxR / noBins << endl;
 	  icf.push_back(pair<double, double> (distance, TA_rdf_d[i] * exp(stepEnergy / T)));
@@ -1291,7 +1299,6 @@ void continuousRDF(double T)
 double continuousU()
 {
   //integration using trapezoidal rule
-  double utail = -8 * M_PI * density / (3.0 * pow(maxR, 3)) * (1.0 - 1.0 / (3.0 * pow(maxR,6))); 
   double sum = 0;
   for(vector<pair<double, double> >::iterator i = rdf_c.begin(); i != rdf_c.end() - 1; ++i)
     {
@@ -1306,12 +1313,11 @@ double continuousU()
       double f2 = u2 * j->second * j->first * j->first;
       sum += (j->first - i->first) * (f1 + f2);
     }
-  return M_PI * density * sum + utail;
+  return M_PI * density * sum;
 }
 
 double continuousP(double T)
 {
-  const double ptail = -16 * M_PI * density * density / (3.0 * pow(maxR, 3)) * (1.0 - 2.0 / (3.0 * pow(maxR,6))); 
   double sum = 0;
   for(vector<pair<double, double> >::iterator i = rdf_c.begin(); i != rdf_c.end() - 1; ++i)
     {
@@ -1327,5 +1333,5 @@ double continuousP(double T)
       double f2 = u2 * j->second * j->first * j->first * i->first;
       sum += (j->first - i->first) * (f1 + f2);
     }
-  return density * T + 1.0 / 3.0 * M_PI * density * density * sum  + ptail;
+  return density * T + 1.0 / 3.0 * M_PI * density * density * sum;
 }

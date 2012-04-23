@@ -49,6 +49,7 @@ Results(double T, double Pd, double Pc, double Ud, double Uc) :
 #include <algorithm> //allows use of sort function
 #include <string> //allows use of strings
 #include <sstream> //allows use of ostreamstream
+#include <time.h> //allows the printing of time
 #include "Stepper.h" //allows the generation of stepped potentials
 #include "Vector3.h" //allows use of vector mathematics
 #include "Particle.h" //Event particle Class
