@@ -72,9 +72,6 @@ engineering design. Central to these simulation software packages is
 the ability to calculate thermodynamic and transport properties of
 fluids quickly and accurately. 
 
-
-%\printbibliography[heading=thesisChapterBib]
-
 \chapter{Molecular Dynamics} 
 \section{Introduction} 
 
@@ -165,6 +162,7 @@ particles during the collision.
 %[Insert plots of thelennard jones energy and force]% 
 %[Insert massive potential from maginn possibly mention coulombs law, hertz's
 %law?]
+\newpage
 \section{Force-Driven Simulators}
 \subsection{Introduction} 
 Force-driven (or time driven) simulators are the most popular method
@@ -310,15 +308,160 @@ corrected time derivatives can be calculated using
 The Gear's algorithm, while more accurate at short timesteps than Verlet's
 integrator \cite{Haile1997}, suffers at long timesteps and is computationally
 more expensive.
-
+\newpage
 \section{Event-Driven Simulators} 
 \subsection{Introduction} 
 Though force-driven simulators are more popular the first MD
 simulation was done using an event-driven simulator by Alder and
-Wainwright \cite{Alder1959}. Event-driven simulators move through time
-by jumping between successive collisions. These collisions last an
-infinitesmall amount of time, and deliver an impulse between the
-particles.
+Wainwright \cite{Alder1959}. The difference between force and event
+driven simulations lies in how the simulators move through time.
+While force driven simulators move forward in uniform blocks, event
+driven simulators jump between successive collisions.  These
+collisions are taken to be instantaneous and only one can occur at any
+particular time.
+
+\subsection{Collision Time Prediction}
+An event-driven simulator first must calculate the collision times
+between every pair of particles (provided the particles do collide),
+in order to select the earliest collision.  For hard sphere
+simulations there are two conditions that must be satisfied in order
+for a collision to occur.  Firstly, the particles must be moving
+towards each other and secondly, the particles must pass close enough
+to each other to collide.  These conditions can be expressed
+mathematically in equations \eqref{eq:collConditions1} and
+\eqref{eq:collConditions2} respectively \cite{Haile1997}.
+
+\begin{subequations}
+  \begin{align}
+    \mathbf{v}_{ij}\cdot\mathbf{r}_{ij} < 0 \label{eq:collConditions1}\\
+    (\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 
+    - v_{ij}^2(r_{ij}^2 - \sigma^2) \geq 0 \label{eq:collConditions2}
+  \end{align}
+\end{subequations}
+
+The time to collision can then be calculated using the quadratic in
+equation \eqref{eq:collEnterTime}.  While there are two solutions,
+only the earliest collision (the negative root) needs to be
+considered.  The second root gives the time when the particles leave
+after passing through each other which, for hard sphere, cannot
+happen.
+
+\begin{equation}
+\Delta t = \frac{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}) \pm 
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 - v_{ij}^2(r_{ij}^2 - \sigma^2)}}
+       {v_{ij}^2} \label{eq:collEnterTime}
+\end{equation}
+
+Since $\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}$ must be negative for the
+collision, there is the possibility of catastrophic cancellation
+\cite{Goldberg1991}, if $(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 \gg
+v_{ij}^2(r_{ij}^2 - \sigma^2)$. Therefore it is advisable to use the
+positive root from the alternate form of the quadratic equation given
+in equation \eqref{eq:collEnterTimeAlt} \cite{Poschel2005}.
+
+\begin{equation}
+\Delta t = \frac{r_{ij}^2 - \sigma^2}{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})
+  \mp \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 
+    - v_{ij}^2(r_{ij}^2 - \sigma^2)}}
+\label{eq:collEnterTimeAlt}
+\end{equation}
+
+When considering stepped potentials many of the same principles apply,
+except there are now two possible ``collisions''. The first, when two
+particles enter a step is treated identically to hard spheres. The
+other event, when the particles leave the step, is calculated using
+the second, later root of the quadratic.  In order to prevent loss of
+numerical precision, the leaving time should be calculated using
+equation \eqref{eq:collExitTime}.
+
+\begin{equation}
+  \label{eq:collExitTime}
+\Delta t = 
+\begin{cases}
+  \frac{r_{ij}^2 - \sigma^2}{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})
+    - \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 
+      - v_{ij}^2(r_{ij}^2 - \sigma^2)}}, & \text{if }
+  \mathbf{v}_{ij}\cdot\mathbf{r}_{ij} > 0 \\
+\\
+
+\frac{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}) +
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 - v_{ij}^2(r_{ij}^2 - \sigma^2)}}
+     {v_{ij}^2} , & \text{if }
+     \mathbf{v}_{ij}\cdot\mathbf{r}_{ij} < 0 
+\end{cases}
+\end{equation}
+
+\subsection{Collision Dynamics}
+Once the time of the next collision is known, the particles can be moved
+to their new locations.  Generally there is no external force applied
+to the particles in event-driven molecular dynamics, therefore the
+particles move in straight lines.  Hence the particles' new positions
+can be calculated using equation \eqref{eq:edNewPos}.
+
+\begin{equation}
+  \mathbf{r}(t+\Delta t) = \mathbf{r}(t) + \mathbf{v}(t)\Delta t 
+  \label{eq:edNewPos}
+\end{equation}
+
+The post-collision velocities of the colliding particles must now be
+calculated.  The simplest collision between two particles is an
+elastic bounce, where the velocities and just exchanged along the
+separation vector between the two particles.  The change in velocity
+during the collision for particles $i$ and $j$ is shown in equation
+\eqref{eq:postVBounce}.
+
+\begin{subequations}
+  \label{eq:postVBounce}
+  \begin{align}
+    \Delta\mathbf{v}_i &= -(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})\mathbf{\hat{r}}_{ij} \\
+    \Delta\mathbf{v}_j &= (\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})\mathbf{\hat{r}}_{ij}
+  \end{align}
+\end{subequations}
+
+For stepped potential system, the collision dynamics are more complex.
+When two particles collide they must pay an energy ``cost'' to proceed
+through the step.  This energy cost $\Delta U$ is the difference in
+the energy of the current step and the step the particles are going
+into, and is shown in equation \eqref{eq:energyCost}.
+
+\begin{equation}
+  \label{eq:energyCost}
+  \Delta U = U_{\text{next step}} - U_{\text{current step}}
+\end{equation}
+
+If the kinect energy of the particles is insufficient, the pair bounce
+off the step and the post-collision velocities are calculated using
+equation \eqref{eq:postVBounce}. However, if the particles can pay
+this cost i.e.\ the inequality \eqref{eq:kineticCost} is true, then the
+particles can enter the step.
+
+\begin{equation}
+\label{eq:kineticCost}
+  \frac{1}{4}m(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 > \Delta U
+\end{equation}
+
+The change in the velocities of particles $i$ and $j$ after going
+through a step are shown in equation \eqref{eq:postVCapture} where $A$
+is given in equation \eqref{eq:changeMomentum}, the derivation of
+these equations is given in Appendix ???.  If the particles are
+entering a step, the positive root of $A$ is used, whereas if the
+particles are leaving a step it is the negative root that should be
+used.
+
+\begin{subequations}
+  \label{eq:postVCapture}
+  \begin{align}
+    \Delta\mathbf{v}_i &= \frac{A}{m} \mathbf{\hat{r}}_{ij} \\
+    \Delta\mathbf{v}_j &= -\frac{A}{m}\mathbf{\hat{r}}_{ij}
+  \end{align}
+\end{subequations}
+
+\begin{equation}
+  \label{eq:changeMomentum}
+  A = -\frac{m}{2}\left((\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij}) \pm
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 - \frac{4}{m}\Delta U}\right)
+\end{equation}
+\newpage
 \chapter{Methodology} 
 \section{Introduction} 
 
@@ -367,7 +510,6 @@ orthongonal direction.
 
 \subsection{Running Simulation} 
 The
-
 \chapter{Results} 
 \section{Benchmarking} 
 \subsection{Introduction} 
@@ -468,7 +610,92 @@ standard deviations are given in table
 %citation, like so: \fullcite{Bannerman_2009}. % 
 %But you must remember toprintthe bibliography at the end of every 
 %chapter!
- \newpage\printbibliography[heading=thesisChapterBib] 
+\newpage\printbibliography[heading=thesisChapterBib] 
+
+\appendix
+\chapter{Derivation of Collision Dynamics for Stepped Potentials}
+Considering a collision between particles $i$ and $j$, each with mass,
+$m$ with a step energy difference of $\Delta U$, the conservation of
+momentum is shown in equation \eqref{eq:consMom}. Here the prime
+indicates post-collision values.
+
+\begin{equation}
+\label{eq:consMom}
+m\mathbf{v}_i + m\mathbf{v}_j = m\mathbf{v}'_i + m\mathbf{v}'_j
+\end{equation}
+
+The momentum change of each particle must occur along the separation
+vector between the two particles, which can be expressed by equation
+\eqref{eq:defA}, where $A$ is an arbitary coefficient.
+
+\begin{equation}
+  \label{eq:defA}
+  m\mathbf{v}_i - m\mathbf{v}'_i = -(m\mathbf{v}_j - m\mathbf{v}'_j) 
+  = -A\mathbf{\hat{r}}_{ij}
+\end{equation}
+
+Energy must also be conserved in the system so equation
+\eqref{eq:constE} must also apply.  This can be rewritten to equations
+\eqref{eq:constE1} and \eqref{eq:constE2}
+
+\begin{equation}
+  \label{eq:constE}
+  \frac{1}{2}mv_i^2 + \frac{1}{2}mv_j^2 =
+  \frac{1}{2}m{v'_i}^2 + \frac{1}{2}m{v'_j}^2 + \Delta U
+\end{equation}
+
+\begin{equation}
+  \label{eq:constE1}
+  v_i^2 - {v'_i}^2 +
+  v_j^2 - {v'_j}^2 - \frac{2}{m}\Delta U = 0
+\end{equation}
+
+\begin{equation}
+  \label{eq:constE2}
+  (\mathbf{v}_i - \mathbf{v}'_i)\cdot(\mathbf{v}_i + \mathbf{v}'_i) +
+  (\mathbf{v}_j - \mathbf{v}'_j)\cdot(\mathbf{v}_j + \mathbf{v}'_j) -
+  \frac{2}{m}\Delta U = 0
+\end{equation}
+
+Equation \eqref{eq:defA} can now be substituted into
+\eqref{eq:constE2} to give equation \eqref{eq:eq1}.
+
+\begin{equation}
+  \label{eq:eq1}
+  \frac{A}{m}\mathbf{\hat{r}}_{ij} (\mathbf{v}_j - \mathbf{v}_i 
+  + \mathbf{v}'_j - \mathbf{v}'_i) - \frac{2}{m}\Delta U = 0
+\end{equation}
+
+Equation \eqref{eq:defA} and the definition of the separation velocity
+vector ($\mathbf{v}_{ij} = \mathbf{v}_i - \mathbf{v}_j$) can be
+substituted into equation \eqref{eq:eq1} to give \eqref{eq:eq2}.
+
+\begin{equation}
+  \label{eq:eq2}
+  -\frac{A^2}{m}
+  -A\mathbf{\hat{r}}_{ij}\cdot\mathbf{v}_{ij} - \Delta U = 0
+\end{equation}
+
+This is a quadratic equation in terms of $A$ therefore it's roots must
+be given by equation \eqref{eq:devQuadratic}.
+
+\begin{equation}
+  \label{eq:devQuadratic}
+  A = -\frac{m}{2}\left((\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij}) \pm
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 - \frac{4}{m}\Delta U}\right)
+\end{equation}  
+
+From equation \eqref{eq:defA}, the change in velocity of each particle
+is given in equations \eqref{eq:deltaV}
+
+\begin{subequations}
+  \label{eq:deltaV}
+  \begin{align}
+    \Delta\mathbf{v}_i &= \frac{A}{m} \mathbf{\hat{r}}_{ij} \\
+    \Delta\mathbf{v}_j &= -\frac{A}{m}\mathbf{\hat{r}}_{ij}    
+  \end{align}
+\end{subequations}
+
 \end{document}
 
 %%%%TAYLOR SERIES FOR GEAR'S ALGORITHM%%%% %\begin{equation} 

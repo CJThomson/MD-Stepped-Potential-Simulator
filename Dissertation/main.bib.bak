@@ -74,6 +74,19 @@
   timestamp = {2012.04.13}
 }
 
+@ARTICLE{Goldberg1991,
+  author = {Goldberg, D.},
+  title = {What every computer scientist should know about floating-point arithmetic},
+  journal = {ACM Comput. Surv.},
+  year = {1991},
+  volume = {23},
+  pages = {5-48},
+  number = {1},
+  doi = {10.1145/103162.103163},
+  owner = {chris},
+  timestamp = {2012.04.23}
+}
+
 @BOOK{Haile1997,
   title = {Molecular Dynamics Simulation: Elementary Methods},
   publisher = {Wiley-Interscience},
@@ -160,6 +173,15 @@
   timestamp = {2012.04.13}
 }
 
+@BOOK{Poschel2005,
+  title = {Computational Granular Dynamics: Models and Algorithms},
+  publisher = {Springer},
+  year = {2005},
+  author = {P\"{o}schel, T. and Schwager, T.},
+  owner = {chris},
+  timestamp = {2012.04.23}
+}
+
 @ARTICLE{Rahman1964,
   author = {A Rahman},
   title = {Correlations in the Motion of Atoms in Liquid Argon},
@@ -185,6 +207,18 @@
   doi = {10.1063/1.442716},
   owner = {chris},
   timestamp = {2012.04.13}
+}
+
+@ARTICLE{Tersoff1988,
+  author = {Tersoff, J.},
+  title = {New empirical approach for the structure and energy of covalent systems},
+  journal = {Phys. Rev. B},
+  year = {1988},
+  volume = {37},
+  pages = {6991-6999},
+  doi = {10.1103/PhysRevB.37.6991},
+  owner = {chris},
+  timestamp = {2012.04.22}
 }
 
 @ARTICLE{Verlet1967,

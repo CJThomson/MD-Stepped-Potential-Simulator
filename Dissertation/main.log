@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.15)  22 APR 2012 20:36
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.10.15)  24 APR 2012 18:35
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -216,6 +216,16 @@ Package biblatex Info: ... file 'biblatex.def' found.
 File: biblatex.def 2011/05/12 v1.4c biblatex generic definitions
 \c@smartand=\count195
 )
+Package biblatex Info: Trying to load bibliography style 'chem-rsc'...
+Package biblatex Info: ... file 'chem-rsc.bbx' found.
+
+(/home/chris/.texmf-var/tex/latex/biblatex-contrib/biblatex-chem/latex/chem-rsc
+.bbx
+File: chem-rsc.bbx 2012/02/05 v1.1f biblatex bibliography style
+Package biblatex Info: Trying to load bibliography style 'numeric-comp'...
+Package biblatex Info: ... file 'numeric-comp.bbx' found.
+ (/usr/share/texmf/tex/latex/biblatex/bbx/numeric-comp.bbx
+File: numeric-comp.bbx 2011/05/12 v1.4c biblatex bibliography style
 Package biblatex Info: Trying to load bibliography style 'numeric'...
 Package biblatex Info: ... file 'numeric.bbx' found.
 
@@ -226,11 +236,16 @@ Package biblatex Info: ... file 'standard.bbx' found.
 
 (/usr/share/texmf/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2011/05/12 v1.4c biblatex bibliography style
-))
+))))
+Package biblatex Info: Trying to load citation style 'chem-rsc'...
+Package biblatex Info: ... file 'chem-rsc.cbx' found.
+
+(/home/chris/.texmf-var/tex/latex/biblatex-contrib/biblatex-chem/latex/chem-rsc
+.cbx
+File: chem-rsc.cbx 2012/02/05 v1.1f biblatex citation style
 Package biblatex Info: Trying to load citation style 'numeric-comp'...
 Package biblatex Info: ... file 'numeric-comp.cbx' found.
-
-(/usr/share/texmf/tex/latex/biblatex/cbx/numeric-comp.cbx
+ (/usr/share/texmf/tex/latex/biblatex/cbx/numeric-comp.cbx
 File: numeric-comp.cbx 2011/05/12 v1.4c biblatex citation style
 \c@cbx@tempcnta=\count196
 \c@cbx@tempcntb=\count197
@@ -244,7 +259,7 @@ Package biblatex Info: Redefining '\supercite'.
 Package biblatex Info: Redefining '\cites'.
 Package biblatex Info: Redefining '\parencites'.
 Package biblatex Info: Redefining '\smartcites'.
-)
+))
 Package biblatex Info: Trying to load configuration file...
 Package biblatex Info: ... file 'biblatex.cfg' found.
 
@@ -693,11 +708,7 @@ File: english.lbx 2011/05/12 v1.4c biblatex localization
 LaTeX Warning: Unused global option(s):
     [UKenglish].
 
-(./main.aux
-
-LaTeX Warning: Label `fig:ljPot' multiply defined.
-
-)
+(./main.aux)
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 16.
@@ -810,7 +821,7 @@ LaTeX Info: Redefining \pageref on input line 16.
 
 pdfTeX warning: pdflatex (file ./figures/UoALogo.pdf): PDF inclusion: found PDF
  version <1.5>, but at most version <1.4> allowed
-<figures/UoALogo.pdf, id=107, 375.16461pt x 140.45314pt>
+<figures/UoALogo.pdf, id=119, 375.16461pt x 140.45314pt>
 File: figures/UoALogo.pdf Graphic file (type pdf)
 
 <use figures/UoALogo.pdf>
@@ -828,20 +839,20 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
 [2
 
 
-] (./main.toc)
+] (./main.toc [3
+
+
+
+
+])
 \tf@toc=\write6
 \openout6 = `main.toc'.
 
- (./wc.tex) [3
-
-
-
-
-] (./main.lof)
+ (./wc.tex) [4] (./main.lof)
 \tf@lof=\write7
 \openout7 = `main.lof'.
 
- [4
+ [5
 
 
 
@@ -849,97 +860,121 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
 \tf@lot=\write8
 \openout8 = `main.lot'.
 
- [5
+ [6
 
 
 
-] (./main.nls
-[6
+]
+(./main.nls [7
 
 
 
-]) [7
+]) [8
 
 
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 68.
-[8
+[9
 
 
 
 ]
 Chapter 2.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 122.
-[9
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 118.
+[10
 
 
-] <figures/ljPlot.pdf, id=215, 845.1575pt x 597.23125pt>
+] <figures/ljPlot.pdf, id=232, 845.1575pt x 597.23125pt>
 File: figures/ljPlot.pdf Graphic file (type pdf)
 
 <use figures/ljPlot.pdf>
-<figures/ljForce.pdf, id=217, 845.1575pt x 597.23125pt>
+<figures/ljForce.pdf, id=234, 845.1575pt x 597.23125pt>
 File: figures/ljForce.pdf Graphic file (type pdf)
 
-<use figures/ljForce.pdf> [10 <./figures/ljPlot.pdf, page is rotated 90 degrees
->] [11 <./figures/ljForce.pdf, page is rotated 90 degrees>] [12] [13]
+<use figures/ljForce.pdf> [11 <./figures/ljPlot.pdf, page is rotated 90 degrees
+>] [12 <./figures/ljForce.pdf, page is rotated 90 degrees>] [13] [14] [15]
+[16] [17]
 Chapter 3.
-[14
+[18
 
 
-] [15]
+] [19]
 Chapter 4.
 
-Overfull \hbox (5.1801pt too wide) in paragraph at lines 427--451
+Overfull \hbox (5.1801pt too wide) in paragraph at lines 568--592
  [] 
  []
 
-[16
+[20
 
 
-] [17]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 472.
+] [21]
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 613.
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (14.79451pt too wide) in paragraph at lines 472--472
-[]  \T1/ptm/m/n/12 J M Haile.     \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-
-la-tion: El-e-men-tary Meth-ods\T1/ptm/m/n/12 .   Wiley-Interscience,
+Overfull \hbox (20.79599pt too wide) in paragraph at lines 613--613
+[]  \T1/ptm/m/n/12 J. M. Haile,     \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-
+u-la-tion: El-e-men-tary Meth-ods\T1/ptm/m/n/12 ,   Wiley-Interscience,
  []
 
-[18] (./main.aux)
 
-LaTeX Warning: There were multiply-defined labels.
+Overfull \hbox (1.23466pt too wide) in paragraph at lines 613--613
+[]  \T1/ptm/m/n/12 L. Ver-let,   ``  Com-puter "Ex-per-i-ments" on Clas-si-cal 
+Flu-ids. I. Ther-mo-dy-nam-i-cal Prop-
+ []
 
+
+Overfull \hbox (1.65318pt too wide) in paragraph at lines 613--613
+[]  \T1/ptm/m/n/12 Z. Khaki-mov,   ``  New in-te-gra-tor for molec-u-lar dy-nam
+-ics sim-u-la-tions'',     \T1/ptm/m/it/12 Com-put. Phys.
+ []
+
+
+Overfull \hbox (7.61813pt too wide) in paragraph at lines 613--613
+\T1/ptm/m/n/12 hy-per-spheres in three, four, and five di-men-sions'',     \T1/
+ptm/m/it/12 J. Chem. Phys.\T1/ptm/m/n/12 ,   2005,   \T1/ptm/b/n/12 122\T1/ptm/
+m/n/12 ,   044513,
+ []
+
+[22] [23]
+Appendix A.
+[24
+
+
+] [25] (./main.aux)
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12610 strings out of 495061
- 193703 string characters out of 1182620
- 389658 words of memory out of 3000000
- 15440 multiletter control sequences out of 15000+50000
- 54350 words of font info for 62 fonts, out of 3000000 for 9000
+ 12709 strings out of 495061
+ 195748 string characters out of 1182620
+ 389681 words of memory out of 3000000
+ 15493 multiletter control sequences out of 15000+50000
+ 53500 words of font info for 63 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 51i,12n,49p,865b,1169s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,12n,49p,865b,1161s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/ty
-pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/
-amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
-/cmmi8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb><
-/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/te
-xmf-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive
-/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texmf-texlive/fonts/type1
-/urw/courier/ucrr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.
-pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texm
-f-texlive/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type
-1/urw/times/utmri8a.pfb>
-Output written on main.pdf (18 pages, 294273 bytes).
+pe1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-texlive/fonts/type1/public/a
+msfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
+cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi6.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/t
+exmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive
+/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/fonts/type1/
+public/amsfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb></usr/share/texmf-texlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/t
+exmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/t
+ype1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8
+a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (25 pages, 348045 bytes).
 PDF statistics:
- 404 PDF objects out of 1000 (max. 8388607)
- 93 named destinations out of 1000 (max. 500000)
- 242 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 528 PDF objects out of 1000 (max. 8388607)
+ 131 named destinations out of 1000 (max. 500000)
+ 266 words of extra memory for PDF output out of 10000 (max. 10000000)
 

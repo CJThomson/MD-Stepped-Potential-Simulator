@@ -53,8 +53,11 @@
     <requires type="static">
       <file>blx-compat.def</file>
       <file>biblatex.def</file>
+      <file>chem-rsc.bbx</file>
+      <file>numeric-comp.bbx</file>
       <file>numeric.bbx</file>
       <file>standard.bbx</file>
+      <file>chem-rsc.cbx</file>
       <file>numeric-comp.cbx</file>
       <file>biblatex.cfg</file>
       <file>english.lbx</file>

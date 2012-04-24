@@ -29,13 +29,6 @@
      {}{}%
      {}{}}%
   }
-  \name{editor}{1}{}{%
-    {{}%
-     {Edition}{E.}%
-     {Second}{S.}%
-     {}{}%
-     {}{}}%
-  }
   \list{publisher}{1}{%
     {Academic Press}%
   }
@@ -44,6 +37,7 @@
   \verb{doi}
   \verb 10.1016/B978-012267351-1/50006-7
   \endverb
+  \field{edition}{2nd Edition}
   \field{title}{Understanding Molecular Simulations}
   \field{year}{2002}
 \endentry
@@ -180,7 +174,7 @@
      {}{}%
      {}{}}%
   }
-  \strng{namehash}{SWC+1}
+  \strng{namehash}{SWCAHCBPBWKR1}
   \strng{fullhash}{SWCAHCBPBWKR1}
   \verb{doi}
   \verb 10.1063/1.442716
@@ -262,6 +256,50 @@
   \field{volume}{31}
   \field{journaltitle}{J. Chem. Phys.}
   \field{year}{1959}
+\endentry
+
+\entry{Goldberg1991}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Goldberg}{G.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{GD1}
+  \strng{fullhash}{GD1}
+  \verb{doi}
+  \verb 10.1145/103162.103163
+  \endverb
+  \field{number}{1}
+  \field{pages}{5\bibrangedash 48}
+  \field{title}{What every computer scientist should know about floating-point
+  arithmetic}
+  \field{volume}{23}
+  \field{journaltitle}{ACM Comput. Surv.}
+  \field{year}{1991}
+\endentry
+
+\entry{Poschel2005}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {P\"{o}schel}{P.}%
+     {T.}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schwager}{S.}%
+     {T.}{T.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Springer}%
+  }
+  \strng{namehash}{PTST1}
+  \strng{fullhash}{PTST1}
+  \field{title}{Computational Granular Dynamics: Models and Algorithms}
+  \field{year}{2005}
 \endentry
 
 \entry{Lue2005}{article}{}
