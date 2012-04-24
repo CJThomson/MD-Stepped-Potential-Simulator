@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 % This file was created with JabRef 2.7b.
 % Encoding: ISO8859_1
 
@@ -234,3 +235,207 @@
   timestamp = {2012.04.12}
 }
 
+=======
+% This file was created with JabRef 2.7b.
+% Encoding: ISO8859_1
+
+@ARTICLE{Abell1985,
+  author = {Abell, G.C.},
+  title = {Empirical chemical pseudopotential theory of molecular and metallic
+	bonding},
+  journal = {Phys. Rev. B},
+  year = {1985},
+  volume = {31},
+  pages = {6184-6196},
+  number = {10},
+  doi = {10.1103/PhysRevB.31.6184},
+  owner = {chris},
+  timestamp = {2012.04.22}
+}
+
+@ARTICLE{Alder1959,
+  author = {Alder, B. J. and Wainwright, T. E.},
+  title = {Studies in Molecular Dynamics. I. General Method},
+  journal = {J. Chem. Phys.},
+  year = {1959},
+  volume = {31},
+  pages = {459-466},
+  doi = {10.1063/1.173037},
+  owner = {chris},
+  timestamp = {2012.04.14}
+}
+
+@ARTICLE{Chapela1989,
+  author = {Chapela, G. and Scriven, L. E. and Davis, H. T.},
+  title = {Molecular dynamics for discontinuous potential. IV. {L}ennard-{J}onesium},
+  journal = {J. Chem. Phys.},
+  year = {1989},
+  volume = {91},
+  pages = {4307},
+  abstract = {Argon, represented as a Lennard-Jones fluid, is simulated using a
+	discontinuous version of the potential. The effect of discretization
+	is thoroughly investigated in terms of the number of discontinuities
+	and the cutoff diameter. Radial distribution functions, pressure,
+	energy, self-diffusion coefficients, and velocity autocorrelation
+	functions are used in order to evaluate this effect. A reduction
+	of five times on computing time can be achieved by varying the cutoff
+	radius and the number of discontinuities without much departure from
+	the physical representation of Lennard-Jonesium atoms. The results
+	indicate that discontinuous molecular dynamics is a viable alternative
+	method to Monte Carlo and continuous molecular dynamics in simulating
+	the properties of simple fluids. The Journal of Chemical Physics
+	is copyrighted by The American Institute of Physics.},
+  doi = {10.1063/1.456811},
+  file = {Chapela_etal_1989.pdf:Chapela_etal_1989.pdf:PDF},
+  owner = {mjki2mb2},
+  timestamp = {2009.03.30}
+}
+
+@BOOK{Frenkel2002,
+  title = {Understanding Molecular Simulations},
+  publisher = {Academic Press},
+  year = {2002},
+  editor = {Second Edition},
+  author = {Frenkel, D. and Smit, B.},
+  doi = {10.1016/B978-012267351-1/50006-7},
+  owner = {chris},
+  timestamp = {2012.03.26}
+}
+
+@BOOK{Gear1971,
+  title = {Numerical Initial Value Problems in Ordinary Differential Equations},
+  publisher = {Prentice-Hall},
+  year = {1971},
+  editor = {George Forsythe},
+  author = {Gear, C. W.},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@BOOK{Haile1997,
+  title = {Molecular Dynamics Simulation: Elementary Methods},
+  publisher = {Wiley-Interscience},
+  year = {1997},
+  author = {J M Haile},
+  owner = {chris},
+  timestamp = {2012.02.27}
+}
+
+@ARTICLE{Hairer2003,
+  author = {Hairer, Ernst and Lubich, Christian and Wanner, Gerhard},
+  title = {Geometric numerical integration illustrated by the Stormer-Verlet
+	method},
+  journal = {Acta Numerica},
+  year = {2003},
+  volume = {12},
+  pages = {399-450},
+  doi = {10.1017/S0962492902000144},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@ARTICLE{Khakimov2002,
+  author = {Khakimov, Z.M.},
+  title = {New integrator for molecular dynamics simulations},
+  journal = {Comput. Phys. Commun.},
+  year = {2002},
+  volume = {147},
+  pages = {733-736},
+  doi = {10.1016/S0010-4655(02)00387-9},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@ARTICLE{Lennard-Jones1924,
+  author = {Lennard-Jones, J.E.},
+  title = {The Determination of Molecular Fields I \& II},
+  journal = {Proc. R. Soc. Lon. Ser-A},
+  year = {1924},
+  volume = {106A},
+  pages = {441-477},
+  doi = {10.1098/rspa.1924.0081},
+  owner = {chris},
+  timestamp = {2012.03.26}
+}
+
+@ARTICLE{Lue2005,
+  author = {Lue, L.},
+  title = {Collision statistics, thermodynamics, and transport coeffiecients
+	of hard hyperspheres in three, four, and five dimensions},
+  journal = {J. Chem. Phys.},
+  year = {2005},
+  volume = {122},
+  pages = {044513},
+  number = {4},
+  doi = {10.1063/1.1834498},
+  owner = {chris},
+  timestamp = {2012.04.15}
+}
+
+@ARTICLE{Maginn2010,
+  author = {Maginn, E. J. and Elliott, J. R.},
+  title = {Historical Perspective and Current Outlook for Molecular Dynamics
+	As a Chemical Engineering Tool},
+  journal = {Ind. Eng. Chem. Res.},
+  year = {2010},
+  volume = {49},
+  pages = {3059-3078},
+  doi = {10.1021/ie901898k},
+  owner = {chris},
+  timestamp = {2012.03.19}
+}
+
+@ARTICLE{Mazur1997,
+  author = {Mazur, Alexey K.},
+  title = {Common Molecular Dynamics Algorithms Revisited: Accuracy and Optimal
+	Time Steps of Stormer-Leapfrog Integrators},
+  journal = {J. Comput. Phys.},
+  year = {1997},
+  volume = {136},
+  pages = {354-365},
+  doi = {10.1006/jcph.1997.5740},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@ARTICLE{Rahman1964,
+  author = {A Rahman},
+  title = {Correlations in the Motion of Atoms in Liquid Argon},
+  journal = {Phys. Rev.},
+  year = {1964},
+  volume = {136},
+  pages = {A405-A411},
+  doi = {10.1103/PhysRev.136.A405},
+  owner = {chris},
+  timestamp = {2012.03.26}
+}
+
+@ARTICLE{Swope1982,
+  author = {Swope, William C. and Andersen Hans, C. and Berens, Peter B. and
+	Wilson, Kent R.},
+  title = {A computer simulation method for the calculation of equilibrium contants
+	for the formation of physical clusters of molecultes: Application
+	to small water clusters},
+  journal = {J. Chem. Phys.},
+  year = {1982},
+  volume = {76},
+  pages = {637-649},
+  doi = {10.1063/1.442716},
+  owner = {chris},
+  timestamp = {2012.04.13}
+}
+
+@ARTICLE{Verlet1967,
+  author = {Verlet, Loup},
+  title = {Computer "Experiments" on Classical Fluids. I. Thermodynamical Properties
+	of Lennard-Jones Molecules},
+  journal = {Phys. Rev.},
+  year = {1967},
+  volume = {159},
+  pages = {98-103},
+  doi = {10.1103/PhysRev.159.98},
+  owner = {chris},
+  timestamp = {2012.04.12}
+}
+
+>>>>>>> 0d2f63c7e6420c855200e0f2c9de7fb2fb81e84b

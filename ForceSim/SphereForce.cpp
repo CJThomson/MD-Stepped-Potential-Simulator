@@ -15,8 +15,11 @@ const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
 const int NL_update = 10;
 int number_of_runs = 10;
-const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
-const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
+//const double ptail = -16 * M_PI * density * density / (3.0 * pow(r_cut, 3)) * (1.0 - 2.0 / (3.0 * pow(r_cut,6))); 
+//const double utail = -8 * M_PI * density / (3.0 * pow(r_cut, 3)) * (1.0 - 1.0 / (3.0 * pow(r_cut,6))); 
+
+const double ptail = 0;
+const double utail = 0;
 //Thermostat
 bool thermostat = true; //use a thermostat
 const double thermoFreq = 0.05; //update frequency of thermostat
