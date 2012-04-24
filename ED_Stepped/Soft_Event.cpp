@@ -95,8 +95,8 @@ int main()
 	  time(&startTime);
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
-	  initSteps(); //step up system steps
-	  //stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
+	  //initSteps(); //step up system steps
+	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
@@ -110,7 +110,7 @@ int main()
 	    }
 	  time_t endTime;
 	  time(&endTime);
-	  cout << "Simulation finished at " << asctime(localtime(&endTime)) 
+	  cout << "\rSimulation finished at " << asctime(localtime(&endTime)) 
 	       << " and took " << round(difftime(endTime, startTime) / 60.0) << " mins" <<endl;
 	  Results avgResults;
 	  for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
@@ -1223,7 +1223,7 @@ void zeroMomentum(vector<CParticle> &particles)
 void checkCaptureMap(vector<CParticle> &particles)
 {
   //CAPTURE TEST
-  cout << "\rChecking the capture map";
+  cout << "\rChecking the capture map ...";
   for(int i = 0; i < particles.size();++i)
     for(int j = i + 1; j < particles.size(); ++j)
       {
