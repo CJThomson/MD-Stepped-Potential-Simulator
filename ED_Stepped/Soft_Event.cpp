@@ -37,7 +37,7 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::VIRIAL;
+Stepper::StepHeight height_type = Stepper::ENERGY;
 Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
 //Logging:
 const int psteps = 50; //frequency of output to file
