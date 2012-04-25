@@ -43,8 +43,8 @@ class Stepper
       genSteps.clear();
 
       //calculate the equivalent hard core
-      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      //double r_core = 0.8;
+      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      double r_core = 0.8;
       genSteps.push_back(Steps(r_core,0));
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
       --number_of_steps;
