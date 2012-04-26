@@ -15,15 +15,15 @@ int main()
   std::vector<Steps> steps;
   Stepper stepper;
 
-  std::ofstream expectF;
-  expectF.open ("expectForce.dat"); //open file
-  for(double i = 0.001; i < 3.0; i+=0.001)
-    expectF << i << "\t" << stepper.generatePlot(i, 0.001) << std::endl; //output all diffusion coeffcients
-  expectF.close(); //close the file
+//  std::ofstream expectF;
+//  expectF.open ("expectForce.dat"); //open file
+//  for(double i = 0.001; i < 3.0; i+=0.001)
+//    expectF << i << "\t" << stepper.generatePlot(i, 0.001) << std::endl; //output all diffusion coeffcients
+//  expectF.close(); //close the file
 
   std::cerr << "finished" << std::endl;
 
-  stepper.generateSteps(noSteps, rcutoff, Stepper::E_ACTION, Stepper::EXPECTEDFORCE, steps);
+  stepper.generateSteps(noSteps, rcutoff, Stepper::VIRIAL , Stepper::EXPECTEDFORCE, steps);
   int counter = 0;
   for(std::vector<Steps>::iterator step_i = steps.begin();
       step_i != steps.end(); ++step_i) //generate step lengths

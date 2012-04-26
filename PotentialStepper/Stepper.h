@@ -44,12 +44,14 @@ class Stepper
 
       //calculate the equivalent hard core
       //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      double r_core = 0.8;
-      //genSteps.push_back(Steps(r_core,0));
-      double totalEF = integrator_Simpson(&expected_Force,r_cutoff,  ZERO, 1000);
-      std::cout << totalEF << std::endl;
+      double r_core = ZERO;
+
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      //--number_of_steps;
+
+      r_core = limit_solver_bisection(&partition_Function, 0.0027 * totalZ, r_cutoff,
+				      ZERO, 1000, 1e6, 1e-10);
+      genSteps.push_back(Steps(r_core,0));
+      --number_of_steps;
       switch(step_radius)
 	{
 	case EVEN:
@@ -68,7 +70,8 @@ class Stepper
 	    double r_lower = 0.9;
 	    for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
 	      {
-		double step = limit_solver(&partition_Function, totalZ / number_of_steps, r_cutoff, r_lower, 100, 1e6, 1e-10);
+		double step = limit_solver(&partition_Function, totalZ / number_of_steps, r_cutoff,
+					   r_lower, 100, 1e6, 1e-10);
 		if(step == 0)
 		  break;
 		else
@@ -81,11 +84,12 @@ class Stepper
 	  break;
 	case EXPECTEDFORCE:
 	  //calculate total partition funciton
-
-	  double r_lower = ZERO;
+	  double totalEF = integrator_Simpson(&expected_Force,r_cutoff,  r_core, 1000);
+	  double r_lower = r_core;
 	  for(size_t i(0); i < number_of_steps - 1; ++i) //generate step lengths
 	    {
-	      double step = limit_solver_bisection(&expected_Force, totalEF / number_of_steps, r_cutoff, r_lower, 1000, 1e6, 1e-5);
+	      double step = limit_solver_bisection(&expected_Force, totalEF / number_of_steps,
+						   r_cutoff, r_lower, 1000, 1e6, 1e-5);
 	      if(step == 0)
 		break;
 	      else
@@ -103,7 +107,7 @@ class Stepper
 	  step_i != genSteps.end(); ++step_i) //generate step lengths
 	{
 	  double energy = 0;
-	  switch(step_radius)
+	  switch(step_energy)
 	    {
 	    case VIRIAL:
 	      if(step_i->step_energy == 0)

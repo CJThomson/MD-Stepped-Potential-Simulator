@@ -43,10 +43,13 @@ class Stepper
       genSteps.clear();
 
       //calculate the equivalent hard core
-      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      //double r_core = 0.8;
-      genSteps.push_back(Steps(r_core,0));
+      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      double r_core = ZERO;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
+      /*r_core = limit_solver_bisection(&partition_Function, 0.001 * totalZ,
+	r_cutoff, r_core, 1000, 1e6, 1e-10);*/
+      r_core = 0.951;
+      genSteps.push_back(Steps(r_core,0));
       --number_of_steps;
       switch(step_radius)
 	{
@@ -66,7 +69,8 @@ class Stepper
 	    double r_lower = 0.9;
 	    for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
 	      {
-		double step = limit_solver(&partition_Function, totalZ / number_of_steps, r_cutoff, r_lower, 100, 1e6, 1e-10);
+		double step = limit_solver(&partition_Function, totalZ / number_of_steps, 
+					   r_cutoff, r_lower, 100, 1e6, 1e-10);
 		if(step == 0)
 		  break;
 		else
