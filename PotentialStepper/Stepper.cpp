@@ -5,7 +5,7 @@
 #include "Stepper.h"
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
-double Stepper::beta = 1.0 / 1.34;
+double Stepper::beta = 1.0 / 1.5;
 
 int main()
 {

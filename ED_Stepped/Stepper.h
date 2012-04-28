@@ -46,7 +46,7 @@ class Stepper
       //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
       double r_core = ZERO;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      r_core = limit_solver_bisection(&partition_Function, (1.0 - 0.999999426696856) * totalZ,
+      r_core = limit_solver_bisection(&partition_Function, (1.0 - 0.999936657516334) * totalZ,
 	r_cutoff, r_core, 1000, 1e6, 1e-10);
       genSteps.push_back(Steps(r_core,0));
       --number_of_steps;

@@ -26,7 +26,7 @@ class Stepper
   } StepWidth;
   //Constructors:
   // = = variables
-  static double lj_eps; // lennard jones minimum energy
+  static double lj_eps; // lennard jones minimum ener#gy
   static double lj_sig; // lennard jones distance of root
   static double beta; // inverse reduced temperature
   //Functions

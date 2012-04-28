@@ -95,8 +95,8 @@ int main()
 	  time(&startTime);
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
-	  //initSteps(); //step up system steps
-	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
+	  initSteps(); //step up system steps
+	  //stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
