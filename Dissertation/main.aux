@@ -2,18 +2,21 @@
 \bibstyle{biblatex}
 \bibdata{main-blx,main}
 \citation{biblatex-control}
-\ifx\hyper@anchor\@undefined
-\global \let \oldcontentsline\contentsline
-\gdef \contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
-\global \let \oldnewlabel\newlabel
-\gdef \newlabel#1#2{\newlabelxx{#1}#2}
-\gdef \newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
-\AtEndDocument{\let \contentsline\oldcontentsline
-\let \newlabel\oldnewlabel}
-\else
-\global \let \hyper@last\relax 
-\fi
-
+\providecommand\HyperFirstAtBeginDocument{\AtBeginDocument}
+\HyperFirstAtBeginDocument{\ifx\hyper@anchor\@undefined
+\global\let\oldcontentsline\contentsline
+\gdef\contentsline#1#2#3#4{\oldcontentsline{#1}{#2}{#3}}
+\global\let\oldnewlabel\newlabel
+\gdef\newlabel#1#2{\newlabelxx{#1}#2}
+\gdef\newlabelxx#1#2#3#4#5#6{\oldnewlabel{#1}{{#2}{#3}}}
+\AtEndDocument{\ifx\hyper@anchor\@undefined
+\let\contentsline\oldcontentsline
+\let\newlabel\oldnewlabel
+\fi}
+\fi}
+\global\let\hyper@last\relax 
+\gdef\HyperFirstAtBeginDocument#1{#1}
+\providecommand\HyField@AuxAddToFields[1]{}
 \@writefile{toc}{\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax }
 \@writefile{lof}{\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax }
 \@writefile{lot}{\boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax }
@@ -46,101 +49,161 @@
 \@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
 \FN@pp@footnotehinttrue 
+\citation{Jasper2006}
 \citation{Frenkel2002}
 \FN@pp@footnotehinttrue 
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {2}Molecular Dynamics}{10}{chapter.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {2}Molecular Models}{10}{chapter.2}}
 \@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2.1}Introduction}{10}{section.2.1}}
-\newlabel{eq:Fma}{{2.1.1}{10}{Introduction\relax }{equation.2.1.1}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Potentials}{10}{subsection.2.1.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2.1}Classical Mechanics}{10}{section.2.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.1}Validity of Classical Mechanics}{10}{subsection.2.1.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.1.2}Newton's Second Law of Motion}{10}{subsection.2.1.2}}
+\citation{Tersoff1988}
 \citation{Lennard-Jones1924}
-\newlabel{eq:forcePotential}{{2.1.2}{11}{Potentials\relax }{equation.2.1.2}{}}
-\newlabel{eq:LJ}{{2.1.3}{11}{Potentials\relax }{equation.2.1.3}{}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces  Plot of the Lennard-Jones potential\relax }}{11}{figure.caption.12}}
+\newlabel{eq:Fma}{{2.1.1}{11}{Newton's Second Law of Motion\relax }{equation.2.1.1}{}}
+\newlabel{eq:pairwise}{{2.1.2}{11}{Newton's Second Law of Motion\relax }{equation.2.1.2}{}}
+\newlabel{eq:tersoff}{{2.1.3}{11}{Newton's Second Law of Motion\relax }{equation.2.1.3}{}}
+\newlabel{eq:forcePotential}{{2.1.4}{11}{Newton's Second Law of Motion\relax }{equation.2.1.4}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2.2}Continuous Potentials}{11}{section.2.2}}
+\citation{Maginn2010}
+\newlabel{eq:LJ}{{2.2.1}{12}{Continuous Potentials\relax }{equation.2.2.1}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {2.1}{\ignorespaces  Plot of the Lennard-Jones potentia\relax }}{12}{figure.caption.12}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
-\newlabel{fig:ljPot}{{2.1}{11}{\label {fig:ljPot} Plot of the Lennard-Jones potential\relax \relax }{figure.caption.12}{}}
+\newlabel{fig:ljPot}{{2.1}{12}{Plot of the Lennard-Jones potentia\relax \relax }{figure.caption.12}{}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces  Plot of the force between a pair of Lennard-Jones particles separated by a distance $r$\relax }}{13}{figure.caption.13}}
+\newlabel{fig:ljForce}{{2.2}{13}{Plot of the force between a pair of Lennard-Jones particles separated by a distance $r$\relax \relax }{figure.caption.13}{}}
+\newlabel{eq:bigPotential}{{2.2.2}{13}{Continuous Potentials\relax }{equation.2.2.2}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2.3}Discrete Potentials}{13}{section.2.3}}
+\newlabel{eq:potentialHS}{{2.3.1}{13}{Discrete Potentials\relax }{equation.2.3.1}{}}
+\FN@pp@footnotehinttrue 
 \citation{Rahman1964}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {2.2}{\ignorespaces  Plot of the Lennard-Jones force between a pair of particles\relax }}{12}{figure.caption.13}}
-\newlabel{fig:ljForce}{{2.2}{12}{\label {fig:ljForce} Plot of the Lennard-Jones force between a pair of particles\relax \relax }{figure.caption.13}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2.2}Force-Driven Simulators}{12}{section.2.2}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Introduction}{12}{subsection.2.2.1}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Integrators}{12}{subsection.2.2.2}}
-\newlabel{eq:Fmvdot}{{2.2.1}{12}{Integrators\relax }{equation.2.2.1}{}}
+\FN@pp@footnotehinttrue 
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {3}Molecular Dynamics}{15}{chapter.3}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3.1}Force-Driven Simulators}{15}{section.3.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.1}Introduction}{15}{subsection.3.1.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.1.2}Integrators}{15}{subsection.3.1.2}}
+\newlabel{eq:Fmvdot}{{3.1.1}{15}{Integrators\relax }{equation.3.1.1}{}}
+\newlabel{eq:Taylor}{{3.1.2}{15}{Integrators\relax }{equation.3.1.2}{}}
 \citation{Haile1997}
 \citation{Verlet1967}
 \citation{Hairer2003}
 \citation{Swope1982}
 \citation{Khakimov2002}
-\newlabel{eq:Taylor}{{2.2.2}{13}{Integrators\relax }{equation.2.2.2}{}}
-\newlabel{eq:Euler}{{2.2.3}{13}{Integrators\relax }{equation.2.2.3}{}}
-\newlabel{eq:Verletpos}{{2.2.4a}{13}{Integrators\relax }{equation.2.2.4a}{}}
-\newlabel{eq:VerletVel}{{2.2.4b}{13}{Integrators\relax }{equation.2.2.4b}{}}
-\newlabel{eq:VVerlet}{{2.2.5}{13}{Integrators\relax }{equation.2.2.5}{}}
-\newlabel{eq:VVerletpos}{{2.2.5a}{13}{Integrators\relax }{equation.2.2.5a}{}}
-\newlabel{eq:VVerletVel}{{2.2.5b}{13}{Integrators\relax }{equation.2.2.5b}{}}
+\newlabel{eq:Euler}{{3.1.3}{16}{Integrators\relax }{equation.3.1.3}{}}
+\newlabel{eq:Verletpos}{{3.1.4a}{16}{Integrators\relax }{equation.3.1.4a}{}}
+\newlabel{eq:VerletVel}{{3.1.4b}{16}{Integrators\relax }{equation.3.1.4b}{}}
+\newlabel{eq:VVerlet}{{3.1.5}{16}{Integrators\relax }{equation.3.1.5}{}}
+\newlabel{eq:VVerletpos}{{3.1.5a}{16}{Integrators\relax }{equation.3.1.5a}{}}
+\newlabel{eq:VVerletVel}{{3.1.5b}{16}{Integrators\relax }{equation.3.1.5b}{}}
 \citation{Gear1971}
 \citation{Haile1997}
-\newlabel{eq:GearPredictor}{{2.2.6}{14}{Integrators\relax }{equation.2.2.6}{}}
-\newlabel{eq:GearCorrector}{{2.2.7}{14}{Integrators\relax }{equation.2.2.7}{}}
-\newlabel{eq:GearCoeff}{{2.2.8}{14}{Integrators\relax }{equation.2.2.8}{}}
+\newlabel{eq:GearPredictor}{{3.1.6}{17}{Integrators\relax }{equation.3.1.6}{}}
+\newlabel{eq:GearCorrector}{{3.1.7}{17}{Integrators\relax }{equation.3.1.7}{}}
+\newlabel{eq:GearCoeff}{{3.1.8}{17}{Integrators\relax }{equation.3.1.8}{}}
 \citation{Alder1959}
 \citation{Haile1997}
 \citation{Goldberg1991}
 \citation{Poschel2005}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {2.3}Event-Driven Simulators}{15}{section.2.3}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}Introduction}{15}{subsection.2.3.1}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}Collision Time Prediction}{15}{subsection.2.3.2}}
-\newlabel{eq:collConditions1}{{2.3.1a}{15}{Collision Time Prediction\relax }{equation.2.3.1a}{}}
-\newlabel{eq:collConditions2}{{2.3.1b}{15}{Collision Time Prediction\relax }{equation.2.3.1b}{}}
-\newlabel{eq:collEnterTime}{{2.3.2}{15}{Collision Time Prediction\relax }{equation.2.3.2}{}}
-\newlabel{eq:collEnterTimeAlt}{{2.3.3}{15}{Collision Time Prediction\relax }{equation.2.3.3}{}}
-\newlabel{eq:collExitTime}{{2.3.4}{16}{Collision Time Prediction\relax }{equation.2.3.4}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}Collision Dynamics}{16}{subsection.2.3.3}}
-\newlabel{eq:edNewPos}{{2.3.5}{16}{Collision Dynamics\relax }{equation.2.3.5}{}}
-\newlabel{eq:postVBounce}{{2.3.6}{16}{Collision Dynamics\relax }{equation.2.3.6}{}}
-\newlabel{eq:energyCost}{{2.3.7}{16}{Collision Dynamics\relax }{equation.2.3.7}{}}
-\newlabel{eq:kineticCost}{{2.3.8}{16}{Collision Dynamics\relax }{equation.2.3.8}{}}
-\newlabel{eq:postVCapture}{{2.3.9}{17}{Collision Dynamics\relax }{equation.2.3.9}{}}
-\newlabel{eq:changeMomentum}{{2.3.10}{17}{Collision Dynamics\relax }{equation.2.3.10}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3.2}Event-Driven Simulators}{18}{section.3.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Introduction}{18}{subsection.3.2.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Collision Time Prediction}{18}{subsection.3.2.2}}
+\newlabel{eq:collConditions1}{{3.2.1a}{18}{Collision Time Prediction\relax }{equation.3.2.1a}{}}
+\newlabel{eq:collConditions2}{{3.2.1b}{18}{Collision Time Prediction\relax }{equation.3.2.1b}{}}
+\newlabel{eq:collEnterTime}{{3.2.2}{18}{Collision Time Prediction\relax }{equation.3.2.2}{}}
+\newlabel{eq:collEnterTimeAlt}{{3.2.3}{19}{Collision Time Prediction\relax }{equation.3.2.3}{}}
+\newlabel{eq:collExitTime}{{3.2.4}{19}{Collision Time Prediction\relax }{equation.3.2.4}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Collision Dynamics}{19}{subsection.3.2.3}}
+\newlabel{eq:edNewPos}{{3.2.5}{19}{Collision Dynamics\relax }{equation.3.2.5}{}}
+\newlabel{eq:postVBounce}{{3.2.6}{19}{Collision Dynamics\relax }{equation.3.2.6}{}}
+\newlabel{eq:energyCost}{{3.2.7}{19}{Collision Dynamics\relax }{equation.3.2.7}{}}
+\newlabel{eq:kineticCost}{{3.2.8}{20}{Collision Dynamics\relax }{equation.3.2.8}{}}
+\newlabel{eq:postVCapture}{{3.2.9}{20}{Collision Dynamics\relax }{equation.3.2.9}{}}
+\newlabel{eq:changeMomentum}{{3.2.10}{20}{Collision Dynamics\relax }{equation.3.2.10}{}}
+\citation{Haile1997}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3.3}Measurement of System Properties}{21}{section.3.3}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Introduction}{21}{subsection.3.3.1}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\contentsline {figure}{\numberline {3.1}{\ignorespaces  Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($U^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\delimiter "426830A T\delimiter "526930B =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t = 0.005$.\relax }}{21}{figure.caption.14}}
+\newlabel{fig:fluctuations}{{3.1}{21}{Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($U^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\langle T\rangle =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t = 0.005$.\relax \relax }{figure.caption.14}{}}
+\newlabel{eq:TAdef}{{3.3.1}{21}{Introduction\relax }{equation.3.3.1}{}}
+\citation{Haile1997}
+\citation{Haile1997}
+\citation{Haile1997}
+\newlabel{eq:TASum}{{3.3.2}{22}{Introduction\relax }{equation.3.3.2}{}}
+\newlabel{eq:TAforcedriven}{{3.3.3}{22}{Introduction\relax }{equation.3.3.3}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}Units}{22}{subsection.3.3.2}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {3.1}{\ignorespaces Table of reduced forms of various quanities used in this dissertation \cite {Haile1997}\relax }}{22}{table.caption.15}}
+\newlabel{tab:reducedForms}{{3.1}{22}{Table of reduced forms of various quanities used in this dissertation \cite {Haile1997}\relax \relax }{table.caption.15}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Energy}{22}{subsection.3.3.3}}
+\citation{Haile1997}
+\citation{Landau1968}
+\newlabel{eq:internalE}{{3.3.4}{23}{Energy\relax }{equation.3.3.4}{}}
+\newlabel{eq:totalEK}{{3.3.5}{23}{Energy\relax }{equation.3.3.5}{}}
+\newlabel{eq:totalU}{{3.3.6}{23}{Energy\relax }{equation.3.3.6}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.4}Temperature}{23}{subsection.3.3.4}}
+\newlabel{eq:MaxwellDist}{{3.3.7}{23}{Temperature\relax }{equation.3.3.7}{}}
+\newlabel{eq:MSV}{{3.3.8}{23}{Temperature\relax }{equation.3.3.8}{}}
+\newlabel{eq:Temperature}{{3.3.9}{23}{Temperature\relax }{equation.3.3.9}{}}
 \citation{Rahman1964}
 \FN@pp@footnotehinttrue 
 \FN@pp@footnotehinttrue 
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {3}Methodology}{18}{chapter.3}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {4}Methodology}{24}{chapter.4}}
 \@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3.1}Introduction}{18}{section.3.1}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {3.2}Force-driven Simulator}{18}{section.3.2}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Initialisation}{19}{subsection.3.2.1}}
-\newlabel{eq:zeroLinearP}{{3.2.1}{19}{Initialisation\relax }{equation.3.2.1}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Running Simulation}{19}{subsection.3.2.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {4.1}Introduction}{24}{section.4.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {4.2}Force-driven Simulator}{24}{section.4.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Initialisation}{25}{subsection.4.2.1}}
+\newlabel{eq:zeroLinearP}{{4.2.1}{25}{Initialisation\relax }{equation.4.2.1}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}Running Simulation}{25}{subsection.4.2.2}}
 \FN@pp@footnotehinttrue 
+\FN@pp@footnotehinttrue 
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {5}Measuring Thermodynamic Properties}{26}{chapter.5}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {5.1}Temperature and Internal energy }{26}{section.5.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {5.2}Pressure (continuous and discontinuous)}{26}{section.5.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {5.3}g(r)}{26}{section.5.3}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {5.4}g(r) to pressure and temperature}{26}{section.5.4}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {5.5}long range corrections}{26}{section.5.5}}
+\FN@pp@footnotehinttrue 
+\FN@pp@footnotehinttrue 
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {6}From Continuous to Discontinuous}{27}{chapter.6}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
+\FN@pp@footnotehinttrue 
+\FN@pp@footnotehinttrue 
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {7}Results}{28}{chapter.7}}
+\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {7.1}Benchmarking}{28}{section.7.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.1}Introduction}{28}{subsection.7.1.1}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.2}Force based code verusus NIST and ESpReSSo}{28}{subsection.7.1.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {7.1.3}Event Driven}{28}{subsection.7.1.3}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {7.2}Chapela's dumb stepping and very good stepping versus force based. }{28}{section.7.2}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {7.3}Stepping in probability versus action}{28}{section.7.3}}
 \citation{Lue2005}
 \citation{Chapela1989}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {7.1}{\ignorespaces Comparison of results obtained by the event-driven simulator with literature values. $t_{avg}$ is the average time between collisions, $\delimiter "426830A \mathbf  {\mathaccentV {hat}05E{r}} \cdot \Delta \mathbf  {v} \delimiter "526930B _{coll}$ is the average momentum transfer per collision, and D is the coefficient of diffusion.\relax }}{29}{table.caption.16}}
+\newlabel{tab:benchhard}{{7.1}{29}{Comparison of results obtained by the event-driven simulator with literature values. $t_{avg}$ is the average time between collisions, $\langle \mathbf {\hat {r}} \cdot \Delta \mathbf {v} \rangle _{coll}$ is the average momentum transfer per collision, and D is the coefficient of diffusion.\relax \relax }{table.caption.16}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {7.4}Hard core position}{29}{section.7.4}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {7.5}Temperature comparisons}{29}{section.7.5}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {7.5.1}Event-Driven Simulator}{29}{subsection.7.5.1}}
+\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {7.2}{\ignorespaces Comparison of results obtained by the event-driven simulator with literature values using stepped potentials. Numbers in parenthesis indicate the uncertainty in the final digit. \relax }}{30}{table.caption.17}}
+\newlabel{tab:benchsoft}{{7.2}{30}{Comparison of results obtained by the event-driven simulator with literature values using stepped potentials. Numbers in parenthesis indicate the uncertainty in the final digit. \relax \relax }{table.caption.17}{}}
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {7.6}References}{30}{section.7.6}}
 \FN@pp@footnotehinttrue 
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {4}Results}{20}{chapter.4}}
+\FN@pp@footnotehinttrue 
+\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {A}Derivation of Collision Dynamics for Stepped Potentials}{32}{appendix.A}}
 \@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
 \@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {4.1}Benchmarking}{20}{section.4.1}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.1}Introduction}{20}{subsection.4.1.1}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {subsection}{\numberline {4.1.2}Event-Driven Simulator}{20}{subsection.4.1.2}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {4.1}{\ignorespaces Comparison of results obtained by the event-driven simulator with literature values. $t_{avg}$ is the average time between collisions, $\delimiter "426830A \mathbf  {\mathaccentV {hat}05E{r}} \cdot \Delta \mathbf  {v} \delimiter "526930B _{coll}$ is the average momentum transfer per collision, and D is the coefficient of diffusion.\relax }}{21}{table.caption.14}}
-\newlabel{tab:benchhard}{{4.1}{21}{Comparison of results obtained by the event-driven simulator with literature values. $t_{avg}$ is the average time between collisions, $\langle \mathbf {\hat {r}} \cdot \Delta \mathbf {v} \rangle _{coll}$ is the average momentum transfer per collision, and D is the coefficient of diffusion.\relax \relax }{table.caption.14}{}}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\contentsline {table}{\numberline {4.2}{\ignorespaces Comparison of results obtained by the event-driven simulator with literature values using stepped potentials. Numbers in parenthesis indicate the uncertainty in the final digit. \relax }}{21}{table.caption.15}}
-\newlabel{tab:benchsoft}{{4.2}{21}{Comparison of results obtained by the event-driven simulator with literature values using stepped potentials. Numbers in parenthesis indicate the uncertainty in the final digit. \label {tab:benchsoft}\relax \relax }{table.caption.15}{}}
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {section}{\numberline {4.2}References}{22}{section.4.2}}
-\FN@pp@footnotehinttrue 
-\FN@pp@footnotehinttrue 
-\@writefile{toc}{\defcounter {refsection}{0}\relax }\@writefile{toc}{\contentsline {chapter}{\numberline {A}Derivation of Collision Dynamics for Stepped Potentials}{24}{appendix.A}}
-\@writefile{lof}{\defcounter {refsection}{0}\relax }\@writefile{lof}{\addvspace {10\p@ }}
-\@writefile{lot}{\defcounter {refsection}{0}\relax }\@writefile{lot}{\addvspace {10\p@ }}
-\newlabel{eq:consMom}{{A.0.1}{24}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.1}{}}
-\newlabel{eq:defA}{{A.0.2}{24}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.2}{}}
-\newlabel{eq:constE}{{A.0.3}{24}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.3}{}}
-\newlabel{eq:constE1}{{A.0.4}{24}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.4}{}}
-\newlabel{eq:constE2}{{A.0.5}{24}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.5}{}}
-\newlabel{eq:eq1}{{A.0.6}{24}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.6}{}}
-\newlabel{eq:eq2}{{A.0.7}{25}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.7}{}}
-\newlabel{eq:devQuadratic}{{A.0.8}{25}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.8}{}}
-\newlabel{eq:deltaV}{{A.0.9}{25}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.9}{}}
+\newlabel{eq:consMom}{{A.0.1}{32}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.1}{}}
+\newlabel{eq:defA}{{A.0.2}{32}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.2}{}}
+\newlabel{eq:constE}{{A.0.3}{32}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.3}{}}
+\newlabel{eq:constE1}{{A.0.4}{32}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.4}{}}
+\newlabel{eq:constE2}{{A.0.5}{32}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.5}{}}
+\newlabel{eq:eq1}{{A.0.6}{32}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.6}{}}
+\newlabel{eq:eq2}{{A.0.7}{33}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.7}{}}
+\newlabel{eq:devQuadratic}{{A.0.8}{33}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.8}{}}
+\newlabel{eq:deltaV}{{A.0.9}{33}{Derivation of Collision Dynamics for Stepped Potentials\relax }{equation.A.0.9}{}}
 \FN@pp@footnotehinttrue 

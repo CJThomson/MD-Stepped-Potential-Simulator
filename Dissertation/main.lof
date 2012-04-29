@@ -4,9 +4,17 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Plot of the Lennard-Jones potential\relax }}{11}{figure.caption.12}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Plot of the Lennard-Jones potentia\relax }}{12}{figure.caption.12}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.2}{\ignorespaces Plot of the Lennard-Jones force between a pair of particles\relax }}{12}{figure.caption.13}
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Plot of the force between a pair of Lennard-Jones particles separated by a distance $r$\relax }}{13}{figure.caption.13}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($U^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\delimiter "426830A T\delimiter "526930B =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t = 0.005$.\relax }}{21}{figure.caption.14}
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{0}\relax 
+\addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

@@ -1,0 +1,1046 @@
+\message{ !name(main.tex)}\documentclass[12pt]{UoAthesis} 
+\usepackage{booktabs} 
+\usepackage{color}
+\usepackage{graphics}
+\thesistitle{Honours Dissertation}
+\thesisauthor{Christopher James Thomson} 
+\thesispdfkeywords{}
+\thesisyear{2012}
+
+\thesisabstract{The objective of this thesis is to determine a general
+  technique for converting continuous potentials to equilivant discrete
+  potentials. Discrete potentials have many desirable properties. }
+
+\acknowledgements{I would like to dedicate this work to..}
+
+%%% The bibtex file where your references are stored 
+\bibliography{main}
+\begin{document}
+
+\message{ !name(main.tex) !offset(-3) }
+
+
+%%% = = = DISSERTATION OVERVIEW = = =
+
+% - INTRODUCTION - %
+% Molecules, why are we interested in the molecular scale? What processes are molecular
+% - - Molecular dynamics, what is it, why is it important to Chemical
+%engineering.
+
+% - - Leading into potentials, need for faster methods, more accurate methods.%
+%Review of exisiting literature (Chapela, PRIME SPEADMD), what they've done,
+%why its not as good as what you're going to do % 
+
+% Outline of the thesis to come
+
+% - Molecular Simulation 
+% -- Newtonian mechanics F=MA, is it valid? 
+% -- Forces from potentials (conservative forces) 
+% Types of forces (gravitional (which is neglected)), pairwise forces 
+% leading to intermolecular potentials.
+
+% --- Give an example soft potential (LJ), Introduce a discrete -- 
+% -potential,hard sphere is the prototypical discrete potential, -- 
+% -but there are steppedpotentials too (Chapela). Talk about the -- 
+% -advantages/disadvantages etc.
+
+%%%% Lead out of the chapter with this 
+% --- Introduce discrete potentials, say they need a special method of solution
+%(EDMD).
+% - Simulation Methods - % 
+% - -Force Driven Simulators 
+% - - - Introduction and general algorithm 
+% - - -Integrators: Euler, Verlet, Velocity Verlet, Gear...lit review to find
+%more recent ones
+% - - - Optimization: neighbour lists, truncation of the potential 
+%- - - Adv/Disadv? or just within other relevant topics 
+% - - Event Driven Simulators % - - - Introduction and general algorithm 
+% - - - Collision rules 
+%Actually older than force based, although not as popular.
+% - - - Optimization: neighbour lists, O(1) priority queue algorithms, time warp%algorithms
+% - -Measuring System Properties % - - - Radial Distribution Function
+ % - - -Temperature 
+% - - - Pressure 
+% - - - Coefficient of Diffusion 
+% - Results - % 
+ % - Discussion- % 
+% - Conclusions - % 
+% - Recommendations for future work - % 
+% - Appendices -% 
+% - - Derivation of collision rule for stepped potentials %
+%% = = = END OVERVIEW = = = %%%
+
+\chapter{Introduction}
+
+Process simulation packages have become an integral part of chemical
+engineering design. Central to these simulation software packages is
+the ability to calculate thermodynamic and transport properties of
+fluids quickly and accurately. Many modern processes rely on molecular
+scale effects... (Absorption, membrane technology (reverse osmosis),
+catalysis)....
+
+To better understand these large scale systems, we need to improve our
+understanding of the smaller scales. Experiments are hard, can't hold
+a ruler up to a molecule, everything is too fast, too small to
+see. (X-ray crystallography). theory is hard, lots of molecules, can't
+solve even three molecules motion analytically (need
+cite). simulations are great, don't try to solve analytically. Since
+50's (alder wainwright), computers are faster, modern sims are
+amazing.
+
+At the heart of these simulations are models for the atoms and
+molecules involved. There are two classes of models, discrete and
+contiuous.
+
+%paragraph describing the thesis
+In chapter~\ref{chap:one}, the something is discussed
+
+\chapter{Molecular Models}
+In this chapter, the models used for molecular dynamics (MD)
+\nomenclature[A]{MD}{Molecular Dynamics} are discussed. There are two
+major types of potentials: continuous and discrete potentials, both
+are important to molecular dynamics. The solution to both relies on
+the use of classical mechanics to describe the motion of particles.
+
+\section{Classical Mechanics}
+
+\subsection{Validity of Classical Mechanics}
+
+The underlying assumption behind many molecular dynamics simulations
+is that the particles move according to the laws of classical
+mechanics. Strictly, due to their size and speed, atom and molecules
+should be treated using quantum mechanics.  However molecular dynamics
+makes a couple of assumptions that allow these quantum mechanical
+effects to be ignored.  
+
+The first is the Born-Oppenheimer Approximation which allows the
+motion of electrons and the nucleus to be treated separately.  Since
+the nucleus is much larger than the electrons and hence less affected
+by quantum mechanics, it is treated as a classical particle.  The
+electrons on the other hand are represented using a potential \cite{Jasper2006}.
+
+The second assumption is that any quantum mechanical effects should
+cancel out. Molecular dynamics is rarely interested in the motion of a
+single particle, it is more concerned with the statistical average of
+every particle.
+
+These assumtions are usually valid unless very light atoms (such as
+hydrogen or helium) are being simulated or the particles are vibrating
+at very high rates \cite{Frenkel2002}.
+
+\subsection{Newton's Second Law of Motion}
+
+The fundamental identity of newtonian mechnanics is Newton's Second
+Law of Motion (equation \eqref{eq:Fma}). This equation allows the prediction of a
+particle's trajectory provided that an initial position and velocity
+is known; and the forces acting on that particle can be calculated for
+any position or velocity.
+
+\begin{equation}
+  \mathbf{F} = m\mathbf{a}
+  \label{eq:Fma} 
+\end{equation}
+
+If a force depends only on the position of a particle it is known as a
+conservative force. Almost all forces considered in molecular dynamics
+are of this type because atoms or molecules do not lose energy due to
+friction or any other dissipative process.
+
+Conservative forces can be of one of two types.  The first are forces
+that depend on a particle's absolute position, such as gravity.
+However gravity is usually disregarded in MD as atoms and molecules
+have such low masses that gravity has very little effect.
+
+The second and most important type are intermolecular forces that
+depend on position relative to other particles.  Usually only the
+forces between pairs of particles are considered, therefore the total
+force acting on a particle $i$ is the sum of the forces between $i$
+and every other particle $j$.  This pairwise summation of forces is
+shown in equation \eqref{eq:pairwise}, where N is the total number of
+particles in the system.
+
+\begin{equation} 
+  \mathbf{F}_i = \sum_{j \not= i}^{N}\mathbf{F}_{ij}
+  \label{eq:pairwise}
+\end{equation}
+
+Force calculations are limited to pairs as this is simpler, but there
+are examples of n-body forces such as equation \eqref{eq:tersoff}
+\cite{Tersoff1988}.  Here the force between particles $i$ and $j$ is
+split into a repulsive force ($\mathbf{F}_R$) and an attractive force
+($\mathbf{F}_A$).  The coefficient in front of the repulsive force,
+$a$, is a range limiting term, while the coefficient $b$, is the bond
+order.  This describes the environment the particles are in, and
+strengthens or weakens the attractive force appropriately.
+
+\begin{equation}
+  \mathbf{F}_{ij} = a\mathbf{F}_{R} + b\mathbf{F}_A
+  \label{eq:tersoff}
+\end{equation}
+
+The intermolecular forces used in molecular dynamics are frequently
+described using a potential.  Provided that the force is conservative,
+it can be calculated from its potential by equation
+\eqref{eq:forcePotential}. Here $\nabla$ denotes the gradient of the
+potential is the partial differential of the potential in each
+orthogonal direction.
+
+\begin{equation} 
+  \mathbf{F}=-\nabla \mathcal{U} 
+  \label{eq:forcePotential} 
+\end{equation}
+
+
+\section{Continuous Potentials}
+
+
+A very popular potential used in molecular dynamics simulations is the
+Lennard-Jones potential \cite{Lennard-Jones1924} shown in figure
+\ref{fig:ljPot} and equation \eqref{eq:LJ} as it is simple yet gives
+comparable results to experimental values.
+
+\begin{equation} 
+  U(r) = 4 \varepsilon \left[ \left( \frac{\sigma}{r} \right)^{12}
+    -\left( \frac{\sigma}{r} \right)^{6} \right] 
+  \label{eq:LJ} 
+\end{equation}
+
+In equation \eqref{eq:LJ}, $\varepsilon$ is the depth of the energy
+well, while $\sigma$ is the distance where the potential between two
+particles is zero.
+
+\begin{figure}[htp] 
+  \begin{center}
+    \includegraphics[clip,width=\textwidth]{figures/ljPlot} 
+    \caption{\label{fig:ljPot} Plot of the Lennard-Jones potentia} 
+  \end{center}
+\end{figure}
+
+The power 12 term, $\left(\frac{\sigma}{r}\right)^{12}$ gives the
+potential the repulsive core caused by overlapping electron shells,
+while the power 6 term, $\left(\frac{\sigma}{r}\right)^{12}$,
+represents the attractive Van der Waals forces.  The force between two
+Lennard-Jones particles is shown in figure \ref{fig:ljForce}.
+
+\begin{figure}[htp] 
+  \begin{center}
+    \includegraphics[clip,width=\textwidth]{figures/ljForce} 
+    \caption{\label{fig:ljForce} Plot of the force between
+      a pair of Lennard-Jones particles separated by a distance $r$}
+  \end{center}
+\end{figure}
+
+The Lennard-Jones potential is even part of more complex potentials
+such as equation \eqref{eq:bigPotential} \cite{Maginn2010}.  Here the
+Lennard-Jones potential is used to represent Van der Waals forces while
+Coulomb's Law ($\frac{q_iq_j}{r_{ij}}$) is modelling longer range
+electrostatic interactions.  The first four terms are contraints on
+bond movements (streching, angle bending, ``dihedral angle'' motion,
+and out of plane movement of rings respectively).
+
+\begin{align}
+  \label{eq:bigPotential}
+  \mathcal{U} &= \sum_{\text{bonds}}k_b(r-r_0)^2 
+  + \sum_{\text{angles}}k_\theta(\theta - \theta_0)^2 \nonumber\\
+  &+ \sum_{\text{dihedrals}} k_\chi[1+\cos(n\chi - \delta)] 
+  + \sum_{\text{improper}} k_\psi(\psi - \psi_0)^2 \nonumber\\
+  &+ \sum_{i=1}^{N-1}\sum_{j>i}^{N}\left\{ 4 \varepsilon 
+    \left[ \left( \frac{\sigma}{r_{ij}} \right)^{12}
+      -\left( \frac{\sigma}{r_{ij}} \right)^{6} \right] 
+    + \frac{q_iq_j}{r_{ij}}\right\}
+\end{align}
+
+\section{Discrete Potentials}
+
+Discrete potentials differ from continuous potentials because they
+have discontinuities.  The simplest discrete potential is that of the
+hard sphere.
+
+Hard spheres were the first type of particles simulated
+\cite{Alder1957} due to their relative simplicity.  The potential for
+hard spheres is shown in equation \eqref{eq:potentialHS}, where \sigma
+is the diameter of the spheres.
+
+\begin{equation}
+  \label{eq:potentialHS}
+  \mathcal{U} = 
+  \begin{cases}
+    \infty &\text{if } |r_i - r_j| < \sigma \\
+    0 &\text{if } |r_i - r_j| \geq \sigma
+  \end{cases}
+\end{equation}
+
+
+
+Hard sphere,
+
+square well -> compare to LJ
+
+SPEAMD, PRIME
+
+Lead out with the two methods used to simulate these potentials are quite different....
+
+\chapter{Molecular Dynamics}
+\section{Force-Driven Simulators}
+\subsection{Introduction} 
+Force-driven (or time driven) simulators are the most popular method
+of simulating particles due to their relative simplicity and ability
+to handle soft potentials. Simulators of this kind were pioneered by
+Rahman \cite{Rahman1964} who predicted physical properties of liquid
+argon with reasonable accuracy.
+
+The distinguishing feature between force-driven and event-driven
+simulators is the way in which they move through time. During
+force-based simulations particles' positions and velocities are
+calculated every unit of time, $\Delta t$ using the forces acting on
+the particles. These newly calculated values are then used to predict
+the next set of particle positions. This is then repeated over the
+desired simulation time.
+
+\subsection{Integrators} 
+Once the forces acting on a particle is known, that particle's
+acceleration can be calculated using Newton's Second Law of Motion
+(equation \ref{eq:Fmvdot}).
+
+\begin{equation} 
+  \vec{F} = m \frac{\partial^2 \vec{r}}{\partial t^2}
+  \label{eq:Fmvdot} 
+\end{equation}
+
+However, since acceleration is the second time derivative of position
+(velocity is the first time deriviative), calculating the particle's
+future position results in solving a differential equation of order 2
+or higher since force, andhence acceleration likely changes with
+time. In order to accomplish this numerical integrators are used.
+
+The majority of numerical integrators are based on Taylor Series
+(equation \ref{eq:Taylor}).
+
+\begin{equation} 
+\vec{r}(t+\Delta t) = r(t) + 
+\frac{\partial\vec{r}(t)}{\partial t}(\Delta t) + 
+\frac{1}{2}\frac{\partial^2\vec{r}(t)}{\partial t^2}\Delta t^2 + 
+\frac{1}{3!}\frac{\partial^3\vec{r}(t)}{\partial t^3}\Delta t^3 
++ \frac{1}{4!}\frac{\partial^4\vec{r}(t)}{\partial t^4}\Delta t^4 
++ ... \label{eq:Taylor} 
+\end{equation}
+
+The simplest integrator is Euler's Method which is just the Taylor
+Series truncated after the acceleration term (equation
+\ref{eq:Euler}).
+
+\begin{equation} 
+  \vec{r}(t+\Delta t) = r(t) + \vec{v}(\Delta t) +
+  \frac{1}{2}\vec{a}\Delta t^2 + \mathcal{O}(\Delta t^3) 
+  \label{eq:Euler}
+\end{equation}
+
+However this method suffers from large errors and is unstable
+\cite{Haile1997} and is therefore rarely used. The Verlet Integrator
+\cite{Verlet1967} improves upon Euler's method by combining the
+forward timestep with a reverse timestep \eqref{eq:Verletpos}. This
+method is actually fourth order as the third (and first) derivative is
+cancelled out during its derivation. The Verlet integrator does not
+include an equation to calculate the future velocity so the central
+difference used by Verlet is often used \eqref{eq:VerletVel}.
+
+\begin{subequations} 
+  \begin{align} 
+    \vec{r}(t + \Delta t) &= 2\vec{r}(t) - \vec{r}(t - \Delta t) 
+    + \vec{a}(t)\Delta t^2 + \mathcal{O}(\Delta t^4)
+    \label{eq:Verletpos} \\
+    \vec{v}(t+\Delta t) &= \frac{\vec{r}(t+\Delta t) -
+      \vec{r}(t-\Delta t)}{2\Delta t} 
+    \label{eq:VerletVel} 
+  \end{align}
+\end{subequations}
+
+Integrators suffer from couple key failings that cause a systematic
+gain of energy known as ``energy drift''. Firstly, integrators are
+based on infinite Taylor series which cannot be fully implemented,
+therefore they have to be truncated after a certain number of terms,
+this introduces an error. Secondly, integrators struggle to predict
+values of forces that have discontinuities in them, such as hard
+spheres which only have forces on contact but not before, or
+discontinuities introduced by truncating potentials to improve
+simulator speed.  There are a couple of types of integrators that try
+and reduce these problems.
+
+Sympletic integrators have the useful property in that they, on
+average, conserve energy \cite{Hairer2003}. The most common symplectic
+integrator used in MD is the Velocity Verlet Integrator
+\cite{Swope1982} shown in \eqref{eq:VVerlet}.
+
+\begin{subequations}
+\label{eq:VVerlet}
+\begin{align}
+ \vec{r}(t + \Delta t) &= \vec{r}(t) + \vec{v}(t) \Delta t 
+ + \frac{1}{2}\vec{a}(t) \Delta t^2 + \mathcal{O}(\Delta t^4)
+ \label{eq:VVerletpos} \\
+ \vec{v}(t+\Delta t) &= \vec{v}(t) + \frac{\vec{a}(t) 
+   + \vec{a}(t+\Delta t)}{2}\Delta t
+ \label{eq:VVerletVel}
+\end{align}
+\end{subequations}
+
+The popularity of the Velocity Verlet is due to its computational
+simplicity andits accuracy and stability at relatively long
+timesteps. It can even be expanded\cite{Khakimov2002} to maintain its
+accuracy and stability at very long timesteps at a small extra
+computational cost. However the Velocity Verlet cannot be used in
+systems that do not conserve energy, ie systems with dissipative
+forces.
+
+Another popular method of improving the traditional integrator is
+predictor-corrector integrators. These use a truncated Taylor series
+to calculated a predicted value for the future position and higher
+order time derivatives. The force is then calculated at this
+predicited position, then the difference between the predicted
+acceleration and the corrected acceleration calculated from the force
+is used to correct the position and time derivatives.
+
+The most popular predictor-corrector integrator is that of Gear
+\cite{Gear1971},using his 5th order algorithm. The predicted value for
+the $i^{th}$ time derivative is shown in \eqref{eq:GearPredictor}, and
+defining $\Delta \vec{a} = \vec{a}\,^{C} - \vec{a}\,^{P}$, the
+corrected time derivatives can be calculated using
+\eqref{eq:GearCorrector} with coefficients from \eqref{eq:GearCoeff}.
+
+\begin{equation} 
+  \frac{\partial^{i}}{\partial t^{i}} \vec{r}\:^{P}(t+\Delta t)
+  =\sum^{n}_{k=i} \frac{1}{k!}\frac{\partial^{i} }{\partial t^{i}}
+  \vec{r}(t) \Delta t^{k} 
+  \label{eq:GearPredictor} 
+\end{equation}
+
+\begin{equation} 
+  \frac{\partial^{i}}{\partial t^{i}} \vec{r}\:^{C}(t+\Delta t)
+  =\frac{\partial^{i} }{\partial t^{i}} \vec{r}\:^{P}(t+\Delta t)
+  +\frac{c_i}{\Delta t^i} \left(\frac{\Delta t^2}{2}\Delta \vec{a}\right)
+  \label{eq:GearCorrector} \end{equation} \begin{equation} c_0 =
+  \frac{3}{16},\;\;c_1 = \frac{251}{360},\;\; c_2 = 1,\;\; c_3 =
+  \frac{11}{18},\;\; c_4 =
+  \frac{1}{6},\;\; c_5 = \frac{1}{60} \label{eq:GearCoeff} 
+\end{equation}
+
+The Gear's algorithm, while more accurate at short timesteps than Verlet's
+integrator \cite{Haile1997}, suffers at long timesteps and is computationally
+more expensive.
+\newpage
+\section{Event-Driven Simulators} 
+Start off by pointing out that discontinuous potentials have
+discontinuities! Whats the force on these points? Infinity! Can't
+integrate over these discontinuities, but what about between them? We
+can solve F=ma, (solve it). We can then analytically integrate
+newton's equation of motion. We can then try to detect when a
+discontinuity occurs and treat them as they happen.
+
+How do you solve what happens over a discontinuity? Conservation of
+momentum and energy (see appendix).
+
+\subsection{Introduction} 
+Though force-driven simulators are more popular the first MD
+simulation was done using an event-driven simulator by Alder and
+Wainwright \cite{Alder1959}. The difference between force and event
+driven simulations lies in how the simulators move through time.
+While force driven simulators move forward in uniform blocks, event
+driven simulators jump between successive collisions.  These
+collisions are taken to be instantaneous and only one can occur at any
+particular time.
+
+\subsection{Collision Time Prediction}
+An event-driven simulator first must calculate the collision times
+between every pair of particles (provided the particles do collide),
+in order to select the earliest collision.  For hard sphere
+simulations there are two conditions that must be satisfied in order
+for a collision to occur.  Firstly, the particles must be moving
+towards each other and secondly, the particles must pass close enough
+to each other to collide.  These conditions can be expressed
+mathematically in equations \eqref{eq:collConditions1} and
+\eqref{eq:collConditions2} respectively \cite{Haile1997}.
+
+\begin{subequations}
+  \begin{align}
+    \mathbf{v}_{ij}\cdot\mathbf{r}_{ij} < 0 \label{eq:collConditions1}\\
+    (\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 
+    - v_{ij}^2(r_{ij}^2 - \sigma^2) \geq 0 \label{eq:collConditions2}
+  \end{align}
+\end{subequations}
+
+The time to collision can then be calculated using the quadratic in
+equation \eqref{eq:collEnterTime}.  While there are two solutions,
+only the earliest collision (the negative root) needs to be
+considered.  The second root gives the time when the particles leave
+after passing through each other which, for hard sphere, cannot
+happen.
+
+\begin{equation}
+\Delta t = \frac{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}) \pm 
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 - v_{ij}^2(r_{ij}^2 - \sigma^2)}}
+       {v_{ij}^2} \label{eq:collEnterTime}
+\end{equation}
+
+Since $\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}$ must be negative for the
+collision, there is the possibility of catastrophic cancellation
+\cite{Goldberg1991}, if $(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 \gg
+v_{ij}^2(r_{ij}^2 - \sigma^2)$. Therefore it is advisable to use the
+positive root from the alternate form of the quadratic equation given
+in equation \eqref{eq:collEnterTimeAlt} \cite{Poschel2005}.
+
+\begin{equation}
+\Delta t = \frac{r_{ij}^2 - \sigma^2}{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})
+  \mp \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 
+    - v_{ij}^2(r_{ij}^2 - \sigma^2)}}
+\label{eq:collEnterTimeAlt}
+\end{equation}
+
+When considering stepped potentials many of the same principles apply,
+except there are now two possible ``collisions''. The first, when two
+particles enter a step is treated identically to hard spheres. The
+other event, when the particles leave the step, is calculated using
+the second, later root of the quadratic.  In order to prevent loss of
+numerical precision, the leaving time should be calculated using
+equation \eqref{eq:collExitTime}.
+
+\begin{equation}
+  \label{eq:collExitTime}
+\Delta t = 
+\begin{cases}
+  \frac{r_{ij}^2 - \sigma^2}{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})
+    - \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 
+      - v_{ij}^2(r_{ij}^2 - \sigma^2)}}, & \text{if }
+  \mathbf{v}_{ij}\cdot\mathbf{r}_{ij} > 0 \\
+\\
+
+\frac{(-\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}) +
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 - v_{ij}^2(r_{ij}^2 - \sigma^2)}}
+     {v_{ij}^2} , & \text{if }
+     \mathbf{v}_{ij}\cdot\mathbf{r}_{ij} < 0 
+\end{cases}
+\end{equation}
+
+\subsection{Collision Dynamics}
+Once the time of the next collision is known, the particles can be moved
+to their new locations.  Generally there is no external force applied
+to the particles in event-driven molecular dynamics, therefore the
+particles move in straight lines.  Hence the particles' new positions
+can be calculated using equation \eqref{eq:edNewPos}.
+
+\begin{equation}
+  \mathbf{r}(t+\Delta t) = \mathbf{r}(t) + \mathbf{v}(t)\Delta t 
+  \label{eq:edNewPos}
+\end{equation}
+
+The post-collision velocities of the colliding particles must now be
+calculated.  The simplest collision between two particles is an
+elastic bounce, where the velocities and just exchanged along the
+separation vector between the two particles.  The change in velocity
+during the collision for particles $i$ and $j$ is shown in equation
+\eqref{eq:postVBounce}.
+
+\begin{subequations}
+  \label{eq:postVBounce}
+  \begin{align}
+    \Delta\mathbf{v}_i &= -(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})\mathbf{\hat{r}}_{ij} \\
+    \Delta\mathbf{v}_j &= (\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})\mathbf{\hat{r}}_{ij}
+  \end{align}
+\end{subequations}
+
+For stepped potential system, the collision dynamics are more complex.
+When two particles collide they must pay an energy ``cost'' to proceed
+through the step.  This energy cost $\Delta U$ is the difference in
+the energy of the current step and the step the particles are going
+into, and is shown in equation \eqref{eq:energyCost}.
+
+\begin{equation}
+  \label{eq:energyCost}
+  \Delta U = U_{\text{next step}} - U_{\text{current step}}
+\end{equation}
+
+If the kinect energy of the particles is insufficient, the pair bounce
+off the step and the post-collision velocities are calculated using
+equation \eqref{eq:postVBounce}. However, if the particles can pay
+this cost i.e.\ the inequality \eqref{eq:kineticCost} is true, then the
+particles can enter the step.
+
+\begin{equation}
+\label{eq:kineticCost}
+  \frac{1}{4}m(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 > \Delta U
+\end{equation}
+
+The change in the velocities of particles $i$ and $j$ after going
+through a step are shown in equation \eqref{eq:postVCapture} where $A$
+is given in equation \eqref{eq:changeMomentum}, the derivation of
+these equations is given in Appendix ???.  If the particles are
+entering a step, the positive root of $A$ is used, whereas if the
+particles are leaving a step it is the negative root that should be
+used.
+
+\begin{subequations}
+  \label{eq:postVCapture}
+  \begin{align}
+    \Delta\mathbf{v}_i &= \frac{A}{m} \mathbf{\hat{r}}_{ij} \\
+    \Delta\mathbf{v}_j &= -\frac{A}{m}\mathbf{\hat{r}}_{ij}
+  \end{align}
+\end{subequations}
+
+\begin{equation}
+  \label{eq:changeMomentum}
+  A = -\frac{m}{2}\left((\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij}) \pm
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 - \frac{4}{m}\Delta U}\right)
+\end{equation}
+\newpage
+\section{Measurement of System Properties}
+\subsection{Introduction}
+Molecular dynamics is a useful tool to predict macroscopic properties
+of particles systems.  Many of the identities and methods to measure
+these properties are derived in statistical mechanics.  However, even
+when the system is at equilibrium, these properties fluctuate around a
+mean (see figure \ref{fig:fluctuations}) therefore it is common to
+take time averages of these values. These time averages are denoted
+with angle brackets $\langle\:\: \rangle$, and the time average of a
+property, $A$, is shown in \eqref{eq:TAdef} \cite{Haile1997}.
+
+\begin{figure}[htp] 
+  \begin{center}
+    \includegraphics[clip,width=\textwidth]{figures/energyplot} 
+    \caption{\label{fig:fluctuations} Plot showing flucuation of pressure
+      ($P^*=P\sigma^3/\varepsilon$), kinetic energy per particle
+      ($E_K^*=E_K/N\varepsilon$) and potential energy per particle
+      ($U^*=U/N\varepsilon$).  Results are from a force-driven simulation
+      involving 864 particles, at a density $\rho^*=0.9$ and
+      temperature $\langle T\rangle=1.497$. Values were collected
+      every 10 timesteps where each timestep was $\Delta t = 0.005$.}
+  \end{center}
+\end{figure}
+
+\begin{equation}
+  \label{eq:TAdef}
+  \langle A \rangle = \lim_{t \to \infty} \frac{1}{t}  \int^{t_0+t}_{t_0}A(\tau) d\tau
+\end{equation}
+
+This time average can be calculated precisely in event-driven
+simulations for several properties such as pressure, kinetic energy
+and potential energy.  These only change at collisions and therefore
+are constant for the time between the collision and can be calculated
+by \eqref{eq:TASum}.
+
+\begin{equation}
+  \label{eq:TASum}
+  \langle A \rangle = \frac{1}{t}\sum^{t_o+t}_{t_0}A(\tau)\Delta \tau
+\end{equation}
+
+In force-driven simulators all properties change continuously and
+hence time averages cannot be calculated precisely, however
+approximations can be made. If properties are measured every uniform
+period of time, the time average can be approximated by equation
+\eqref{eq:TAforcedriven}, where $M$ is the number of measurements
+taken.
+
+\begin{equation}
+  \label{eq:TAforcedriven}
+  \langle A \rangle = \frac{1}{M} \sum^{M}_{1}A(\tau)
+\end{equation}
+\subsection{Units}
+
+In molecular dynamics simulations, properties are frequently measured
+in dimensionless forms \cite{Haile1997}. These ``reduced units'' are
+usually denoted with an asterisk.  In order to achieve this a number
+of fundamental dimensions are needed: a characteristic length $\sigma$, a
+characteristic energy $\varepsilon$, and the mass of one particle $m$.  In the case of
+the Lennard-Jones potential, the characteristic length and energy are
+taken as: the distance of the root, and the depth of the attractive
+well respectively. A table of reduced forms are given in table
+\ref{tab:reducedForms}.
+
+\begin{table}[htp] 
+  \caption{Table of reduced forms of various quanities used in this
+    dissertation \cite{Haile1997}}
+  \label{tab:reducedForms}
+  \begin{center}
+    \begin{tabular}{c c}
+      \toprule
+      Quantity & Reduced forms \\
+      \midrule
+      Density & $\rho^* = N \sigma^3 / V$ \\
+      Energy & $E^* = E / \varepsilon$ \\
+      Force & $F^* = F\sigma/\varepsilon$ \\
+      Length & $r^* = r / \sigma$ \\
+      Pressure & $P^* = P \sigma^3 /\varepsilon$ \\
+      Temperature & $T^* = kT/\varepsilon$ \\
+      Time & $t^* = t / (\sigma \sqrt{m/\varepsilon})$ \\
+      Velocity & $v^* = v\sqrt{m/\varepsilon}$ \\
+      \bottomrule
+    \end{tabular}
+  \end{center}
+\end{table}
+
+\subsection{Energy}
+Perhaps one of the most important properties to measure in MD
+simulations is the total internal energy of the system.  For isolated
+systems, i.e.\ systems where mass or energy cannot enter or leave the
+system, this internal energy is the sum of kinetic and potential
+energy (equation \eqref{eq:internalE}).
+
+\begin{equation}
+  E = E_K + U \label{eq:internalE}
+\end{equation}
+
+The total kinetic energy in the system is the sum of the kinetic
+energy of each particle, as shown in equation \eqref{eq:totalEK}.
+
+\begin{equation}
+  \label{eq:totalEK}
+  E_K = \sum_i^N mv_i^2
+\end{equation}
+
+The potential energy of the system is the sum of the potential energy
+between every pair of particles (for a pairwise potential), and is
+shown in equation \eqref{eq:totalU}.
+
+\begin{equation}
+  \label{eq:totalU}
+  U = \underset{i\;\;<\;\;j}{\sum\sum}U(r_{ij})
+\end{equation}
+
+Event-driven simulators strictly conserve energy, therefore the
+kinetic and potential energy can be measured at the beginning of the
+simulation and then updated whenever either changes e.g.\ when a
+collision occurs.
+
+\subsection{Temperature}
+
+The velocity distrubution of particles is given by the Maxwell
+distribution \cite{Haile1997}, shown in equation
+\eqref{eq:MaxwellDist}.
+
+\begin{equation}
+  \label{eq:MaxwellDist}
+  f(v_x)dv_x = \sqrt{\frac{m}{2\pi kT}}e^{-\frac{mv_x^2}{2kT}} 
+\end{equation}
+
+This is the form of a Gaussian distribution and it can be shown
+\cite{Landau1968} that the mean square velocity in any direction is as
+shown in equation \eqref{eq:MSV}.
+
+\begin{equation}
+  \label{eq:MSV}
+  \bar{\;v_x^2\;} = \frac{kT}{m}
+\end{equation}
+
+Making the assumption that the velocity distribution is the same in
+each direction, the temperature can be expressed as equation
+\eqref{eq:Temperature}, by taking the average temperature in each
+direction. 
+
+\begin{equation}
+\label{eq:Temperature}
+  T^* = kT = \frac{mv^2}{3} = \frac{2}{3}E_K
+\end{equation}
+\newpage
+
+\chapter{Methodology} 
+\section{Introduction} 
+
+The two simulators described in this chapter were coded in C++ using
+the C++ Standard Library with the Boost [cite] library to handle
+random number generation.
+
+\section{Force-driven Simulator} 
+Force driven simuators are currently the
+dominant MD paradigm therefore it was decided that the results from
+the stepped potentials would be compared to the equivalent results
+obtained from a force-driven simulator. In order to acquire these
+results a force-driven simulator was written.
+
+The algorithm for the force driven simulator is as follows. 
+\begin{flushleft}
+  \begin{enumerate} 
+  \item Initialisation 
+  \item Calculate particles' future positions 
+  \item Calculate the forces acting on the particles 
+  \item Calculate the future velocities of particles 
+  \item Run thermostat (if enabled) 
+  \item Measure properties 
+  \item Repeat steps 2-6 for the desired number of iterations
+  \end{enumerate} 
+\end{flushleft}
+
+\subsection{Initialisation} The particles are initialised in a Face Centered
+Cubic (FCC) \nomenclature[A]{FCC}{Face Centered Cubic} structure. The
+use of the FCC lattice is common when simulating Lennard-Jones
+potentials as the first force-driven simulation \cite{Rahman1964} was
+carried out using liquid Argon which crystalises to a FCC lattice.
+
+Particle velocities are assigned randomly from a Gaussian distribution
+with a mean, $\mu = 0$, and a standard deviation, $\sigma =
+\sqrt{T^{*}}$, where $T^{*}$ is the desired reduced temperature. The
+velocities are then rescaled to ensure there net shift in linear
+momentum in any direction by applying \eqref{eq:zeroLinearP} in each
+orthongonal direction.
+
+\begin{equation} 
+  v_{i}^{new} = v_{i}^{old} - \frac{1}{N}
+  \sum^{N}_{i}v_{i}^{old}
+  \label{eq:zeroLinearP} 
+\end{equation}
+
+\subsection{Running Simulation} 
+The
+
+
+\chapter{Measuring Thermodynamic Properties}
+
+\section{Temperature and Internal energy }
+\section{Pressure (continuous and discontinuous)}
+\section{g(r)}
+\section{g(r) to pressure and temperature}
+\section{long range corrections}
+
+\chapter{From Continuous to Discontinuous}
+State the case why we want to run discontinuous systems, the
+advantages (fast, extremely stable-> infinitely hard potentials, and
+disadvantages (underdeveloped set of potentials in the literature,
+complex algorithm). These disadvantages can be overcome by writing a
+good general EDMD program and finding a a general method to convert
+the hard work in soft potentials to stepped potentials. 
+
+
+\chapter{Results} 
+
+\section{Benchmarking} 
+
+\subsection{Introduction} 
+After a MD simulator has been created it is necessary to compare its
+results with those generated by others, to verify that the simulator
+works correctly.
+
+\subsection{Force based code verusus NIST and ESpReSSo}
+
+\subsection{Event Driven}
+Event driven codes are significantly more complex than time-stepping codes, so we need more tests
+
+{\bf HARD SPHERES v LEO}
+
+{\bf Stepped Potential of Chapela}
+
+\section{Chapela's dumb stepping and very good stepping versus force based. }
+
+Show that dumb stepping doesn't work, show how good chapela's results actually are when he tries. Proves this is possible.
+
+\section{Stepping in probability versus action}
+
+Hard cores dominate the freezing behaviour (see Alder and Wainwrights
+famous paper) and therefore for high density pressure etc. but the stepping in equal probability doesnt do this.
+
+\section{Hard core position}
+
+Try setting the inner step to infinite energy
+
+Use barker henderson, an old attempt to make hard sphere match
+everything else. (too far out).
+
+
+talk about probability of finding a particle in the core. Talk about
+sigma try out 3, 4, and 5.
+
+\section{Temperature comparisons}
+Show that chapelas solution gets worse faster than ours.
+
+\subsection{Event-Driven Simulator}
+ The event-driven simulator was first tested running a hard sphere
+ simulation before testing the more complex stepped potentials. A
+ single 'step' with a energy requirement sufficiently large such that
+ no particle could enter it. The simulation was run once at a range of
+ densities using 864 particles at a reduced temperature of $T^*=1$ for
+ 5 million collisions, the results were compared with those of Lue
+ \cite{Lue2005} in table \ref{tab:benchhard}. The agreement between
+ results is good and lies within statistical uncertainty. The largest
+ discrepancies are in the values for the coefficient of diffusion at
+ low densities which is probably due to Lue's values were obtained
+ after 10 million collisions.
+
+\begin{table} \caption{Comparison of results obtained by the event-driven
+simulator with literature values. $t_{avg}$ is the average time
+between collisions, $\langle\mathbf{\hat{r}} \cdot \Delta \mathbf{v}
+\rangle_{coll}$ is the average momentum transfer per collision, and D
+is the coefficient of
+diffusion.} \label{tab:benchhard} \begin{center} \begin{tabular}{l c c
+        c c c c} \toprule $\rho$ & \multicolumn{2}{c}{$t_{avg}$} &
+      \multicolumn{2}{c}{$\langle\mathbf{\hat{r}} \cdot \Delta
+        \mathbf{v} \rangle_{coll}$} & \multicolumn{2}{c}{D}
+      \\ \cmidrule(rl{0.75em}){2-3} \cmidrule(rl{0.75em}){4-5}
+      \cmidrule(rl{0.75em}){6-7} & Simulator & Lue & Simulator & Lue &
+      Simulator & Lue\\ \midrule 0.3 & 0.3052 & 0.3052 & 1.775 & 1.772
+      & 0.53 & 0.55 \\ 0.4 & 0.1944 & 0.1942 & 1.776 & 1.773 & 0.341 &
+      0.359 \\ 0.5 & 0.13024 & 0.13031 & 1.774 & 1.7724 & 0.247 &
+      0.247 \\ 0.6 & 0.08966 & 0.08968 & 1.771 & 1.7721 & 0.169 &
+      0.173 \\ 0.7 & 0.0625 & 0.0625 & 1.773 & 1.776 & 0.114 & 0.113
+      \\ 0.8 & 0.04365 & 0.0436 & 1.772 & 1.772 & 0.064 & 0.065 \\ 0.9
+      & 0.03029 & 0.03024 & 1.773 & 1.772 & 0.033 & 0.0327
+      \\ \bottomrule
+\end{tabular} \end{center} \end{table}
+
+The simulator was then benchmarked using a step potential. The results
+were compared with Chapela et al \cite{Chapela1989} using their 'Case
+6' steps. The simulation was run for 1.5 million collisions using 864
+particles. Each simulation was run ten times and the mean values and
+standard deviations are given in table
+\ref{tab:benchsoft} 
+
+\begin{table} 
+  \caption{Comparison of results
+    obtained by the event-driven simulator with literature values
+    using stepped potentials. Numbers in parenthesis indicate the
+    uncertainty in the final digit.
+\label{tab:benchsoft}} 
+  \begin{center} 
+    \begin{tabular}{l c c c c c c} 
+      \toprule
+      $\rho$ & \multicolumn{2}{c}{$\langle T\rangle$} &
+      \multicolumn{2}{c}{$\langle U \rangle$} &
+      \multicolumn{2}{c}{$\langle P \rangle$}
+      \\ \cmidrule(rl{0.75em}){2-3} \cmidrule(rl{0.75em}){4-5}
+      \cmidrule(rl{0.75em}){6-7}& Simulator & Chapela et al &
+      Simulator & Chapela et al & Simulator & Chapela etal\\ 
+      \midrule
+      0.85 & 0.719(3) & 0.72 & -6.04(7) & -5.80 & -0.5(4) & 0.54
+      \\ 0.85& 1.339(8) & 1.34 & -5.130(9) & -5.14 & 4.08(4) & 4.08
+      \\ 0.85 & 2.35(1) & 2.35 & -4.24(2) & -4.20 & 8.78(9) & 8.86
+      \\ 0.85 & 3.37(2) & 3.37 & -3.48(2) & -3.49 & 12.90(9) & 13.00
+      \\ 0.85 & 4.59(1) & 4.60 & -2.67(1) & -2.68 & 17.31(8) & 13.43
+      \\ 0.75 & 0.811(2) & 0.81 & -5.095(3) & -5.08 & -0.20(2) & -0.24
+      \\ 0.75 &1.309(9) & 1.31 & -4.67(1) & -4.63 & 1.81(5) & 1.84
+      \\ 0.75 & 2.49(1) & 2.49 & -3.88(1) & -3.82 & 5.80(4) & 5.95
+      \\ 0.75 & 3.59(2) & 3.59 & -3.26(1) & -3.22 & 9.03(7) & 9.20
+      \\ 0.65 & 1.309(8) & 1.31 & -4.081(8) & -4.06 & 0.80(3) & 0.81
+      \\0.65 & 2.61(1) & 2.61 & -3.42(1) & -3.41 & 3.86(5) & 3.89
+      \\ 0.65 & 3.79(1) & 3.79 & -2.926(9) & -2.94 & 6.34(7) & 6.33
+      \\ 
+      \bottomrule 
+    \end{tabular}
+\end{center} 
+\end{table} 
+
+%\section{Adding Figures} 
+%To add figures to yourtext,you need to use a series of commands, but 
+%you can just copy paste the one below and tweak it for your needs. 
+%\begin{figure}[htp] 
+% \centering 
+%\includegraphics[clip,width=0.5\textwidth]{figures/testfig} 
+%\caption{\label{fig:testfig} A test figure.} 
+%\end{figure}
+
+
+% %\section{References} 
+%You can reference entries in your bib file using the key you have set 
+%for it like so~\cite{Bannerman_2009}. I can even do cool things like 
+%say the author of that citation is \citeauthor{Bannerman_2009} and it 
+%was published in \citeyear{Bannerman_2009}. Or even ask for a full
+%citation, like so: \fullcite{Bannerman_2009}. % 
+%But you must remember toprintthe bibliography at the end of every 
+%chapter!
+\newpage\printbibliography[heading=thesisChapterBib] 
+
+\appendix
+\chapter{Derivation of Collision Dynamics for Stepped Potentials}
+Considering a collision between particles $i$ and $j$, each with mass,
+$m$ with a step energy difference of $\Delta U$, the conservation of
+momentum is shown in equation \eqref{eq:consMom}. Here the prime
+indicates post-collision values.
+
+\begin{equation}
+\label{eq:consMom}
+m\mathbf{v}_i + m\mathbf{v}_j = m\mathbf{v}'_i + m\mathbf{v}'_j
+\end{equation}
+
+The momentum change of each particle must occur along the separation
+vector between the two particles, which can be expressed by equation
+\eqref{eq:defA}, where $A$ is an arbitary coefficient.
+
+\begin{equation}
+  \label{eq:defA}
+  m\mathbf{v}_i - m\mathbf{v}'_i = -(m\mathbf{v}_j - m\mathbf{v}'_j) 
+  = -A\mathbf{\hat{r}}_{ij}
+\end{equation}
+
+Energy must also be conserved in the system so equation
+\eqref{eq:constE} must also apply.  This can be rewritten to equations
+\eqref{eq:constE1} and \eqref{eq:constE2}
+
+\begin{equation}
+  \label{eq:constE}
+  \frac{1}{2}mv_i^2 + \frac{1}{2}mv_j^2 =
+  \frac{1}{2}m{v'_i}^2 + \frac{1}{2}m{v'_j}^2 + \Delta U
+\end{equation}
+
+\begin{equation}
+  \label{eq:constE1}
+  v_i^2 - {v'_i}^2 +
+  v_j^2 - {v'_j}^2 - \frac{2}{m}\Delta U = 0
+\end{equation}
+
+\begin{equation}
+  \label{eq:constE2}
+  (\mathbf{v}_i - \mathbf{v}'_i)\cdot(\mathbf{v}_i + \mathbf{v}'_i) +
+  (\mathbf{v}_j - \mathbf{v}'_j)\cdot(\mathbf{v}_j + \mathbf{v}'_j) -
+  \frac{2}{m}\Delta U = 0
+\end{equation}
+
+Equation \eqref{eq:defA} can now be substituted into
+\eqref{eq:constE2} to give equation \eqref{eq:eq1}.
+
+\begin{equation}
+  \label{eq:eq1}
+  \frac{A}{m}\mathbf{\hat{r}}_{ij} (\mathbf{v}_j - \mathbf{v}_i 
+  + \mathbf{v}'_j - \mathbf{v}'_i) - \frac{2}{m}\Delta U = 0
+\end{equation}
+
+Equation \eqref{eq:defA} and the definition of the separation velocity
+vector ($\mathbf{v}_{ij} = \mathbf{v}_i - \mathbf{v}_j$) can be
+substituted into equation \eqref{eq:eq1} to give \eqref{eq:eq2}.
+
+\begin{equation}
+  \label{eq:eq2}
+  -\frac{A^2}{m}
+  -A\mathbf{\hat{r}}_{ij}\cdot\mathbf{v}_{ij} - \Delta U = 0
+\end{equation}
+
+This is a quadratic equation in terms of $A$ therefore it's roots must
+be given by equation \eqref{eq:devQuadratic}.
+
+\begin{equation}
+  \label{eq:devQuadratic}
+  A = -\frac{m}{2}\left((\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij}) \pm
+  \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 - \frac{4}{m}\Delta U}\right)
+\end{equation}  
+
+From equation \eqref{eq:defA}, the change in velocity of each particle
+is given in equations \eqref{eq:deltaV}
+
+\begin{subequations}
+  \label{eq:deltaV}
+  \begin{align}
+    \Delta\mathbf{v}_i &= \frac{A}{m} \mathbf{\hat{r}}_{ij} \\
+    \Delta\mathbf{v}_j &= -\frac{A}{m}\mathbf{\hat{r}}_{ij}    
+  \end{align}
+\end{subequations}
+
+\end{document}
+
+%%%%TAYLOR SERIES FOR GEAR'S ALGORITHM%%%% %\begin{equation} 
+%\begin{aligned}
+%\vec{r}(t+\Delta t) &= \vec{r}(t) + \vec{v}(t) \Delta t 
+% +\frac{1}{2}\vec{a}(t)\Delta t^2 + \frac{1}{3!}\vec{b}(t)\Delta t^3 
+% +\frac{1}{4!}\vec{c}(t)\Delta t^4 + \frac{1}{5!}\vec{d}(t)\Delta t^5 \\
+%\vec{v}(t+\Delta t) &= \vec{v}(t) \Delta t + \vec{a}(t)\Delta t^2 
+% +\frac{1}{2}\vec{b}(t)\Delta t^3 + \frac{1}{3!}\vec{c}(t)\Delta t^4 +
+%\frac{1}{4!}\vec{d}(t)\Delta t^5 \\ %\vec{a}(t+\Delta t) &= \vec{a}(t)\Delta
+%t^2+ \vec{b}(t)\Delta t^3 % + \frac{1}{2!}\vec{c}(t)\Delta t^4 +
+%\frac{1}{3!}\vec{d}(t)\Delta t^5 \\ %\vec{b}(t+\Delta t) &= \vec{b}(t)\Delta
+%t^3+ \vec{c}(t)\Delta t^4 % + \frac{1}{2!}\vec{d}(t)\Delta t^5 \\
+%\vec{c}(t+\Deltat) &= \vec{c}(t)\Delta t^4 + \vec{d}(t)\Delta t^5 \\
+%\vec{d}(t+\Delta t) &=
+%\vec{d}(t)\Delta t^5 \\ %\end{aligned} %\end{equation}
+
+\message{ !name(main.tex) !offset(-1046) }
