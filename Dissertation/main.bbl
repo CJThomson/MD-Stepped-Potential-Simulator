@@ -1,0 +1,606 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Alder1957}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Alder}{A.}%
+     {B.~J.}{B.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wainwright}{W.}%
+     {T.~E.}{T.~E.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{ABJWTE1}
+  \strng{fullhash}{ABJWTE1}
+  \field{sortinit}{A}
+  \verb{doi}
+  \verb 10.1063/1.1743957
+  \endverb
+  \field{pages}{1208\bibrangedash 1209}
+  \field{title}{Phase Transition for a Hard Sphere System}
+  \field{volume}{27}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1957}
+\endentry
+
+\entry{Alder1959}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Alder}{A.}%
+     {B.~J.}{B.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wainwright}{W.}%
+     {T.~E.}{T.~E.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{ABJWTE1}
+  \strng{fullhash}{ABJWTE1}
+  \field{sortinit}{A}
+  \verb{doi}
+  \verb 10.1063/1.1730376
+  \endverb
+  \field{pages}{459\bibrangedash 466}
+  \field{title}{Studies in Molecular Dynamics. I. General Method}
+  \field{volume}{31}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1959}
+\endentry
+
+\entry{Andersen1980}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Andersen}{A.}%
+     {H.~C.}{H.~C.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{AHC1}
+  \strng{fullhash}{AHC1}
+  \field{sortinit}{A}
+  \verb{doi}
+  \verb 10.1063/1.439486
+  \endverb
+  \field{pages}{2384\bibrangedash 2393}
+  \field{title}{Molecular dynamics simulations at constant pressure and/or
+  temperature}
+  \field{volume}{72}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1980}
+\endentry
+
+\entry{Barker1967}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Barker}{B.}%
+     {J.~A.}{J.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Henderson}{H.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BJAHD1}
+  \strng{fullhash}{BJAHD1}
+  \field{sortinit}{B}
+  \verb{doi}
+  \verb 10.1063/1.1712308
+  \endverb
+  \field{pages}{2856\bibrangedash 2861}
+  \field{title}{Perturbation Theory and Equation of State for Fluids: The
+  Square-Well Potential}
+  \field{volume}{47}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1967}
+\endentry
+
+\entry{Chapela1989}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Scriven}{S.}%
+     {L.~E.}{L.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {H.~T.}{H.~T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CGSLEDHT1}
+  \strng{fullhash}{CGSLEDHT1}
+  \field{sortinit}{C}
+  \field{abstract}{%
+  Argon, represented as a Lennard-Jones fluid, is simulated using a
+  discontinuous version of the potential. The effect of discretization is
+  thoroughly investigated in terms of the number of discontinuities and the
+  cutoff diameter. Radial distribution functions, pressure, energy,
+  self-diffusion coefficients, and velocity autocorrelation functions are used
+  in order to evaluate this effect. A reduction of five times on computing time
+  can be achieved by varying the cutoff radius and the number of
+  discontinuities without much departure from the physical representation of
+  Lennard-Jonesium atoms. The results indicate that discontinuous molecular
+  dynamics is a viable alternative method to Monte Carlo and continuous
+  molecular dynamics in simulating the properties of simple fluids. The Journal
+  of Chemical Physics is copyrighted by The American Institute of Physics.%
+  }
+  \verb{doi}
+  \verb 10.1063/1.456811
+  \endverb
+  \field{pages}{4307}
+  \field{title}{Molecular dynamics for discontinuous potential. IV.
+  {L}ennard-{J}onesium}
+  \field{volume}{91}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1989}
+\endentry
+
+\entry{Frenkel2002}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Frenkel}{F.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smit}{S.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Academic Press}%
+  }
+  \strng{namehash}{FDSB1}
+  \strng{fullhash}{FDSB1}
+  \field{sortinit}{F}
+  \verb{doi}
+  \verb 10.1016/B978-012267351-1/50006-7
+  \endverb
+  \field{edition}{2nd Edition}
+  \field{title}{Understanding Molecular Simulations}
+  \field{year}{2002}
+\endentry
+
+\entry{Gear1971}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Gear}{G.}%
+     {C.~W.}{C.~W.}%
+     {}{}%
+     {}{}}%
+  }
+  \name{editor}{1}{}{%
+    {{}%
+     {Forsythe}{F.}%
+     {George}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Prentice-Hall}%
+  }
+  \strng{namehash}{GCW1}
+  \strng{fullhash}{GCW1}
+  \field{sortinit}{G}
+  \field{title}{Numerical Initial Value Problems in Ordinary Differential
+  Equations}
+  \field{year}{1971}
+\endentry
+
+\entry{Goldberg1991}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Goldberg}{G.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{GD1}
+  \strng{fullhash}{GD1}
+  \field{sortinit}{G}
+  \verb{doi}
+  \verb 10.1145/103162.103163
+  \endverb
+  \field{number}{1}
+  \field{pages}{5\bibrangedash 48}
+  \field{title}{What every computer scientist should know about floating-point
+  arithmetic}
+  \field{volume}{23}
+  \field{journaltitle}{ACM Comput. Surv.}
+  \field{year}{1991}
+\endentry
+
+\entry{Haile1997}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Haile}{H.}%
+     {J~M}{J.~M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Wiley-Interscience}%
+  }
+  \strng{namehash}{HJM1}
+  \strng{fullhash}{HJM1}
+  \field{sortinit}{H}
+  \field{title}{Molecular Dynamics Simulation: Elementary Methods}
+  \field{year}{1997}
+\endentry
+
+\entry{Hairer2003}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Hairer}{H.}%
+     {Ernst}{E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lubich}{L.}%
+     {Christian}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wanner}{W.}%
+     {Gerhard}{G.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{HELCWG1}
+  \strng{fullhash}{HELCWG1}
+  \field{sortinit}{H}
+  \verb{doi}
+  \verb 10.1017/S0962492902000144
+  \endverb
+  \field{pages}{399\bibrangedash 450}
+  \field{title}{Geometric numerical integration illustrated by the
+  Stormer-Verlet method}
+  \field{volume}{12}
+  \field{journaltitle}{Acta Numerica}
+  \field{year}{2003}
+\endentry
+
+\entry{Jasper2006}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Jasper}{J.}%
+     {Ahren~W.}{A.~W.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nangia}{N.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Zhu}{Z.}%
+     {Chaoyuan}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Truhlar}{T.}%
+     {Donald~G.}{D.~G.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{JAW+1}
+  \strng{fullhash}{JAWNSZCTDG1}
+  \field{sortinit}{J}
+  \verb{doi}
+  \verb 10.1021/ar040206v
+  \endverb
+  \field{number}{2}
+  \field{pages}{101\bibrangedash 108}
+  \field{title}{Non-Born - Oppenheimer Molecular Dynamics}
+  \field{volume}{39}
+  \field{journaltitle}{Acc. Chem. Res.}
+  \field{year}{2006}
+\endentry
+
+\entry{Khakimov2002}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Khakimov}{K.}%
+     {Z.M.}{Z.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{KZ1}
+  \strng{fullhash}{KZ1}
+  \field{sortinit}{K}
+  \verb{doi}
+  \verb 10.1016/S0010-4655(02)00387-9
+  \endverb
+  \field{pages}{733\bibrangedash 736}
+  \field{title}{New integrator for molecular dynamics simulations}
+  \field{volume}{147}
+  \field{journaltitle}{Comput. Phys. Commun.}
+  \field{year}{2002}
+\endentry
+
+\entry{Landau1968}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Landau}{L.}%
+     {L.D.}{L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lifshitz}{L.}%
+     {E.M.}{E.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Pergamon}%
+  }
+  \strng{namehash}{LLLE1}
+  \strng{fullhash}{LLLE1}
+  \field{sortinit}{L}
+  \field{edition}{2nd}
+  \field{series}{Course of Theoretical Physics}
+  \field{title}{Statistical Mechanics}
+  \field{volume}{5}
+  \list{location}{1}{%
+    {Oxford}%
+  }
+  \field{year}{1968}
+\endentry
+
+\entry{Lennard-Jones1924}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Lennard-Jones}{L.-J.}%
+     {J.E.}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LJJ1}
+  \strng{fullhash}{LJJ1}
+  \field{sortinit}{L}
+  \verb{doi}
+  \verb 10.1098/rspa.1924.0081
+  \endverb
+  \field{pages}{441\bibrangedash 477}
+  \field{title}{The Determination of Molecular Fields I \& II}
+  \field{volume}{106A}
+  \field{journaltitle}{Proc. R. Soc. Lon. Ser-A}
+  \field{year}{1924}
+\endentry
+
+\entry{Lue2005}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Lue}{L.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LL1}
+  \strng{fullhash}{LL1}
+  \field{sortinit}{L}
+  \verb{doi}
+  \verb 10.1063/1.1834498
+  \endverb
+  \field{number}{4}
+  \field{pages}{044513}
+  \field{title}{Collision statistics, thermodynamics, and transport
+  coeffiecients of hard hyperspheres in three, four, and five dimensions}
+  \field{volume}{122}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{2005}
+\endentry
+
+\entry{Maginn2010}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Maginn}{M.}%
+     {E.~J.}{E.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Elliott}{E.}%
+     {J.~R.}{J.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MEJEJR1}
+  \strng{fullhash}{MEJEJR1}
+  \field{sortinit}{M}
+  \verb{doi}
+  \verb 10.1021/ie901898k
+  \endverb
+  \field{pages}{3059\bibrangedash 3078}
+  \field{title}{Historical Perspective and Current Outlook for Molecular
+  Dynamics As a Chemical Engineering Tool}
+  \field{volume}{49}
+  \field{journaltitle}{Ind. Eng. Chem. Res.}
+  \field{year}{2010}
+\endentry
+
+\entry{Mattson1999}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Mattson}{M.}%
+     {W.}{W.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rice}{R.}%
+     {B.~M.}{B.~M.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MWRBM1}
+  \strng{fullhash}{MWRBM1}
+  \field{sortinit}{M}
+  \verb{doi}
+  \verb 10.1016/S0010-4655(98)00203-3
+  \endverb
+  \field{pages}{135\bibrangedash 148}
+  \field{title}{Near-neighbour calculations using a modified cell-linked list
+  method}
+  \field{volume}{119}
+  \field{journaltitle}{Comput. Phys. Commun.}
+  \field{year}{1999}
+\endentry
+
+\entry{Poschel2005}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {P\"{o}schel}{P.}%
+     {T.}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schwager}{S.}%
+     {T.}{T.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Springer}%
+  }
+  \strng{namehash}{PTST1}
+  \strng{fullhash}{PTST1}
+  \field{sortinit}{P}
+  \field{title}{Computational Granular Dynamics: Models and Algorithms}
+  \field{year}{2005}
+\endentry
+
+\entry{Rahman1964}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Rahman}{R.}%
+     {A}{A}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{RA1}
+  \strng{fullhash}{RA1}
+  \field{sortinit}{R}
+  \verb{doi}
+  \verb 10.1103/PhysRev.136.A405
+  \endverb
+  \field{pages}{A405\bibrangedash A411}
+  \field{title}{Correlations in the Motion of Atoms in Liquid Argon}
+  \field{volume}{136}
+  \field{journaltitle}{Phys. Rev.}
+  \field{year}{1964}
+\endentry
+
+\entry{Swope1982}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Swope}{S.}%
+     {William~C.}{W.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Andersen}{A.}%
+     {Hans~C.}{H.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Berens}{B.}%
+     {Peter~B.}{P.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wilson}{W.}%
+     {Kent~R.}{K.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SWC+1}
+  \strng{fullhash}{SWCAHCBPBWKR1}
+  \field{sortinit}{S}
+  \verb{doi}
+  \verb 10.1063/1.442716
+  \endverb
+  \field{pages}{637\bibrangedash 649}
+  \field{title}{A computer simulation method for the calculation of equilibrium
+  contants for the formation of physical clusters of molecultes: Application to
+  small water clusters}
+  \field{volume}{76}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1982}
+\endentry
+
+\entry{Tersoff1988}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Tersoff}{T.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{TJ1}
+  \strng{fullhash}{TJ1}
+  \field{sortinit}{T}
+  \verb{doi}
+  \verb 10.1103/PhysRevB.37.6991
+  \endverb
+  \field{pages}{6991\bibrangedash 6999}
+  \field{title}{New empirical approach for the structure and energy of covalent
+  systems}
+  \field{volume}{37}
+  \field{journaltitle}{Phys. Rev. B}
+  \field{year}{1988}
+\endentry
+
+\entry{Verlet1967}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Verlet}{V.}%
+     {Loup}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{VL1}
+  \strng{fullhash}{VL1}
+  \field{sortinit}{V}
+  \verb{doi}
+  \verb 10.1103/PhysRev.159.98
+  \endverb
+  \field{pages}{98\bibrangedash 103}
+  \field{title}{Computer "Experiments" on Classical Fluids. I. Thermodynamical
+  Properties of Lennard-Jones Molecules}
+  \field{volume}{159}
+  \field{journaltitle}{Phys. Rev.}
+  \field{year}{1967}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

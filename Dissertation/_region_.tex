@@ -128,7 +128,7 @@ These assumtions are usually valid unless very light atoms (such as
 hydrogen or helium) are being simulated or the particles are vibrating
 at very high rates \cite{Frenkel2002}.
 
-\subsection{Newton's Second Law of Motion}
+\subsection{Newton's Second Law of Motion \label{NewtonLaw}}
 
 The fundamental identity of newtonian mechnanics is Newton's Second
 Law of Motion (equation \eqref{eq:Fma}). This equation allows the prediction of a
@@ -258,21 +258,41 @@ hard sphere.
 
 Hard spheres were the first type of particles simulated
 \cite{Alder1957} due to their relative simplicity.  The potential for
-hard spheres is shown in equation \eqref{eq:potentialHS}, where \sigma
+hard spheres is shown in equation \eqref{eq:potentialHS}, where $\sigma$
 is the diameter of the spheres.
 
 \begin{equation}
   \label{eq:potentialHS}
   \mathcal{U} = 
   \begin{cases}
-    \infty &\text{if } |r_i - r_j| < \sigma \\
-    0 &\text{if } |r_i - r_j| \geq \sigma
+    \infty &\text{if }\; |\mathbf{r}_i - \mathbf{r}_j| < \sigma \\
+    0 &\text{if }\; |\mathbf{r}_i - \mathbf{r}_j| > \sigma
   \end{cases}
 \end{equation}
 
+The hard sphere potential can be elaborated upon by adding an
+attractive well out side the hard core.  This square well potential
+takes the form of equation \eqref{eq:potentialSW} \cite{Barker1967},
+where $\lambda$ is the outer radius of the core in terms of the hard
+core diameter $\sigma$.
+
+\begin{equation}
+  \label{eq:potentialSW}
+  \mathcal{U} = 
+  \begin{cases}
+    \infty &\text{if }\; |\mathbf{r}_i - \mathbf{r}_j| < \sigma \\
+    -\varepsilon &\text{if }\; \sigma < |\mathbf{r}_i - \mathbf{r}_j| < \lambda\sigma \\
+    0 &\text{if }\; |\mathbf{r}_i - \mathbf{r}_j| > \lambda\sigma
+  \end{cases}
+\end{equation}
+
+The square well potential is similar to the Lennard-Jones potential in
+that they have an attractive well, followed by a steep repulsive core,
+however the two give quite different simulation results.  
 
 
-Hard sphere,
+Hence people have created better discrete potentials to model molecular interactions
+ Hard sphere,
 
 square well -> compare to LJ
 
@@ -280,48 +300,88 @@ SPEAMD, PRIME
 
 Lead out with the two methods used to simulate these potentials are quite different....
 
+
+
+
 \chapter{Molecular Dynamics}
-\section{Force-Driven Simulators}
-\subsection{Introduction} 
+
+\section{Force-driven Simulators} 
+In order to compare the effectiveness of step potentials a set of
+comparison results from a continuous potential is needed.  The method
+to simulate a continuous potential is given in this section.
+
 Force-driven (or time driven) simulators are the most popular method
 of simulating particles due to their relative simplicity and ability
-to handle soft potentials. Simulators of this kind were pioneered by
-Rahman \cite{Rahman1964} who predicted physical properties of liquid
-argon with reasonable accuracy.
+to handle continuous potentials. Simulators of this kind were
+pioneered by Rahman \cite{Rahman1964} who predicted physical
+properties of liquid argon using a Lennard-Jones potential with
+reasonable accuracy.
 
 The distinguishing feature between force-driven and event-driven
 simulators is the way in which they move through time. During
 force-based simulations particles' positions and velocities are
-calculated every unit of time, $\Delta t$ using the forces acting on
-the particles. These newly calculated values are then used to predict
-the next set of particle positions. This is then repeated over the
-desired simulation time.
+calculated at uniform intervals of time, $\Delta t$ using the forces
+acting on the particles. These newly calculated values are then used
+to predict the next set of particle positions. This is then repeated
+over the desired simulation time.
 
-\subsection{Integrators} 
-Once the forces acting on a particle is known, that particle's
-acceleration can be calculated using Newton's Second Law of Motion
-(equation \ref{eq:Fmvdot}).
+The general algorithm for a force driven simulator is as follows. 
+\begin{flushleft}
+  \begin{enumerate} 
+  \item Initialisation 
+  \item Calculate particles' future positions 
+  \item Calculate the forces acting on the particles 
+  \item Calculate the future velocities of particles 
+  \item Run thermostat (if enabled) 
+  \item Measure properties 
+  \item Repeat steps 2-6 for the desired number of iterations
+  \end{enumerate} 
+\end{flushleft}
+
+\subsection{Initialisation \label{sec:initMD}} The particles are initialised in a Face Centered
+Cubic (FCC) \nomenclature[A]{FCC}{Face Centered Cubic} structure. The
+use of the FCC lattice is common when simulating Lennard-Jones
+potentials as the first force-driven simulation \cite{Rahman1964} was
+carried out using liquid Argon which crystalises to a FCC lattice.
+
+Particle velocities are assigned randomly from a Gaussian distribution
+with a mean, $\mu = 0$, and a standard deviation, $\sigma =
+\sqrt{T^{*}}$, where $T^{*}$ is the desired reduced temperature. The
+velocities are then rescaled to ensure there net shift in linear
+momentum in any direction by applying \eqref{eq:zeroLinearP} in each
+orthongonal direction.
 
 \begin{equation} 
-  \vec{F} = m \frac{\partial^2 \vec{r}}{\partial t^2}
+  v_{i}^{new} = v_{i}^{old} - \frac{1}{N}
+  \sum^{N}_{i}v_{i}^{old}
+  \label{eq:zeroLinearP} 
+\end{equation}
+
+\subsection{Integrators} 
+
+Predicting the particles' future positions require solving Newton's
+Second Law of Motion (equation \ref{eq:Fmvdot}), using forces
+calculated from the potential.
+
+\begin{equation} 
+  \mathbf{F} = m \frac{\partial^2 \mathbf{r}}{\partial t^2}
   \label{eq:Fmvdot} 
 \end{equation}
 
 However, since acceleration is the second time derivative of position
 (velocity is the first time deriviative), calculating the particle's
-future position results in solving a differential equation of order 2
-or higher since force, andhence acceleration likely changes with
-time. In order to accomplish this numerical integrators are used.
+future position results in solving a differential equation. In order
+to accomplish this numerical integrators are used.
 
 The majority of numerical integrators are based on Taylor Series
 (equation \ref{eq:Taylor}).
 
 \begin{equation} 
-\vec{r}(t+\Delta t) = r(t) + 
-\frac{\partial\vec{r}(t)}{\partial t}(\Delta t) + 
-\frac{1}{2}\frac{\partial^2\vec{r}(t)}{\partial t^2}\Delta t^2 + 
-\frac{1}{3!}\frac{\partial^3\vec{r}(t)}{\partial t^3}\Delta t^3 
-+ \frac{1}{4!}\frac{\partial^4\vec{r}(t)}{\partial t^4}\Delta t^4 
+\mathbf{r}(t+\Delta t) = \mathbf{r}(t) + 
+\frac{\partial\mathbf{r}(t)}{\partial t}(\Delta t) + 
+\frac{1}{2}\frac{\partial^2\mathbf{r}(t)}{\partial t^2}\Delta t^2 + 
+\frac{1}{3!}\frac{\partial^3\mathbf{r}(t)}{\partial t^3}\Delta t^3 
++ \frac{1}{4!}\frac{\partial^4\mathbf{r}(t)}{\partial t^4}\Delta t^4 
 + ... \label{eq:Taylor} 
 \end{equation}
 
@@ -330,27 +390,28 @@ Series truncated after the acceleration term (equation
 \ref{eq:Euler}).
 
 \begin{equation} 
-  \vec{r}(t+\Delta t) = r(t) + \vec{v}(\Delta t) +
-  \frac{1}{2}\vec{a}\Delta t^2 + \mathcal{O}(\Delta t^3) 
+  \mathbf{r}(t+\Delta t) = \mathbf{r}(t) + \mathbf{v}(\Delta t) +
+  \frac{1}{2}\mathbf{a}\Delta t^2 + \mathcal{O}(\Delta t^3) 
   \label{eq:Euler}
 \end{equation}
 
-However this method suffers from large errors and is unstable
-\cite{Haile1997} and is therefore rarely used. The Verlet Integrator
-\cite{Verlet1967} improves upon Euler's method by combining the
-forward timestep with a reverse timestep \eqref{eq:Verletpos}. This
-method is actually fourth order as the third (and first) derivative is
-cancelled out during its derivation. The Verlet integrator does not
-include an equation to calculate the future velocity so the central
-difference used by Verlet is often used \eqref{eq:VerletVel}.
+However this method suffers from large errors and is highly unstable
+(i.e.\ it amplifies any errors) \cite{Haile1997} and is therefore rarely
+used. The Verlet Integrator \cite{Verlet1967} improves upon Euler's
+method by combining the forward timestep with a reverse timestep
+\eqref{eq:Verletpos}. This method is actually fourth order as the
+third (and first) derivative is cancelled out during its
+derivation. The Verlet integrator does not include an equation to
+calculate the future velocity so the central difference used by Verlet
+is often used \eqref{eq:VerletVel}.
 
 \begin{subequations} 
   \begin{align} 
-    \vec{r}(t + \Delta t) &= 2\vec{r}(t) - \vec{r}(t - \Delta t) 
-    + \vec{a}(t)\Delta t^2 + \mathcal{O}(\Delta t^4)
+    \mathbf{r}(t + \Delta t) &= 2\mathbf{r}(t) - \mathbf{r}(t - \Delta t) 
+    + \mathbf{a}(t)\Delta t^2 + \mathcal{O}(\Delta t^4)
     \label{eq:Verletpos} \\
-    \vec{v}(t+\Delta t) &= \frac{\vec{r}(t+\Delta t) -
-      \vec{r}(t-\Delta t)}{2\Delta t} 
+    \mathbf{v}(t+\Delta t) &= \frac{\mathbf{r}(t+\Delta t) -
+      \mathbf{r}(t-\Delta t)}{2\Delta t} 
     \label{eq:VerletVel} 
   \end{align}
 \end{subequations}
@@ -360,39 +421,13 @@ gain of energy known as ``energy drift''. Firstly, integrators are
 based on infinite Taylor series which cannot be fully implemented,
 therefore they have to be truncated after a certain number of terms,
 this introduces an error. Secondly, integrators struggle to predict
-values of forces that have discontinuities in them, such as hard
-spheres which only have forces on contact but not before, or
-discontinuities introduced by truncating potentials to improve
-simulator speed.  There are a couple of types of integrators that try
-and reduce these problems.
+values of forces that have discontinuities in them, such as discrete
+potentials or discontinuities introduced by truncating potentials to
+improve simulator speed.  There are a couple of types of integrators
+that try and reduce these problems.
 
-Sympletic integrators have the useful property in that they, on
-average, conserve energy \cite{Hairer2003}. The most common symplectic
-integrator used in MD is the Velocity Verlet Integrator
-\cite{Swope1982} shown in \eqref{eq:VVerlet}.
-
-\begin{subequations}
-\label{eq:VVerlet}
-\begin{align}
- \vec{r}(t + \Delta t) &= \vec{r}(t) + \vec{v}(t) \Delta t 
- + \frac{1}{2}\vec{a}(t) \Delta t^2 + \mathcal{O}(\Delta t^4)
- \label{eq:VVerletpos} \\
- \vec{v}(t+\Delta t) &= \vec{v}(t) + \frac{\vec{a}(t) 
-   + \vec{a}(t+\Delta t)}{2}\Delta t
- \label{eq:VVerletVel}
-\end{align}
-\end{subequations}
-
-The popularity of the Velocity Verlet is due to its computational
-simplicity andits accuracy and stability at relatively long
-timesteps. It can even be expanded\cite{Khakimov2002} to maintain its
-accuracy and stability at very long timesteps at a small extra
-computational cost. However the Velocity Verlet cannot be used in
-systems that do not conserve energy, ie systems with dissipative
-forces.
-
-Another popular method of improving the traditional integrator is
-predictor-corrector integrators. These use a truncated Taylor series
+The first method to improve the traditional integrator is the
+predictor-corrector integrator. These use a truncated Taylor series
 to calculated a predicted value for the future position and higher
 order time derivatives. The force is then calculated at this
 predicited position, then the difference between the predicted
@@ -402,21 +437,21 @@ is used to correct the position and time derivatives.
 The most popular predictor-corrector integrator is that of Gear
 \cite{Gear1971},using his 5th order algorithm. The predicted value for
 the $i^{th}$ time derivative is shown in \eqref{eq:GearPredictor}, and
-defining $\Delta \vec{a} = \vec{a}\,^{C} - \vec{a}\,^{P}$, the
+defining $\Delta \mathbf{a} = \mathbf{a}\,^{C} - \mathbf{a}\,^{P}$, the
 corrected time derivatives can be calculated using
 \eqref{eq:GearCorrector} with coefficients from \eqref{eq:GearCoeff}.
 
 \begin{equation} 
-  \frac{\partial^{i}}{\partial t^{i}} \vec{r}\:^{P}(t+\Delta t)
+  \frac{\partial^{i}}{\partial t^{i}} \mathbf{r}\:^{P}(t+\Delta t)
   =\sum^{n}_{k=i} \frac{1}{k!}\frac{\partial^{i} }{\partial t^{i}}
-  \vec{r}(t) \Delta t^{k} 
+  \mathbf{r}(t) \Delta t^{k} 
   \label{eq:GearPredictor} 
 \end{equation}
 
 \begin{equation} 
-  \frac{\partial^{i}}{\partial t^{i}} \vec{r}\:^{C}(t+\Delta t)
-  =\frac{\partial^{i} }{\partial t^{i}} \vec{r}\:^{P}(t+\Delta t)
-  +\frac{c_i}{\Delta t^i} \left(\frac{\Delta t^2}{2}\Delta \vec{a}\right)
+  \frac{\partial^{i}}{\partial t^{i}} \mathbf{r}\:^{C}(t+\Delta t)
+  =\frac{\partial^{i} }{\partial t^{i}} \mathbf{r}\:^{P}(t+\Delta t)
+  +\frac{c_i}{\Delta t^i} \left(\frac{\Delta t^2}{2}\Delta \mathbf{a}\right)
   \label{eq:GearCorrector} \end{equation} \begin{equation} c_0 =
   \frac{3}{16},\;\;c_1 = \frac{251}{360},\;\; c_2 = 1,\;\; c_3 =
   \frac{11}{18},\;\; c_4 =
@@ -426,8 +461,156 @@ corrected time derivatives can be calculated using
 The Gear's algorithm, while more accurate at short timesteps than Verlet's
 integrator \cite{Haile1997}, suffers at long timesteps and is computationally
 more expensive.
-\newpage
-\section{Event-Driven Simulators} 
+
+The other method used to try and mitigate the failings of other types
+of integrator is the sympletic integrator.  These have the useful
+property in that they, on average, conserve energy
+\cite{Hairer2003}. The most common symplectic integrator used in MD is
+the Velocity Verlet Integrator \cite{Swope1982} shown in
+\eqref{eq:VVerlet}.
+
+\begin{subequations}
+\label{eq:VVerlet}
+\begin{align}
+ \mathbf{r}(t + \Delta t) &= \mathbf{r}(t) + \mathbf{v}(t) \Delta t 
+ + \frac{1}{2}\mathbf{a}(t) \Delta t^2 + \mathcal{O}(\Delta t^4)
+ \label{eq:VVerletpos} \\
+ \mathbf{v}(t+\Delta t) &= \mathbf{v}(t) + \frac{\mathbf{a}(t) 
+   + \mathbf{a}(t+\Delta t)}{2}\Delta t
+ \label{eq:VVerletVel}
+\end{align}
+\end{subequations}
+
+The popularity of the Velocity Verlet is due to its computational
+simplicity and its accuracy and stability at relatively long
+timesteps. It can even be expanded\cite{Khakimov2002} to maintain its
+accuracy and stability at very long timesteps at a small extra
+computational cost. However the Velocity Verlet cannot be used in
+systems that do not conserve energy, ie systems with dissipative
+forces.
+
+Since in this disseration all forces considered are conservative the
+Velocity Verlet integrator is used.
+
+\subsection{Periodic Boundary Conditions}
+
+When simulating a system it is necessary to have a boundary to prevent
+the particles from moving away from each into infinity.  However solid
+walls have a large effect on the properties of a system so an
+alternative method is needed.  Since some of the earliest MD
+simulations \cite{Alder1959} have used periodic boundary conditions to
+solve this problem.  
+
+\begin{figure}[htp] 
+  \begin{center}
+    \includegraphics[clip, scale = 0.8]{figures/PBC} 
+    \caption{\label{fig:PBC} Figure showing 2D periodic boundary
+      conditions. Only the nearest 8 images (dashed) to the simulated
+      system (solid) are shown.}
+  \end{center}
+\end{figure}
+
+The concept behind periodic boundary conditions is to create a
+pseudoinfinite system made up of tessellated images of the simulated
+system (as shown in figure \ref{fig:PBC}).  When a particle leaves the
+primary cell, its image enters from the opposite side.  This ensures
+mass is conserved in each cell.  This, however, brings the problem of
+particles being able to interact with multiple images of another
+particle, or even with themselves.  The minimum image criterion is
+used to ensure particles only interact with the closest image of
+another particle.
+
+
+\subsection{Thermostat}
+
+All simulations in this dissertation used the caniocal NVT ensemble,
+i.e.\ the number of particles, $N$; the volume of the system, $V$ and
+the temperature, $T$ were kept constant during the simulation.  While
+keeping the number of particles and system size constant is simple,
+controlling the temperature is more complex.  
+
+The simplest method for controlling the temperature is to rescale the
+particle velocities to match the desired temperature using equation
+\eqref{eq:tempRescale}. 
+
+\begin{equation}
+  \label{eq:tempRescale}
+  \mathbf{v}_{\text{new}} = \mathbf{v}_{\text{old}} \sqrt{\frac{T_{\text{desired}}}{T_{\text{current}}}}
+\end{equation}
+
+However this does not allow energy fluctuations that should exist in a
+NVT system, therefore an Andersen thermostat\cite{Andersen1980} is
+used.  An Andersen thermostat works by colliding a random particle
+with a ghost particle at the desired temperature.  In this
+force-driven simulation, this is achieved by reassigning the
+velocities of 5\% of particles from a Gaussian distribution at the
+correct temperature (similar to section \ref{sec:initMD}).
+
+\subsection{Optimisation}
+
+Due to the time-consuming nature of computer simulations there are a
+number of techniques used to speed up simulations.  Since the
+calculation of the forces on the particles is the most time-consuming
+part of force-driven simulations \cite{Frenkel2002}, almost all
+optimising techniques focus on this aspect.
+
+The first technique to improve simulation speed is to truncate the
+potential.  Since continuous potentials tend to zero as particles get
+further away from each other, significant time can be saved by
+selecting a cut-off radius at which the potential is taken to be zero.
+The form of a truncated potential is shown in equation
+\eqref{eq:truncatePotential}.  For the Lennard-Jones potential a
+cut-off radius of $3\sigma$ is used as $\mathcal{U}(3\sigma) =
+-0.00548\varepsilon$ and $F(3\sigma) = -0.0109\varepsilon/\sigma$ are
+both approximately 1\% of the minimum values.
+
+\begin{equation}
+  \label{eq:truncatePotential}
+  \mathcal{U}(r) = 
+  \begin{cases}
+    \mathcal{U}(r) &\text{if }\; r \leq r_{\text{cut-off}} \\
+    0 & \text{if }\; r > r_{\text{cut-off}} 
+  \end{cases}
+\end{equation}
+
+While truncating the potential prevents the calculation of the forces
+it still requires the computation of the distance between particles.
+These extraneous calculations can be eliminated by using a neighbour list.
+
+There are two main types of neighbour list used in molcular dynamics
+simulations.  The first is the use of Verlet lists \cite{Verlet1967},
+and this is the type used in this disseration for the force-driven
+simulation.  A Verlet list is a list of all the particles within a
+certain radius of a particle.  If this list was updated every
+timestep, this would be no improvement on the original method, but by
+making the Verlet radius larger than the truncation radius, these list
+can be used for multiple timesteps.  Haile \cite{Haile1997} recommends
+using a Verlet radius of $3.3\sigma$, and updating the list every $10$
+timesteps, and this is what was done in this dissertation.
+
+Another method is to use cell-linked lists \cite{Poschel2005}, this
+method involves dividing the system into a grid and only the particles
+in the same cell or a neighbouring cell are taken into account.  This
+method can however be inefficient as the length of each cell must be
+at least the truncation cut-off radius wide to prevent particles being
+missed out.  However this means a volume of $27r_{\text{cut-off}}^3$
+(as in 3 dimensions each cell has 26 neighbours) are considered but
+only particles within the spherical volume $\frac{4}{3}\pi
+r_{\text{cut-off}}^3$ should be checked; this means the volume checked
+is over six times larger than it needs to be.  
+
+Mattson and Rice \cite{Mattson1999} improve this by reducing the
+length of each cell to less than the cut-off radius, but this results
+in more neighbouring cells having to be checked i.e. for a cell length
+of $0.5r_{\text{cut-off}}$ the nearest 124 (a $5\times 5\times 5$
+grid) cells are considered neighbours. This means there is a
+compromise as smaller cells mean that less volume is checked, but also
+means the cell lists are made obsolete quicker and therefore have to
+generated more frequently.
+
+ \newpage
+\section{Event-Driven Simulators}
+ 
 Start off by pointing out that discontinuous potentials have
 discontinuities! Whats the force on these points? Infinity! Can't
 integrate over these discontinuities, but what about between them? We
@@ -439,14 +622,55 @@ How do you solve what happens over a discontinuity? Conservation of
 momentum and energy (see appendix).
 
 \subsection{Introduction} 
+
+Most molecular dynamics simulations use potentials to calculate the
+forces acting on particles (see section \ref{NewtonLaw}), however this
+is problematic when using discrete potentials.  The gradient (and
+hence the force) is either infinite at the steps or zero between them.
+
+Therefore a new technique for simulating these discrete potentials is
+needed.  Since between the steps there is no force therefore the
+acceleration (and higher order time derivatives) are zero the Taylor
+series (equation \eqref{eq:Taylor}) can be reduced to equation
+\eqref{eq:edNewPos}.
+
+\begin{equation}
+  \mathbf{r}(t+\Delta t) = \mathbf{r}(t) + \mathbf{v}(t)\Delta t 
+  \label{eq:edNewPos}
+\end{equation}
+
+This leaves only the problem of simulating the point where the
+particles are at a step, but since, energy and momentum must be
+conserved, this too can be overcome (this is expanded upon in section
+\ref{sec:CollDyn}).  This method is known as event-driven molecular
+dynamics.
+
 Though force-driven simulators are more popular the first MD
 simulation was done using an event-driven simulator by Alder and
-Wainwright \cite{Alder1959}. The difference between force and event
-driven simulations lies in how the simulators move through time.
-While force driven simulators move forward in uniform blocks, event
-driven simulators jump between successive collisions.  These
-collisions are taken to be instantaneous and only one can occur at any
-particular time.
+Wainwright \cite{Alder1957}. Event-driven simulators differ from
+force-driven simulators in that they move through time by jumping from
+the point when a discontinuity occurs (known as a collision) to the
+next discontinuity.  These collisions are taken to be instantaneous
+and only one can occur at any particular time.
+
+The general algorithm for a event driven simulator shown below.
+
+\begin{flushleft}
+  \begin{enumerate} 
+  \item Initialisation 
+    \begin{enumerate}
+      \item Initialise particles
+      \item Initialise event list
+      \item Initialise capture map
+    \end{enumerate}
+  \item Find the next event
+  \item Process the event
+  \item Calculate the future velocities of particles 
+  \item Run thermostat (if enabled) 
+  \item Measure properties 
+  \item Repeat steps 2-6 for the desired number of iterations
+  \end{enumerate} 
+\end{flushleft}
 
 \subsection{Collision Time Prediction}
 An event-driven simulator first must calculate the collision times
@@ -519,17 +743,14 @@ equation \eqref{eq:collExitTime}.
 \end{cases}
 \end{equation}
 
-\subsection{Collision Dynamics}
+\subsection{Collision Dynamics \label{sec:CollDyn}}
 Once the time of the next collision is known, the particles can be moved
 to their new locations.  Generally there is no external force applied
 to the particles in event-driven molecular dynamics, therefore the
 particles move in straight lines.  Hence the particles' new positions
 can be calculated using equation \eqref{eq:edNewPos}.
 
-\begin{equation}
-  \mathbf{r}(t+\Delta t) = \mathbf{r}(t) + \mathbf{v}(t)\Delta t 
-  \label{eq:edNewPos}
-\end{equation}
+
 
 The post-collision velocities of the colliding particles must now be
 calculated.  The simplest collision between two particles is an
@@ -742,48 +963,7 @@ direction.
 \chapter{Methodology} 
 \section{Introduction} 
 
-The two simulators described in this chapter were coded in C++ using
-the C++ Standard Library with the Boost [cite] library to handle
-random number generation.
 
-\section{Force-driven Simulator} 
-Force driven simuators are currently the
-dominant MD paradigm therefore it was decided that the results from
-the stepped potentials would be compared to the equivalent results
-obtained from a force-driven simulator. In order to acquire these
-results a force-driven simulator was written.
-
-The algorithm for the force driven simulator is as follows. 
-\begin{flushleft}
-  \begin{enumerate} 
-  \item Initialisation 
-  \item Calculate particles' future positions 
-  \item Calculate the forces acting on the particles 
-  \item Calculate the future velocities of particles 
-  \item Run thermostat (if enabled) 
-  \item Measure properties 
-  \item Repeat steps 2-6 for the desired number of iterations
-  \end{enumerate} 
-\end{flushleft}
-
-\subsection{Initialisation} The particles are initialised in a Face Centered
-Cubic (FCC) \nomenclature[A]{FCC}{Face Centered Cubic} structure. The
-use of the FCC lattice is common when simulating Lennard-Jones
-potentials as the first force-driven simulation \cite{Rahman1964} was
-carried out using liquid Argon which crystalises to a FCC lattice.
-
-Particle velocities are assigned randomly from a Gaussian distribution
-with a mean, $\mu = 0$, and a standard deviation, $\sigma =
-\sqrt{T^{*}}$, where $T^{*}$ is the desired reduced temperature. The
-velocities are then rescaled to ensure there net shift in linear
-momentum in any direction by applying \eqref{eq:zeroLinearP} in each
-orthongonal direction.
-
-\begin{equation} 
-  v_{i}^{new} = v_{i}^{old} - \frac{1}{N}
-  \sum^{N}_{i}v_{i}^{old}
-  \label{eq:zeroLinearP} 
-\end{equation}
 
 \subsection{Running Simulation} 
 The
@@ -865,21 +1045,28 @@ simulator with literature values. $t_{avg}$ is the average time
 between collisions, $\langle\mathbf{\hat{r}} \cdot \Delta \mathbf{v}
 \rangle_{coll}$ is the average momentum transfer per collision, and D
 is the coefficient of
-diffusion.} \label{tab:benchhard} \begin{center} \begin{tabular}{l c c
-        c c c c} \toprule $\rho$ & \multicolumn{2}{c}{$t_{avg}$} &
+diffusion.} 
+\label{tab:benchhard} 
+\begin{center} 
+  \begin{tabular}{l c c c c c c} 
+    \toprule $\rho$ & \multicolumn{2}{c}{$t_{avg}$} &
       \multicolumn{2}{c}{$\langle\mathbf{\hat{r}} \cdot \Delta
-        \mathbf{v} \rangle_{coll}$} & \multicolumn{2}{c}{D}
-      \\ \cmidrule(rl{0.75em}){2-3} \cmidrule(rl{0.75em}){4-5}
+        \mathbf{v} \rangle_{coll}$} & \multicolumn{2}{c}{D} \\ 
+      \cmidrule(rl{0.75em}){2-3} 
+      \cmidrule(rl{0.75em}){4-5}
       \cmidrule(rl{0.75em}){6-7} & Simulator & Lue & Simulator & Lue &
-      Simulator & Lue\\ \midrule 0.3 & 0.3052 & 0.3052 & 1.775 & 1.772
-      & 0.53 & 0.55 \\ 0.4 & 0.1944 & 0.1942 & 1.776 & 1.773 & 0.341 &
-      0.359 \\ 0.5 & 0.13024 & 0.13031 & 1.774 & 1.7724 & 0.247 &
-      0.247 \\ 0.6 & 0.08966 & 0.08968 & 1.771 & 1.7721 & 0.169 &
-      0.173 \\ 0.7 & 0.0625 & 0.0625 & 1.773 & 1.776 & 0.114 & 0.113
-      \\ 0.8 & 0.04365 & 0.0436 & 1.772 & 1.772 & 0.064 & 0.065 \\ 0.9
-      & 0.03029 & 0.03024 & 1.773 & 1.772 & 0.033 & 0.0327
+      Simulator & Lue
+      \\ \midrule 0.3 & 0.3052 & 0.3052 & 1.775 & 1.772 & 0.53 & 0.55 
+      \\ 0.4 & 0.1944 & 0.1942 & 1.776 & 1.773 & 0.341 & 0.359 
+      \\ 0.5 & 0.13024 & 0.13031 & 1.774 & 1.7724 & 0.247 & 0.247 
+      \\ 0.6 & 0.08966 & 0.08968 & 1.771 & 1.7721 & 0.169 & 0.173 
+      \\ 0.7 & 0.0625 & 0.0625 & 1.773 & 1.776 & 0.114 & 0.113
+      \\ 0.8 & 0.04365 & 0.0436 & 1.772 & 1.772 & 0.064 & 0.065 
+      \\ 0.9 & 0.03029 & 0.03024 & 1.773 & 1.772 & 0.033 & 0.0327
       \\ \bottomrule
-\end{tabular} \end{center} \end{table}
+    \end{tabular} 
+  \end{center} 
+\end{table}
 
 The simulator was then benchmarked using a step potential. The results
 were compared with Chapela et al \cite{Chapela1989} using their 'Case
@@ -1043,4 +1230,4 @@ is given in equations \eqref{eq:deltaV}
 %\vec{d}(t+\Delta t) &=
 %\vec{d}(t)\Delta t^5 \\ %\end{aligned} %\end{equation}
 
-\message{ !name(main.tex) !offset(-1046) }
+\message{ !name(main.tex) !offset(-1233) }

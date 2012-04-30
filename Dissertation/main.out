@@ -1,51 +1,52 @@
-\BOOKMARK [0][-]{FrontCover.0}{Front Cover}{}% 1
-\BOOKMARK [0][-]{chapter*.2}{Abstract}{}% 2
-\BOOKMARK [0][-]{Contents.0}{Contents}{}% 3
-\BOOKMARK [0][-]{TableoffiguresPg.0}{List of Figures}{}% 4
-\BOOKMARK [0][-]{TableoftablesPg.0}{List of Tables}{}% 5
-\BOOKMARK [0][-]{section*.9}{Nomenclature}{}% 6
-\BOOKMARK [0][-]{chapter*.11}{Acknowledgements}{}% 7
-\BOOKMARK [0][-]{chapter.1}{1 Introduction}{}% 8
-\BOOKMARK [0][-]{chapter.2}{2 Molecular Models}{}% 9
-\BOOKMARK [1][-]{section.2.1}{2.1 Classical Mechanics}{chapter.2}% 10
-\BOOKMARK [2][-]{subsection.2.1.1}{2.1.1 Validity of Classical Mechanics}{section.2.1}% 11
-\BOOKMARK [2][-]{subsection.2.1.2}{2.1.2 Newton's Second Law of Motion}{section.2.1}% 12
-\BOOKMARK [1][-]{section.2.2}{2.2 Continuous Potentials}{chapter.2}% 13
-\BOOKMARK [1][-]{section.2.3}{2.3 Discrete Potentials}{chapter.2}% 14
-\BOOKMARK [0][-]{chapter.3}{3 Molecular Dynamics}{}% 15
-\BOOKMARK [1][-]{section.3.1}{3.1 Force-Driven Simulators}{chapter.3}% 16
-\BOOKMARK [2][-]{subsection.3.1.1}{3.1.1 Introduction}{section.3.1}% 17
-\BOOKMARK [2][-]{subsection.3.1.2}{3.1.2 Integrators}{section.3.1}% 18
-\BOOKMARK [1][-]{section.3.2}{3.2 Event-Driven Simulators}{chapter.3}% 19
-\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Introduction}{section.3.2}% 20
-\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Collision Time Prediction}{section.3.2}% 21
-\BOOKMARK [2][-]{subsection.3.2.3}{3.2.3 Collision Dynamics}{section.3.2}% 22
-\BOOKMARK [1][-]{section.3.3}{3.3 Measurement of System Properties}{chapter.3}% 23
-\BOOKMARK [2][-]{subsection.3.3.1}{3.3.1 Introduction}{section.3.3}% 24
-\BOOKMARK [2][-]{subsection.3.3.2}{3.3.2 Units}{section.3.3}% 25
-\BOOKMARK [2][-]{subsection.3.3.3}{3.3.3 Energy}{section.3.3}% 26
-\BOOKMARK [2][-]{subsection.3.3.4}{3.3.4 Temperature}{section.3.3}% 27
-\BOOKMARK [0][-]{chapter.4}{4 Methodology}{}% 28
-\BOOKMARK [1][-]{section.4.1}{4.1 Introduction}{chapter.4}% 29
-\BOOKMARK [1][-]{section.4.2}{4.2 Force-driven Simulator}{chapter.4}% 30
-\BOOKMARK [2][-]{subsection.4.2.1}{4.2.1 Initialisation}{section.4.2}% 31
-\BOOKMARK [2][-]{subsection.4.2.2}{4.2.2 Running Simulation}{section.4.2}% 32
-\BOOKMARK [0][-]{chapter.5}{5 Measuring Thermodynamic Properties}{}% 33
-\BOOKMARK [1][-]{section.5.1}{5.1 Temperature and Internal energy }{chapter.5}% 34
-\BOOKMARK [1][-]{section.5.2}{5.2 Pressure \(continuous and discontinuous\)}{chapter.5}% 35
-\BOOKMARK [1][-]{section.5.3}{5.3 g\(r\)}{chapter.5}% 36
-\BOOKMARK [1][-]{section.5.4}{5.4 g\(r\) to pressure and temperature}{chapter.5}% 37
-\BOOKMARK [1][-]{section.5.5}{5.5 long range corrections}{chapter.5}% 38
-\BOOKMARK [0][-]{chapter.6}{6 From Continuous to Discontinuous}{}% 39
-\BOOKMARK [0][-]{chapter.7}{7 Results}{}% 40
-\BOOKMARK [1][-]{section.7.1}{7.1 Benchmarking}{chapter.7}% 41
-\BOOKMARK [2][-]{subsection.7.1.1}{7.1.1 Introduction}{section.7.1}% 42
-\BOOKMARK [2][-]{subsection.7.1.2}{7.1.2 Force based code verusus NIST and ESpReSSo}{section.7.1}% 43
-\BOOKMARK [2][-]{subsection.7.1.3}{7.1.3 Event Driven}{section.7.1}% 44
-\BOOKMARK [1][-]{section.7.2}{7.2 Chapela's dumb stepping and very good stepping versus force based. }{chapter.7}% 45
-\BOOKMARK [1][-]{section.7.3}{7.3 Stepping in probability versus action}{chapter.7}% 46
-\BOOKMARK [1][-]{section.7.4}{7.4 Hard core position}{chapter.7}% 47
-\BOOKMARK [1][-]{section.7.5}{7.5 Temperature comparisons}{chapter.7}% 48
-\BOOKMARK [2][-]{subsection.7.5.1}{7.5.1 Event-Driven Simulator}{section.7.5}% 49
-\BOOKMARK [1][-]{section.7.6}{7.6 References}{chapter.7}% 50
-\BOOKMARK [0][-]{appendix.A}{A Derivation of Collision Dynamics for Stepped Potentials}{}% 51
+\BOOKMARK [0][-]{FrontCover.0}{Front Cover}{}
+\BOOKMARK [0][-]{chapter*.2}{Abstract}{}
+\BOOKMARK [0][-]{Contents.0}{Contents}{}
+\BOOKMARK [0][-]{TableoffiguresPg.0}{List of Figures}{}
+\BOOKMARK [0][-]{TableoftablesPg.0}{List of Tables}{}
+\BOOKMARK [0][-]{section*.9}{Nomenclature}{}
+\BOOKMARK [0][-]{chapter*.11}{Acknowledgements}{}
+\BOOKMARK [0][-]{chapter.1}{1 Introduction}{}
+\BOOKMARK [0][-]{chapter.2}{2 Molecular Models}{}
+\BOOKMARK [1][-]{section.2.1}{2.1 Classical Mechanics}{chapter.2}
+\BOOKMARK [2][-]{subsection.2.1.1}{2.1.1 Validity of Classical Mechanics}{section.2.1}
+\BOOKMARK [2][-]{subsection.2.1.2}{2.1.2 Newton's Second Law of Motion }{section.2.1}
+\BOOKMARK [1][-]{section.2.2}{2.2 Continuous Potentials}{chapter.2}
+\BOOKMARK [1][-]{section.2.3}{2.3 Discrete Potentials}{chapter.2}
+\BOOKMARK [0][-]{chapter.3}{3 Molecular Dynamics}{}
+\BOOKMARK [1][-]{section.3.1}{3.1 Force-driven Simulators}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.1.1}{3.1.1 Initialisation }{section.3.1}
+\BOOKMARK [2][-]{subsection.3.1.2}{3.1.2 Integrators}{section.3.1}
+\BOOKMARK [2][-]{subsection.3.1.3}{3.1.3 Periodic Boundary Conditions}{section.3.1}
+\BOOKMARK [2][-]{subsection.3.1.4}{3.1.4 Thermostat}{section.3.1}
+\BOOKMARK [2][-]{subsection.3.1.5}{3.1.5 Optimisation}{section.3.1}
+\BOOKMARK [1][-]{section.3.2}{3.2 Event-Driven Simulators}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Introduction}{section.3.2}
+\BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Collision Time Prediction}{section.3.2}
+\BOOKMARK [2][-]{subsection.3.2.3}{3.2.3 Collision Dynamics }{section.3.2}
+\BOOKMARK [1][-]{section.3.3}{3.3 Measurement of System Properties}{chapter.3}
+\BOOKMARK [2][-]{subsection.3.3.1}{3.3.1 Introduction}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.2}{3.3.2 Units}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.3}{3.3.3 Energy}{section.3.3}
+\BOOKMARK [2][-]{subsection.3.3.4}{3.3.4 Temperature}{section.3.3}
+\BOOKMARK [0][-]{chapter.4}{4 Methodology}{}
+\BOOKMARK [1][-]{section.4.1}{4.1 Introduction}{chapter.4}
+\BOOKMARK [2][-]{subsection.4.1.1}{4.1.1 Running Simulation}{section.4.1}
+\BOOKMARK [0][-]{chapter.5}{5 Measuring Thermodynamic Properties}{}
+\BOOKMARK [1][-]{section.5.1}{5.1 Temperature and Internal energy }{chapter.5}
+\BOOKMARK [1][-]{section.5.2}{5.2 Pressure \(continuous and discontinuous\)}{chapter.5}
+\BOOKMARK [1][-]{section.5.3}{5.3 g\(r\)}{chapter.5}
+\BOOKMARK [1][-]{section.5.4}{5.4 g\(r\) to pressure and temperature}{chapter.5}
+\BOOKMARK [1][-]{section.5.5}{5.5 long range corrections}{chapter.5}
+\BOOKMARK [0][-]{chapter.6}{6 From Continuous to Discontinuous}{}
+\BOOKMARK [0][-]{chapter.7}{7 Results}{}
+\BOOKMARK [1][-]{section.7.1}{7.1 Benchmarking}{chapter.7}
+\BOOKMARK [2][-]{subsection.7.1.1}{7.1.1 Introduction}{section.7.1}
+\BOOKMARK [2][-]{subsection.7.1.2}{7.1.2 Force based code verusus NIST and ESpReSSo}{section.7.1}
+\BOOKMARK [2][-]{subsection.7.1.3}{7.1.3 Event Driven}{section.7.1}
+\BOOKMARK [1][-]{section.7.2}{7.2 Chapela's dumb stepping and very good stepping versus force based. }{chapter.7}
+\BOOKMARK [1][-]{section.7.3}{7.3 Stepping in probability versus action}{chapter.7}
+\BOOKMARK [1][-]{section.7.4}{7.4 Hard core position}{chapter.7}
+\BOOKMARK [1][-]{section.7.5}{7.5 Temperature comparisons}{chapter.7}
+\BOOKMARK [2][-]{subsection.7.5.1}{7.5.1 Event-Driven Simulator}{section.7.5}
+\BOOKMARK [1][-]{section.7.6}{7.6 References}{chapter.7}
+\BOOKMARK [0][-]{appendix.A}{A Derivation of Collision Dynamics for Stepped Potentials}{}

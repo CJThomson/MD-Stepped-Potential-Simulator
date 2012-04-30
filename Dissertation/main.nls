@@ -2,7 +2,9 @@
 
  \nomgroup{A}
 
-  \item [{FCC}]\begingroup Face Centered Cubic\nomeqref {3.2.0}
-		\nompageref{22}
+  \item [{FCC}]\begingroup Face Centered Cubic\nomeqref {3.1.0}
+		\nompageref{16}
+  \item [{MD}]\begingroup Molecular Dynamics\nomeqref {2.0.0}
+		\nompageref{10}
 
 \end{thenomenclature}

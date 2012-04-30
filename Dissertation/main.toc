@@ -14,7 +14,7 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {subsection}{\numberline {2.1.1}Validity of Classical Mechanics}{10}{subsection.2.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {2.1.2}Newton's Second Law of Motion}{10}{subsection.2.1.2}
+\contentsline {subsection}{\numberline {2.1.2}Newton's Second Law of Motion }{10}{subsection.2.1.2}
 \defcounter {refsection}{0}\relax 
 \contentsline {section}{\numberline {2.2}Continuous Potentials}{11}{section.2.2}
 \defcounter {refsection}{0}\relax 
@@ -22,74 +22,76 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {chapter}{\numberline {3}Molecular Dynamics}{15}{chapter.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.1}Force-Driven Simulators}{15}{section.3.1}
+\contentsline {section}{\numberline {3.1}Force-driven Simulators}{15}{section.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.1}Introduction}{15}{subsection.3.1.1}
+\contentsline {subsection}{\numberline {3.1.1}Initialisation }{16}{subsection.3.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.1.2}Integrators}{15}{subsection.3.1.2}
+\contentsline {subsection}{\numberline {3.1.2}Integrators}{16}{subsection.3.1.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.2}Event-Driven Simulators}{18}{section.3.2}
+\contentsline {subsection}{\numberline {3.1.3}Periodic Boundary Conditions}{18}{subsection.3.1.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.1}Introduction}{18}{subsection.3.2.1}
+\contentsline {subsection}{\numberline {3.1.4}Thermostat}{19}{subsection.3.1.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.2}Collision Time Prediction}{18}{subsection.3.2.2}
+\contentsline {subsection}{\numberline {3.1.5}Optimisation}{19}{subsection.3.1.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.2.3}Collision Dynamics}{19}{subsection.3.2.3}
+\contentsline {section}{\numberline {3.2}Event-Driven Simulators}{21}{section.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {3.3}Measurement of System Properties}{21}{section.3.3}
+\contentsline {subsection}{\numberline {3.2.1}Introduction}{21}{subsection.3.2.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.1}Introduction}{21}{subsection.3.3.1}
+\contentsline {subsection}{\numberline {3.2.2}Collision Time Prediction}{22}{subsection.3.2.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.2}Units}{22}{subsection.3.3.2}
+\contentsline {subsection}{\numberline {3.2.3}Collision Dynamics }{23}{subsection.3.2.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.3}Energy}{22}{subsection.3.3.3}
+\contentsline {section}{\numberline {3.3}Measurement of System Properties}{25}{section.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {3.3.4}Temperature}{23}{subsection.3.3.4}
+\contentsline {subsection}{\numberline {3.3.1}Introduction}{25}{subsection.3.3.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {4}Methodology}{24}{chapter.4}
+\contentsline {subsection}{\numberline {3.3.2}Units}{26}{subsection.3.3.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.1}Introduction}{24}{section.4.1}
+\contentsline {subsection}{\numberline {3.3.3}Energy}{26}{subsection.3.3.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {4.2}Force-driven Simulator}{24}{section.4.2}
+\contentsline {subsection}{\numberline {3.3.4}Temperature}{27}{subsection.3.3.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.1}Initialisation}{25}{subsection.4.2.1}
+\contentsline {chapter}{\numberline {4}Methodology}{28}{chapter.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {4.2.2}Running Simulation}{25}{subsection.4.2.2}
+\contentsline {section}{\numberline {4.1}Introduction}{28}{section.4.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {5}Measuring Thermodynamic Properties}{26}{chapter.5}
+\contentsline {subsection}{\numberline {4.1.1}Running Simulation}{28}{subsection.4.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.1}Temperature and Internal energy }{26}{section.5.1}
+\contentsline {chapter}{\numberline {5}Measuring Thermodynamic Properties}{29}{chapter.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.2}Pressure (continuous and discontinuous)}{26}{section.5.2}
+\contentsline {section}{\numberline {5.1}Temperature and Internal energy }{29}{section.5.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.3}g(r)}{26}{section.5.3}
+\contentsline {section}{\numberline {5.2}Pressure (continuous and discontinuous)}{29}{section.5.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.4}g(r) to pressure and temperature}{26}{section.5.4}
+\contentsline {section}{\numberline {5.3}g(r)}{29}{section.5.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {5.5}long range corrections}{26}{section.5.5}
+\contentsline {section}{\numberline {5.4}g(r) to pressure and temperature}{29}{section.5.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {6}From Continuous to Discontinuous}{27}{chapter.6}
+\contentsline {section}{\numberline {5.5}long range corrections}{29}{section.5.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {7}Results}{28}{chapter.7}
+\contentsline {chapter}{\numberline {6}From Continuous to Discontinuous}{30}{chapter.6}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.1}Benchmarking}{28}{section.7.1}
+\contentsline {chapter}{\numberline {7}Results}{31}{chapter.7}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.1.1}Introduction}{28}{subsection.7.1.1}
+\contentsline {section}{\numberline {7.1}Benchmarking}{31}{section.7.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.1.2}Force based code verusus NIST and ESpReSSo}{28}{subsection.7.1.2}
+\contentsline {subsection}{\numberline {7.1.1}Introduction}{31}{subsection.7.1.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.1.3}Event Driven}{28}{subsection.7.1.3}
+\contentsline {subsection}{\numberline {7.1.2}Force based code verusus NIST and ESpReSSo}{31}{subsection.7.1.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.2}Chapela's dumb stepping and very good stepping versus force based. }{28}{section.7.2}
+\contentsline {subsection}{\numberline {7.1.3}Event Driven}{31}{subsection.7.1.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.3}Stepping in probability versus action}{28}{section.7.3}
+\contentsline {section}{\numberline {7.2}Chapela's dumb stepping and very good stepping versus force based. }{31}{section.7.2}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.4}Hard core position}{29}{section.7.4}
+\contentsline {section}{\numberline {7.3}Stepping in probability versus action}{31}{section.7.3}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.5}Temperature comparisons}{29}{section.7.5}
+\contentsline {section}{\numberline {7.4}Hard core position}{32}{section.7.4}
 \defcounter {refsection}{0}\relax 
-\contentsline {subsection}{\numberline {7.5.1}Event-Driven Simulator}{29}{subsection.7.5.1}
+\contentsline {section}{\numberline {7.5}Temperature comparisons}{32}{section.7.5}
 \defcounter {refsection}{0}\relax 
-\contentsline {section}{\numberline {7.6}References}{30}{section.7.6}
+\contentsline {subsection}{\numberline {7.5.1}Event-Driven Simulator}{32}{subsection.7.5.1}
 \defcounter {refsection}{0}\relax 
-\contentsline {chapter}{\numberline {A}Derivation of Collision Dynamics for Stepped Potentials}{32}{appendix.A}
+\contentsline {section}{\numberline {7.6}References}{33}{section.7.6}
+\defcounter {refsection}{0}\relax 
+\contentsline {chapter}{\numberline {A}Derivation of Collision Dynamics for Stepped Potentials}{36}{appendix.A}

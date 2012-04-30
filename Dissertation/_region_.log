@@ -1,15 +1,14 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=latex 2012.4.1)  28 APR 2012 23:55
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  30 APR 2012 13:54
 entering extended mode
- restricted \write18 enabled.
  %&-line parsing enabled.
 **\nonstopmode\nofiles\PassOptionsToPackage{active,tightpage,auctex}{preview}\A
 tBeginDocument{\ifx\ifPreview\undefined\RequirePackage[displaymath,floats,graph
 ics,textmath,sections,footnotes]{preview}[2004/11/05]\fi} \input _region_.tex
 (./_region_.tex  !name(main.tex) (./UoAthesis.cls
 Document Class: UoAthesis 
-(/usr/share/texmf-dist/tex/latex/base/report.cls
+(/usr/share/texmf-texlive/tex/latex/base/report.cls
 Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
-(/usr/share/texmf-dist/tex/latex/base/size12.clo
+(/usr/share/texmf-texlive/tex/latex/base/size12.clo
 File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 )
 \c@part=\count79
@@ -30,23 +29,20 @@ File: size12.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
 \topMargin=\skip45
 \bottomMargin=\skip46
 
-(/usr/share/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2010/09/12 v5.6 Page Geometry
+(/usr/share/texmf-texlive/tex/latex/geometry/geometry.sty
+Package: geometry 2008/12/21 v4.2 Page Geometry
 
-(/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/share/texmf-texlive/tex/latex/graphics/keyval.sty
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-(/usr/share/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
-Package ifpdf Info: pdfTeX in PDF mode is not detected.
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ifpdf.sty
+Package: ifpdf 2009/04/10 v2.0 Provides the ifpdf switch (HO)
+Package ifpdf Info: pdfTeX in pdf mode detected.
 )
-(/usr/share/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-Package: ifvtex 2010/03/01 v1.5 Switches for detecting VTeX and its modes (HO)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ifvtex.sty
+Package: ifvtex 2008/11/04 v1.4 Switches for detecting VTeX and its modes (HO)
 Package ifvtex Info: VTeX not detected.
-)
-(/usr/share/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
 \Gm@cnth=\count88
 \Gm@cntv=\count89
@@ -55,13 +51,9 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@wd@mp=\dimen104
 \Gm@odd@mp=\dimen105
 \Gm@even@mp=\dimen106
-\Gm@layoutwidth=\dimen107
-\Gm@layoutheight=\dimen108
-\Gm@layouthoffset=\dimen109
-\Gm@layoutvoffset=\dimen110
 \Gm@dimlist=\toks15
 )
-(/usr/share/texmf-dist/tex/latex/fncychap/fncychap.sty
+(/usr/share/texmf-texlive/tex/latex/fncychap/fncychap.sty
 Package: fncychap 2007/07/30 v1.34 LaTeX package (Revised chapters)
 \RW=\skip47
 \mylen=\skip48
@@ -73,27 +65,3917 @@ Package: fncychap 2007/07/30 v1.34 LaTeX package (Revised chapters)
 \c@AlphaCnt=\count91
 \c@AlphaDecCnt=\count92
 )
+(/usr/share/texmf/tex/latex/biblatex/biblatex.sty
+Package: biblatex 2011/11/13 v1.7 programmable bibliographies
 
-! LaTeX Error: File `biblatex.sty' not found.
+(/usr/share/texmf/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2011/01/03 v2.1 e-TeX tools for LaTeX
 
-Type X to quit or <RETURN> to proceed,
-or enter new name. (Default extension: sty)
+(/usr/share/texmf-texlive/tex/latex/etex-pkg/etex.sty
+Package: etex 1998/03/26 v2.0 eTeX basic definition package (PEB)
+\et@xins=\count93
+)
+\etb@tempcnta=\count94
+)
+(/usr/share/texmf/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count95
 
-Enter file name: 
-! Emergency stop.
-<read *> 
-         
-l.65 \defbibheading
-                   {thesisChapterBib}{\section{References}}^^M
-*** (cannot \read from terminal in nonstop modes)
+(/usr/share/texmf/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+(/usr/share/texmf-texlive/tex/latex/base/ifthen.sty
+Package: ifthen 2001/05/26 v1.1c Standard LaTeX ifthen package (DPC)
+)
+(/usr/share/texmf-texlive/tex/latex/ltxmisc/url.sty
+\Urlmuskip=\muskip10
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
+\c@listtotal=\count96
+\c@listcount=\count97
+\c@liststart=\count98
+\c@liststop=\count99
+\c@citecount=\count100
+\c@citetotal=\count101
+\c@multicitecount=\count102
+\c@multicitetotal=\count103
+\c@instcount=\count104
+\c@maxnames=\count105
+\c@minnames=\count106
+\c@maxitems=\count107
+\c@minitems=\count108
+\c@citecounter=\count109
+\c@savedcitecounter=\count110
+\c@uniquelist=\count111
+\c@uniquename=\count112
+\c@refsection=\count113
+\c@refsegment=\count114
+\c@maxextrayear=\count115
+\c@maxextraalpha=\count116
+\c@abbrvpenalty=\count117
+\c@highnamepenalty=\count118
+\c@lownamepenalty=\count119
+\c@maxparens=\count120
+\c@parenlevel=\count121
+\blx@tempcnta=\count122
+\blx@tempcntb=\count123
+\blx@tempcntc=\count124
+\blx@maxsection=\count125
+\blx@maxsegment=\count126
+\blx@notetype=\count127
+\blx@parenlevel@text=\count128
+\blx@parenlevel@foot=\count129
+\labelnumberwidth=\skip54
+\labelalphawidth=\skip55
+\shorthandwidth=\skip56
+\biblabelsep=\skip57
+\bibitemsep=\skip58
+\bibnamesep=\skip59
+\bibinitsep=\skip60
+\bibparsep=\skip61
+\bibhang=\skip62
+\blx@auxin=\read1
+\blx@auxout=\write3
+\c@mincomprange=\count130
+\c@maxcomprange=\count131
+\c@mincompwidth=\count132
+\c@labelname=\count133
+\c@savedlabelname=\count134
+\c@author=\count135
+\c@savedauthor=\count136
+\c@shortauthor=\count137
+\c@savedshortauthor=\count138
+\c@editor=\count139
+\c@savededitor=\count140
+\c@editora=\count141
+\c@savededitora=\count142
+\c@editorb=\count143
+\c@savededitorb=\count144
+\c@editorc=\count145
+\c@savededitorc=\count146
+\c@shorteditor=\count147
+\c@savedshorteditor=\count148
+\c@bookauthor=\count149
+\c@savedbookauthor=\count150
+\c@translator=\count151
+\c@savedtranslator=\count152
+\c@annotator=\count153
+\c@savedannotator=\count154
+\c@commentator=\count155
+\c@savedcommentator=\count156
+\c@introduction=\count157
+\c@savedintroduction=\count158
+\c@foreword=\count159
+\c@savedforeword=\count160
+\c@afterword=\count161
+\c@savedafterword=\count162
+\c@holder=\count163
+\c@savedholder=\count164
+\c@namea=\count165
+\c@savednamea=\count166
+\c@nameb=\count167
+\c@savednameb=\count168
+\c@namec=\count169
+\c@savednamec=\count170
+\c@institution=\count171
+\c@savedinstitution=\count172
+\c@language=\count173
+\c@savedlanguage=\count174
+\c@location=\count175
+\c@savedlocation=\count176
+\c@organization=\count177
+\c@savedorganization=\count178
+\c@origlocation=\count179
+\c@savedoriglocation=\count180
+\c@origpublisher=\count181
+\c@savedorigpublisher=\count182
+\c@pageref=\count183
+\c@savedpageref=\count184
+\c@publisher=\count185
+\c@savedpublisher=\count186
+\c@lista=\count187
+\c@savedlista=\count188
+\c@listb=\count189
+\c@savedlistb=\count190
+\c@listc=\count191
+\c@savedlistc=\count192
+\c@listd=\count193
+\c@savedlistd=\count194
+\c@liste=\count195
+\c@savedliste=\count196
+\c@listf=\count197
+\c@savedlistf=\count198
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
 
- 
+(/usr/share/texmf/tex/latex/biblatex/blx-compat.def
+File: blx-compat.def 2011/11/13 v1.7 biblatex generic compatibility
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+
+(/usr/share/texmf/tex/latex/biblatex/biblatex.def
+File: biblatex.def 2011/11/13 v1.7 biblatex generic definitions
+\c@biburlnumpenalty=\count199
+\c@biburlucpenalty=\count200
+\c@biburllcpenalty=\count201
+\c@smartand=\count202
+)
+Package biblatex Info: Trying to load bibliography style 'numeric'...
+Package biblatex Info: ... file 'numeric.bbx' found.
+
+(/usr/share/texmf/tex/latex/biblatex/bbx/numeric.bbx
+File: numeric.bbx 2011/11/13 v1.7 biblatex bibliography style
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+
+(/usr/share/texmf/tex/latex/biblatex/bbx/standard.bbx
+File: standard.bbx 2011/11/13 v1.7 biblatex bibliography style
+))
+Package biblatex Info: Trying to load citation style 'numeric'...
+Package biblatex Info: ... file 'numeric.cbx' found.
+
+(/usr/share/texmf/tex/latex/biblatex/cbx/numeric.cbx
+File: numeric.cbx 2011/11/13 v1.7 biblatex citation style
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\supercite'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\smartcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+
+(/usr/share/texmf/tex/latex/biblatex/biblatex.cfg
+File: biblatex.cfg 
+))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2000/07/18 v2.13 AMS math features
+\@mathmargin=\skip63
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texmf-texlive/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01
+
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0
+\@emptytoks=\toks16
+\ex@=\dimen107
+))
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d
+\pmbraise@=\dimen108
+)
+(/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty
+Package: amsopn 1999/12/14 v2.01 operator names
+)
+\inf@bad=\count203
+LaTeX Info: Redefining \frac on input line 211.
+\uproot@=\count204
+\leftroot@=\count205
+LaTeX Info: Redefining \overline on input line 307.
+\classnum@=\count206
+\DOTSCASE@=\count207
+LaTeX Info: Redefining \ldots on input line 379.
+LaTeX Info: Redefining \dots on input line 382.
+LaTeX Info: Redefining \cdots on input line 467.
+\Mathstrutbox@=\box26
+\strutbox@=\box27
+\big@size=\dimen109
+LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
+\macc@depth=\count208
+\c@MaxMatrixCols=\count209
+\dotsspace@=\muskip11
+\c@parentequation=\count210
+\dspbrk@lvl=\count211
+\tag@help=\toks17
+\row@=\count212
+\column@=\count213
+\maxfields@=\count214
+\andhelp@=\toks18
+\eqnshift@=\dimen110
+\alignsep@=\dimen111
+\tagshift@=\dimen112
+\tagwidth@=\dimen113
+\totwidth@=\dimen114
+\lineht@=\dimen115
+\@envbody=\toks19
+\multlinegap=\skip64
+\multlinetaggap=\skip65
+\mathdisplay@stack=\toks20
+LaTeX Info: Redefining \[ on input line 2666.
+LaTeX Info: Redefining \] on input line 2667.
+)
+(/usr/share/texmf-texlive/tex/latex/tools/bm.sty
+Package: bm 2004/02/26 v1.1c Bold Symbol Support (DPC/FMi)
+\symboldoperators=\mathgroup4
+\symboldletters=\mathgroup5
+\symboldsymbols=\mathgroup6
+LaTeX Font Info:    Redeclaring math alphabet \mathbf on input line 138.
+LaTeX Info: Redefining \bm on input line 204.
+)
+(/usr/share/texmf-texlive/tex/latex/ltxmisc/cancel.sty
+Package: cancel 2000/03/12 v2.1 Cancel math terms
+)
+(/usr/share/texmf-texlive/tex/latex/base/fontenc.sty
+Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
+
+(/usr/share/texmf-texlive/tex/latex/base/t1enc.def
+File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
+))
+(/usr/share/texmf-texlive/tex/latex/tools/indentfirst.sty
+Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
+)
+(/usr/share/texmf-texlive/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2009/02/07 v0.4g Insert pages of external PDF documents (AM)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/share/texmf-texlive/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/etc/texmf/tex/latex/config/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2010/03/12 v0.04p Graphics/color for pdfTeX
+\Gread@gobject=\count215
+))
+\Gin@req@height=\dimen116
+\Gin@req@width=\dimen117
+)
+(/usr/share/texmf-texlive/tex/latex/tools/calc.sty
+Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count216
+\calc@Bcount=\count217
+\calc@Adimen=\dimen118
+\calc@Bdimen=\dimen119
+\calc@Askip=\skip66
+\calc@Bskip=\skip67
+LaTeX Info: Redefining \setlength on input line 76.
+LaTeX Info: Redefining \addtolength on input line 77.
+\calc@Ccount=\count218
+\calc@Cskip=\skip68
+)
+(/usr/share/texmf-texlive/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2006/07/14 v1.1d eso-pic (RN)
+
+(/usr/share/texmf-texlive/tex/latex/ms/everyshi.sty
+Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
+))
+(/usr/share/texmf-texlive/tex/latex/pdfpages/pppdftex.def
+File: pppdftex.def 2009/02/07 v0.4g Pdfpages driver for pdfTeX (AM)
+)
+\AM@pagebox=\box28
+\AM@toc@title=\toks21
+\c@AM@survey=\count219
+\AM@templatesizebox=\box29
+)
+(/usr/share/texmf-texlive/tex/latex/setspace/setspace.sty
+Package: setspace 2000/12/01 6.7 Contributed and Supported LaTeX2e package
+
+Package: `setspace' 6.7 <2000/12/01>
+) (/usr/share/texmf-texlive/tex/latex/psnfss/times.sty
+Package: times 2005/04/12 PSNFSS-v9.2a (SPQR) 
+)
+(/usr/share/texmf-texlive/tex/latex/fancyhdr/fancyhdr.sty
+\fancy@headwidth=\skip69
+\f@ncyO@elh=\skip70
+\f@ncyO@erh=\skip71
+\f@ncyO@olh=\skip72
+\f@ncyO@orh=\skip73
+\f@ncyO@elf=\skip74
+\f@ncyO@erf=\skip75
+\f@ncyO@olf=\skip76
+\f@ncyO@orf=\skip77
+)
+
+Package Fancyhdr Warning: \fancyhead's `E' option without twoside option is use
+less on input line 83.
+
+(/usr/share/texmf-texlive/tex/latex/footmisc/footmisc.sty
+Package: footmisc 2009/09/15 v5.5a a miscellany of footnote facilities
+\FN@temptoken=\toks22
+\footnotemargin=\dimen120
+
+
+LaTeX Warning: Command \@makecol  has changed.
+               Check if current package is valid.
+
+\c@pp@next@reset=\count220
+\c@@fnserial=\count221
+Package footmisc Info: Declaring symbol style bringhurst on input line 855.
+Package footmisc Info: Declaring symbol style chicago on input line 863.
+Package footmisc Info: Declaring symbol style wiley on input line 872.
+Package footmisc Info: Declaring symbol style lamport-robust on input line 883.
+
+Package footmisc Info: Declaring symbol style lamport* on input line 903.
+Package footmisc Info: Declaring symbol style lamport*-robust on input line 924
+.
+) (/usr/share/texmf-texlive/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen121
+)
+(/usr/share/texmf-texlive/tex/latex/textpos/textpos.sty
+Package: textpos 2009/05/28 v1.7f
+
+Package: `textpos' 1.7f <2009 May 28>
+\TP@textbox=\box30
+\TP@holdbox=\box31
+\TPHorizModule=\dimen122
+\TPVertModule=\dimen123
+\TP@margin=\dimen124
+\TP@absmargin=\dimen125
+Grid set 16 x 16 = 37.34424pt x 52.81541pt
+\TPboxrulesize=\dimen126
+\TP@ox=\dimen127
+\TP@oy=\dimen128
+\TP@tbargs=\toks23
+\TP@prevdepth=\dimen129
+TextBlockOrigin set to 0pt x 0pt
+) (/usr/share/texmf-texlive/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+(/usr/share/texmf-texlive/tex/latex/caption/caption.sty
+Package: caption 2009/10/09 v3.1k Customizing captions (AR)
+
+(/usr/share/texmf-texlive/tex/latex/caption/caption3.sty
+Package: caption3 2009/10/09 v3.1k caption3 kernel (AR)
+\captionmargin=\dimen130
+\captionmargin@=\dimen131
+\captionwidth=\dimen132
+\caption@indent=\dimen133
+\caption@parindent=\dimen134
+\caption@hangindent=\dimen135
+)
+\c@ContinuedFloat=\count222
+)
+\c@KVtest=\count223
+\sf@farskip=\skip78
+\sf@captopadj=\dimen136
+\sf@capskip=\skip79
+\sf@nearskip=\skip80
+\c@subfigure=\count224
+\c@subfigure@save=\count225
+\c@lofdepth=\count226
+\c@subtable=\count227
+\c@subtable@save=\count228
+\c@lotdepth=\count229
+\sf@top=\skip81
+\sf@bottom=\skip82
+)
+(/usr/share/texmf-texlive/tex/latex/placeins/placeins.sty
+Package: placeins 2005/04/18  v 2.2
+)
+(/usr/share/texmf-texlive/tex/latex/epigraph/epigraph.sty
+Package: epigraph 2009/09/02 v1.5c typesetting epigraphs
+\beforeepigraphskip=\skip83
+\afterepigraphskip=\skip84
+\epigraphwidth=\skip85
+\epigraphrule=\skip86
+) (./nomencl.sty
+Package: nomencl 2005/09/22 v4.2 Nomenclature package (LN)
+
+(/usr/share/texmf-texlive/tex/latex/tools/multicol.sty
+Package: multicol 2008/12/05 v1.6h multicolumn formatting (FMi)
+\c@tracingmulticols=\count230
+\mult@box=\box32
+\multicol@leftmargin=\dimen137
+\c@unbalance=\count231
+\c@collectmore=\count232
+\doublecol@number=\count233
+Normal \count register pool exhausted, switching to extended pool.
+\multicoltolerance=\count277
+\multicolpretolerance=\count278
+\full@width=\dimen138
+\page@free=\dimen139
+\premulticols=\dimen140
+\postmulticols=\dimen141
+\multicolsep=\skip87
+\multicolbaselineskip=\skip88
+\partial@page=\box33
+\last@line=\box34
+\mult@rightbox=\box35
+\mult@grightbox=\box36
+\mult@gfirstbox=\box37
+\mult@firstbox=\box38
+\@tempa=\box39
+\@tempa=\box40
+\@tempa=\box41
+\@tempa=\box42
+\@tempa=\box43
+\@tempa=\box44
+\@tempa=\box45
+\@tempa=\box46
+\@tempa=\box47
+\@tempa=\box48
+\@tempa=\box49
+\@tempa=\box50
+\@tempa=\box51
+\@tempa=\box52
+\@tempa=\box53
+\@tempa=\box54
+\@tempa=\box55
+\c@columnbadness=\count279
+\c@finalcolumnbadness=\count280
+\last@try=\dimen142
+\multicolovershoot=\dimen143
+\multicolundershoot=\dimen144
+\mult@nat@firstbox=\box56
+\colbreak@box=\box57
+)
+\nomlabelwidth=\dimen145
+\nom@tempdim=\dimen146
+\nomitemsep=\skip89
+
+Using the configuration file nomencl.cfg
+(./nomencl.cfg)) (/usr/share/texmf-texlive/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+LaTeX Info: Redefining \color on input line 76.
+
+(/etc/texmf/tex/latex/config/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+(/usr/share/texmf-texlive/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2009/10/09 v6.79a Hypertext links for LaTeX
+
+(/usr/share/texmf-texlive/tex/generic/ifxetex/ifxetex.sty
+Package: ifxetex 2009/01/23 v0.5 Provides ifxetex conditional
+)
+(/usr/share/texmf-texlive/tex/latex/oberdiek/hycolor.sty
+Package: hycolor 2009/10/02 v1.5 Code for color options of hyperref/bookmark (H
+O)
+
+(/usr/share/texmf-texlive/tex/latex/oberdiek/xcolor-patch.sty
+Package: xcolor-patch 2009/10/02 xcolor patch
+))
+\@linkdim=\dimen147
+\Hy@linkcounter=\count281
+\Hy@pagecounter=\count282
+
+(/usr/share/texmf-texlive/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2009/10/09 v6.79a Hyperref: PDFDocEncoding definition (HO)
+)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/etexcmds.sty
+Package: etexcmds 2007/12/12 v1.2 Prefix for e-TeX command names (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/infwarerr.sty
+Package: infwarerr 2007/09/09 v1.2 Providing info/warning/message (HO)
+)
+Package etexcmds Info: Could not find \expanded.
+(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
+(etexcmds)             that some package has redefined \expanded.
+(etexcmds)             In the latter case, load this package earlier.
+)
+(/usr/share/texmf-texlive/tex/latex/latexconfig/hyperref.cfg
+File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
+)
+(/usr/share/texmf-texlive/tex/latex/oberdiek/kvoptions.sty
+Package: kvoptions 2009/08/13 v3.4 Keyval support for LaTeX options (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/kvsetkeys.sty
+Package: kvsetkeys 2009/07/30 v1.5 Key value parser with default handler suppor
+t (HO)
+))
+Package hyperref Info: Option `plainpages' set `false' on input line 2864.
+Package hyperref Info: Option `pdfpagelabels' set `true' on input line 2864.
+Package hyperref Info: Option `hypertexnames' set `true' on input line 2864.
+Package hyperref Info: Option `naturalnames' set `true' on input line 2864.
+Package hyperref Info: Option `bookmarks' set `true' on input line 2864.
+Package hyperref Info: Option `bookmarksnumbered' set `true' on input line 2864
+.
+Package hyperref Info: Option `colorlinks' set `true' on input line 2864.
+Package hyperref Info: Option `breaklinks' set `true' on input line 2864.
+Package hyperref Info: Hyper figures OFF on input line 2975.
+Package hyperref Info: Link nesting OFF on input line 2980.
+Package hyperref Info: Hyper index ON on input line 2983.
+Package hyperref Info: Plain pages OFF on input line 2990.
+Package hyperref Info: Backreferencing OFF on input line 2995.
+
+Implicit mode ON; LaTeX internals redefined
+Package hyperref Info: Bookmarks ON on input line 3191.
+LaTeX Info: Redefining \url on input line 3428.
+(/usr/share/texmf-texlive/tex/generic/oberdiek/bitset.sty
+Package: bitset 2007/09/28 v1.0 Data type bit set (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/intcalc.sty
+Package: intcalc 2007/09/27 v1.1 Expandable integer calculations (HO)
+)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/bigintcalc.sty
+Package: bigintcalc 2007/11/11 v1.1 Expandable big integer calculations (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/pdftexcmds.sty
+Package: pdftexcmds 2009/09/23 v0.6 LuaTeX support for pdfTeX utility functions
+ (HO)
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ifluatex.sty
+Package: ifluatex 2009/04/17 v1.2 Provides the ifluatex switch (HO)
+Package ifluatex Info: LuaTeX not detected.
+)
+(/usr/share/texmf-texlive/tex/generic/oberdiek/ltxcmds.sty
+Package: ltxcmds 2009/08/05 v1.0 Some LaTeX kernel commands for general use (HO
+)
+)
+Package pdftexcmds Info: LuaTeX not detected.
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+)))
+\Fld@menulength=\count283
+\Field@Width=\dimen148
+\Fld@charsize=\dimen149
+\Field@toks=\toks24
+Package hyperref Info: Hyper figures OFF on input line 4377.
+Package hyperref Info: Link nesting OFF on input line 4382.
+Package hyperref Info: Hyper index ON on input line 4385.
+Package hyperref Info: backreferencing OFF on input line 4392.
+Package hyperref Info: Link coloring ON on input line 4395.
+Package hyperref Info: Link coloring with OCG OFF on input line 4402.
+Package hyperref Info: PDF/A mode OFF on input line 4407.
+
+(/usr/share/texmf-texlive/tex/generic/oberdiek/atbegshi.sty
+Package: atbegshi 2008/07/31 v1.9 At begin shipout hook (HO)
+)
+\Hy@abspage=\count284
+\c@Item=\count285
+\c@Hfootnote=\count286
+)
+*hyperref using driver hpdftex*
+(/usr/share/texmf-texlive/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2009/10/09 v6.79a Hyperref driver for pdfTeX
+\Fld@listcount=\count287
+)
+\@nomenclaturefile=\write4
+\openout4 = `_region_.nlo'.
+
+
+Writing nomenclature file _region_.nlo
+) (/usr/share/texmf-texlive/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen150
+\lightrulewidth=\dimen151
+\cmidrulewidth=\dimen152
+\belowrulesep=\dimen153
+\belowbottomsep=\dimen154
+\aboverulesep=\dimen155
+\abovetopsep=\dimen156
+\cmidrulesep=\dimen157
+\cmidrulekern=\dimen158
+\defaultaddspace=\dimen159
+\@cmidla=\count288
+\@cmidlb=\count289
+\@aboverulesep=\dimen160
+\@belowrulesep=\dimen161
+\@thisruleclass=\count290
+\@lastruleclass=\count291
+\@thisrulewidth=\dimen162
+)
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+
+(/usr/share/texmf/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2011/11/13 v1.7 biblatex localization
+)
+\@quotelevel=\count292
+\@quotereset=\count293
+
+
+LaTeX Warning: Unused global option(s):
+    [UKenglish].
+
+No file _region_.aux.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 18.
+LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 18.
+(/usr/share/texmf-texlive/tex/latex/psnfss/t1ptm.fd
+File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
+)
+(/usr/share/texmf/tex/latex/preview/preview.sty
+Package: preview 2010/02/14 11.86 (AUCTeX/preview-latex)
+
+(/usr/share/texmf/tex/latex/preview/prtightpage.def
+\PreviewBorder=\dimen163
+)
+(/usr/share/texmf/tex/latex/preview/prauctex.def
+No auxiliary output files.
+
+
+\hbadness=\count294
+\hfuzz=\dimen164
+(/usr/share/texmf/tex/latex/preview/prauctex.cfg))
+(/usr/share/texmf/tex/latex/preview/prfootnotes.def)
+\pr@snippet=\count295
+\pr@box=\box58
+\pr@output=\toks25
+
+Preview: Fontsize 12pt
+Preview: PDFoutput 1
+)
+*geometry auto-detecting driver*
+*geometry detected driver: pdftex*
+-------------------- Geometry parameters
+paper: a4paper
+landscape: --
+twocolumn: --
+twoside: --
+asymmetric: --
+h-parts: 85.35826pt, 426.79135pt, 85.35826pt
+v-parts: 71.13188pt, 702.78308pt, 71.13188pt
+hmarginratio: --
+vmarginratio: --
+lines: --
+heightrounded: --
+bindingoffset: 0.0pt
+truedimen: --
+includehead: --
+includefoot: --
+includemp: --
+driver: pdftex
+-------------------- Page layout dimensions and switches
+\paperwidth  597.50787pt
+\paperheight 845.04684pt
+\textwidth  426.79135pt
+\textheight 702.78308pt
+\oddsidemargin  13.08827pt
+\evensidemargin 13.08827pt
+\topmargin  -38.1381pt
+\headheight 14.5pt
+\headsep    25.0pt
+\footskip   30.0pt
+\marginparwidth 35.0pt
+\marginparsep   10.0pt
+\columnsep  10.0pt
+\skip\footins  10.8pt plus 4.0pt minus 2.0pt
+\hoffset 0.0pt
+\voffset 0.0pt
+\mag 1000
+
+(1in=72.27pt, 1cm=28.45pt)
+-----------------------
+Package biblatex Info: No input encoding detected.
+(biblatex)             Assuming 'ascii'.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'ascii'.
+Package biblatex Info: Reference section=0 on input line 18.
+Package biblatex Info: Reference segment=0 on input line 18.
+(/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count296
+\scratchdimen=\dimen165
+\scratchbox=\box59
+\nofMPsegments=\count297
+\nofMParguments=\count298
+\everyMPshowfont=\toks26
+\MPscratchCnt=\count299
+\MPscratchDim=\dimen166
+\MPnumerator=\count300
+\everyMPtoPDFconversion=\toks27
+) ABD: EveryShipout initializing macros
+Package caption Info: Begin \AtBeginDocument code.
+Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
+LaTeX Info: Redefining \subref on input line 18.
+Package caption Info: Incompatible package detected (regarding \caption).
+(caption)             \caption = \protected\long macro:->\pr@protect@domacro {}
+{##1{}}\pr@\caption .
+
+
+Package caption Warning: \caption will not be redefined since it's already
+(caption)                redefined by a document class or package which is
+(caption)                unknown to the caption package.
+See the caption package documentation for explanation.
+
+Package caption Info: hyperref package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring ON on input line 18.
+(/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
+Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
+
+(/usr/share/texmf-texlive/tex/latex/oberdiek/refcount.sty
+Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
+)
+\c@section@level=\count301
+)
+LaTeX Info: Redefining \ref on input line 18.
+LaTeX Info: Redefining \pageref on input line 18.
+\AtBeginShipoutBox=\box60
+
+! Preview: Snippet 1 started.
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+
+
+pdfTeX warning: pdflatex (file ./figures/UoALogo.pdf): PDF inclusion: found PDF
+ version <1.5>, but at most version <1.4> allowed
+<figures/UoALogo.pdf, id=3, 375.16461pt x 140.45314pt>
+File: figures/UoALogo.pdf Graphic file (type pdf)
+
+<use figures/UoALogo.pdf>
+Preview: Tightpage -32891 -32891 32891 32891
+! Preview: Snippet 1 ended.(4397997+0x11747421).
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+[1 <./figures/UoALogo.pdf>]
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 18.
+
+! Preview: Snippet 2 started.
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+! Preview: Snippet 2 ended.(10923059+0x27970198).
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+[2
+
+
+
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+! Preview: Snippet 3 started.
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+! Preview: Snippet 3 ended.(10923059+0x27970198).
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+[3
+
+
+
+
+] (./wc.tex)
+! Preview: Snippet 4 started.
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+! Preview: Snippet 4 ended.(10923059+0x27970198).
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+[4
+
+
+
+
+]
+! Preview: Snippet 5 started.
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+! Preview: Snippet 5 ended.(10923059+0x27970198).
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+[5
+
+
+
+
+]
+No file _region_.nls.
+! Preview: Snippet 6 started.
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+! Preview: Snippet 6 ended.(10923059+0x27970198).
+<-><->
+      
+l.18 \begin{document}
+                     
+Not a real error.
+
+[6
+
+
+
+
+]  !name(main.tex) !offset(-3) 
+! Preview: Snippet 7 started.
+<-><->
+      
+l.73 \chapter
+             {Introduction}
+Not a real error.
+
+Chapter 1.
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 73.
+! Preview: Snippet 7 ended.(10649600+11315x27970198).
+<-><->
+      
+l.73 \chapter{Introduction}
+                           
+Not a real error.
+
+[7
+
+
+
+
+
+
+
+]
+
+LaTeX Warning: Reference `chap:one' on page 5 undefined on input line 96.
+
+! Preview: Snippet 8 started.
+<-><->
+      
+l.98 \chapter
+             {Molecular Models}
+Not a real error.
+
+Chapter 2.
+! Preview: Snippet 8 ended.(10649600+11315x27970198).
+<-><->
+      
+l.98 \chapter{Molecular Models}
+                               
+Not a real error.
+
+[8
+
+
+
+
+
+
+
+]
+! Preview: Snippet 9 started.
+<-><->
+      
+l.105 \section
+              {Classical Mechanics}
+Not a real error.
+
+! Preview: Snippet 9 ended.(780261+13582x27970198).
+<-><->
+      
+l.105 \section{Classical Mechanics}
+                                   
+Not a real error.
+
+[9
+
+]
+! Preview: Snippet 10 started.
+<-><->
+      
+l.107 \subsection
+                 {Validity of Classical Mechanics}
+Not a real error.
+
+LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 107.
+! Preview: Snippet 10 ended.(650217+191572x27970198).
+<-><->
+      
+l.107 \subsection{Validity of Classical Mechanics}
+                                                  
+Not a real error.
+
+[10
+
+]
+
+LaTeX Warning: Citation 'Jasper2006' on page 5 undefined on input line 120.
+
+
+LaTeX Warning: Citation 'Frenkel2002' on page 5 undefined on input line 129.
+
+! Preview: Snippet 11 started.
+<-><->
+      
+l.131 \subsection
+                 {Newton's Second Law of Motion \label{NewtonLaw}}
+Not a real error.
+
+! Preview: Snippet 11 ended.(650217+11318x27970198).
+<-><->
+      
+l.131 ...s Second Law of Motion \label{NewtonLaw}}
+                                                  
+Not a real error.
+
+[11
+
+
+]
+
+LaTeX Warning: Reference `eq:Fma' on page 5 undefined on input line 134.
+
+! Preview: Snippet 12 started.
+<-><->
+      
+l.139 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 12 ended.(680345+0x27970198).
+<-><->
+      
+l.142 \end{equation}
+                    
+Not a real error.
+
+[12
+
+]
+! Preview: Snippet 13 started.
+<-><->
+      
+l.157 force acting on a particle $
+                                  i$ is the sum of the forces between $i$
+Not a real error.
+
+! Preview: Snippet 13 ended.(515577+0x262695).
+<-><->
+      
+l.157 force acting on a particle $i$
+                                     is the sum of the forces between $i$
+Not a real error.
+
+[13]
+! Preview: Snippet 14 started.
+<-><->
+      
+l.157 ...le $i$ is the sum of the forces between $
+                                                  i$
+Not a real error.
+
+! Preview: Snippet 14 ended.(515577+0x262695).
+<-><->
+      
+l.157 ... $i$ is the sum of the forces between $i$
+                                                  
+Not a real error.
+
+[14]
+! Preview: Snippet 15 started.
+<-><->
+      
+l.158 and every other particle $
+                                j$.  This pairwise summation of forces is
+Not a real error.
+
+! Preview: Snippet 15 ended.(515577+152916x362819).
+<-><->
+      
+l.158 and every other particle $j$
+                                  .  This pairwise summation of forces is
+Not a real error.
+
+[15]
+
+LaTeX Warning: Reference `eq:pairwise' on page 6 undefined on input line 159.
+
+! Preview: Snippet 16 started.
+<-><->
+      
+l.162 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 16 ended.(2528242+0x27970198).
+<-><->
+      
+l.165 \end{equation}
+                    
+Not a real error.
+
+[16
+
+]
+
+LaTeX Warning: Reference `eq:tersoff' on page 6 undefined on input line 168.
+
+
+LaTeX Warning: Citation 'Tersoff1988' on page 6 undefined on input line 169.
+
+! Preview: Snippet 17 started.
+<-><->
+      
+l.169 ...988}.  Here the force between particles $
+                                                  i$ and $j$ is
+Not a real error.
+
+! Preview: Snippet 17 ended.(515577+0x262695).
+<-><->
+      
+l.169 ...8}.  Here the force between particles $i$
+                                                   and $j$ is
+Not a real error.
+
+[17]
+! Preview: Snippet 18 started.
+<-><->
+      
+l.169 ...ere the force between particles $i$ and $
+                                                  j$ is
+Not a real error.
+
+! Preview: Snippet 18 ended.(515577+152916x362819).
+<-><->
+      
+l.169 ...e the force between particles $i$ and $j$
+                                                   is
+Not a real error.
+
+[18]
+! Preview: Snippet 19 started.
+<-><->
+      
+l.170 split into a repulsive force ($
+                                     \mathbf{F}_R$) and an attractive force
+Not a real error.
+
+! Preview: Snippet 19 ended.(539580+117964x1011717).
+<-><->
+      
+l.170 split into a repulsive force ($\mathbf{F}_R$
+                                                  ) and an attractive force
+Not a real error.
+
+[19]
+! Preview: Snippet 20 started.
+<-><->
+      
+l.171 ($
+        \mathbf{F}_A$).  The coefficient in front of the repulsive force,
+Not a real error.
+
+! Preview: Snippet 20 ended.(539580+117964x1006166).
+<-><->
+      
+l.171 ($\mathbf{F}_A$
+                     ).  The coefficient in front of the repulsive force,
+Not a real error.
+
+[20]
+! Preview: Snippet 21 started.
+<-><->
+      
+l.172 $
+       a$, is a range limiting term, while the coefficient $b$, is the bond
+Not a real error.
+
+! Preview: Snippet 21 ended.(338603+0x404225).
+<-><->
+      
+l.172 $a$
+         , is a range limiting term, while the coefficient $b$, is the bond
+Not a real error.
+
+[21]
+! Preview: Snippet 22 started.
+<-><->
+      
+l.172 ...ge limiting term, while the coefficient $
+                                                  b$, is the bond
+Not a real error.
+
+! Preview: Snippet 22 ended.(546132+0x327402).
+<-><->
+      
+l.172 ... limiting term, while the coefficient $b$
+                                                  , is the bond
+Not a real error.
+
+[22]
+! Preview: Snippet 23 started.
+<-><->
+      
+l.176 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 23 ended.(766041+0x27970198).
+<-><->
+      
+l.179 \end{equation}
+                    
+Not a real error.
+
+[23
+
+]
+
+LaTeX Warning: Reference `eq:forcePotential' on page 6 undefined on input line 
+184.
+
+! Preview: Snippet 24 started.
+<-><->
+      
+l.184 \eqref{eq:forcePotential}. Here $
+                                       \nabla$ denotes the gradient of the
+Not a real error.
+
+! Preview: Snippet 24 ended.(537394+0x655362).
+<-><->
+      
+l.184 \eqref{eq:forcePotential}. Here $\nabla$
+                                               denotes the gradient of the
+Not a real error.
+
+[24]
+! Preview: Snippet 25 started.
+<-><->
+      
+l.188 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 25 ended.(680345+0x27970198).
+<-><->
+      
+l.191 \end{equation}
+                    
+Not a real error.
+
+[25
+
+]
+! Preview: Snippet 26 started.
+<-><->
+      
+l.194 \section
+              {Continuous Potentials}
+Not a real error.
+
+! Preview: Snippet 26 ended.(780261+13582x27970198).
+<-><->
+      
+l.194 \section{Continuous Potentials}
+                                     
+Not a real error.
+
+[26
+
+]
+
+LaTeX Warning: Citation 'Lennard-Jones1924' on page 6 undefined on input line 1
+98.
+
+
+LaTeX Warning: Reference `fig:ljPot' on page 6 undefined on input line 199.
+
+
+LaTeX Warning: Reference `eq:LJ' on page 6 undefined on input line 199.
+
+! Preview: Snippet 27 started.
+<-><->
+      
+l.202 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 27 ended.(1887455+0x27970198).
+<-><->
+      
+l.206 \end{equation}
+                    
+Not a real error.
+
+[27
+
+]
+
+LaTeX Warning: Reference `eq:LJ' on page 6 undefined on input line 208.
+
+! Preview: Snippet 28 started.
+<-><->
+      
+l.208 In equation \eqref{eq:LJ}, $
+                                  \varepsilon$ is the depth of the energy
+Not a real error.
+
+! Preview: Snippet 28 ended.(338603+0x360354).
+<-><->
+      
+l.208 In equation \eqref{eq:LJ}, $\varepsilon$
+                                               is the depth of the energy
+Not a real error.
+
+[28]
+! Preview: Snippet 29 started.
+<-><->
+      
+l.209 well, while $
+                   \sigma$ is the distance where the potential between two
+Not a real error.
+
+! Preview: Snippet 29 ended.(338603+0x465893).
+<-><->
+      
+l.209 well, while $\sigma$
+                           is the distance where the potential between two
+Not a real error.
+
+[29]
+! Preview: Snippet 30 started.
+<-><->
+      
+l.212 \begin{figure}
+                    [htp]
+Not a real error.
+
+<figures/ljPlot.pdf, id=125, 845.1575pt x 597.23125pt>
+File: figures/ljPlot.pdf Graphic file (type pdf)
+
+<use figures/ljPlot.pdf>
+! Preview: Snippet 30 ended.(21085866+285084x27970198).
+<-><->
+      
+l.217 \end{figure}
+                  
+Not a real error.
+
+[30
+
+
+
+ <./figures/ljPlot.pdf, page is rotated 90 degrees>]
+! Preview: Snippet 31 started.
+<-><->
+      
+l.219 The power 12 term, $
+                          \left(\frac{\sigma}{r}\right)^{12}$ gives the
+Not a real error.
+
+! Preview: Snippet 31 ended.(798815+275256x1805169).
+<-><->
+      
+l.219 ...erm, $\left(\frac{\sigma}{r}\right)^{12}$
+                                                   gives the
+Not a real error.
+
+[31]
+! Preview: Snippet 32 started.
+<-><->
+      
+l.221 while the power 6 term, $
+                               \left(\frac{\sigma}{r}\right)^{12}$,
+Not a real error.
+
+! Preview: Snippet 32 ended.(798815+275256x1805169).
+<-><->
+      
+l.221 ...erm, $\left(\frac{\sigma}{r}\right)^{12}$
+                                                  ,
+Not a real error.
+
+[32]
+
+LaTeX Warning: Reference `fig:ljForce' on page 6 undefined on input line 223.
+
+! Preview: Snippet 33 started.
+<-><->
+      
+l.225 \begin{figure}
+                    [htp]
+Not a real error.
+
+<figures/ljForce.pdf, id=144, 845.1575pt x 597.23125pt>
+File: figures/ljForce.pdf Graphic file (type pdf)
+
+<use figures/ljForce.pdf>
+! Preview: Snippet 33 ended.(22036138+285084x27970198).
+<-><->
+      
+l.231 \end{figure}
+                  
+Not a real error.
+
+[33
+
+
+ <./figures/ljForce.pdf, page is rotated 90 degrees>]
+
+LaTeX Warning: Reference `eq:bigPotential' on page 6 undefined on input line 23
+4.
+
+
+LaTeX Warning: Citation 'Maginn2010' on page 6 undefined on input line 234.
+
+! Preview: Snippet 34 started.
+<-><->
+      
+l.236 Coulomb's Law ($
+                      \frac{q_iq_j}{r_{ij}}$) is modelling longer range
+Not a real error.
+
+! Preview: Snippet 34 ended.(625916+427583x1119417).
+<-><->
+      
+l.236 Coulomb's Law ($\frac{q_iq_j}{r_{ij}}$
+                                            ) is modelling longer range
+Not a real error.
+
+[34]
+! Preview: Snippet 35 started.
+<-><->
+      
+l.241 \begin{align}
+                   
+Not a real error.
+
+! Preview: Snippet 35 ended.(6909005+0x27970198).
+<-><->
+      
+l.251 \end{align}
+                 
+Not a real error.
+
+[35
+
+]
+! Preview: Snippet 36 started.
+<-><->
+      
+l.253 \section
+              {Discrete Potentials}
+Not a real error.
+
+! Preview: Snippet 36 ended.(780261+13582x27970198).
+<-><->
+      
+l.253 \section{Discrete Potentials}
+                                   
+Not a real error.
+
+[36
+
+]
+
+LaTeX Warning: Citation 'Alder1957' on page 6 undefined on input line 260.
+
+
+LaTeX Warning: Reference `eq:potentialHS' on page 6 undefined on input line 261
+.
+
+! Preview: Snippet 37 started.
+<-><->
+      
+l.261 ... equation \eqref{eq:potentialHS}, where $
+                                                  \sigma$
+Not a real error.
+
+! Preview: Snippet 37 ended.(338603+0x465893).
+<-><->
+      
+l.261 ...on \eqref{eq:potentialHS}, where $\sigma$
+                                                  
+Not a real error.
+
+[37]
+! Preview: Snippet 38 started.
+<-><->
+      
+l.264 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 38 ended.(2831184+0x27970198).
+<-><->
+      
+l.271 \end{equation}
+                    
+Not a real error.
+
+[38
+
+]
+
+LaTeX Warning: Reference `eq:potentialSW' on page 7 undefined on input line 275
+.
+
+
+LaTeX Warning: Citation 'Barker1967' on page 7 undefined on input line 275.
+
+! Preview: Snippet 39 started.
+<-><->
+      
+l.276 where $
+             \lambda$ is the outer radius of the core in terms of the hard
+Not a real error.
+
+! Preview: Snippet 39 ended.(546132+0x449190).
+<-><->
+      
+l.276 where $\lambda$
+                      is the outer radius of the core in terms of the hard
+Not a real error.
+
+[39]
+! Preview: Snippet 40 started.
+<-><->
+      
+l.277 core diameter $
+                     \sigma$.
+Not a real error.
+
+! Preview: Snippet 40 ended.(338603+0x465893).
+<-><->
+      
+l.277 core diameter $\sigma$
+                            .
+Not a real error.
+
+[40]
+! Preview: Snippet 41 started.
+<-><->
+      
+l.279 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 41 ended.(4246776+0x27970198).
+<-><->
+      
+l.287 \end{equation}
+                    
+Not a real error.
+
+[41
+
+]
+! Preview: Snippet 42 started.
+<-><->
+      
+l.306 \chapter
+              {Molecular Dynamics}
+Not a real error.
+
+Chapter 3.
+! Preview: Snippet 42 ended.(10649600+11315x27970198).
+<-><->
+      
+l.306 \chapter{Molecular Dynamics}
+                                  
+Not a real error.
+
+[42
+
+
+
+
+
+
+
+]
+! Preview: Snippet 43 started.
+<-><->
+      
+l.308 \section
+              {Force-driven Simulators}
+Not a real error.
+
+! Preview: Snippet 43 ended.(780261+13582x27970198).
+<-><->
+      
+l.308 \section{Force-driven Simulators}
+                                       
+Not a real error.
+
+[43
+
+]
+
+LaTeX Warning: Citation 'Rahman1964' on page 7 undefined on input line 316.
+
+! Preview: Snippet 44 started.
+<-><->
+      
+l.323 calculated at uniform intervals of time, $
+                                                \Delta t$ using the forces
+Not a real error.
+
+! Preview: Snippet 44 ended.(537395+0x919770).
+<-><->
+      
+l.323 ... at uniform intervals of time, $\Delta t$
+                                                   using the forces
+Not a real error.
+
+[44]
+! Preview: Snippet 45 started.
+<-><->
+      
+l.341 \subsection
+                 {Initialisation \label{sec:initMD}} The particles are initi...
+
+Not a real error.
+
+! Preview: Snippet 45 ended.(650217+11318x27970198).
+<-><->
+      
+l.341 ...ection{Initialisation \label{sec:initMD}}
+                                                   The particles are initial...
+
+Not a real error.
+
+[45
+
+
+]
+
+LaTeX Warning: Citation 'Rahman1964' on page 7 undefined on input line 344.
+
+! Preview: Snippet 46 started.
+<-><->
+      
+l.348 with a mean, $
+                    \mu = 0$, and a standard deviation, $\sigma =
+Not a real error.
+
+! Preview: Snippet 46 ended.(506811+152916x1884139).
+<-><->
+      
+l.348 with a mean, $\mu = 0$
+                            , and a standard deviation, $\sigma =
+Not a real error.
+
+[46]
+! Preview: Snippet 47 started.
+<-><->
+      
+l.348 ...n, $\mu = 0$, and a standard deviation, $
+                                                  \sigma =
+Not a real error.
+
+! Preview: Snippet 47 ended.(728757+89130x3026654).
+<-><->
+      
+l.349 \sqrt{T^{*}}$
+                   , where $T^{*}$ is the desired reduced temperature. The
+Not a real error.
+
+[47]
+! Preview: Snippet 48 started.
+<-><->
+      
+l.349 \sqrt{T^{*}}$, where $
+                            T^{*}$ is the desired reduced temperature. The
+Not a real error.
+
+! Preview: Snippet 48 ended.(537395+0x869579).
+<-><->
+      
+l.349 \sqrt{T^{*}}$, where $T^{*}$
+                                   is the desired reduced temperature. The
+Not a real error.
+
+[48]
+
+LaTeX Warning: Reference `eq:zeroLinearP' on page 8 undefined on input line 351
+.
+
+! Preview: Snippet 49 started.
+<-><->
+      
+l.354 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 49 ended.(2408808+0x27970198).
+<-><->
+      
+l.358 \end{equation}
+                    
+Not a real error.
+
+[49
+
+]
+! Preview: Snippet 50 started.
+<-><->
+      
+l.360 \subsection
+                 {Integrators}
+Not a real error.
+
+! Preview: Snippet 50 ended.(650217+191572x27970198).
+<-><->
+      
+l.360 \subsection{Integrators}
+                              
+Not a real error.
+
+[50
+
+]
+
+LaTeX Warning: Reference `eq:Fmvdot' on page 8 undefined on input line 363.
+
+! Preview: Snippet 51 started.
+<-><->
+      
+l.366 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 51 ended.(1694746+0x27970198).
+<-><->
+      
+l.369 \end{equation}
+                    
+Not a real error.
+
+[51
+
+]
+
+LaTeX Warning: Reference `eq:Taylor' on page 8 undefined on input line 377.
+
+! Preview: Snippet 52 started.
+<-><->
+      
+l.379 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 52 ended.(1694746+0x27970198).
+<-><->
+      
+l.386 \end{equation}
+                    
+Not a real error.
+
+[52
+
+]
+
+LaTeX Warning: Reference `eq:Euler' on page 8 undefined on input line 390.
+
+! Preview: Snippet 53 started.
+<-><->
+      
+l.392 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 53 ended.(1578292+0x27970198).
+<-><->
+      
+l.396 \end{equation}
+                    
+Not a real error.
+
+[53
+
+]
+
+LaTeX Warning: Citation 'Haile1997' on page 8 undefined on input line 399.
+
+
+LaTeX Warning: Citation 'Verlet1967' on page 8 undefined on input line 400.
+
+
+LaTeX Warning: Reference `eq:Verletpos' on page 8 undefined on input line 402.
+
+
+LaTeX Warning: Reference `eq:VerletVel' on page 8 undefined on input line 406.
+
+! Preview: Snippet 54 started.
+<-><->
+      
+l.409   \begin{align}
+                     
+Not a real error.
+
+! Preview: Snippet 54 ended.(3102733+0x27970198).
+<-><->
+      
+l.416   \end{align}
+                   
+Not a real error.
+
+[54
+
+
+]
+
+LaTeX Warning: Citation 'Gear1971' on page 8 undefined on input line 438.
+
+! Preview: Snippet 55 started.
+<-><->
+      
+l.439 the $
+           i^{th}$ time derivative is shown in \eqref{eq:GearPredictor}, and
+Not a real error.
+
+! Preview: Snippet 55 ended.(649479+0x817634).
+<-><->
+      
+l.439 the $i^{th}$
+                   time derivative is shown in \eqref{eq:GearPredictor}, and
+Not a real error.
+
+[55]
+
+LaTeX Warning: Reference `eq:GearPredictor' on page 8 undefined on input line 4
+39.
+
+! Preview: Snippet 56 started.
+<-><->
+      
+l.440 defining $
+                \Delta \mathbf{a} = \mathbf{a}\,^{C} - \mathbf{a}\,^{P}$, the
+Not a real error.
+
+! Preview: Snippet 56 ended.(643653+65536x5121239).
+<-><->
+      
+l.440 ...a} = \mathbf{a}\,^{C} - \mathbf{a}\,^{P}$
+                                                  , the
+Not a real error.
+
+[56]
+
+LaTeX Warning: Reference `eq:GearCorrector' on page 8 undefined on input line 4
+42.
+
+
+LaTeX Warning: Reference `eq:GearCoeff' on page 8 undefined on input line 442.
+
+! Preview: Snippet 57 started.
+<-><->
+      
+l.444 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 57 ended.(2293769+0x27970198).
+<-><->
+      
+l.449 \end{equation}
+                    
+Not a real error.
+
+[57
+
+]
+! Preview: Snippet 58 started.
+<-><->
+      
+l.451 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 58 ended.(1911137+0x27970198).
+<-><->
+      
+l.455   \label{eq:GearCorrector} \end{equation}
+                                                \begin{equation} c_0 =
+Not a real error.
+
+[58
+
+]
+! Preview: Snippet 59 started.
+<-><->
+      
+l.455 ...orrector} \end{equation} \begin{equation}
+                                                   c_0 =
+Not a real error.
+
+! Preview: Snippet 59 ended.(1578292+0x27970198).
+<-><->
+      
+l.459 \end{equation}
+                    
+Not a real error.
+
+[59
+
+]
+
+LaTeX Warning: Citation 'Haile1997' on page 9 undefined on input line 462.
+
+
+LaTeX Warning: Citation 'Hairer2003' on page 9 undefined on input line 468.
+
+
+LaTeX Warning: Citation 'Swope1982' on page 9 undefined on input line 469.
+
+
+LaTeX Warning: Reference `eq:VVerlet' on page 9 undefined on input line 470.
+
+! Preview: Snippet 60 started.
+<-><->
+      
+l.474 \begin{align}
+                   
+Not a real error.
+
+! Preview: Snippet 60 ended.(3501741+0x27970198).
+<-><->
+      
+l.481 \end{align}
+                 
+Not a real error.
+
+[60
+
+
+]
+
+LaTeX Warning: Citation 'Khakimov2002' on page 9 undefined on input line 486.
+
+! Preview: Snippet 61 started.
+<-><->
+      
+l.495 \subsection
+                 {Periodic Boundary Conditions}
+Not a real error.
+
+! Preview: Snippet 61 ended.(650217+191572x27970198).
+<-><->
+      
+l.495 \subsection{Periodic Boundary Conditions}
+                                               
+Not a real error.
+
+[61
+
+]
+
+LaTeX Warning: Citation 'Alder1959' on page 9 undefined on input line 501.
+
+! Preview: Snippet 62 started.
+<-><->
+      
+l.504 \begin{figure}
+                    [htp]
+Not a real error.
+
+
+
+pdfTeX warning: pdflatex (file ./figures/PBC.pdf): PDF inclusion: found PDF ver
+sion <1.5>, but at most version <1.4> allowed
+<figures/PBC.pdf, id=266, 322.0281pt x 322.12846pt>
+File: figures/PBC.pdf Graphic file (type pdf)
+ <use figures/PBC.pdf>
+! Preview: Snippet 62 ended.(19159650+285084x27970198).
+<-><->
+      
+l.511 \end{figure}
+                  
+Not a real error.
+
+[62
+
+
+ <./figures/PBC.pdf>]
+
+LaTeX Warning: Reference `fig:PBC' on page 9 undefined on input line 515.
+
+! Preview: Snippet 63 started.
+<-><->
+      
+l.524 \subsection
+                 {Thermostat}
+Not a real error.
+
+! Preview: Snippet 63 ended.(650217+11318x27970198).
+<-><->
+      
+l.524 \subsection{Thermostat}
+                             
+Not a real error.
+
+[63
+
+]
+! Preview: Snippet 64 started.
+<-><->
+      
+l.527 i.e.\ the number of particles, $
+                                      N$; the volume of the system, $V$ and
+Not a real error.
+
+! Preview: Snippet 64 ended.(537395+0x698774).
+<-><->
+      
+l.527 i.e.\ the number of particles, $N$
+                                        ; the volume of the system, $V$ and
+Not a real error.
+
+[64]
+! Preview: Snippet 65 started.
+<-><->
+      
+l.527 ...rticles, $N$; the volume of the system, $
+                                                  V$ and
+Not a real error.
+
+! Preview: Snippet 65 ended.(537395+0x620037).
+<-><->
+      
+l.527 ...icles, $N$; the volume of the system, $V$
+                                                   and
+Not a real error.
+
+[65]
+! Preview: Snippet 66 started.
+<-><->
+      
+l.528 the temperature, $
+                        T$ were kept constant during the simulation.  While
+Not a real error.
+
+! Preview: Snippet 66 ended.(537395+0x558279).
+<-><->
+      
+l.528 the temperature, $T$
+                           were kept constant during the simulation.  While
+Not a real error.
+
+[66]
+
+LaTeX Warning: Reference `eq:tempRescale' on page 9 undefined on input line 534
+.
+
+! Preview: Snippet 67 started.
+<-><->
+      
+l.536 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 67 ended.(1918911+0x27970198).
+<-><->
+      
+l.539 \end{equation}
+                    
+Not a real error.
+
+[67
+
+]
+
+LaTeX Warning: Citation 'Andersen1980' on page 9 undefined on input line 542.
+
+
+LaTeX Warning: Reference `sec:initMD' on page 9 undefined on input line 547.
+
+! Preview: Snippet 68 started.
+<-><->
+      
+l.549 \subsection
+                 {Optimisation}
+Not a real error.
+
+! Preview: Snippet 68 ended.(650217+191572x27970198).
+<-><->
+      
+l.549 \subsection{Optimisation}
+                               
+Not a real error.
+
+[68
+
+]
+
+LaTeX Warning: Citation 'Frenkel2002' on page 10 undefined on input line 554.
+
+
+LaTeX Warning: Reference `eq:truncatePotential' on page 10 undefined on input l
+ine 562.
+
+! Preview: Snippet 69 started.
+<-><->
+      
+l.563 cut-off radius of $
+                         3\sigma$ is used as $\mathcal{U}(3\sigma) =
+Not a real error.
+
+! Preview: Snippet 69 ended.(506811+0x850913).
+<-><->
+      
+l.563 cut-off radius of $3\sigma$
+                                  is used as $\mathcal{U}(3\sigma) =
+Not a real error.
+
+[69]
+! Preview: Snippet 70 started.
+<-><->
+      
+l.563 cut-off radius of $3\sigma$ is used as $
+                                              \mathcal{U}(3\sigma) =
+Not a real error.
+
+! Preview: Snippet 70 ended.(589824+196608x6551969).
+<-><->
+      
+l.564 -0.00548\varepsilon$
+                           and $F(3\sigma) = -0.0109\varepsilon/\sigma$ are
+Not a real error.
+
+[70]
+! Preview: Snippet 71 started.
+<-><->
+      
+l.564 -0.00548\varepsilon$ and $
+                                F(3\sigma) = -0.0109\varepsilon/\sigma$ are
+Not a real error.
+
+! Preview: Snippet 71 ended.(589824+196608x7053021).
+<-><->
+      
+l.564 ... $F(3\sigma) = -0.0109\varepsilon/\sigma$
+                                                   are
+Not a real error.
+
+[71]
+! Preview: Snippet 72 started.
+<-><->
+      
+l.567 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 72 ended.(2831184+0x27970198).
+<-><->
+      
+l.574 \end{equation}
+                    
+Not a real error.
+
+[72
+
+]
+
+LaTeX Warning: Citation 'Verlet1967' on page 10 undefined on input line 581.
+
+
+LaTeX Warning: Citation 'Haile1997' on page 10 undefined on input line 587.
+
+! Preview: Snippet 73 started.
+<-><->
+      
+l.588 using a Verlet radius of $
+                                3.3\sigma$, and updating the list every $10$
+Not a real error.
+
+! Preview: Snippet 73 ended.(506811+0x1449833).
+<-><->
+      
+l.588 using a Verlet radius of $3.3\sigma$
+                                          , and updating the list every $10$
+Not a real error.
+
+[73]
+! Preview: Snippet 74 started.
+<-><->
+      
+l.588 ...3.3\sigma$, and updating the list every $
+                                                  10$
+Not a real error.
+
+! Preview: Snippet 74 ended.(506811+0x770040).
+<-><->
+      
+l.588 ...\sigma$, and updating the list every $10$
+                                                  
+Not a real error.
+
+[74]
+
+LaTeX Warning: Citation 'Poschel2005' on page 10 undefined on input line 591.
+
+! Preview: Snippet 75 started.
+<-><->
+      
+l.596 ...ed out.  However this means a volume of $
+                                                  27r_{\text{cut-off}}^3$
+Not a real error.
+
+! Preview: Snippet 75 ended.(623265+201134x2563293).
+<-><->
+      
+l.596 ...eans a volume of $27r_{\text{cut-off}}^3$
+                                                  
+Not a real error.
+
+[75]
+! Preview: Snippet 76 started.
+<-><->
+      
+l.598 only particles within the spherical volume $
+                                                  \frac{4}{3}\pi
+Not a real error.
+
+! Preview: Snippet 76 ended.(647518+271194x2694100).
+<-><->
+      
+l.599 r_{\text{cut-off}}^3$
+                            should be checked; this means the volume checked
+Not a real error.
+
+[76]
+
+LaTeX Warning: Citation 'Mattson1999' on page 10 undefined on input line 602.
+
+! Preview: Snippet 77 started.
+<-><->
+      
+l.605 of $
+          0.5r_{\text{cut-off}}$ the nearest 124 (a $5\times 5\times 5$
+Not a real error.
+
+! Preview: Snippet 77 ended.(506811+123202x2777193).
+<-><->
+      
+l.605 of $0.5r_{\text{cut-off}}$
+                                 the nearest 124 (a $5\times 5\times 5$
+Not a real error.
+
+[77]
+! Preview: Snippet 78 started.
+<-><->
+      
+l.605 ...5r_{\text{cut-off}}$ the nearest 124 (a $
+                                                  5\times 5\times 5$
+Not a real error.
+
+! Preview: Snippet 78 ended.(506811+65536x3077442).
+<-><->
+      
+l.605 ...}$ the nearest 124 (a $5\times 5\times 5$
+                                                  
+Not a real error.
+
+[78]
+! Preview: Snippet 79 started.
+<-><->
+      
+l.612 \section
+              {Event-Driven Simulators}
+Not a real error.
+
+! Preview: Snippet 79 ended.(780261+13582x27970198).
+<-><->
+      
+l.612 \section{Event-Driven Simulators}
+                                       
+Not a real error.
+
+[79
+
+]
+! Preview: Snippet 80 started.
+<-><->
+      
+l.624 \subsection
+                 {Introduction}
+Not a real error.
+
+! Preview: Snippet 80 ended.(650217+11318x27970198).
+<-><->
+      
+l.624 \subsection{Introduction}
+                               
+Not a real error.
+
+[80
+
+]
+
+LaTeX Warning: Reference `NewtonLaw' on page 11 undefined on input line 627.
+
+
+LaTeX Warning: Reference `eq:Taylor' on page 11 undefined on input line 634.
+
+
+LaTeX Warning: Reference `eq:edNewPos' on page 11 undefined on input line 635.
+
+! Preview: Snippet 81 started.
+<-><->
+      
+l.637 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 81 ended.(786432+0x27970198).
+<-><->
+      
+l.640 \end{equation}
+                    
+Not a real error.
+
+[81
+
+]
+
+LaTeX Warning: Reference `sec:CollDyn' on page 11 undefined on input line 645.
+
+
+LaTeX Warning: Citation 'Alder1957' on page 11 undefined on input line 650.
+
+! Preview: Snippet 82 started.
+<-><->
+      
+l.675 \subsection
+                 {Collision Time Prediction}
+Not a real error.
+
+! Preview: Snippet 82 ended.(650217+11318x27970198).
+<-><->
+      
+l.675 \subsection{Collision Time Prediction}
+                                            
+Not a real error.
+
+[82
+
+]
+
+LaTeX Warning: Reference `eq:collConditions1' on page 11 undefined on input lin
+e 683.
+
+
+LaTeX Warning: Reference `eq:collConditions2' on page 11 undefined on input lin
+e 684.
+
+
+LaTeX Warning: Citation 'Haile1997' on page 11 undefined on input line 684.
+
+! Preview: Snippet 83 started.
+<-><->
+      
+l.687   \begin{align}
+                     
+Not a real error.
+
+! Preview: Snippet 83 ended.(2555177+0x27970198).
+<-><->
+      
+l.691   \end{align}
+                   
+Not a real error.
+
+[83
+
+
+]
+
+LaTeX Warning: Reference `eq:collEnterTime' on page 12 undefined on input line 
+695.
+
+! Preview: Snippet 84 started.
+<-><->
+      
+l.701 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 84 ended.(2596693+0x27970198).
+<-><->
+      
+l.705 \end{equation}
+                    
+Not a real error.
+
+[84
+
+]
+! Preview: Snippet 85 started.
+<-><->
+      
+l.707 Since $
+             \mathbf{v}_{ij}\cdot\mathbf{r}_{ij}$ must be negative for the
+Not a real error.
+
+! Preview: Snippet 85 ended.(349526+219909x2352125).
+<-><->
+      
+l.707 Since $\mathbf{v}_{ij}\cdot\mathbf{r}_{ij}$
+                                                  must be negative for the
+Not a real error.
+
+[85]
+
+LaTeX Warning: Citation 'Goldberg1991' on page 12 undefined on input line 709.
+
+! Preview: Snippet 86 started.
+<-><->
+      
+l.709 \cite{Goldberg1991}, if $
+                               (\mathbf{v}_{ij}\cdot\mathbf{r}_{ij})^2 \gg
+Not a real error.
+
+! Preview: Snippet 86 ended.(623265+296364x8498126).
+<-><->
+      
+l.710 v_{ij}^2(r_{ij}^2 - \sigma^2)$
+                                    . Therefore it is advisable to use the
+Not a real error.
+
+[86]
+
+LaTeX Warning: Reference `eq:collEnterTimeAlt' on page 12 undefined on input li
+ne 712.
+
+
+LaTeX Warning: Citation 'Poschel2005' on page 12 undefined on input line 712.
+
+! Preview: Snippet 87 started.
+<-><->
+      
+l.714 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 87 ended.(2586868+0x27970198).
+<-><->
+      
+l.719 \end{equation}
+                    
+Not a real error.
+
+[87
+
+]
+
+LaTeX Warning: Reference `eq:collExitTime' on page 12 undefined on input line 7
+27.
+
+! Preview: Snippet 88 started.
+<-><->
+      
+l.729 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 88 ended.(4718640+0x27970198).
+<-><->
+      
+l.744 \end{equation}
+                    
+Not a real error.
+
+[88
+
+]
+! Preview: Snippet 89 started.
+<-><->
+      
+l.746 \subsection
+                 {Collision Dynamics \label{sec:CollDyn}}
+Not a real error.
+
+! Preview: Snippet 89 ended.(650217+191572x27970198).
+<-><->
+      
+l.746 ...n{Collision Dynamics \label{sec:CollDyn}}
+                                                  
+Not a real error.
+
+[89
+
+
+]
+
+LaTeX Warning: Reference `eq:edNewPos' on page 12 undefined on input line 751.
+
+! Preview: Snippet 90 started.
+<-><->
+      
+l.759 during the collision for particles $
+                                          i$ and $j$ is shown in equation
+Not a real error.
+
+! Preview: Snippet 90 ended.(515577+0x262695).
+<-><->
+      
+l.759 during the collision for particles $i$
+                                             and $j$ is shown in equation
+Not a real error.
+
+[90]
+! Preview: Snippet 91 started.
+<-><->
+      
+l.759 during the collision for particles $i$ and $
+                                                  j$ is shown in equation
+Not a real error.
+
+! Preview: Snippet 91 ended.(515577+152916x362819).
+<-><->
+      
+l.759 ...g the collision for particles $i$ and $j$
+                                                   is shown in equation
+Not a real error.
+
+[91]
+
+LaTeX Warning: Reference `eq:postVBounce' on page 12 undefined on input line 76
+0.
+
+! Preview: Snippet 92 started.
+<-><->
+      
+l.764   \begin{align}
+                     
+Not a real error.
+
+! Preview: Snippet 92 ended.(2555177+0x27970198).
+<-><->
+      
+l.767   \end{align}
+                   
+Not a real error.
+
+[92]
+! Preview: Snippet 93 started.
+<-><->
+      
+l.772 through the step.  This energy cost $
+                                           \Delta U$ is the difference in
+Not a real error.
+
+! Preview: Snippet 93 ended.(537395+0x1246829).
+<-><->
+      
+l.772 ...gh the step.  This energy cost $\Delta U$
+                                                   is the difference in
+Not a real error.
+
+[93]
+
+LaTeX Warning: Reference `eq:energyCost' on page 12 undefined on input line 774
+.
+
+! Preview: Snippet 94 started.
+<-><->
+      
+l.776 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 94 ended.(768863+0x27970198).
+<-><->
+      
+l.779 \end{equation}
+                    
+Not a real error.
+
+[94
+
+]
+
+LaTeX Warning: Reference `eq:postVBounce' on page 12 undefined on input line 78
+3.
+
+
+LaTeX Warning: Reference `eq:kineticCost' on page 12 undefined on input line 78
+4.
+
+! Preview: Snippet 95 started.
+<-><->
+      
+l.787 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 95 ended.(1578292+0x27970198).
+<-><->
+      
+l.790 \end{equation}
+                    
+Not a real error.
+
+[95
+
+]
+! Preview: Snippet 96 started.
+<-><->
+      
+l.792 The change in the velocities of particles $
+                                                 i$ and $j$ after going
+Not a real error.
+
+! Preview: Snippet 96 ended.(515577+0x262695).
+<-><->
+      
+l.792 ...change in the velocities of particles $i$
+                                                   and $j$ after going
+Not a real error.
+
+[96]
+! Preview: Snippet 97 started.
+<-><->
+      
+l.792 ... in the velocities of particles $i$ and $
+                                                  j$ after going
+Not a real error.
+
+! Preview: Snippet 97 ended.(515577+152916x362819).
+<-><->
+      
+l.792 ...n the velocities of particles $i$ and $j$
+                                                   after going
+Not a real error.
+
+[97]
+
+LaTeX Warning: Reference `eq:postVCapture' on page 12 undefined on input line 7
+93.
+
+! Preview: Snippet 98 started.
+<-><->
+      
+l.793 ... equation \eqref{eq:postVCapture} where $
+                                                  A$
+Not a real error.
+
+! Preview: Snippet 98 ended.(537395+0x577257).
+<-><->
+      
+l.793 ...quation \eqref{eq:postVCapture} where $A$
+                                                  
+Not a real error.
+
+[98]
+
+LaTeX Warning: Reference `eq:changeMomentum' on page 12 undefined on input line
+ 794.
+
+! Preview: Snippet 99 started.
+<-><->
+      
+l.796 entering a step, the positive root of $
+                                             A$ is used, whereas if the
+Not a real error.
+
+! Preview: Snippet 99 ended.(537395+0x577257).
+<-><->
+      
+l.796 entering a step, the positive root of $A$
+                                                is used, whereas if the
+Not a real error.
+
+[99]
+! Preview: Snippet 100 started.
+<-><->
+      
+l.802   \begin{align}
+                     
+Not a real error.
+
+! Preview: Snippet 100 ended.(3479896+0x27970198).
+<-><->
+      
+l.805   \end{align}
+                   
+Not a real error.
+
+[100]
+! Preview: Snippet 101 started.
+<-><->
+      
+l.808 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 101 ended.(2359319+0x27970198).
+<-><->
+      
+l.812 \end{equation}
+                    
+Not a real error.
+
+[101
+
+]
+! Preview: Snippet 102 started.
+<-><->
+      
+l.814 \section
+              {Measurement of System Properties}
+Not a real error.
+
+! Preview: Snippet 102 ended.(780261+229886x27970198).
+<-><->
+      
+l.814 \section{Measurement of System Properties}
+                                                
+Not a real error.
+
+[102
+
+]
+! Preview: Snippet 103 started.
+<-><->
+      
+l.815 \subsection
+                 {Introduction}
+Not a real error.
+
+! Preview: Snippet 103 ended.(650217+11318x27970198).
+<-><->
+      
+l.815 \subsection{Introduction}
+                               
+Not a real error.
+
+[103
+
+]
+
+LaTeX Warning: Reference `fig:fluctuations' on page 14 undefined on input line 
+820.
+
+! Preview: Snippet 104 started.
+<-><->
+      
+l.822 with angle brackets $
+                           \langle\:\: \rangle$, and the time average of a
+Not a real error.
+
+! Preview: Snippet 104 ended.(589824+196608x961190).
+<-><->
+      
+l.822 with angle brackets $\langle\:\: \rangle$
+                                               , and the time average of a
+Not a real error.
+
+[104]
+! Preview: Snippet 105 started.
+<-><->
+      
+l.823 property, $
+                 A$, is shown in \eqref{eq:TAdef} \cite{Haile1997}.
+Not a real error.
+
+! Preview: Snippet 105 ended.(537395+0x577257).
+<-><->
+      
+l.823 property, $A$
+                   , is shown in \eqref{eq:TAdef} \cite{Haile1997}.
+Not a real error.
+
+[105]
+
+LaTeX Warning: Reference `eq:TAdef' on page 14 undefined on input line 823.
+
+
+LaTeX Warning: Citation 'Haile1997' on page 14 undefined on input line 823.
+
+! Preview: Snippet 106 started.
+<-><->
+      
+l.825 \begin{figure}
+                    [htp]
+Not a real error.
+
+<figures/energyplot.pdf, id=436, 845.1575pt x 597.23125pt>
+File: figures/energyplot.pdf Graphic file (type pdf)
+
+<use figures/energyplot.pdf>
+! Preview: Snippet 106 ended.(23936682+285084x27970198).
+<-><->
+      
+l.836 \end{figure}
+                  
+Not a real error.
+
+[106
+
+
+ <./figures/energyplot.pdf, page is rotated 90 degrees>]
+! Preview: Snippet 107 started.
+<-><->
+      
+l.838 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 107 ended.(1968178+0x27970198).
+<-><->
+      
+l.841 \end{equation}
+                    
+Not a real error.
+
+[107
+
+]
+
+LaTeX Warning: Reference `eq:TASum' on page 14 undefined on input line 847.
+
+! Preview: Snippet 108 started.
+<-><->
+      
+l.849 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 108 ended.(2440028+0x27970198).
+<-><->
+      
+l.852 \end{equation}
+                    
+Not a real error.
+
+[108
+
+]
+
+LaTeX Warning: Reference `eq:TAforcedriven' on page 14 undefined on input line 
+858.
+
+! Preview: Snippet 109 started.
+<-><->
+      
+l.858 \eqref{eq:TAforcedriven}, where $
+                                       M$ is the number of measurements
+Not a real error.
+
+! Preview: Snippet 109 ended.(537395+0x827114).
+<-><->
+      
+l.858 \eqref{eq:TAforcedriven}, where $M$
+                                          is the number of measurements
+Not a real error.
+
+[109]
+! Preview: Snippet 110 started.
+<-><->
+      
+l.861 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 110 ended.(2402995+0x27970198).
+<-><->
+      
+l.864 \end{equation}
+                    
+Not a real error.
+
+[110
+
+]
+! Preview: Snippet 111 started.
+<-><->
+      
+l.865 \subsection
+                 {Units}
+Not a real error.
+
+! Preview: Snippet 111 ended.(650217+11318x27970198).
+<-><->
+      
+l.865 \subsection{Units}
+                        
+Not a real error.
+
+[111
+
+]
+
+LaTeX Warning: Citation 'Haile1997' on page 14 undefined on input line 868.
+
+! Preview: Snippet 112 started.
+<-><->
+      
+l.870 ...ons are needed: a characteristic length $
+                                                  \sigma$, a
+Not a real error.
+
+! Preview: Snippet 112 ended.(338603+0x465893).
+<-><->
+      
+l.870 ... needed: a characteristic length $\sigma$
+                                                  , a
+Not a real error.
+
+[112]
+! Preview: Snippet 113 started.
+<-><->
+      
+l.871 characteristic energy $
+                             \varepsilon$, and the mass of one particle $m$....
+
+Not a real error.
+
+! Preview: Snippet 113 ended.(338603+0x360354).
+<-><->
+      
+l.871 characteristic energy $\varepsilon$
+                                         , and the mass of one particle $m$....
+
+Not a real error.
+
+[113]
+! Preview: Snippet 114 started.
+<-><->
+      
+l.871 ...repsilon$, and the mass of one particle $
+                                                  m$.  In the case of
+Not a real error.
+
+! Preview: Snippet 114 ended.(338603+0x673557).
+<-><->
+      
+l.871 ...psilon$, and the mass of one particle $m$
+                                                  .  In the case of
+Not a real error.
+
+[114]
+
+LaTeX Warning: Reference `tab:reducedForms' on page 14 undefined on input line 
+875.
+
+! Preview: Snippet 115 started.
+<-><->
+      
+l.877 \begin{table}
+                   [htp]
+Not a real error.
+
+
+LaTeX Warning: Citation 'Haile1997' on page 14 undefined on input line 879.
+
+
+LaTeX Warning: Citation 'Haile1997' on page 14 undefined on input line 879.
+
+! Preview: Snippet 115 ended.(8452641+4586018x27970198).
+<-><->
+      
+l.897 \end{table}
+                 
+Not a real error.
+
+[115
+
+
+]
+! Preview: Snippet 116 started.
+<-><->
+      
+l.899 \subsection
+                 {Energy}
+Not a real error.
+
+! Preview: Snippet 116 ended.(650217+191572x27970198).
+<-><->
+      
+l.899 \subsection{Energy}
+                         
+Not a real error.
+
+[116
+
+]
+
+LaTeX Warning: Reference `eq:internalE' on page 14 undefined on input line 904.
+
+
+! Preview: Snippet 117 started.
+<-><->
+      
+l.906 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 117 ended.(678160+0x27970198).
+<-><->
+      
+l.908 \end{equation}
+                    
+Not a real error.
+
+[117
+
+]
+
+LaTeX Warning: Reference `eq:totalEK' on page 14 undefined on input line 911.
+
+! Preview: Snippet 118 started.
+<-><->
+      
+l.913 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 118 ended.(2408808+0x27970198).
+<-><->
+      
+l.916 \end{equation}
+                    
+Not a real error.
+
+[118
+
+]
+
+LaTeX Warning: Reference `eq:totalU' on page 14 undefined on input line 920.
+
+! Preview: Snippet 119 started.
+<-><->
+      
+l.922 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 119 ended.(1916561+0x27970198).
+<-><->
+      
+l.925 \end{equation}
+                    
+Not a real error.
+
+[119
+
+]
+! Preview: Snippet 120 started.
+<-><->
+      
+l.932 \subsection
+                 {Temperature}
+Not a real error.
+
+! Preview: Snippet 120 ended.(650217+191572x27970198).
+<-><->
+      
+l.932 \subsection{Temperature}
+                              
+Not a real error.
+
+[120
+
+]
+
+LaTeX Warning: Citation 'Haile1997' on page 14 undefined on input line 935.
+
+
+LaTeX Warning: Reference `eq:MaxwellDist' on page 14 undefined on input line 93
+6.
+
+! Preview: Snippet 121 started.
+<-><->
+      
+l.938 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 121 ended.(1918911+0x27970198).
+<-><->
+      
+l.941 \end{equation}
+                    
+Not a real error.
+
+[121
+
+]
+
+LaTeX Warning: Citation 'Landau1968' on page 14 undefined on input line 944.
+
+
+LaTeX Warning: Reference `eq:MSV' on page 14 undefined on input line 945.
+
+! Preview: Snippet 122 started.
+<-><->
+      
+l.947 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 122 ended.(1617613+0x27970198).
+<-><->
+      
+l.950 \end{equation}
+                    
+Not a real error.
+
+[122
+
+]
+
+LaTeX Warning: Reference `eq:Temperature' on page 14 undefined on input line 95
+4.
+
+! Preview: Snippet 123 started.
+<-><->
+      
+l.957 \begin{equation}
+                      
+Not a real error.
+
+! Preview: Snippet 123 ended.(1694746+0x27970198).
+<-><->
+      
+l.960 \end{equation}
+                    
+Not a real error.
+
+[123
+
+]
+! Preview: Snippet 124 started.
+<-><->
+      
+l.963 \chapter
+              {Methodology}
+Not a real error.
+
+Chapter 4.
+! Preview: Snippet 124 ended.(10649600+11315x27970198).
+<-><->
+      
+l.963 \chapter{Methodology}
+                           
+Not a real error.
+
+[124
+
+
+
+
+
+
+
+]
+! Preview: Snippet 125 started.
+<-><->
+      
+l.964 \section
+              {Introduction}
+Not a real error.
+
+! Preview: Snippet 125 ended.(780261+13582x27970198).
+<-><->
+      
+l.964 \section{Introduction}
+                            
+Not a real error.
+
+[125
+
+]
+! Preview: Snippet 126 started.
+<-><->
+      
+l.968 \subsection
+                 {Running Simulation}
+Not a real error.
+
+! Preview: Snippet 126 ended.(650217+191572x27970198).
+<-><->
+      
+l.968 \subsection{Running Simulation}
+                                     
+Not a real error.
+
+[126
+
+]
+! Preview: Snippet 127 started.
+<-><->
+      
+l.972 \chapter
+              {Measuring Thermodynamic Properties}
+Not a real error.
+
+Chapter 5.
+! Preview: Snippet 127 ended.(10649600+11315x27970198).
+<-><->
+      
+l.972 \chapter{Measuring Thermodynamic Properties}
+                                                  
+Not a real error.
+
+[127
+
+
+
+
+
+
+
+]
+! Preview: Snippet 128 started.
+<-><->
+      
+l.974 \section
+              {Temperature and Internal energy }
+Not a real error.
+
+! Preview: Snippet 128 ended.(780261+229886x27970198).
+<-><->
+      
+l.974 \section{Temperature and Internal energy }
+                                                
+Not a real error.
+
+[128
+
+]
+! Preview: Snippet 129 started.
+<-><->
+      
+l.975 \section
+              {Pressure (continuous and discontinuous)}
+Not a real error.
+
+! Preview: Snippet 129 ended.(780261+197040x27970198).
+<-><->
+      
+l.975 ...{Pressure (continuous and discontinuous)}
+                                                  
+Not a real error.
+
+[129
+
+]
+! Preview: Snippet 130 started.
+<-><->
+      
+l.976 \section
+              {g(r)}
+Not a real error.
+
+! Preview: Snippet 130 ended.(780261+229886x27970198).
+<-><->
+      
+l.976 \section{g(r)}
+                    
+Not a real error.
+
+[130
+
+]
+! Preview: Snippet 131 started.
+<-><->
+      
+l.977 \section
+              {g(r) to pressure and temperature}
+Not a real error.
+
+! Preview: Snippet 131 ended.(780261+229886x27970198).
+<-><->
+      
+l.977 \section{g(r) to pressure and temperature}
+                                                
+Not a real error.
+
+[131
+
+]
+! Preview: Snippet 132 started.
+<-><->
+      
+l.978 \section
+              {long range corrections}
+Not a real error.
+
+! Preview: Snippet 132 ended.(780261+229886x27970198).
+<-><->
+      
+l.978 \section{long range corrections}
+                                      
+Not a real error.
+
+[132
+
+]
+! Preview: Snippet 133 started.
+<-><->
+      
+l.980 \chapter
+              {From Continuous to Discontinuous}
+Not a real error.
+
+Chapter 6.
+! Preview: Snippet 133 ended.(10649600+11315x27970198).
+<-><->
+      
+l.980 \chapter{From Continuous to Discontinuous}
+                                                
+Not a real error.
+
+[133
+
+
+
+
+
+
+
+]
+! Preview: Snippet 134 started.
+<-><->
+      
+l.989 \chapter
+              {Results}
+Not a real error.
+
+Chapter 7.
+! Preview: Snippet 134 ended.(10649600+11315x27970198).
+<-><->
+      
+l.989 \chapter{Results}
+                       
+Not a real error.
+
+[134
+
+
+
+
+
+
+
+]
+! Preview: Snippet 135 started.
+<-><->
+      
+l.991 \section
+              {Benchmarking}
+Not a real error.
+
+! Preview: Snippet 135 ended.(780261+229886x27970198).
+<-><->
+      
+l.991 \section{Benchmarking}
+                            
+Not a real error.
+
+[135
+
+]
+! Preview: Snippet 136 started.
+<-><->
+      
+l.993 \subsection
+                 {Introduction}
+Not a real error.
+
+! Preview: Snippet 136 ended.(650217+11318x27970198).
+<-><->
+      
+l.993 \subsection{Introduction}
+                               
+Not a real error.
+
+[136
+
+]
+! Preview: Snippet 137 started.
+<-><->
+      
+l.998 \subsection
+                 {Force based code verusus NIST and ESpReSSo}
+Not a real error.
+
+! Preview: Snippet 137 ended.(650217+191572x27970198).
+<-><->
+      
+l.998 ...rce based code verusus NIST and ESpReSSo}
+                                                  
+Not a real error.
+
+[137
+
+]
+! Preview: Snippet 138 started.
+<-><->
+      
+l.1000 \subsection
+                  {Event Driven}
+Not a real error.
+
+! Preview: Snippet 138 ended.(650217+11318x27970198).
+<-><->
+      
+l.1000 \subsection{Event Driven}
+                                
+Not a real error.
+
+[138
+
+]
+! Preview: Snippet 139 started.
+<-><->
+      
+l.1007 \section
+               {Chapela's dumb stepping and very good stepping versus force ...
+
+Not a real error.
+
+! Preview: Snippet 139 ended.(2569521+13582x27970198).
+<-><->
+      
+l.1007 ...very good stepping versus force based. }
+                                                  
+Not a real error.
+
+[139
+
+]
+! Preview: Snippet 140 started.
+<-><->
+      
+l.1011 \section
+               {Stepping in probability versus action}
+Not a real error.
+
+! Preview: Snippet 140 ended.(780261+229886x27970198).
+<-><->
+      
+l.1011 ...n{Stepping in probability versus action}
+                                                  
+Not a real error.
+
+[140
+
+]
+! Preview: Snippet 141 started.
+<-><->
+      
+l.1016 \section
+               {Hard core position}
+Not a real error.
+
+! Preview: Snippet 141 ended.(780261+229886x27970198).
+<-><->
+      
+l.1016 \section{Hard core position}
+                                   
+Not a real error.
+
+[141
+
+]
+! Preview: Snippet 142 started.
+<-><->
+      
+l.1027 \section
+               {Temperature comparisons}
+Not a real error.
+
+! Preview: Snippet 142 ended.(780261+229886x27970198).
+<-><->
+      
+l.1027 \section{Temperature comparisons}
+                                        
+Not a real error.
+
+[142
+
+]
+! Preview: Snippet 143 started.
+<-><->
+      
+l.1030 \subsection
+                  {Event-Driven Simulator}
+Not a real error.
+
+! Preview: Snippet 143 ended.(650217+11318x27970198).
+<-><->
+      
+l.1030 \subsection{Event-Driven Simulator}
+                                          
+Not a real error.
+
+[143
+
+]
+! Preview: Snippet 144 started.
+<-><->
+      
+l.1035 ... particles at a reduced temperature of $
+                                                  T^*=1$ for
+Not a real error.
+
+! Preview: Snippet 144 ended.(537395+0x2290419).
+<-><->
+      
+l.1035 ...cles at a reduced temperature of $T^*=1$
+                                                   for
+Not a real error.
+
+[144]
+
+LaTeX Warning: Citation 'Lue2005' on page 16 undefined on input line 1037.
+
+
+LaTeX Warning: Reference `tab:benchhard' on page 16 undefined on input line 103
+7.
+
+! Preview: Snippet 145 started.
+<-><->
+      
+l.1043 \begin{table}
+                     \caption{Comparison of results obtained by the event-dr...
+
+Not a real error.
+
+! Preview: Snippet 145 ended.(9522051+4705156x27970198).
+<-><->
+      
+l.1069 \end{table}
+                  
+Not a real error.
+
+[145
+
+
+]
+
+LaTeX Warning: Citation 'Chapela1989' on page 16 undefined on input line 1072.
+
+
+LaTeX Warning: Reference `tab:benchsoft' on page 16 undefined on input line 107
+6.
+
+! Preview: Snippet 146 started.
+<-><->
+      
+l.1078 \begin{table}
+                    
+Not a real error.
+
+! Preview: Snippet 146 ended.(12562917+7080833x27970198).
+<-><->
+      
+l.1110 \end{table}
+                  
+Not a real error.
+
+[146
+
+
+]
+
+LaTeX Warning: Empty bibliography on input line 1130.
+
+! Preview: Snippet 147 started.
+<-><->
+      
+l.1133 \chapter
+               {Derivation of Collision Dynamics for Stepped Potentials}
+Not a real error.
+
+Appendix A.
+! Preview: Snippet 147 ended.(12091392+11315x27970198).
+<-><->
+      
+l.1133 ...llision Dynamics for Stepped Potentials}
+                                                  
+Not a real error.
+
+[147
+
+
+
+
+
+
+
+]
+! Preview: Snippet 148 started.
+<-><->
+      
+l.1134 Considering a collision between particles $
+                                                  i$ and $j$, each with mass,
+Not a real error.
+
+! Preview: Snippet 148 ended.(515577+0x262695).
+<-><->
+      
+l.1134 ...dering a collision between particles $i$
+                                                   and $j$, each with mass,
+Not a real error.
+
+[148]
+! Preview: Snippet 149 started.
+<-><->
+      
+l.1134 ... a collision between particles $i$ and $
+                                                  j$, each with mass,
+Not a real error.
+
+! Preview: Snippet 149 ended.(515577+152916x362819).
+<-><->
+      
+l.1134 ... collision between particles $i$ and $j$
+                                                  , each with mass,
+Not a real error.
+
+[149]
+! Preview: Snippet 150 started.
+<-><->
+      
+l.1135 $
+        m$ with a step energy difference of $\Delta U$, the conservation of
+Not a real error.
+
+! Preview: Snippet 150 ended.(338603+0x673557).
+<-><->
+      
+l.1135 $m$
+           with a step energy difference of $\Delta U$, the conservation of
+Not a real error.
+
+[150]
+! Preview: Snippet 151 started.
+<-><->
+      
+l.1135 $m$ with a step energy difference of $
+                                             \Delta U$, the conservation of
+Not a real error.
+
+! Preview: Snippet 151 ended.(537395+0x1246829).
+<-><->
+      
+l.1135 ...h a step energy difference of $\Delta U$
+                                                  , the conservation of
+Not a real error.
+
+[151]
+
+LaTeX Warning: Reference `eq:consMom' on page 17 undefined on input line 1136.
+
+! Preview: Snippet 152 started.
+<-><->
+      
+l.1139 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 152 ended.(912347+0x27970198).
+<-><->
+      
+l.1142 \end{equation}
+                     
+Not a real error.
+
+[152
+
+]
+
+LaTeX Warning: Reference `eq:defA' on page 17 undefined on input line 1146.
+
+! Preview: Snippet 153 started.
+<-><->
+      
+l.1146 \eqref{eq:defA}, where $
+                               A$ is an arbitary coefficient.
+Not a real error.
+
+! Preview: Snippet 153 ended.(537395+0x577257).
+<-><->
+      
+l.1146 \eqref{eq:defA}, where $A$
+                                  is an arbitary coefficient.
+Not a real error.
+
+[153]
+! Preview: Snippet 154 started.
+<-><->
+      
+l.1148 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 154 ended.(912347+0x27970198).
+<-><->
+      
+l.1152 \end{equation}
+                     
+Not a real error.
+
+[154
+
+]
+
+LaTeX Warning: Reference `eq:constE' on page 17 undefined on input line 1155.
+
+
+LaTeX Warning: Reference `eq:constE1' on page 17 undefined on input line 1156.
+
+
+LaTeX Warning: Reference `eq:constE2' on page 17 undefined on input line 1156.
+
+! Preview: Snippet 155 started.
+<-><->
+      
+l.1158 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 155 ended.(1578292+0x27970198).
+<-><->
+      
+l.1162 \end{equation}
+                     
+Not a real error.
+
+[155
+
+]
+! Preview: Snippet 156 started.
+<-><->
+      
+l.1164 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 156 ended.(1578292+0x27970198).
+<-><->
+      
+l.1168 \end{equation}
+                     
+Not a real error.
+
+[156
+
+]
+! Preview: Snippet 157 started.
+<-><->
+      
+l.1170 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 157 ended.(1578292+0x27970198).
+<-><->
+      
+l.1175 \end{equation}
+                     
+Not a real error.
+
+[157
+
+]
+
+LaTeX Warning: Reference `eq:defA' on page 17 undefined on input line 1177.
+
+
+LaTeX Warning: Reference `eq:constE2' on page 17 undefined on input line 1178.
+
+
+LaTeX Warning: Reference `eq:eq1' on page 17 undefined on input line 1178.
+
+! Preview: Snippet 158 started.
+<-><->
+      
+l.1180 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 158 ended.(1608876+0x27970198).
+<-><->
+      
+l.1184 \end{equation}
+                     
+Not a real error.
+
+[158
+
+]
+
+LaTeX Warning: Reference `eq:defA' on page 17 undefined on input line 1186.
+
+! Preview: Snippet 159 started.
+<-><->
+      
+l.1187 vector ($
+                \mathbf{v}_{ij} = \mathbf{v}_i - \mathbf{v}_j$) can be
+Not a real error.
+
+! Preview: Snippet 159 ended.(458752+219909x4386459).
+<-><->
+      
+l.1187 ...f{v}_{ij} = \mathbf{v}_i - \mathbf{v}_j$
+                                                  ) can be
+Not a real error.
+
+[159]
+
+LaTeX Warning: Reference `eq:eq1' on page 17 undefined on input line 1188.
+
+
+LaTeX Warning: Reference `eq:eq2' on page 17 undefined on input line 1188.
+
+! Preview: Snippet 160 started.
+<-><->
+      
+l.1190 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 160 ended.(1694746+0x27970198).
+<-><->
+      
+l.1194 \end{equation}
+                     
+Not a real error.
+
+[160
+
+]
+! Preview: Snippet 161 started.
+<-><->
+      
+l.1196 This is a quadratic equation in terms of $
+                                                 A$ therefore it's roots must
+Not a real error.
+
+! Preview: Snippet 161 ended.(537395+0x577257).
+<-><->
+      
+l.1196 ... is a quadratic equation in terms of $A$
+                                                   therefore it's roots must
+Not a real error.
+
+[161]
+
+LaTeX Warning: Reference `eq:devQuadratic' on page 17 undefined on input line 1
+197.
+
+! Preview: Snippet 162 started.
+<-><->
+      
+l.1199 \begin{equation}
+                       
+Not a real error.
+
+! Preview: Snippet 162 ended.(2359319+0x27970198).
+<-><->
+      
+l.1203 \end{equation}
+                     
+Not a real error.
+
+[162
+
+]
+
+LaTeX Warning: Reference `eq:defA' on page 17 undefined on input line 1205.
+
+
+LaTeX Warning: Reference `eq:deltaV' on page 17 undefined on input line 1206.
+
+! Preview: Snippet 163 started.
+<-><->
+      
+l.1210   \begin{align}
+                      
+Not a real error.
+
+! Preview: Snippet 163 ended.(3479896+0x27970198).
+<-><->
+      
+l.1213   \end{align}
+                    
+Not a real error.
+
+[163]
+
+LaTeX Warning: There were undefined references.
+
+
+Package biblatex Warning: Please (re)run BibTeX on the file(s):
+(biblatex)                _region_
+(biblatex)                and rerun LaTeX afterwards.
+
+Package logreq Info: Writing requests to '_region_.run.xml'.
+\openout1 = `_region_.run.xml'.
+
+ ) 
 Here is how much of TeX's memory you used:
- 876 strings out of 493630
- 11411 string characters out of 3148802
- 68143 words of memory out of 3000000
- 4243 multiletter control sequences out of 15000+200000
- 3938 words of font info for 15 fonts, out of 3000000 for 9000
- 831 hyphenation exceptions out of 8191
- 31i,0n,38p,385b,36s stack positions out of 5000i,500n,10000p,200000b,50000s
-No pages of output.
+ 12840 strings out of 495061
+ 197772 string characters out of 1182621
+ 384495 words of memory out of 3000000
+ 15672 multiletter control sequences out of 15000+50000
+ 32120 words of font info for 51 fonts, out of 3000000 for 9000
+ 28 hyphenation exceptions out of 8191
+ 51i,14n,45p,1090b,1110s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
+ve/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/ty
+pe1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-texlive/fonts/type1/public/a
+msfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
+cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi6.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/t
+exmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive
+/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/fonts/type1/
+public/amsfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
+ts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/tex
+mf-texlive/fonts/type1/urw/times/utmr8a.pfb>
+Output written on _region_.pdf (163 pages, 431267 bytes).
+PDF statistics:
+ 745 PDF objects out of 1000 (max. 8388607)
+ 109 named destinations out of 1000 (max. 500000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
+

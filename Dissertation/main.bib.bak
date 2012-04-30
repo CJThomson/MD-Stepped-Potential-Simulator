@@ -1,4 +1,4 @@
-% This file was created with JabRef 2.7.2.
+% This file was created with JabRef 2.7b.
 % Encoding: UTF-8
 
 @ARTICLE{Abell1985,
@@ -35,6 +35,31 @@
   volume = {27},
   pages = {1208-1209},
   doi = {10.1063/1.1743957},
+  owner = {Chris},
+  timestamp = {2012.04.28}
+}
+
+@ARTICLE{Andersen1980,
+  author = {Andersen, H. C.},
+  title = {Molecular dynamics simulations at constant pressure and/or temperature},
+  journal = {J. Chem. Phys.},
+  year = {1980},
+  volume = {72},
+  pages = {2384-2393},
+  doi = {10.1063/1.439486},
+  owner = {chris},
+  timestamp = {2012.04.29}
+}
+
+@ARTICLE{Barker1967,
+  author = {Barker, J. A. and Henderson, D.},
+  title = {Perturbation Theory and Equation of State for Fluids: The Square-Well
+	Potential},
+  journal = {J. Chem. Phys.},
+  year = {1967},
+  volume = {47},
+  pages = {2856-2861},
+  doi = {10.1063/1.1712308},
   owner = {Chris},
   timestamp = {2012.04.28}
 }
