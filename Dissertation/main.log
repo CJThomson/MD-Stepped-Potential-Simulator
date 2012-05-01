@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  30 APR 2012 14:05
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  1 MAY 2012 02:28
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -815,7 +815,7 @@ LaTeX Info: Redefining \pageref on input line 19.
 
 pdfTeX warning: pdflatex (file ./figures/UoALogo.pdf): PDF inclusion: found PDF
  version <1.5>, but at most version <1.4> allowed
-<figures/UoALogo.pdf, id=211, 375.16461pt x 140.45314pt>
+<figures/UoALogo.pdf, id=191, 375.16461pt x 140.45314pt>
 File: figures/UoALogo.pdf Graphic file (type pdf)
 
 <use figures/UoALogo.pdf>
@@ -884,11 +884,11 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
 [10
 
 
-] [11] <figures/ljPlot.pdf, id=379, 845.1575pt x 597.23125pt>
+] [11] <figures/ljPlot.pdf, id=354, 845.1575pt x 597.23125pt>
 File: figures/ljPlot.pdf Graphic file (type pdf)
 
 <use figures/ljPlot.pdf>
-<figures/ljForce.pdf, id=382, 845.1575pt x 597.23125pt>
+<figures/ljForce.pdf, id=357, 845.1575pt x 597.23125pt>
 File: figures/ljForce.pdf Graphic file (type pdf)
 
 <use figures/ljForce.pdf> [12 <./figures/ljPlot.pdf, page is rotated 90 degrees
@@ -901,33 +901,26 @@ Chapter 3.
 
 pdfTeX warning: pdflatex (file ./figures/PBC.pdf): PDF inclusion: found PDF ver
 sion <1.5>, but at most version <1.4> allowed
-<figures/PBC.pdf, id=476, 322.0281pt x 322.12846pt>
+<figures/PBC.pdf, id=451, 322.0281pt x 322.12846pt>
 File: figures/PBC.pdf Graphic file (type pdf)
  <use figures/PBC.pdf>
 [18 <./figures/PBC.pdf>] [19] [20] [21] [22] [23] [24]
-<figures/energyplot.pdf, id=580, 845.1575pt x 597.23125pt>
+Chapter 4.
+<figures/energyplot.pdf, id=555, 845.1575pt x 597.23125pt>
 File: figures/energyplot.pdf Graphic file (type pdf)
 
-<use figures/energyplot.pdf> [25 <./figures/energyplot.pdf, page is rotated 90 
-degrees>] [26] [27]
-Chapter 4.
-[28
+<use figures/energyplot.pdf> [25
 
 
-]
+] [26 <./figures/energyplot.pdf, page is rotated 90 degrees>] [27] [28] [29]
 Chapter 5.
-[29
-
-
-]
-Chapter 6.
 [30
 
 
 ]
-Chapter 7.
+Chapter 6.
 
-Overfull \hbox (1.16156pt too wide) in paragraph at lines 1004--1004
+Overfull \hbox (1.16156pt too wide) in paragraph at lines 1052--1052
 []\T1/ptm/b/n/17.28 Chapela's dumb step-ping and very good step-ping ver-
  []
 
@@ -935,30 +928,30 @@ Overfull \hbox (1.16156pt too wide) in paragraph at lines 1004--1004
 
 
 ]
-Overfull \hbox (5.1801pt too wide) in paragraph at lines 1082--1106
+Overfull \hbox (5.1801pt too wide) in paragraph at lines 1130--1154
  [] 
  []
 
 [32]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 1127.
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 1175.
 
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (6.69336pt too wide) in paragraph at lines 1127--1127
+Overfull \hbox (6.69336pt too wide) in paragraph at lines 1175--1175
 \T1/ptm/m/n/12 Method''. In: \T1/ptm/m/it/12 J. Chem. Phys. \T1/ptm/m/n/12 31 (
 1959), pp. 459^^U466. \T1/ptm/m/sc/12 doi\T1/ptm/m/n/12 : [][]$\T1/pcr/m/n/12 1
 0 . 1063 / 1 . 1730376$[][]\T1/ptm/m/n/12 . 
  []
 
 [33]
-Overfull \hbox (14.79451pt too wide) in paragraph at lines 1127--1127
+Overfull \hbox (14.79451pt too wide) in paragraph at lines 1175--1175
 []\T1/ptm/m/n/12 J M Haile. \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-la-tio
 n: El-e-men-tary Meth-ods\T1/ptm/m/n/12 . Wiley-Interscience,
  []
 
 
-Overfull \hbox (8.27794pt too wide) in paragraph at lines 1127--1127
+Overfull \hbox (8.27794pt too wide) in paragraph at lines 1175--1175
 \T1/ptm/m/it/12 put. Phys. Com-mun. \T1/ptm/m/n/12 147 (2002), pp. 733^^U736. \
 T1/ptm/m/sc/12 doi\T1/ptm/m/n/12 : [][]$\T1/pcr/m/n/12 10 . 1016 / S0010 -[] 46
 55(02 )
@@ -978,13 +971,13 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12944 strings out of 495061
- 198995 string characters out of 1182621
+ 12948 strings out of 495061
+ 199054 string characters out of 1182621
  393826 words of memory out of 3000000
- 15661 multiletter control sequences out of 15000+50000
+ 15663 multiletter control sequences out of 15000+50000
  58716 words of font info for 65 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 51i,12n,49p,865b,1143s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,12n,49p,865b,1141s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/ty
 pe1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-texlive/fonts/type1/public/a
@@ -999,9 +992,9 @@ ts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8
 exmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8
 a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (37 pages, 507323 bytes).
+Output written on main.pdf (37 pages, 513647 bytes).
 PDF statistics:
- 817 PDF objects out of 1000 (max. 8388607)
- 202 named destinations out of 1000 (max. 500000)
- 472 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 814 PDF objects out of 1000 (max. 8388607)
+ 204 named destinations out of 1000 (max. 500000)
+ 432 words of extra memory for PDF output out of 10000 (max. 10000000)
 

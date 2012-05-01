@@ -347,6 +347,38 @@
   \field{year}{2002}
 \endentry
 
+\entry{Labik2005}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Lab\'{i}k}{L.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kolafa}{K.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Malijevsk\'{y}}{M.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LSKJMA1}
+  \strng{fullhash}{LSKJMA1}
+  \field{sortinit}{L}
+  \verb{doi}
+  \verb 10.1103/PhysRevE.71.021105
+  \endverb
+  \field{pages}{021105}
+  \field{title}{Virial coefficients of hard spheres and hard disks up to the
+  ninth}
+  \field{volume}{71}
+  \field{journaltitle}{Phys. Rev. E}
+  \field{year}{2005}
+\endentry
+
 \entry{Landau1968}{book}{}
   \name{author}{2}{}{%
     {{}%
@@ -516,6 +548,65 @@
   \field{volume}{136}
   \field{journaltitle}{Phys. Rev.}
   \field{year}{1964}
+\endentry
+
+\entry{Schultz2009}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Schultz}{S.}%
+     {A.~J.}{A.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kofke}{K.}%
+     {D.~A.}{D.~A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SAJKDA1}
+  \strng{fullhash}{SAJKDA1}
+  \field{sortinit}{S}
+  \verb{doi}
+  \verb 10.1080/00268970903267053
+  \endverb
+  \field{pages}{2309\bibrangedash 2318}
+  \field{title}{Sixth, seventh and eighth virial coefficients of the
+  Lennard-Jones model}
+  \field{volume}{1007}
+  \field{journaltitle}{Mol. Phys.}
+  \field{year}{2009}
+\endentry
+
+\entry{Smith2005}{book}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Smith}{S.}%
+     {J.~M.}{J.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Van~Ness}{V.~N.}%
+     {H.~C.}{H.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Abbott}{A.}%
+     {M.M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {McGraw-Hill}%
+  }
+  \strng{namehash}{SJMVNHCAM1}
+  \strng{fullhash}{SJMVNHCAM1}
+  \field{sortinit}{S}
+  \field{edition}{7th}
+  \field{title}{Introduction ot Chemical Engineering Thermodynamics}
+  \list{location}{1}{%
+    {New York}%
+  }
+  \field{year}{2005}
 \endentry
 
 \entry{Swope1982}{article}{}

@@ -669,16 +669,23 @@ The general algorithm for a event driven simulator shown below.
   \end{enumerate} 
 \end{flushleft}
 
+This algorithm is more complex than that for the force driven
+simulation especially when event-driven simulators generally have many
+different types of event.
+
+
 \subsection{Collision Time Prediction}
-An event-driven simulator first must calculate the collision times
-between every pair of particles (provided the particles do collide),
-in order to select the earliest collision.  For hard sphere
-simulations there are two conditions that must be satisfied in order
-for a collision to occur.  Firstly, the particles must be moving
-towards each other and secondly, the particles must pass close enough
-to each other to collide.  These conditions can be expressed
-mathematically in equations \eqref{eq:collConditions1} and
-\eqref{eq:collConditions2} respectively \cite{Haile1997}.
+The initialisation of the particles for the event-driven simulation is
+identicle to that for the force-driven simulation.densityNIST An event-driven
+simulator first must calculate the collision times between every pair
+of particles (provided the particles do collide), in order to select
+the earliest collision.  For hard sphere simulations there are two
+conditions that must be satisfied in order for a collision to occur.
+Firstly, the particles must be moving towards each other and secondly,
+the particles must pass close enough to each other to collide.  These
+conditions can be expressed mathematically in equations
+\eqref{eq:collConditions1} and \eqref{eq:collConditions2} respectively
+\cite{Haile1997}.
 
 \begin{subequations}
   \begin{align}
@@ -808,8 +815,11 @@ used.
   \sqrt{(\mathbf{v}_{ij}\cdot\mathbf{\hat{r}}_{ij})^2 - \frac{4}{m}\Delta U}\right)
 \end{equation}
 \newpage
-\section{Measurement of System Properties}
-\subsection{Introduction}
+
+\newpage
+
+\chapter{Measuring Thermodynamic Properties}
+\section{Introduction}
 Molecular dynamics is a useful tool to predict macroscopic properties
 of particles systems.  Many of the identities and methods to measure
 these properties are derived in statistical mechanics.  However, even
@@ -859,7 +869,7 @@ taken.
   \label{eq:TAforcedriven}
   \langle A \rangle = \frac{1}{M} \sum^{M}_{1}A(\tau)
 \end{equation}
-\subsection{Units}
+\section{Units}
 
 In molecular dynamics simulations, properties are frequently measured
 in dimensionless forms \cite{Haile1997}. These ``reduced units'' are
@@ -893,7 +903,7 @@ well respectively. A table of reduced forms are given in table
   \end{center}
 \end{table}
 
-\subsection{Energy}
+\section{Energy}
 Perhaps one of the most important properties to measure in MD
 simulations is the total internal energy of the system.  For isolated
 systems, i.e.\ systems where mass or energy cannot enter or leave the
@@ -901,7 +911,7 @@ system, this internal energy is the sum of kinetic and potential
 energy (equation \eqref{eq:internalE}).
 
 \begin{equation}
-  E = E_K + U \label{eq:internalE}
+  E = E_K + \mathcal{U} \label{eq:internalE}
 \end{equation}
 
 The total kinetic energy in the system is the sum of the kinetic
@@ -918,7 +928,7 @@ shown in equation \eqref{eq:totalU}.
 
 \begin{equation}
   \label{eq:totalU}
-  U = \underset{i\;\;<\;\;j}{\sum\sum}U(r_{ij})
+  \mathcal{U} = \underset{i\;\;<\;\;j}{\sum\sum}\mathcal{U}(r_{ij})
 \end{equation}
 
 Event-driven simulators strictly conserve energy, therefore the
@@ -926,15 +936,15 @@ kinetic and potential energy can be measured at the beginning of the
 simulation and then updated whenever either changes e.g.\ when a
 collision occurs.
 
-\subsection{Temperature}
+\section{Temperature}
 
 The velocity distrubution of particles is given by the Maxwell
 distribution \cite{Haile1997}, shown in equation
-\eqref{eq:MaxwellDist}.
+\eqref{eq:MaxwellDist}, where $k_B$ is the Boltzman Constant.
 
 \begin{equation}
   \label{eq:MaxwellDist}
-  f(v_x)dv_x = \sqrt{\frac{m}{2\pi kT}}e^{-\frac{mv_x^2}{2kT}} 
+  f(v_x)dv_x = \sqrt{\frac{m}{2\pi k_BT}}e^{-\frac{mv_x^2}{2k_BT}} 
 \end{equation}
 
 This is the form of a Gaussian distribution and it can be shown
@@ -943,7 +953,7 @@ shown in equation \eqref{eq:MSV}.
 
 \begin{equation}
   \label{eq:MSV}
-  \bar{\;v_x^2\;} = \frac{kT}{m}
+  \bar{\;v_x^2\;} = \frac{k_BT}{m}
 \end{equation}
 
 Making the assumption that the velocity distribution is the same in
@@ -953,23 +963,61 @@ direction.
 
 \begin{equation}
 \label{eq:Temperature}
-  T^* = kT = \frac{mv^2}{3} = \frac{2}{3}E_K
+  T^* = k_BT = \frac{mv^2}{3N} = \frac{2}{3N}E_K
 \end{equation}
-\newpage
 
-\chapter{Methodology} 
-\section{Introduction} 
+This allows the calculation of the temperature from the kinetic energy
+of the system.
+\section{Pressure}
 
+The pressure in a molecular dynamics simulation is calculated using
+the virial equation of state (equation \eqref{eq:virialEOS}) \cite{Landau1968}.
 
+\begin{equation}
+  \label{eq:virialEOS}
+  \frac{PV}{Nk_BT} = 1 + B_2\rho + B_3\rho^2 + B_4\rho^3 + ... + B_{n}\rho^{n-1}
+\end{equation}
 
-\subsection{Running Simulation} 
-The
+The coefficients, $B_2, B_3, B_4, ..., B_n$ are known as the second,
+third, etc. virial coeffcients.  Values for these virial coefficients
+are available in the literature for common potentials such as hard
+spheres \cite{Labik2005} or Lennard-Jones
+\cite{Schultz2009}. Physically these coefficients represent the
+contribution to the pressure by two, three, etc particles interacting,
+and since most potentials are pairwise the pressure contribution is
+truncated at the second virial coefficient, the form of which in three
+dimensions is given in equation \eqref{eq:secondVirial} \cite{Smith2005}.
 
+\begin{equation}
+  \label{eq:secondVirial}
+  B_2 = -2\pi \int^\infty_0 \left(e^{\mathcal{U}(r)/kT}-1\right)r^2dr
+\end{equation}
 
-\chapter{Measuring Thermodynamic Properties}
+However these virial coefficients do not apply to molecular dynamics
+simulations that use periodic boundary conditions \cite{Haile1997},
+therefore an alternative method is required.
 
-\section{Temperature and Internal energy }
-\section{Pressure (continuous and discontinuous)}
+Using kinetic theory and measuring momentum flux during the simulation
+an expression for the second virial coefficient can be created for
+both simulation methods.  In force driven simulations, the second
+virial can be calculated using equation \eqref{eq:virialMD}
+\cite{Haile1997}.
+
+\begin{equation}
+  \label{eq:virialMD}
+  B_2\rho = \frac{1}{3NkT}\left \langle\underset{i\;\;<\;\;j}{\sum\sum}\mathbf{F}_{ij}\cdot\mathbf{r}_{ij} \right\rangle
+\end{equation}
+
+Calculating the pressure in event-driven simulators is more complex
+due to the lack of forces in the simulation, however by keeping track
+of the momentum flux at each collision an average pressure can be
+calculated using equation \eqref{eq:virialED}\cite{Lue2005}.  Here $N_{\text{coll}}$
+is the total number of collisions during the time $t$.
+
+\begin{equation}
+  \label{eq:virialED}
+  B_2\rho = \frac{m}{3}\frac{N_{\text{coll}}}{Nt}\langle\mathbf{r}_{ij}\cdot\Delta \mathbf{v}_i\rangle_{\text{coll}}
+\end{equation}
 \section{g(r)}
 \section{g(r) to pressure and temperature}
 \section{long range corrections}

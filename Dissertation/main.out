@@ -23,30 +23,25 @@
 \BOOKMARK [2][-]{subsection.3.2.1}{3.2.1 Introduction}{section.3.2}
 \BOOKMARK [2][-]{subsection.3.2.2}{3.2.2 Collision Time Prediction}{section.3.2}
 \BOOKMARK [2][-]{subsection.3.2.3}{3.2.3 Collision Dynamics }{section.3.2}
-\BOOKMARK [1][-]{section.3.3}{3.3 Measurement of System Properties}{chapter.3}
-\BOOKMARK [2][-]{subsection.3.3.1}{3.3.1 Introduction}{section.3.3}
-\BOOKMARK [2][-]{subsection.3.3.2}{3.3.2 Units}{section.3.3}
-\BOOKMARK [2][-]{subsection.3.3.3}{3.3.3 Energy}{section.3.3}
-\BOOKMARK [2][-]{subsection.3.3.4}{3.3.4 Temperature}{section.3.3}
-\BOOKMARK [0][-]{chapter.4}{4 Methodology}{}
+\BOOKMARK [0][-]{chapter.4}{4 Measuring Thermodynamic Properties}{}
 \BOOKMARK [1][-]{section.4.1}{4.1 Introduction}{chapter.4}
-\BOOKMARK [2][-]{subsection.4.1.1}{4.1.1 Running Simulation}{section.4.1}
-\BOOKMARK [0][-]{chapter.5}{5 Measuring Thermodynamic Properties}{}
-\BOOKMARK [1][-]{section.5.1}{5.1 Temperature and Internal energy }{chapter.5}
-\BOOKMARK [1][-]{section.5.2}{5.2 Pressure \(continuous and discontinuous\)}{chapter.5}
-\BOOKMARK [1][-]{section.5.3}{5.3 g\(r\)}{chapter.5}
-\BOOKMARK [1][-]{section.5.4}{5.4 g\(r\) to pressure and temperature}{chapter.5}
-\BOOKMARK [1][-]{section.5.5}{5.5 long range corrections}{chapter.5}
-\BOOKMARK [0][-]{chapter.6}{6 From Continuous to Discontinuous}{}
-\BOOKMARK [0][-]{chapter.7}{7 Results}{}
-\BOOKMARK [1][-]{section.7.1}{7.1 Benchmarking}{chapter.7}
-\BOOKMARK [2][-]{subsection.7.1.1}{7.1.1 Introduction}{section.7.1}
-\BOOKMARK [2][-]{subsection.7.1.2}{7.1.2 Force based code verusus NIST and ESpReSSo}{section.7.1}
-\BOOKMARK [2][-]{subsection.7.1.3}{7.1.3 Event Driven}{section.7.1}
-\BOOKMARK [1][-]{section.7.2}{7.2 Chapela's dumb stepping and very good stepping versus force based. }{chapter.7}
-\BOOKMARK [1][-]{section.7.3}{7.3 Stepping in probability versus action}{chapter.7}
-\BOOKMARK [1][-]{section.7.4}{7.4 Hard core position}{chapter.7}
-\BOOKMARK [1][-]{section.7.5}{7.5 Temperature comparisons}{chapter.7}
-\BOOKMARK [2][-]{subsection.7.5.1}{7.5.1 Event-Driven Simulator}{section.7.5}
-\BOOKMARK [1][-]{section.7.6}{7.6 References}{chapter.7}
+\BOOKMARK [1][-]{section.4.2}{4.2 Units}{chapter.4}
+\BOOKMARK [1][-]{section.4.3}{4.3 Energy}{chapter.4}
+\BOOKMARK [1][-]{section.4.4}{4.4 Temperature}{chapter.4}
+\BOOKMARK [1][-]{section.4.5}{4.5 Pressure}{chapter.4}
+\BOOKMARK [1][-]{section.4.6}{4.6 g\(r\)}{chapter.4}
+\BOOKMARK [1][-]{section.4.7}{4.7 g\(r\) to pressure and temperature}{chapter.4}
+\BOOKMARK [1][-]{section.4.8}{4.8 long range corrections}{chapter.4}
+\BOOKMARK [0][-]{chapter.5}{5 From Continuous to Discontinuous}{}
+\BOOKMARK [0][-]{chapter.6}{6 Results}{}
+\BOOKMARK [1][-]{section.6.1}{6.1 Benchmarking}{chapter.6}
+\BOOKMARK [2][-]{subsection.6.1.1}{6.1.1 Introduction}{section.6.1}
+\BOOKMARK [2][-]{subsection.6.1.2}{6.1.2 Force based code verusus NIST and ESpReSSo}{section.6.1}
+\BOOKMARK [2][-]{subsection.6.1.3}{6.1.3 Event Driven}{section.6.1}
+\BOOKMARK [1][-]{section.6.2}{6.2 Chapela's dumb stepping and very good stepping versus force based. }{chapter.6}
+\BOOKMARK [1][-]{section.6.3}{6.3 Stepping in probability versus action}{chapter.6}
+\BOOKMARK [1][-]{section.6.4}{6.4 Hard core position}{chapter.6}
+\BOOKMARK [1][-]{section.6.5}{6.5 Temperature comparisons}{chapter.6}
+\BOOKMARK [2][-]{subsection.6.5.1}{6.5.1 Event-Driven Simulator}{section.6.5}
+\BOOKMARK [1][-]{section.6.6}{6.6 References}{chapter.6}
 \BOOKMARK [0][-]{appendix.A}{A Derivation of Collision Dynamics for Stepped Potentials}{}

@@ -12,11 +12,9 @@
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {3.1}{\ignorespaces Figure showing 2D periodic boundary conditions. Only the nearest 8 images (dashed) to the simulated system (solid) are shown.\relax }}{18}{figure.caption.14}
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.2}{\ignorespaces Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($U^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\delimiter "426830A T\delimiter "526930B =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t = 0.005$.\relax }}{25}{figure.caption.15}
-\defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\addvspace {10\p@ }
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($U^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\delimiter "426830A T\delimiter "526930B =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t = 0.005$.\relax }}{26}{figure.caption.15}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

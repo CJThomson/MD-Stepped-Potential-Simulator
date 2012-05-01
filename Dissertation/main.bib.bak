@@ -22,7 +22,7 @@
   year = {1959},
   volume = {31},
   pages = {459-466},
-  doi = {10.1063/1.173037},
+  doi = {10.1063/1.1730376},
   owner = {chris},
   timestamp = {2012.04.14}
 }
@@ -171,6 +171,18 @@
   timestamp = {2012.04.13}
 }
 
+@ARTICLE{Labik2005,
+  author = {Lab\'{i}k, S. and Kolafa, J. and Malijevsk\'{y}, A.},
+  title = {Virial coefficients of hard spheres and hard disks up to the ninth},
+  journal = {Phys. Rev. E},
+  year = {2005},
+  volume = {71},
+  pages = {021105},
+  doi = {10.1103/PhysRevE.71.021105},
+  owner = {chris},
+  timestamp = {2012.05.01}
+}
+
 @BOOK{Landau1968,
   title = {Statistical Mechanics},
   publisher = {Pergamon},
@@ -223,6 +235,18 @@
   timestamp = {2012.03.19}
 }
 
+@ARTICLE{Mattson1999,
+  author = {Mattson, W. and Rice, B. M.},
+  title = {Near-neighbour calculations using a modified cell-linked list method},
+  journal = {Comput. Phys. Commun.},
+  year = {1999},
+  volume = {119},
+  pages = {135-148},
+  doi = {10.1016/S0010-4655(98)00203-3},
+  owner = {chris},
+  timestamp = {2012.04.30}
+}
+
 @ARTICLE{Mazur1997,
   author = {Mazur, Alexey K.},
   title = {Common Molecular Dynamics Algorithms Revisited: Accuracy and Optimal
@@ -255,6 +279,19 @@
   doi = {10.1103/PhysRev.136.A405},
   owner = {chris},
   timestamp = {2012.03.26}
+}
+
+@ARTICLE{Schultz2009,
+  author = {Schultz, A. J. and Kofke, D. A.},
+  title = {Sixth, seventh and eighth virial coefficients of the Lennard-Jones
+	model},
+  journal = {Mol. Phys.},
+  year = {2009},
+  volume = {1007},
+  pages = {2309-2318},
+  doi = {10.1080/00268970903267053},
+  owner = {chris},
+  timestamp = {2012.05.01}
 }
 
 @ARTICLE{Swope1982,
