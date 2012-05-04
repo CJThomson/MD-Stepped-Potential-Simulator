@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  1 MAY 2012 02:28
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  3 MAY 2012 22:17
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -223,6 +223,16 @@ File: biblatex.def 2011/11/13 v1.7 biblatex generic definitions
 \c@biburllcpenalty=\count201
 \c@smartand=\count202
 )
+Package biblatex Info: Trying to load bibliography style 'chem-acs'...
+Package biblatex Info: ... file 'chem-acs.bbx' found.
+
+(/home/chris/texmf/tex/latex/biblatex/biblatex-chem/latex/chem-acs.bbx
+File: chem-acs.bbx 2012/02/05 v1.1f biblatex bibliography style
+Package biblatex Info: Trying to load bibliography style 'numeric-comp'...
+Package biblatex Info: ... file 'numeric-comp.bbx' found.
+
+(/usr/share/texmf/tex/latex/biblatex/bbx/numeric-comp.bbx
+File: numeric-comp.bbx 2011/11/13 v1.7 biblatex bibliography style
 Package biblatex Info: Trying to load bibliography style 'numeric'...
 Package biblatex Info: ... file 'numeric.bbx' found.
 
@@ -233,12 +243,19 @@ Package biblatex Info: ... file 'standard.bbx' found.
 
 (/usr/share/texmf/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2011/11/13 v1.7 biblatex bibliography style
-))
-Package biblatex Info: Trying to load citation style 'numeric'...
-Package biblatex Info: ... file 'numeric.cbx' found.
+))))
+Package biblatex Info: Trying to load citation style 'chem-acs'...
+Package biblatex Info: ... file 'chem-acs.cbx' found.
 
-(/usr/share/texmf/tex/latex/biblatex/cbx/numeric.cbx
-File: numeric.cbx 2011/11/13 v1.7 biblatex citation style
+(/home/chris/texmf/tex/latex/biblatex/biblatex-chem/latex/chem-acs.cbx
+File: chem-acs.cbx 2012/02/05 v1.1f biblatex citation style
+Package biblatex Info: Trying to load citation style 'numeric-comp'...
+Package biblatex Info: ... file 'numeric-comp.cbx' found.
+
+(/usr/share/texmf/tex/latex/biblatex/cbx/numeric-comp.cbx
+File: numeric-comp.cbx 2011/11/13 v1.7 biblatex citation style
+\c@cbx@tempcnta=\count203
+\c@cbx@tempcntb=\count204
 Package biblatex Info: Redefining '\cite'.
 Package biblatex Info: Redefining '\parencite'.
 Package biblatex Info: Redefining '\footcite'.
@@ -249,7 +266,7 @@ Package biblatex Info: Redefining '\supercite'.
 Package biblatex Info: Redefining '\cites'.
 Package biblatex Info: Redefining '\parencites'.
 Package biblatex Info: Redefining '\smartcites'.
-)
+))
 Package biblatex Info: Trying to load configuration file...
 Package biblatex Info: ... file 'biblatex.cfg' found.
 
@@ -276,13 +293,13 @@ Package: amsbsy 1999/11/29 v1.2d
 (/usr/share/texmf-texlive/tex/latex/amsmath/amsopn.sty
 Package: amsopn 1999/12/14 v2.01 operator names
 )
-\inf@bad=\count203
+\inf@bad=\count205
 LaTeX Info: Redefining \frac on input line 211.
-\uproot@=\count204
-\leftroot@=\count205
+\uproot@=\count206
+\leftroot@=\count207
 LaTeX Info: Redefining \overline on input line 307.
-\classnum@=\count206
-\DOTSCASE@=\count207
+\classnum@=\count208
+\DOTSCASE@=\count209
 LaTeX Info: Redefining \ldots on input line 379.
 LaTeX Info: Redefining \dots on input line 382.
 LaTeX Info: Redefining \cdots on input line 467.
@@ -291,15 +308,15 @@ LaTeX Info: Redefining \cdots on input line 467.
 \big@size=\dimen109
 LaTeX Font Info:    Redeclaring font encoding OML on input line 567.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 568.
-\macc@depth=\count208
-\c@MaxMatrixCols=\count209
+\macc@depth=\count210
+\c@MaxMatrixCols=\count211
 \dotsspace@=\muskip11
-\c@parentequation=\count210
-\dspbrk@lvl=\count211
+\c@parentequation=\count212
+\dspbrk@lvl=\count213
 \tag@help=\toks17
-\row@=\count212
-\column@=\count213
-\maxfields@=\count214
+\row@=\count214
+\column@=\count215
+\maxfields@=\count216
 \andhelp@=\toks18
 \eqnshift@=\dimen110
 \alignsep@=\dimen111
@@ -354,22 +371,22 @@ Package graphics Info: Driver file: pdftex.def on input line 91.
 
 (/usr/share/texmf-texlive/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2010/03/12 v0.04p Graphics/color for pdfTeX
-\Gread@gobject=\count215
+\Gread@gobject=\count217
 ))
 \Gin@req@height=\dimen116
 \Gin@req@width=\dimen117
 )
 (/usr/share/texmf-texlive/tex/latex/tools/calc.sty
 Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count216
-\calc@Bcount=\count217
+\calc@Acount=\count218
+\calc@Bcount=\count219
 \calc@Adimen=\dimen118
 \calc@Bdimen=\dimen119
 \calc@Askip=\skip66
 \calc@Bskip=\skip67
 LaTeX Info: Redefining \setlength on input line 76.
 LaTeX Info: Redefining \addtolength on input line 77.
-\calc@Ccount=\count218
+\calc@Ccount=\count220
 \calc@Cskip=\skip68
 )
 (/usr/share/texmf-texlive/tex/latex/eso-pic/eso-pic.sty
@@ -383,7 +400,7 @@ File: pppdftex.def 2009/02/07 v0.4g Pdfpages driver for pdfTeX (AM)
 )
 \AM@pagebox=\box28
 \AM@toc@title=\toks21
-\c@AM@survey=\count219
+\c@AM@survey=\count221
 \AM@templatesizebox=\box29
 )
 (/usr/share/texmf-texlive/tex/latex/setspace/setspace.sty
@@ -417,8 +434,8 @@ Package: footmisc 2009/09/15 v5.5a a miscellany of footnote facilities
 LaTeX Warning: Command \@makecol  has changed.
                Check if current package is valid.
 
-\c@pp@next@reset=\count220
-\c@@fnserial=\count221
+\c@pp@next@reset=\count222
+\c@@fnserial=\count223
 Package footmisc Info: Declaring symbol style bringhurst on input line 855.
 Package footmisc Info: Declaring symbol style chicago on input line 863.
 Package footmisc Info: Declaring symbol style wiley on input line 872.
@@ -462,19 +479,19 @@ Package: caption3 2009/10/09 v3.1k caption3 kernel (AR)
 \caption@parindent=\dimen134
 \caption@hangindent=\dimen135
 )
-\c@ContinuedFloat=\count222
+\c@ContinuedFloat=\count224
 )
-\c@KVtest=\count223
+\c@KVtest=\count225
 \sf@farskip=\skip78
 \sf@captopadj=\dimen136
 \sf@capskip=\skip79
 \sf@nearskip=\skip80
-\c@subfigure=\count224
-\c@subfigure@save=\count225
-\c@lofdepth=\count226
-\c@subtable=\count227
-\c@subtable@save=\count228
-\c@lotdepth=\count229
+\c@subfigure=\count226
+\c@subfigure@save=\count227
+\c@lofdepth=\count228
+\c@subtable=\count229
+\c@subtable@save=\count230
+\c@lotdepth=\count231
 \sf@top=\skip81
 \sf@bottom=\skip82
 )
@@ -492,15 +509,15 @@ Package: nomencl 2005/09/22 v4.2 Nomenclature package (LN)
 
 (/usr/share/texmf-texlive/tex/latex/tools/multicol.sty
 Package: multicol 2008/12/05 v1.6h multicolumn formatting (FMi)
-\c@tracingmulticols=\count230
+\c@tracingmulticols=\count232
 \mult@box=\box32
 \multicol@leftmargin=\dimen137
-\c@unbalance=\count231
-\c@collectmore=\count232
-\doublecol@number=\count233
+\c@unbalance=\count233
 Normal \count register pool exhausted, switching to extended pool.
-\multicoltolerance=\count277
-\multicolpretolerance=\count278
+\c@collectmore=\count277
+\doublecol@number=\count278
+\multicoltolerance=\count279
+\multicolpretolerance=\count280
 \full@width=\dimen138
 \page@free=\dimen139
 \premulticols=\dimen140
@@ -530,8 +547,8 @@ Normal \count register pool exhausted, switching to extended pool.
 \@tempa=\box53
 \@tempa=\box54
 \@tempa=\box55
-\c@columnbadness=\count279
-\c@finalcolumnbadness=\count280
+\c@columnbadness=\count281
+\c@finalcolumnbadness=\count282
 \last@try=\dimen142
 \multicolovershoot=\dimen143
 \multicolundershoot=\dimen144
@@ -566,8 +583,8 @@ O)
 Package: xcolor-patch 2009/10/02 xcolor patch
 ))
 \@linkdim=\dimen147
-\Hy@linkcounter=\count281
-\Hy@pagecounter=\count282
+\Hy@linkcounter=\count283
+\Hy@pagecounter=\count284
 
 (/usr/share/texmf-texlive/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2009/10/09 v6.79a Hyperref: PDFDocEncoding definition (HO)
@@ -636,7 +653,7 @@ Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 )))
-\Fld@menulength=\count283
+\Fld@menulength=\count285
 \Field@Width=\dimen148
 \Fld@charsize=\dimen149
 \Field@toks=\toks24
@@ -651,14 +668,14 @@ Package hyperref Info: PDF/A mode OFF on input line 4407.
 (/usr/share/texmf-texlive/tex/generic/oberdiek/atbegshi.sty
 Package: atbegshi 2008/07/31 v1.9 At begin shipout hook (HO)
 )
-\Hy@abspage=\count284
-\c@Item=\count285
-\c@Hfootnote=\count286
+\Hy@abspage=\count286
+\c@Item=\count287
+\c@Hfootnote=\count288
 )
 *hyperref using driver hpdftex*
 (/usr/share/texmf-texlive/tex/latex/hyperref/hpdftex.def
 File: hpdftex.def 2009/10/09 v6.79a Hyperref driver for pdfTeX
-\Fld@listcount=\count287
+\Fld@listcount=\count289
 )
 \@nomenclaturefile=\write4
 \openout4 = `main.nlo'.
@@ -677,12 +694,12 @@ Package: booktabs 2005/04/14 v1.61803 publication quality tables
 \cmidrulesep=\dimen157
 \cmidrulekern=\dimen158
 \defaultaddspace=\dimen159
-\@cmidla=\count288
-\@cmidlb=\count289
+\@cmidla=\count290
+\@cmidlb=\count291
 \@aboverulesep=\dimen160
 \@belowrulesep=\dimen161
-\@thisruleclass=\count290
-\@lastruleclass=\count291
+\@thisruleclass=\count292
+\@lastruleclass=\count293
 \@thisrulewidth=\dimen162
 )
 (/usr/share/texmf-texlive/tex/latex/tools/enumerate.sty
@@ -695,8 +712,8 @@ Package biblatex Info: ... file 'english.lbx' found.
 (/usr/share/texmf/tex/latex/biblatex/lbx/english.lbx
 File: english.lbx 2011/11/13 v1.7 biblatex localization
 )
-\@quotelevel=\count292
-\@quotereset=\count293
+\@quotelevel=\count294
+\@quotereset=\count295
 
 
 LaTeX Warning: Unused global option(s):
@@ -705,21 +722,21 @@ LaTeX Warning: Unused global option(s):
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 19.
-LaTeX Font Info:    ... okay on input line 19.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 19.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 20.
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -773,27 +790,27 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 19.
-Package biblatex Info: Reference segment=0 on input line 19.
+Package biblatex Info: Reference section=0 on input line 20.
+Package biblatex Info: Reference segment=0 on input line 20.
  (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count294
+\scratchcounter=\count296
 \scratchdimen=\dimen163
 \scratchbox=\box58
-\nofMPsegments=\count295
-\nofMParguments=\count296
+\nofMPsegments=\count297
+\nofMParguments=\count298
 \everyMPshowfont=\toks26
-\MPscratchCnt=\count297
+\MPscratchCnt=\count299
 \MPscratchDim=\dimen164
-\MPnumerator=\count298
+\MPnumerator=\count300
 \everyMPtoPDFconversion=\toks27
 ) ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
 Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
-LaTeX Info: Redefining \subref on input line 19.
+LaTeX Info: Redefining \subref on input line 20.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 19.
+Package hyperref Info: Link coloring ON on input line 20.
 
 (/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
@@ -801,10 +818,10 @@ Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
 (/usr/share/texmf-texlive/tex/latex/oberdiek/refcount.sty
 Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
-\c@section@level=\count299
+\c@section@level=\count301
 )
-LaTeX Info: Redefining \ref on input line 19.
-LaTeX Info: Redefining \pageref on input line 19.
+LaTeX Info: Redefining \ref on input line 20.
+LaTeX Info: Redefining \pageref on input line 20.
  (./main.out)
 (./main.out)
 \@outlinefile=\write5
@@ -815,18 +832,18 @@ LaTeX Info: Redefining \pageref on input line 19.
 
 pdfTeX warning: pdflatex (file ./figures/UoALogo.pdf): PDF inclusion: found PDF
  version <1.5>, but at most version <1.4> allowed
-<figures/UoALogo.pdf, id=191, 375.16461pt x 140.45314pt>
+<figures/UoALogo.pdf, id=207, 375.16461pt x 140.45314pt>
 File: figures/UoALogo.pdf Graphic file (type pdf)
 
 <use figures/UoALogo.pdf>
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 19--19
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 20--20
 [][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 19.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 20.
 LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
-(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 19.
+(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 20.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figures/UoALogo.pdf>]
@@ -869,9 +886,9 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 71.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 72.
 
-LaTeX Warning: Reference `chap:one' on page 9 undefined on input line 94.
+LaTeX Warning: Reference `chap:one' on page 9 undefined on input line 97.
 
 [9
 
@@ -880,89 +897,146 @@ LaTeX Warning: Reference `chap:one' on page 9 undefined on input line 94.
 ]
 Chapter 2.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 105.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 109.
 [10
 
 
-] [11] <figures/ljPlot.pdf, id=354, 845.1575pt x 597.23125pt>
+] [11] <figures/ljPlot.pdf, id=405, 845.1575pt x 597.23125pt>
 File: figures/ljPlot.pdf Graphic file (type pdf)
 
 <use figures/ljPlot.pdf>
-<figures/ljForce.pdf, id=357, 845.1575pt x 597.23125pt>
+<figures/ljForce.pdf, id=410, 845.1575pt x 597.23125pt>
 File: figures/ljForce.pdf Graphic file (type pdf)
 
 <use figures/ljForce.pdf> [12 <./figures/ljPlot.pdf, page is rotated 90 degrees
->] [13 <./figures/ljForce.pdf, page is rotated 90 degrees>] [14]
+>] <figures/hardSphere.pdf, id=431, 845.1575pt x 597.23125pt>
+File: figures/hardSphere.pdf Graphic file (type pdf)
+
+<use figures/hardSphere.pdf> [13 <./figures/ljForce.pdf, page is rotated 90 deg
+rees>] [14 <./figures/hardSphere.pdf, page is rotated 90 degrees>]
+<figures/squareWell.pdf, id=468, 845.1575pt x 597.23125pt>
+File: figures/squareWell.pdf Graphic file (type pdf)
+
+<use figures/squareWell.pdf>
+<figures/ChapelaSteps.pdf, id=472, 845.1575pt x 597.23125pt>
+File: figures/ChapelaSteps.pdf Graphic file (type pdf)
+
+<use figures/ChapelaSteps.pdf>
+
+pdfTeX warning: pdflatex (file ./figures/SPEADMD.pdf): PDF inclusion: found PDF
+ version <1.5>, but at most version <1.4> allowed
+<figures/SPEADMD.pdf, id=476, 169.8345pt x 217.38817pt>
+File: figures/SPEADMD.pdf Graphic file (type pdf)
+
+<use figures/SPEADMD.pdf> [15 <./figures/squareWell.pdf, page is rotated 90 deg
+rees>] [16 <./figures/ChapelaSteps.pdf, page is rotated 90 degrees> <./figures/
+SPEADMD.pdf>]
 Chapter 3.
-[15
+[17
 
 
-] [16] [17]
+] [18] [19] [20] [21] [22]
 
 pdfTeX warning: pdflatex (file ./figures/PBC.pdf): PDF inclusion: found PDF ver
 sion <1.5>, but at most version <1.4> allowed
-<figures/PBC.pdf, id=451, 322.0281pt x 322.12846pt>
+<figures/PBC.pdf, id=619, 322.0281pt x 322.12846pt>
 File: figures/PBC.pdf Graphic file (type pdf)
  <use figures/PBC.pdf>
-[18 <./figures/PBC.pdf>] [19] [20] [21] [22] [23] [24]
+[23 <./figures/PBC.pdf>] [24] [25]
 Chapter 4.
-<figures/energyplot.pdf, id=555, 845.1575pt x 597.23125pt>
+
+
+pdfTeX warning: pdflatex (file ./figures/energyplot.pdf): PDF inclusion: found 
+PDF version <1.5>, but at most version <1.4> allowed
+<figures/energyplot.pdf, id=661, 794.95897pt x 614.295pt>
 File: figures/energyplot.pdf Graphic file (type pdf)
 
-<use figures/energyplot.pdf> [25
+<use figures/energyplot.pdf> [26
 
 
-] [26 <./figures/energyplot.pdf, page is rotated 90 degrees>] [27] [28] [29]
+] [27 <./figures/energyplot.pdf>] [28] [29]
+<figures/rdfsmooth.pdf, id=741, 845.1575pt x 597.23125pt>
+File: figures/rdfsmooth.pdf Graphic file (type pdf)
+
+<use figures/rdfsmooth.pdf> [30 <./figures/rdfsmooth.pdf, page is rotated 90 de
+grees>] <figures/rdfrough.pdf, id=756, 845.1575pt x 597.23125pt>
+File: figures/rdfrough.pdf Graphic file (type pdf)
+
+<use figures/rdfrough.pdf> [31 <./figures/rdfrough.pdf, page is rotated 90 degr
+ees>] <figures/rdfcomp.pdf, id=775, 845.1575pt x 597.23125pt>
+File: figures/rdfcomp.pdf Graphic file (type pdf)
+
+<use figures/rdfcomp.pdf>
+
+Package Fancyhdr Warning: \headheight is too small (14.5pt): 
+ Make it at least 26.98592pt.
+ We now make it that large for the rest of the document.
+ This may cause the page layout to be inconsistent, however.
+
+[32 <./figures/rdfcomp.pdf, page is rotated 90 degrees>] [33]
 Chapter 5.
-[30
+[34
 
 
 ]
 Chapter 6.
 
-Overfull \hbox (1.16156pt too wide) in paragraph at lines 1052--1052
+Overfull \hbox (1.16156pt too wide) in paragraph at lines 1282--1282
 []\T1/ptm/b/n/17.28 Chapela's dumb step-ping and very good step-ping ver-
  []
 
-[31
+[35
 
 
 ]
-Overfull \hbox (5.1801pt too wide) in paragraph at lines 1130--1154
+Overfull \hbox (5.1801pt too wide) in paragraph at lines 1360--1384
  [] 
  []
 
-[32]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 1175.
+[36]
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 1405.
 
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
 File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
 )
-Overfull \hbox (6.69336pt too wide) in paragraph at lines 1175--1175
-\T1/ptm/m/n/12 Method''. In: \T1/ptm/m/it/12 J. Chem. Phys. \T1/ptm/m/n/12 31 (
-1959), pp. 459^^U466. \T1/ptm/m/sc/12 doi\T1/ptm/m/n/12 : [][]$\T1/pcr/m/n/12 1
-0 . 1063 / 1 . 1730376$[][]\T1/ptm/m/n/12 . 
+Overfull \hbox (5.18546pt too wide) in paragraph at lines 1405--1405
+\T1/ptm/m/n/12 u-lar Dy-nam-ics. \T1/ptm/m/it/12 Acc. Chem. Res. \T1/ptm/b/n/12
+ 2006\T1/ptm/m/n/12 , \T1/ptm/m/it/12 39\T1/ptm/m/n/12 , 101^^U108, DOI: [][]$\
+T1/pcr/m/n/12 10 . 1021 / ar040206v$[][]\T1/ptm/m/n/12 . 
  []
 
-[33]
-Overfull \hbox (14.79451pt too wide) in paragraph at lines 1175--1175
-[]\T1/ptm/m/n/12 J M Haile. \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-la-tio
-n: El-e-men-tary Meth-ods\T1/ptm/m/n/12 . Wiley-Interscience,
+[37]
+Overfull \hbox (24.46916pt too wide) in paragraph at lines 1405--1405
+[]\T1/ptm/m/n/12 Haile, J. M., \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-la-
+tion: El-e-men-tary Meth-ods\T1/ptm/m/n/12 ; Wiley-Interscience:
  []
 
 
-Overfull \hbox (8.27794pt too wide) in paragraph at lines 1175--1175
-\T1/ptm/m/it/12 put. Phys. Com-mun. \T1/ptm/m/n/12 147 (2002), pp. 733^^U736. \
-T1/ptm/m/sc/12 doi\T1/ptm/m/n/12 : [][]$\T1/pcr/m/n/12 10 . 1016 / S0010 -[] 46
-55(02 )
+Overfull \hbox (2.90045pt too wide) in paragraph at lines 1405--1405
+\T1/ptm/m/n/12 er-ties of Lennard-Jones Molecules. \T1/ptm/m/it/12 Phys. Rev. \
+T1/ptm/b/n/12 1967\T1/ptm/m/n/12 , \T1/ptm/m/it/12 159\T1/ptm/m/n/12 , 98^^U103
+, DOI: [][]$\T1/pcr/m/n/12 10 . 1103 /
  []
 
-[34] [35]
+[38]
+Overfull \hbox (0.71083pt too wide) in paragraph at lines 1405--1405
+[]\T1/ptm/m/n/12 Goldberg, D. What ev-ery com-puter sci-en-tist should know abo
+ut floating-point arith-
+ []
+
+
+Overfull \hbox (2.58939pt too wide) in paragraph at lines 1405--1405
+\T1/ptm/m/n/12 disks up to the ninth. \T1/ptm/m/it/12 Phys. Rev. E \T1/ptm/b/n/
+12 2005\T1/ptm/m/n/12 , \T1/ptm/m/it/12 71\T1/ptm/m/n/12 , 021105, DOI: [][]$\T
+1/pcr/m/n/12 10 . 1103 / PhysRevE .
+ []
+
+[39]
 Appendix A.
-[36
+[40
 
 
-] [37] (./main.aux)
+] [41] (./main.aux)
 
 LaTeX Warning: There were undefined references.
 
@@ -971,13 +1045,13 @@ Package logreq Info: Writing requests to 'main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 12948 strings out of 495061
- 199054 string characters out of 1182621
- 393826 words of memory out of 3000000
- 15663 multiletter control sequences out of 15000+50000
- 58716 words of font info for 65 fonts, out of 3000000 for 9000
+ 13090 strings out of 495061
+ 202183 string characters out of 1182621
+ 396827 words of memory out of 3000000
+ 15764 multiletter control sequences out of 15000+50000
+ 53500 words of font info for 63 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 51i,12n,49p,865b,1141s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,12n,53p,865b,1208s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/ty
 pe1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-texlive/fonts/type1/public/a
@@ -992,9 +1066,9 @@ ts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8
 exmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/t
 ype1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8
 a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (37 pages, 513647 bytes).
+Output written on main.pdf (41 pages, 672198 bytes).
 PDF statistics:
- 814 PDF objects out of 1000 (max. 8388607)
- 204 named destinations out of 1000 (max. 500000)
- 432 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1014 PDF objects out of 1200 (max. 8388607)
+ 230 named destinations out of 1000 (max. 500000)
+ 541 words of extra memory for PDF output out of 10000 (max. 10000000)
 

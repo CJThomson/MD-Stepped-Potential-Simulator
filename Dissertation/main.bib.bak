@@ -39,6 +39,15 @@
   timestamp = {2012.04.28}
 }
 
+@BOOK{Allen1987,
+  title = {Computer Simulation of Liquids},
+  publisher = {Oxford University Press},
+  year = {1987},
+  author = {Allen, M.P. and Tildesley, D. J.},
+  owner = {chris},
+  timestamp = {2012.05.02}
+}
+
 @ARTICLE{Andersen1980,
   author = {Andersen, H. C.},
   title = {Molecular dynamics simulations at constant pressure and/or temperature},
@@ -64,6 +73,21 @@
   timestamp = {2012.04.28}
 }
 
+@ARTICLE{Buckingham1938,
+  author = {Buckingham, R. A.},
+  title = {The Classical Equation of State of Gaseous Helium, Neon and Argon},
+  journal = {Proc. R. Soc. Lon. Ser-A},
+  year = {1938},
+  volume = {168},
+  pages = {264-283},
+  number = {933},
+  __markedentry = {[chris:6]},
+  doi = {10.1098/rspa.1938.0173},
+  eprint = {http://rspa.royalsocietypublishing.org/content/168/933/264.full.pdf+html},
+  owner = {chris},
+  timestamp = {2012.05.03}
+}
+
 @ARTICLE{Chapela1989,
   author = {Chapela, G. and Scriven, L. E. and Davis, H. T.},
   title = {Molecular dynamics for discontinuous potential. IV. {L}ennard-{J}onesium},
@@ -87,6 +111,18 @@
   doi = {10.1063/1.456811},
   owner = {mjki2mb2},
   timestamp = {2009.03.30}
+}
+
+@ARTICLE{ElliotJr2002,
+  author = {Elliot Jr., J. R.},
+  title = {Optimized step potential models for n-alkanes and benzene},
+  journal = {Fluid Phase Equilib.},
+  year = {2002},
+  volume = {194-197},
+  pages = {161-168},
+  doi = {10.1016/S0378-3812(01)00664-1},
+  owner = {chris},
+  timestamp = {2012.05.03}
 }
 
 @BOOK{Frenkel2002,
@@ -222,6 +258,26 @@
   timestamp = {2012.04.15}
 }
 
+@ARTICLE{MacKerell1998,
+  author = {MacKerell,, A. D. and Bashford, D. and Bellott and Dunbrack,, R.
+	L. and Evanseck, J. D. and Field, M. J. and Fischer, S. and Gao,
+	J. and Guo, H. and Ha, S. and Joseph-McCarthy, D. and Kuchnir, L.
+	and Kuczera, K. and Lau, F. T. K. and Mattos, C. and Michnick, S.
+	and Ngo, T. and Nguyen, D. T. and Prodhom, B. and Reiher, W. E. and
+	Roux, B. and Schlenkrich, M. and Smith, J. C. and Stote, R. and Straub,
+	J. and Watanabe, M. and Wiórkiewicz-Kuczera, J. and Yin, D. and Karplus,
+	M.},
+  title = {All-Atom Empirical Potential for Molecular Modeling and Dynamics
+	Studies of Proteins},
+  journal = {J. Phys. Chem. B},
+  year = {1998},
+  volume = {102},
+  pages = {3586-3616},
+  doi = {10.1021/jp973084f},
+  owner = {chris},
+  timestamp = {2012.05.03}
+}
+
 @ARTICLE{Maginn2010,
   author = {Maginn, E. J. and Elliott, J. R.},
   title = {Historical Perspective and Current Outlook for Molecular Dynamics
@@ -294,6 +350,30 @@
   timestamp = {2012.05.01}
 }
 
+@BOOK{Smith2005,
+  title = {Introduction ot Chemical Engineering Thermodynamics},
+  publisher = {McGraw-Hill},
+  year = {2005},
+  author = {Smith, J. M. and Van Ness, H. C. and Abbott, M.M.},
+  address = {New York},
+  edition = {7th},
+  owner = {chris},
+  timestamp = {2012.05.01}
+}
+
+@ELECTRONIC{Spoel2010,
+  author = {van der Spoel, D. and Lindahl, E. and Hess, B. and van Buuren, A.
+	R and Apol, E. and Meulenhoff, P.J. and
+	
+	Tieleman, D. P. and Sijbers, A. L. T. M. and Feenstra, K. A. and van
+	Drunen, R. and Berendsen, H. J. C.},
+  year = {2010},
+  title = {Gromacs User Manual version 4.5.4},
+  url = {www.gromacs.org},
+  owner = {chris},
+  timestamp = {2012.05.03}
+}
+
 @ARTICLE{Swope1982,
   author = {Swope, William C. and Andersen, Hans C. and Berens, Peter B. and
 	Wilson, Kent R.},
@@ -321,6 +401,40 @@
   timestamp = {2012.04.22}
 }
 
+@ARTICLE{Unlu2004,
+  author = {Unlu, O. and Gray, N. H. and Gerek, Z. N. and Elliott, J. R.},
+  title = {Transferable Step Potentials for the Straight-Chain Alkanes, Alkenes,
+	Alkynes, Ethers, and Alcohols},
+  journal = {Ind. Eng. Chem. Res.},
+  year = {2004},
+  volume = {43},
+  pages = {1788--1793},
+  number = {7},
+  doi = {10.1021/ie034036m},
+  file = {Unlu_etal_2004.pdf:Unlu_etal_2004.pdf:PDF},
+  owner = {mjki2mb2},
+  timestamp = {2009.03.30}
+}
+
+@ARTICLE{Vahid2010,
+  author = {Vahid, Amir and Elliott Jr., J. Richard},
+  title = {Transferable intermolecular potentials for carboxylic acids and their
+	phase behavior},
+  journal = {AIChE Journal},
+  year = {2010},
+  volume = {56},
+  pages = {485--505},
+  number = {2},
+  __markedentry = {[chris:]},
+  doi = {10.1002/aic.11966},
+  issn = {1547-5905},
+  keywords = {molecular simulation, vapor pressure, compressibility factor, phase
+	equilibria},
+  owner = {chris},
+  publisher = {Wiley Subscription Services, Inc., A Wiley Company},
+  timestamp = {2012.05.03}
+}
+
 @ARTICLE{Verlet1967,
   author = {Verlet, Loup},
   title = {Computer "Experiments" on Classical Fluids. I. Thermodynamical Properties
@@ -332,5 +446,18 @@
   doi = {10.1103/PhysRev.159.98},
   owner = {chris},
   timestamp = {2012.04.12}
+}
+
+@ARTICLE{Yarnell1973,
+  author = {Yarnell, J. L. and Katz, M. J. and Wenzel, R. G.},
+  title = {Structure Factor and Radial Distribution Function for Liquid Argon
+	at 85 $^\circ$K},
+  journal = {Phys. Rev. A},
+  year = {1973},
+  volume = {7},
+  pages = {2130-2144},
+  doi = {10.1103/PhysRevA.7.2130},
+  owner = {chris},
+  timestamp = {2012.05.03}
 }
 

@@ -4,17 +4,31 @@
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {2.1}{\ignorespaces Plot of the Lennard-Jones potentia\relax }}{12}{figure.caption.12}
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Plot of the Lennard-Jones potential\relax }}{12}{figure.caption.12}
 \defcounter {refsection}{0}\relax 
 \contentsline {figure}{\numberline {2.2}{\ignorespaces Plot of the force between a pair of Lennard-Jones particles separated by a distance $r$\relax }}{13}{figure.caption.13}
 \defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Plot of the hard sphere potential\relax }}{14}{figure.caption.14}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Plot of the square well potential with $\lambda = 1.5$\relax }}{15}{figure.caption.15}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.5}{\ignorespaces A stepped version (solid line) of the continuous Lennard-Jones potential (dashed line) created by Chapela \textit {et al.}\relax }}{16}{figure.caption.16}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {2.6}{\ignorespaces SPEADMD stepped potentials for methane, ethane and benzene \cite {ElliotJr2002}.\relax }}{16}{figure.caption.17}
+\defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure showing 2D periodic boundary conditions. Only the nearest 8 images (dashed) to the simulated system (solid) are shown.\relax }}{18}{figure.caption.14}
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Figure showing 2D periodic boundary conditions. Only the nearest 8 images (dashed) to the simulated system (solid) are shown.\relax }}{23}{figure.caption.18}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 
-\contentsline {figure}{\numberline {4.1}{\ignorespaces Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($U^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\delimiter "426830A T\delimiter "526930B =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t = 0.005$.\relax }}{26}{figure.caption.15}
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Plot showing flucuation of pressure ($P^*=P\sigma ^3/\varepsilon $), kinetic energy per particle ($E_K^*=E_K/N\varepsilon $) and potential energy per particle ($\Phi ^*=U/N\varepsilon $). Results are from a force-driven simulation involving 864 particles, at a density $\rho ^*=0.9$ and temperature $\delimiter "426830A T^*\delimiter "526930B =1.497$. Values were collected every 10 timesteps where each timestep was $\Delta t^* = 0.005$.\relax }}{27}{figure.caption.19}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Plot of the radial distribution function, $g(r)$, for a continuous Lennard-Jones potential. Results taken from a force-driven simulation at $\rho ^*=0.7$ and $T^*=1.5$\relax }}{30}{figure.caption.21}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Plot of the radial distribution function, $g(r)$, for a discrete stepped potential. Results taken from a event-driven simulation at $\rho ^*=0.7$ and $T^*=1.5$\relax }}{31}{figure.caption.22}
+\defcounter {refsection}{0}\relax 
+\contentsline {figure}{\numberline {4.4}{\ignorespaces The continuous form of the radial distribution function of a discrete potential is shown with the solid line. The crosses show the RDF obtained from the continuous Lennard-Jones potential. Both were obtained at $\rho ^*=0.7$ and $T^* = 1.5$\relax }}{32}{figure.caption.23}
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
 \defcounter {refsection}{0}\relax 

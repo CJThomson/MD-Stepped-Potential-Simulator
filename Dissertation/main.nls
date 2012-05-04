@@ -2,9 +2,36 @@
 
  \nomgroup{A}
 
-  \item [{FCC}]\begingroup Face Centered Cubic\nomeqref {3.1.0}
-		\nompageref{16}
-  \item [{MD}]\begingroup Molecular Dynamics\nomeqref {2.0.0}
-		\nompageref{10}
+  \item [{FCC}]\begingroup Face Centered Cubic\nomeqref {3.4.0}
+		\nompageref{22}
+  \item [{MD}]\begingroup Molecular Dynamics\nomeqref {1.0.0}
+		\nompageref{9}
+  \item [{RDF}]\begingroup Radial   Distribution Function\nomeqref {4.6.0}
+		\nompageref{30}
+  \item [{SPEADMD}]\begingroup Step Potentials for   Equilbria and Discontinuous Molecular Dynamics\nomeqref {2.3.2}
+		\nompageref{15}
+
+ \nomgroup{O}
+
+  \item [{$\nabla$}]\begingroup Gradient operator\nomeqref {2.1.3}
+		\nompageref{11}
+
+ \nomgroup{V}
+
+  \item [{$\mathbf{a}$}]\begingroup Acceleration vector of a particle\nomeqref {2.1.1}
+		\nompageref{11}
+  \item [{$\Phi_{ij}$}]\begingroup Intermolecular potential between   particles $i$ and $j$\nomeqref {2.1.3}
+		\nompageref{11}
+  \item [{$\sigma$}]\begingroup Characteristic length, taken to be particle   diameter\nomeqref {2.2.1}
+		\nompageref{12}
+  \item [{$\varepsilon$}]\begingroup Characteristic energy, usually well   depth\nomeqref {2.2.1}
+		\nompageref{12}
+  \item [{$F$}]\begingroup Force\nomeqref {2.1.1}\nompageref{11}
+  \item [{$F_{ij}$}]\begingroup Intermolecular force between particle $i$   and $j$\nomeqref {2.1.2}
+		\nompageref{11}
+  \item [{$F_{i}$}]\begingroup Force acting on particle $i$\nomeqref {2.1.2}
+		\nompageref{11}
+  \item [{$m$}]\begingroup Mass of a particle $i$\nomeqref {2.1.1}
+		\nompageref{11}
 
 \end{thenomenclature}
