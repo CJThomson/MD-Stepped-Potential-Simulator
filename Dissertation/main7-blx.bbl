@@ -1,0 +1,229 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Chapela1989}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Scriven}{S.}%
+     {L.~E.}{L.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {H.~T.}{H.~T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CG+1}
+  \strng{fullhash}{CGSLEDHT1}
+  \field{abstract}{%
+  Argon, represented as a Lennard-Jones fluid, is simulated using a
+  discontinuous version of the potential. The effect of discretization is
+  thoroughly investigated in terms of the number of discontinuities and the
+  cutoff diameter. Radial distribution functions, pressure, energy,
+  self-diffusion coefficients, and velocity autocorrelation functions are used
+  in order to evaluate this effect. A reduction of five times on computing time
+  can be achieved by varying the cutoff radius and the number of
+  discontinuities without much departure from the physical representation of
+  Lennard-Jonesium atoms. The results indicate that discontinuous molecular
+  dynamics is a viable alternative method to Monte Carlo and continuous
+  molecular dynamics in simulating the properties of simple fluids. The Journal
+  of Chemical Physics is copyrighted by The American Institute of Physics.%
+  }
+  \verb{doi}
+  \verb 10.1063/1.456811
+  \endverb
+  \field{pages}{4307}
+  \field{title}{Molecular Dynamics for Discontinuous Potential. IV.
+  {L}ennard-{J}onesium}
+  \field{volume}{91}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1989}
+\endentry
+
+\entry{MacKerell1998}{article}{}
+  \name{author}{29}{}{%
+    {{}%
+     {MacKerell}{M.}%
+     {A.~D.}{A.~D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bashford}{B.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bellott}{B.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Dunbrack}{D.}%
+     {R.~L.}{R.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Evanseck}{E.}%
+     {J.~D.}{J.~D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Field}{F.}%
+     {M.~J.}{M.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Fischer}{F.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gao}{G.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Guo}{G.}%
+     {H.}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ha}{H.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Joseph-McCarthy}{J.-M.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kuchnir}{K.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kuczera}{K.}%
+     {K.}{K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lau}{L.}%
+     {F.~T.~K.}{F.~T.~K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mattos}{M.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Michnick}{M.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ngo}{N.}%
+     {T.}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nguyen}{N.}%
+     {D.~T.}{D.~T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Prodhom}{P.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Reiher}{R.}%
+     {W.~E.}{W.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Roux}{R.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schlenkrich}{S.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smith}{S.}%
+     {J.~C.}{J.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stote}{S.}%
+     {R.}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Straub}{S.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Watanabe}{W.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wiórkiewicz-Kuczera}{W.-K.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Yin}{Y.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Karplus}{K.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MAD+1}
+  \strng{fullhash}{MADBDBDRLEJDFMJFSGJGHHSJMDKLKKLFTKMCMSNTNDTPBRWERBSMSJCSRSJ%
+WMWKJYDKM1}
+  \verb{doi}
+  \verb 10.1021/jp973084f
+  \endverb
+  \field{pages}{3586\bibrangedash 3616}
+  \field{title}{All-Atom Empirical Potential for Molecular Modeling and
+  Dynamics Studies of Proteins}
+  \field{volume}{102}
+  \field{journaltitle}{J. Phys. Chem. B}
+  \field{year}{1998}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

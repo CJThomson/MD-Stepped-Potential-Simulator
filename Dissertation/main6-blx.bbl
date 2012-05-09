@@ -1,0 +1,346 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Chapela1989}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Scriven}{S.}%
+     {L.~E.}{L.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {H.~T.}{H.~T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CG+1}
+  \strng{fullhash}{CGSLEDHT1}
+  \field{abstract}{%
+  Argon, represented as a Lennard-Jones fluid, is simulated using a
+  discontinuous version of the potential. The effect of discretization is
+  thoroughly investigated in terms of the number of discontinuities and the
+  cutoff diameter. Radial distribution functions, pressure, energy,
+  self-diffusion coefficients, and velocity autocorrelation functions are used
+  in order to evaluate this effect. A reduction of five times on computing time
+  can be achieved by varying the cutoff radius and the number of
+  discontinuities without much departure from the physical representation of
+  Lennard-Jonesium atoms. The results indicate that discontinuous molecular
+  dynamics is a viable alternative method to Monte Carlo and continuous
+  molecular dynamics in simulating the properties of simple fluids. The Journal
+  of Chemical Physics is copyrighted by The American Institute of Physics.%
+  }
+  \verb{doi}
+  \verb 10.1063/1.456811
+  \endverb
+  \field{pages}{4307}
+  \field{title}{Molecular Dynamics for Discontinuous Potential. IV.
+  {L}ennard-{J}onesium}
+  \field{volume}{91}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1989}
+\endentry
+
+\entry{Limbach2006}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Limbach}{L.}%
+     {H.J.}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Arnold}{A.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mann}{M.}%
+     {B.A.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Holm}{H.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+  }
+  \keyw{Computer simulation}
+  \strng{namehash}{LH+1}
+  \strng{fullhash}{LHAAMBHC1}
+  \verb{doi}
+  \verb 10.1016/j.cpc.2005.10.005
+  \endverb
+  \field{issn}{0010-4655}
+  \field{number}{9}
+  \field{pages}{704 \bibrangedash  727}
+  \field{title}{ESPResSo - An Extensible Simulation Package for Research on
+  Soft Matter Systems}
+  \verb{url}
+  \verb http://www.sciencedirect.com/science/article/pii/S001046550500576X
+  \endverb
+  \field{volume}{174}
+  \field{journaltitle}{Comput. Phys. Commun.}
+  \field{year}{2006}
+\endentry
+
+\entry{Lue2005}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Lue}{L.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LL1}
+  \strng{fullhash}{LL1}
+  \verb{doi}
+  \verb 10.1063/1.1834498
+  \endverb
+  \field{number}{4}
+  \field{pages}{044513}
+  \field{title}{Collision Statistics, Thermodynamics, and Transport
+  Coeffiecients of Hard Hyperspheres in Three, Four, and Five Dimensions}
+  \field{volume}{122}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{2005}
+\endentry
+
+\entry{Bannerman2011}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Bannerman}{B.}%
+     {M.~N.}{M.~N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Sargant}{S.}%
+     {R.}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lue}{L.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Wiley Subscription Services, Inc., A Wiley Company}%
+  }
+  \keyw{molecular dynamics, event-driven simulation, discontinuous potentials,
+  hard spheres, square-well potential}
+  \strng{namehash}{BMN+1}
+  \strng{fullhash}{BMNSRLL1}
+  \verb{doi}
+  \verb 10.1002/jcc.21915
+  \endverb
+  \field{issn}{1096-987X}
+  \field{number}{15}
+  \field{pages}{3329\bibrangedash 3338}
+  \field{title}{DynamO: A Free ${\cal O}$(N) General Event-Driven Molecular
+  Dynamics Simulator}
+  \verb{url}
+  \verb http://dx.doi.org/10.1002/jcc.21915
+  \endverb
+  \field{volume}{32}
+  \field{journaltitle}{J. Comput. Chem.}
+  \field{year}{2011}
+\endentry
+
+\entry{Unlu2004}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Unlu}{U.}%
+     {O.}{O.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gray}{G.}%
+     {N.~H.}{N.~H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gerek}{G.}%
+     {Z.~N.}{Z.~N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Elliott}{E.}%
+     {J.~R.}{J.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{UO+1}
+  \strng{fullhash}{UOGNHGZNEJR1}
+  \verb{doi}
+  \verb 10.1021/ie034036m
+  \endverb
+  \field{number}{7}
+  \field{pages}{1788\bibrangedash 1793}
+  \field{title}{Transferable Step Potentials for the Straight-Chain Alkanes,
+  Alkenes, Alkynes, Ethers, and Alcohols}
+  \field{volume}{43}
+  \verb{file}
+  \verb Unlu_etal_2004.pdf:Unlu_etal_2004.pdf:PDF
+  \endverb
+  \field{journaltitle}{Ind. Eng. Chem. Res.}
+  \field{year}{2004}
+\endentry
+
+\entry{ElliotJr2002}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Elliot~Jr.}{E.~J.}%
+     {J.~R.}{J.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{EJJR1}
+  \strng{fullhash}{EJJR1}
+  \verb{doi}
+  \verb 10.1016/S0378-3812(01)00664-1
+  \endverb
+  \field{pages}{161\bibrangedash 168}
+  \field{title}{Optimized Step Potential Models for n-Alkanes and Benzene}
+  \field{volume}{194-197}
+  \field{journaltitle}{Fluid Phase Equilib.}
+  \field{year}{2002}
+\endentry
+
+\entry{Chapela2010}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rio}{R.}%
+     {F.}{F.}%
+     {del}{d.}%
+     {}{}}%
+    {{}%
+     {Benavides}{B.}%
+     {A.~L.}{A.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Alejandre}{A.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CG+1}
+  \strng{fullhash}{CGRFdBALAJ1}
+  \field{pages}{234107}
+  \field{title}{Discrete Perturbation Theory Applied to Lennard-Jones and
+  Yukawa Potentials}
+  \field{volume}{133}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{2010}
+\endentry
+
+\entry{Barker1967a}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Barker}{B.}%
+     {J.~A.}{J.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Henderson}{H.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BJAHD1}
+  \strng{fullhash}{BJAHD1}
+  \field{pages}{4714\bibrangedash 4721}
+  \field{title}{Perturbation Theory and Equation of State for Fluids: II. A
+  Successful Theory of Liquids}
+  \field{volume}{47}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1967}
+\endentry
+
+\entry{Alder1957}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Alder}{A.}%
+     {B.~J.}{B.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wainwright}{W.}%
+     {T.~E.}{T.~E.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{ABJWTE1}
+  \strng{fullhash}{ABJWTE1}
+  \verb{doi}
+  \verb 10.1063/1.1743957
+  \endverb
+  \field{pages}{1208\bibrangedash 1209}
+  \field{title}{Phase Transition for a Hard Sphere System}
+  \field{volume}{27}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1957}
+\endentry
+
+\entry{Sun1996}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Sun}{S.}%
+     {Tongfan}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Teja}{T.}%
+     {Amyn~S.}{A.~S.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{STTAS1}
+  \strng{fullhash}{STTAS1}
+  \verb{doi}
+  \verb 10.1021/jp9620476
+  \endverb
+  \verb{eprint}
+  \verb http://pubs.acs.org/doi/pdf/10.1021/jp9620476
+  \endverb
+  \field{number}{43}
+  \field{pages}{17365\bibrangedash 17372}
+  \field{title}{An Equation of State for Real Fluids Based on the Lennard-Jones
+  Potential}
+  \verb{url}
+  \verb http://pubs.acs.org/doi/abs/10.1021/jp9620476
+  \endverb
+  \field{volume}{100}
+  \field{journaltitle}{J. Phys. Chem.}
+  \field{year}{1996}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

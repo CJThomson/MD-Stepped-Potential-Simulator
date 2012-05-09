@@ -1,0 +1,2 @@
+#!/bin/bash
+rm -f *.png *.pdf *.eps *.jpeg *.jpg

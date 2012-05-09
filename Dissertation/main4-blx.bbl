@@ -1,0 +1,275 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Haile1997}{book}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Haile}{H.}%
+     {J~M}{J.~M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Wiley-Interscience}%
+  }
+  \strng{namehash}{HJM1}
+  \strng{fullhash}{HJM1}
+  \field{title}{Molecular Dynamics Simulation: Elementary Methods}
+  \field{year}{1997}
+\endentry
+
+\entry{Landau1968}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Landau}{L.}%
+     {L.D.}{L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lifshitz}{L.}%
+     {E.M.}{E.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Pergamon}%
+  }
+  \strng{namehash}{LLLE1}
+  \strng{fullhash}{LLLE1}
+  \field{edition}{2nd}
+  \field{series}{Course of Theoretical Physics}
+  \field{title}{Statistical Mechanics}
+  \field{volume}{5}
+  \list{location}{1}{%
+    {Oxford}%
+  }
+  \field{year}{1968}
+\endentry
+
+\entry{Labik2005}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Lab\'{i}k}{L.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kolafa}{K.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Malijevsk\'{y}}{M.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LS+1}
+  \strng{fullhash}{LSKJMA1}
+  \verb{doi}
+  \verb 10.1103/PhysRevE.71.021105
+  \endverb
+  \field{pages}{021105}
+  \field{title}{Virial Coefficients of Hard Spheres and Hard Disks up to the
+  Ninth}
+  \field{volume}{71}
+  \field{journaltitle}{Phys. Rev. E}
+  \field{year}{2005}
+\endentry
+
+\entry{Schultz2009}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Schultz}{S.}%
+     {A.~J.}{A.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kofke}{K.}%
+     {D.~A.}{D.~A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{SAJKDA1}
+  \strng{fullhash}{SAJKDA1}
+  \verb{doi}
+  \verb 10.1080/00268970903267053
+  \endverb
+  \field{pages}{2309\bibrangedash 2318}
+  \field{title}{Sixth, Seventh and Eighth Virial Coefficients of the
+  Lennard-Jones Model}
+  \field{volume}{1007}
+  \field{journaltitle}{Mol. Phys.}
+  \field{year}{2009}
+\endentry
+
+\entry{Smith2005}{book}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Smith}{S.}%
+     {J.~M.}{J.~M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Van~Ness}{V.~N.}%
+     {H.~C.}{H.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Abbott}{A.}%
+     {M.M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {McGraw-Hill}%
+  }
+  \strng{namehash}{SJM+1}
+  \strng{fullhash}{SJMVNHCAM1}
+  \field{edition}{7th}
+  \field{title}{Introduction ot Chemical Engineering Thermodynamics}
+  \list{location}{1}{%
+    {New York}%
+  }
+  \field{year}{2005}
+\endentry
+
+\entry{Lue2005}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Lue}{L.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{LL1}
+  \strng{fullhash}{LL1}
+  \verb{doi}
+  \verb 10.1063/1.1834498
+  \endverb
+  \field{number}{4}
+  \field{pages}{044513}
+  \field{title}{Collision Statistics, Thermodynamics, and Transport
+  Coeffiecients of Hard Hyperspheres in Three, Four, and Five Dimensions}
+  \field{volume}{122}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{2005}
+\endentry
+
+\entry{Yarnell1973}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Yarnell}{Y.}%
+     {J.~L.}{J.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Katz}{K.}%
+     {M.~J.}{M.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wenzel}{W.}%
+     {R.~G.}{R.~G.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{YJL+1}
+  \strng{fullhash}{YJLKMJWRG1}
+  \verb{doi}
+  \verb 10.1103/PhysRevA.7.2130
+  \endverb
+  \field{pages}{2130\bibrangedash 2144}
+  \field{title}{Structure Factor and Radial Distribution Function for Liquid
+  Argon at 85 $^\circ$K}
+  \field{volume}{7}
+  \field{journaltitle}{Phys. Rev. A}
+  \field{year}{1973}
+\endentry
+
+\entry{Allen1987}{book}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Allen}{A.}%
+     {M.P.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Tildesley}{T.}%
+     {D.~J.}{D.~J.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Oxford University Press}%
+  }
+  \strng{namehash}{AMTDJ1}
+  \strng{fullhash}{AMTDJ1}
+  \field{title}{Computer Simulation of Liquids}
+  \field{year}{1987}
+\endentry
+
+\entry{Chapela1989}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Scriven}{S.}%
+     {L.~E.}{L.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {H.~T.}{H.~T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CG+1}
+  \strng{fullhash}{CGSLEDHT1}
+  \field{abstract}{%
+  Argon, represented as a Lennard-Jones fluid, is simulated using a
+  discontinuous version of the potential. The effect of discretization is
+  thoroughly investigated in terms of the number of discontinuities and the
+  cutoff diameter. Radial distribution functions, pressure, energy,
+  self-diffusion coefficients, and velocity autocorrelation functions are used
+  in order to evaluate this effect. A reduction of five times on computing time
+  can be achieved by varying the cutoff radius and the number of
+  discontinuities without much departure from the physical representation of
+  Lennard-Jonesium atoms. The results indicate that discontinuous molecular
+  dynamics is a viable alternative method to Monte Carlo and continuous
+  molecular dynamics in simulating the properties of simple fluids. The Journal
+  of Chemical Physics is copyrighted by The American Institute of Physics.%
+  }
+  \verb{doi}
+  \verb 10.1063/1.456811
+  \endverb
+  \field{pages}{4307}
+  \field{title}{Molecular Dynamics for Discontinuous Potential. IV.
+  {L}ennard-{J}onesium}
+  \field{volume}{91}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1989}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput

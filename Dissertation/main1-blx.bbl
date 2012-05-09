@@ -1,0 +1,626 @@
+% $ biblatex auxiliary file $
+% $ biblatex version 1.7 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated as
+% required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+\entry{Maginn2010}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Maginn}{M.}%
+     {E.~J.}{E.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Elliott}{E.}%
+     {J.~R.}{J.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MEJEJR1}
+  \strng{fullhash}{MEJEJR1}
+  \verb{doi}
+  \verb 10.1021/ie901898k
+  \endverb
+  \field{pages}{3059\bibrangedash 3078}
+  \field{title}{Historical Perspective and Current Outlook for Molecular
+  Dynamics As a Chemical Engineering Tool}
+  \field{volume}{49}
+  \field{journaltitle}{Ind. Eng. Chem. Res.}
+  \field{year}{2010}
+\endentry
+
+\entry{Alder1957}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Alder}{A.}%
+     {B.~J.}{B.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wainwright}{W.}%
+     {T.~E.}{T.~E.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{ABJWTE1}
+  \strng{fullhash}{ABJWTE1}
+  \verb{doi}
+  \verb 10.1063/1.1743957
+  \endverb
+  \field{pages}{1208\bibrangedash 1209}
+  \field{title}{Phase Transition for a Hard Sphere System}
+  \field{volume}{27}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1957}
+\endentry
+
+\entry{Verlet1967}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Verlet}{V.}%
+     {Loup}{L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{VL1}
+  \strng{fullhash}{VL1}
+  \verb{doi}
+  \verb 10.1103/PhysRev.159.98
+  \endverb
+  \field{pages}{98\bibrangedash 103}
+  \field{title}{Computer "Experiments" on Classical Fluids. I. Thermodynamical
+  Properties of Lennard-Jones Molecules}
+  \field{volume}{159}
+  \field{journaltitle}{Phys. Rev.}
+  \field{year}{1967}
+\endentry
+
+\entry{Allsopp2012}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Allsopp}{A.}%
+     {N.}{N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ruocco}{R.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Fratalocchi}{F.}%
+     {A.}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{AN+1}
+  \strng{fullhash}{ANRGFA1}
+  \verb{doi}
+  \verb 10.1016/j.jcp.2012.01.019
+  \endverb
+  \field{pages}{3432\bibrangedash 3445}
+  \field{title}{Molecular Dynamics Beyonds the Limits: Massive Scaling on 72
+  Racks of a BlueGene/P and Supercooled Glass Dynamics of a 1 Billion Particles
+  System}
+  \field{volume}{231}
+  \field{journaltitle}{J. Comput. Phys.}
+  \field{year}{2012}
+\endentry
+
+\entry{Mandumpal2011}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Mandumpal}{M.}%
+     {Jestin~B.}{J.~B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kreck}{K.}%
+     {Cara~A.}{C.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mancera}{M.}%
+     {Ricardo~L.}{R.~L.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MJB+1}
+  \strng{fullhash}{MJBKCAMRL1}
+  \verb{doi}
+  \verb 10.1039/C0CP02326D
+  \endverb
+  \field{pages}{3839\bibrangedash 3842}
+  \field{title}{A Molecular Mechanism of Solvent Cryoprotection in Aqueous DMSO
+  Solutions}
+  \field{volume}{13}
+  \field{journaltitle}{Phys. Chem. Chem. Phys.}
+  \field{year}{2011}
+\endentry
+
+\entry{Benavides1999}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Benavides}{B.}%
+     {Ana~Laura}{A.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gil-Villegas}{G.-V.}%
+     {Alejandro}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BALGVA1}
+  \strng{fullhash}{BALGVA1}
+  \verb{doi}
+  \verb 10.1080/00268979909482924
+  \endverb
+  \verb{eprint}
+  \verb http://www.tandfonline.com/doi/pdf/10.1080/00268979909482924
+  \endverb
+  \field{number}{12}
+  \field{pages}{1225\bibrangedash 1232}
+  \field{title}{The Thermodynamics of Molecules with Discrete Potentials}
+  \verb{url}
+  \verb h
+  \endverb
+  \field{volume}{97}
+  \field{journaltitle}{Mol. Phys.}
+  \field{year}{1999}
+\endentry
+
+\entry{Barker1967}{article}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Barker}{B.}%
+     {J.~A.}{J.~A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Henderson}{H.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{BJAHD1}
+  \strng{fullhash}{BJAHD1}
+  \verb{doi}
+  \verb 10.1063/1.1712308
+  \endverb
+  \field{pages}{2856\bibrangedash 2861}
+  \field{title}{Perturbation Theory and Equation of State for Fluids: The
+  Square-Well Potential}
+  \field{volume}{47}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1967}
+\endentry
+
+\entry{Vidales2001}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Vidales}{V.}%
+     {Adolfo}{A.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Benavides}{B.}%
+     {Ana~Laura}{A.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gil-Villegas}{G.-V.}%
+     {Alejandre}{A.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{VA+1}
+  \strng{fullhash}{VABALGVA1}
+  \verb{doi}
+  \verb 10.1080/00268970010018846
+  \endverb
+  \verb{eprint}
+  \verb http://www.tandfonline.com/doi/pdf/10.1080/00268970010018846
+  \endverb
+  \field{number}{9}
+  \field{pages}{703\bibrangedash 710}
+  \field{title}{Perturbation Theory for Mixtures of Discrete Potential Fluids}
+  \field{volume}{99}
+  \field{journaltitle}{Mol. Phys.}
+  \field{year}{2001}
+\endentry
+
+\entry{Chapela2010}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rio}{R.}%
+     {F.}{F.}%
+     {del}{d.}%
+     {}{}}%
+    {{}%
+     {Benavides}{B.}%
+     {A.~L.}{A.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Alejandre}{A.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CG+1}
+  \strng{fullhash}{CGRFdBALAJ1}
+  \field{pages}{234107}
+  \field{title}{Discrete Perturbation Theory Applied to Lennard-Jones and
+  Yukawa Potentials}
+  \field{volume}{133}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{2010}
+\endentry
+
+\entry{ElliotJr2002}{article}{}
+  \name{author}{1}{}{%
+    {{}%
+     {Elliot~Jr.}{E.~J.}%
+     {J.~R.}{J.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{EJJR1}
+  \strng{fullhash}{EJJR1}
+  \verb{doi}
+  \verb 10.1016/S0378-3812(01)00664-1
+  \endverb
+  \field{pages}{161\bibrangedash 168}
+  \field{title}{Optimized Step Potential Models for n-Alkanes and Benzene}
+  \field{volume}{194-197}
+  \field{journaltitle}{Fluid Phase Equilib.}
+  \field{year}{2002}
+\endentry
+
+\entry{Unlu2004}{article}{}
+  \name{author}{4}{}{%
+    {{}%
+     {Unlu}{U.}%
+     {O.}{O.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gray}{G.}%
+     {N.~H.}{N.~H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gerek}{G.}%
+     {Z.~N.}{Z.~N.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Elliott}{E.}%
+     {J.~R.}{J.~R.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{UO+1}
+  \strng{fullhash}{UOGNHGZNEJR1}
+  \verb{doi}
+  \verb 10.1021/ie034036m
+  \endverb
+  \field{number}{7}
+  \field{pages}{1788\bibrangedash 1793}
+  \field{title}{Transferable Step Potentials for the Straight-Chain Alkanes,
+  Alkenes, Alkynes, Ethers, and Alcohols}
+  \field{volume}{43}
+  \verb{file}
+  \verb Unlu_etal_2004.pdf:Unlu_etal_2004.pdf:PDF
+  \endverb
+  \field{journaltitle}{Ind. Eng. Chem. Res.}
+  \field{year}{2004}
+\endentry
+
+\entry{MacKerell1998}{article}{}
+  \name{author}{29}{}{%
+    {{}%
+     {MacKerell}{M.}%
+     {A.~D.}{A.~D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bashford}{B.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Bellott}{B.}%
+     {}{}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Dunbrack}{D.}%
+     {R.~L.}{R.~L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Evanseck}{E.}%
+     {J.~D.}{J.~D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Field}{F.}%
+     {M.~J.}{M.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Fischer}{F.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Gao}{G.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Guo}{G.}%
+     {H.}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ha}{H.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Joseph-McCarthy}{J.-M.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kuchnir}{K.}%
+     {L.}{L.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Kuczera}{K.}%
+     {K.}{K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Lau}{L.}%
+     {F.~T.~K.}{F.~T.~K.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Mattos}{M.}%
+     {C.}{C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Michnick}{M.}%
+     {S.}{S.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Ngo}{N.}%
+     {T.}{T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Nguyen}{N.}%
+     {D.~T.}{D.~T.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Prodhom}{P.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Reiher}{R.}%
+     {W.~E.}{W.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Roux}{R.}%
+     {B.}{B.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Schlenkrich}{S.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Smith}{S.}%
+     {J.~C.}{J.~C.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Stote}{S.}%
+     {R.}{R.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Straub}{S.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Watanabe}{W.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Wiórkiewicz-Kuczera}{W.-K.}%
+     {J.}{J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Yin}{Y.}%
+     {D.}{D.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Karplus}{K.}%
+     {M.}{M.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{MAD+1}
+  \strng{fullhash}{MADBDBDRLEJDFMJFSGJGHHSJMDKLKKLFTKMCMSNTNDTPBRWERBSMSJCSRSJ%
+WMWKJYDKM1}
+  \verb{doi}
+  \verb 10.1021/jp973084f
+  \endverb
+  \field{pages}{3586\bibrangedash 3616}
+  \field{title}{All-Atom Empirical Potential for Molecular Modeling and
+  Dynamics Studies of Proteins}
+  \field{volume}{102}
+  \field{journaltitle}{J. Phys. Chem. B}
+  \field{year}{1998}
+\endentry
+
+\entry{Ponder2003}{incollection}{}
+  \name{author}{2}{}{%
+    {{}%
+     {Ponder}{P.}%
+     {Jay~W.}{J.~W.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Case}{C.}%
+     {David~A.}{D.~A.}%
+     {}{}%
+     {}{}}%
+  }
+  \name{editor}{1}{}{%
+    {{}%
+     {Daggett}{D.}%
+     {Valerie}{V.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Academic Press}%
+  }
+  \strng{namehash}{PJWCDA1}
+  \strng{fullhash}{PJWCDA1}
+  \field{booktitle}{Protein Simulations}
+  \verb{doi}
+  \verb 10.1016/S0065-3233(03)66002-X
+  \endverb
+  \field{issn}{0065-3233}
+  \field{pages}{27 \bibrangedash  85}
+  \field{series}{Advances in Protein Chemistry}
+  \field{title}{Force Fields for Protein Simulations}
+  \field{volume}{66}
+  \field{year}{2003}
+\endentry
+
+\entry{McQuaid2004}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {McQuaid}{M.}%
+     {Michael~J.}{M.~J.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Sun}{S.}%
+     {Huai}{H.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Rigby}{R.}%
+     {David}{D.}%
+     {}{}%
+     {}{}}%
+  }
+  \list{publisher}{1}{%
+    {Wiley Subscription Services, Inc., A Wiley Company}%
+  }
+  \keyw{azides, COMPASS force field, fuel properties, propellant properties}
+  \strng{namehash}{MMJ+1}
+  \strng{fullhash}{MMJSHRD1}
+  \verb{doi}
+  \verb 10.1002/jcc.10316
+  \endverb
+  \field{issn}{1096-987X}
+  \field{number}{1}
+  \field{pages}{61\bibrangedash 71}
+  \field{title}{Development and Validation of COMPASS Force Field Parameters
+  for Molecules with Aliphatic Azide Chains}
+  \verb{url}
+  \verb http://dx.doi.org/10.1002/jcc.10316
+  \endverb
+  \field{volume}{25}
+  \field{journaltitle}{J. Comput. Chem.}
+  \field{year}{2004}
+\endentry
+
+\entry{Chapela1989}{article}{}
+  \name{author}{3}{}{%
+    {{}%
+     {Chapela}{C.}%
+     {G.}{G.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Scriven}{S.}%
+     {L.~E.}{L.~E.}%
+     {}{}%
+     {}{}}%
+    {{}%
+     {Davis}{D.}%
+     {H.~T.}{H.~T.}%
+     {}{}%
+     {}{}}%
+  }
+  \strng{namehash}{CG+1}
+  \strng{fullhash}{CGSLEDHT1}
+  \field{abstract}{%
+  Argon, represented as a Lennard-Jones fluid, is simulated using a
+  discontinuous version of the potential. The effect of discretization is
+  thoroughly investigated in terms of the number of discontinuities and the
+  cutoff diameter. Radial distribution functions, pressure, energy,
+  self-diffusion coefficients, and velocity autocorrelation functions are used
+  in order to evaluate this effect. A reduction of five times on computing time
+  can be achieved by varying the cutoff radius and the number of
+  discontinuities without much departure from the physical representation of
+  Lennard-Jonesium atoms. The results indicate that discontinuous molecular
+  dynamics is a viable alternative method to Monte Carlo and continuous
+  molecular dynamics in simulating the properties of simple fluids. The Journal
+  of Chemical Physics is copyrighted by The American Institute of Physics.%
+  }
+  \verb{doi}
+  \verb 10.1063/1.456811
+  \endverb
+  \field{pages}{4307}
+  \field{title}{Molecular Dynamics for Discontinuous Potential. IV.
+  {L}ennard-{J}onesium}
+  \field{volume}{91}
+  \field{journaltitle}{J. Chem. Phys.}
+  \field{year}{1989}
+\endentry
+
+\lossort
+\endlossort
+
+\endinput
