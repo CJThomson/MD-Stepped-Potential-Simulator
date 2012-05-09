@@ -1,4 +1,5 @@
 #/bin/bash
+cd figures; ./Makefigures; cd ..
 pdflatex main.tex --draftmode || exit 1
 
 makeindex main.nlo -s nomencl.ist -o main.nls  || exit 1

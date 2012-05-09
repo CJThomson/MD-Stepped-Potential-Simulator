@@ -60,7 +60,7 @@ vdivide={\topMargin,*,\bottomMargin}]{geometry}
 
 %%% Reference sections
 \RequirePackage[style=chem-acs, doi=true, articletitle=true, %
-biblabel=brackets]{biblatex}
+biblabel=brackets,refsection=chapter]{biblatex}
 %\RequirePackage[style=nature, article-title=true]{biblatex}
 \defbibheading{thesisChapterBib}{\section{References}}
 
@@ -134,7 +134,7 @@ biblabel=brackets]{biblatex}
 \renewcommand{\epigraphsize}{\footnotesize}
 
 %%% Nomenclature
-\RequirePackage[noprefix,columns,refpage]{nomencl} %My version of the Nomencl package
+\RequirePackage[noprefix,refpage]{nomencl} %My version of the Nomencl package
 \setlength{\nomitemsep}{-\parsep} %single line spacing nomencl
 
 %%% Stop links being colored in the pdf, place
@@ -215,7 +215,8 @@ breaklinks=true
   \end{titlepage}
 
   %%% Abstract
-  \setcounter{page}{2}
+  \pagenumbering{roman}
+  \setcounter{page}{1}
   \chapter*{Abstract}
   \addcontentsline{toc}{chapter}{Abstract}%
   \@abstract
@@ -246,5 +247,6 @@ breaklinks=true
   \@acknowledgements
   \cleardoublepage
   \docspacing
+  \pagenumbering{arabic}
 }
 \makeatother

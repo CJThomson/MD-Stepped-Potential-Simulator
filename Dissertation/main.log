@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  3 MAY 2012 22:17
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.28)  9 MAY 2012 03:48
 entering extended mode
  %&-line parsing enabled.
 **main.tex
@@ -722,21 +722,21 @@ LaTeX Warning: Unused global option(s):
 (./main.aux)
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 20.
-LaTeX Font Info:    ... okay on input line 20.
-LaTeX Font Info:    Try loading font information for T1+ptm on input line 20.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 40.
+LaTeX Font Info:    ... okay on input line 40.
+LaTeX Font Info:    Try loading font information for T1+ptm on input line 40.
  (/usr/share/texmf-texlive/tex/latex/psnfss/t1ptm.fd
 File: t1ptm.fd 2001/06/04 font definitions for T1/ptm.
 )
@@ -790,8 +790,26 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
 (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 20.
-Package biblatex Info: Reference segment=0 on input line 20.
+Package biblatex Info: ... file 'main1-blx.bbl' found.
+ (./main1-blx.bbl)
+Package biblatex Info: ... file 'main2-blx.bbl' found.
+ (./main2-blx.bbl)
+Package biblatex Info: ... file 'main3-blx.bbl' found.
+ (./main3-blx.bbl)
+Package biblatex Info: ... file 'main4-blx.bbl' found.
+
+(./main4-blx.bbl)
+Package biblatex Info: ... file 'main5-blx.bbl' found.
+ (./main5-blx.bbl)
+Package biblatex Info: ... file 'main6-blx.bbl' found.
+ (./main6-blx.bbl)
+Package biblatex Info: ... file 'main7-blx.bbl' found.
+ (./main7-blx.bbl)
+Package biblatex Info: ... file 'main8-blx.bbl' found.
+
+(./main8-blx.bbl)
+Package biblatex Info: Reference section=0 on input line 40.
+Package biblatex Info: Reference segment=0 on input line 40.
  (/usr/share/texmf-texlive/tex/context/base/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count296
@@ -807,10 +825,10 @@ Package biblatex Info: Reference segment=0 on input line 20.
 ) ABD: EveryShipout initializing macros
 Package caption Info: Begin \AtBeginDocument code.
 Package caption3 Info: subfig package 1.2 or 1.3 is loaded.
-LaTeX Info: Redefining \subref on input line 20.
+LaTeX Info: Redefining \subref on input line 40.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 20.
+Package hyperref Info: Link coloring ON on input line 40.
 
 (/usr/share/texmf-texlive/tex/latex/hyperref/nameref.sty
 Package: nameref 2007/05/29 v2.31 Cross-referencing by name of section
@@ -820,8 +838,8 @@ Package: refcount 2008/08/11 v3.1 Data extraction from references (HO)
 )
 \c@section@level=\count301
 )
-LaTeX Info: Redefining \ref on input line 20.
-LaTeX Info: Redefining \pageref on input line 20.
+LaTeX Info: Redefining \ref on input line 40.
+LaTeX Info: Redefining \pageref on input line 40.
  (./main.out)
 (./main.out)
 \@outlinefile=\write5
@@ -832,30 +850,30 @@ LaTeX Info: Redefining \pageref on input line 20.
 
 pdfTeX warning: pdflatex (file ./figures/UoALogo.pdf): PDF inclusion: found PDF
  version <1.5>, but at most version <1.4> allowed
-<figures/UoALogo.pdf, id=207, 375.16461pt x 140.45314pt>
+<figures/UoALogo.pdf, id=295, 375.16461pt x 140.45314pt>
 File: figures/UoALogo.pdf Graphic file (type pdf)
 
 <use figures/UoALogo.pdf>
-Overfull \hbox (17.62482pt too wide) in paragraph at lines 20--20
+Overfull \hbox (17.62482pt too wide) in paragraph at lines 40--40
 [][] 
  []
 
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 20.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 40.
 LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
-(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 20.
+(Font)              Font shape `T1/ptm/b/sc' tried instead on input line 40.
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map} <./figures/UoALogo.pdf>]
-[2
+[1
 
 
-] (./main.toc [3
+] (./main.toc [2
 
 
 
 
-])
+] [3])
 \tf@toc=\write6
 \openout6 = `main.toc'.
 
@@ -867,208 +885,342 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/sc' in size <12> not available
 
 
 
-] (./main.lot)
+] [6] (./main.lot)
 \tf@lot=\write8
 \openout8 = `main.lot'.
 
- [6
+
+[7
 
 
 
-]
-(./main.nls [7
+] (./main.nls [8
 
 
 
-]) [8
+]) [9] [10
 
 
 ]
 Chapter 1.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <17.28> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 72.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 92.
+Package biblatex Info: Reference section=1 on input line 92.
+\openout3 = `main1-blx.aux'.
 
-LaTeX Warning: Reference `chap:one' on page 9 undefined on input line 97.
-
-[9
+Package biblatex Info: Setting label 'refsection:1' on input line 92.
+pdfTeX warning (ext4): destination with the same identifier (name{page.1}) has 
+been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.146 
+       [1
 
 
 
 ]
+LaTeX Font Info:    Try loading font information for T1+pcr on input line 201.
+ (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
+File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
+)
+Overfull \hbox (2.90045pt too wide) in paragraph at lines 201--201
+\T1/ptm/m/n/12 er-ties of Lennard-Jones Molecules. \T1/ptm/m/it/12 Phys. Rev. \
+T1/ptm/b/n/12 1967\T1/ptm/m/n/12 , \T1/ptm/m/it/12 159\T1/ptm/m/n/12 , 98^^U103
+, DOI: [][]$\T1/pcr/m/n/12 10 . 1103 /
+ []
+
+[2]
+Overfull \hbox (52.18488pt too wide) in paragraph at lines 201--201
+\T1/ptm/m/n/12 crete Po-ten-tials. \T1/ptm/m/it/12 Mol. Phys. \T1/ptm/b/n/12 19
+99\T1/ptm/m/n/12 , \T1/ptm/m/it/12 97\T1/ptm/m/n/12 , 1225^^U1232, DOI: [][]$\T
+1/pcr/m/n/12 10 . 1080 / 00268979909482924$[][]\T1/ptm/m/n/12 . 
+ []
+
+[3]
 Chapter 2.
+Package biblatex Info: Reference section=0 on input line 203.
+Package biblatex Info: Reference section=2 on input line 203.
+\openout3 = `main2-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:2' on input line 203.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 109.
-[10
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 213.
+[4
 
 
-] [11] <figures/ljPlot.pdf, id=405, 845.1575pt x 597.23125pt>
+] [5] <figures/ljPlot.pdf, id=648, 704.6325pt x 338.26375pt>
 File: figures/ljPlot.pdf Graphic file (type pdf)
 
 <use figures/ljPlot.pdf>
-<figures/ljForce.pdf, id=410, 845.1575pt x 597.23125pt>
+<figures/ljForce.pdf, id=653, 705.63625pt x 338.26375pt>
 File: figures/ljForce.pdf Graphic file (type pdf)
 
-<use figures/ljForce.pdf> [12 <./figures/ljPlot.pdf, page is rotated 90 degrees
->] <figures/hardSphere.pdf, id=431, 845.1575pt x 597.23125pt>
-File: figures/hardSphere.pdf Graphic file (type pdf)
+<use figures/ljForce.pdf>
+Overfull \hbox (5.25179pt too wide) in paragraph at lines 373--378
+\T1/ptm/m/n/12 is the CHARMM (Chem-istry at HAR-vard Molec-u-lar Me-chan-ics) p
+o-ten-tial (Eq. []) [[][]8[][]]. 
+ []
 
-<use figures/hardSphere.pdf> [13 <./figures/ljForce.pdf, page is rotated 90 deg
-rees>] [14 <./figures/hardSphere.pdf, page is rotated 90 degrees>]
-<figures/squareWell.pdf, id=468, 845.1575pt x 597.23125pt>
+[6 <./figures/ljPlot.pdf>]
+<figures/hardsphere.pdf, id=677, 704.6325pt x 338.26375pt>
+File: figures/hardsphere.pdf Graphic file (type pdf)
+
+<use figures/hardsphere.pdf> [7 <./figures/ljForce.pdf>]
+<figures/squareWell.pdf, id=706, 704.6325pt x 338.26375pt>
 File: figures/squareWell.pdf Graphic file (type pdf)
 
 <use figures/squareWell.pdf>
-<figures/ChapelaSteps.pdf, id=472, 845.1575pt x 597.23125pt>
-File: figures/ChapelaSteps.pdf Graphic file (type pdf)
+<figures/Chapela_Steps.pdf, id=710, 701.62125pt x 336.25626pt>
+File: figures/Chapela_Steps.pdf Graphic file (type pdf)
 
-<use figures/ChapelaSteps.pdf>
+<use figures/Chapela_Steps.pdf> [8 <./figures/hardsphere.pdf> <./figures/square
+Well.pdf>]
 
 pdfTeX warning: pdflatex (file ./figures/SPEADMD.pdf): PDF inclusion: found PDF
  version <1.5>, but at most version <1.4> allowed
-<figures/SPEADMD.pdf, id=476, 169.8345pt x 217.38817pt>
+<figures/SPEADMD.pdf, id=743, 169.8345pt x 217.38817pt>
 File: figures/SPEADMD.pdf Graphic file (type pdf)
 
-<use figures/SPEADMD.pdf> [15 <./figures/squareWell.pdf, page is rotated 90 deg
-rees>] [16 <./figures/ChapelaSteps.pdf, page is rotated 90 degrees> <./figures/
-SPEADMD.pdf>]
+<use figures/SPEADMD.pdf>
+Overfull \hbox (5.18546pt too wide) in paragraph at lines 503--503
+\T1/ptm/m/n/12 u-lar Dy-nam-ics. \T1/ptm/m/it/12 Acc. Chem. Res. \T1/ptm/b/n/12
+ 2006\T1/ptm/m/n/12 , \T1/ptm/m/it/12 39\T1/ptm/m/n/12 , 101^^U108, DOI: [][]$\
+T1/pcr/m/n/12 10 . 1021 / ar040206v$[][]\T1/ptm/m/n/12 . 
+ []
+
+[9 <./figures/Chapela_Steps.pdf> <./figures/SPEADMD.pdf>] [10] [11]
 Chapter 3.
-[17
+Package biblatex Info: Reference section=0 on input line 506.
+Package biblatex Info: Reference section=3 on input line 506.
+\openout3 = `main3-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:3' on input line 506.
+[12
 
 
-] [18] [19] [20] [21] [22]
+] [13] [14]
+Overfull \hbox (11.56267pt too wide) in paragraph at lines 695--697
+[]\T1/ptm/m/n/12 Calculate the forces act-ing on the par-ti-cles from the in-te
+r-molec-u-lar po-ten-tial (Lennard-
+ []
+
+[15] [16] [17] [18]
 
 pdfTeX warning: pdflatex (file ./figures/PBC.pdf): PDF inclusion: found PDF ver
 sion <1.5>, but at most version <1.4> allowed
-<figures/PBC.pdf, id=619, 322.0281pt x 322.12846pt>
+<figures/PBC.pdf, id=925, 322.0281pt x 322.12846pt>
 File: figures/PBC.pdf Graphic file (type pdf)
  <use figures/PBC.pdf>
-[23 <./figures/PBC.pdf>] [24] [25]
+[19 <./figures/PBC.pdf>] [20] [21] [22]
+Overfull \hbox (24.46916pt too wide) in paragraph at lines 1129--1129
+[]\T1/ptm/m/n/12 Haile, J. M., \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-la-
+tion: El-e-men-tary Meth-ods\T1/ptm/m/n/12 ; Wiley-Interscience:
+ []
+
+
+Overfull \hbox (2.90045pt too wide) in paragraph at lines 1129--1129
+\T1/ptm/m/n/12 er-ties of Lennard-Jones Molecules. \T1/ptm/m/it/12 Phys. Rev. \
+T1/ptm/b/n/12 1967\T1/ptm/m/n/12 , \T1/ptm/m/it/12 159\T1/ptm/m/n/12 , 98^^U103
+, DOI: [][]$\T1/pcr/m/n/12 10 . 1103 /
+ []
+
+[23] [24]
 Chapter 4.
+Package biblatex Info: Reference section=0 on input line 1131.
+Package biblatex Info: Reference section=4 on input line 1131.
+\openout3 = `main4-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:4' on input line 1131.
 
 
 pdfTeX warning: pdflatex (file ./figures/energyplot.pdf): PDF inclusion: found 
 PDF version <1.5>, but at most version <1.4> allowed
-<figures/energyplot.pdf, id=661, 794.95897pt x 614.295pt>
+<figures/energyplot.pdf, id=992, 845.1575pt x 597.23125pt>
 File: figures/energyplot.pdf Graphic file (type pdf)
 
-<use figures/energyplot.pdf> [26
+<use figures/energyplot.pdf>
+Overfull \hbox (38.0467pt too wide) in paragraph at lines 1154--1155
+[]  
+ []
+
+[25
 
 
-] [27 <./figures/energyplot.pdf>] [28] [29]
-<figures/rdfsmooth.pdf, id=741, 845.1575pt x 597.23125pt>
+] [26 <./figures/energyplot.pdf>] [27]
+<figures/rdfsmooth.pdf, id=1040, 688.5725pt x 489.83pt>
 File: figures/rdfsmooth.pdf Graphic file (type pdf)
 
-<use figures/rdfsmooth.pdf> [30 <./figures/rdfsmooth.pdf, page is rotated 90 de
-grees>] <figures/rdfrough.pdf, id=756, 845.1575pt x 597.23125pt>
+<use figures/rdfsmooth.pdf> [28]
+<figures/rdfrough.pdf, id=1056, 688.5725pt x 489.83pt>
 File: figures/rdfrough.pdf Graphic file (type pdf)
 
-<use figures/rdfrough.pdf> [31 <./figures/rdfrough.pdf, page is rotated 90 degr
-ees>] <figures/rdfcomp.pdf, id=775, 845.1575pt x 597.23125pt>
+<use figures/rdfrough.pdf>
+<figures/rdfcomp.pdf, id=1062, 688.5725pt x 489.83pt>
 File: figures/rdfcomp.pdf Graphic file (type pdf)
 
-<use figures/rdfcomp.pdf>
+<use figures/rdfcomp.pdf> [29 <./figures/rdfsmooth.pdf>] [30 <./figures/rdfroug
+h.pdf> <./figures/rdfcomp.pdf>]
 
 Package Fancyhdr Warning: \headheight is too small (14.5pt): 
  Make it at least 26.98592pt.
  We now make it that large for the rest of the document.
  This may cause the page layout to be inconsistent, however.
 
-[32 <./figures/rdfcomp.pdf, page is rotated 90 degrees>] [33]
-Chapter 5.
-[34
-
-
-]
-Chapter 6.
-
-Overfull \hbox (1.16156pt too wide) in paragraph at lines 1282--1282
-[]\T1/ptm/b/n/17.28 Chapela's dumb step-ping and very good step-ping ver-
- []
-
-[35
-
-
-]
-Overfull \hbox (5.1801pt too wide) in paragraph at lines 1360--1384
- [] 
- []
-
-[36]
-LaTeX Font Info:    Try loading font information for T1+pcr on input line 1405.
-
- (/usr/share/texmf-texlive/tex/latex/psnfss/t1pcr.fd
-File: t1pcr.fd 2001/06/04 font definitions for T1/pcr.
-)
-Overfull \hbox (5.18546pt too wide) in paragraph at lines 1405--1405
-\T1/ptm/m/n/12 u-lar Dy-nam-ics. \T1/ptm/m/it/12 Acc. Chem. Res. \T1/ptm/b/n/12
- 2006\T1/ptm/m/n/12 , \T1/ptm/m/it/12 39\T1/ptm/m/n/12 , 101^^U108, DOI: [][]$\
-T1/pcr/m/n/12 10 . 1021 / ar040206v$[][]\T1/ptm/m/n/12 . 
- []
-
-[37]
-Overfull \hbox (24.46916pt too wide) in paragraph at lines 1405--1405
+[31]
+Overfull \hbox (24.46916pt too wide) in paragraph at lines 1502--1502
 []\T1/ptm/m/n/12 Haile, J. M., \T1/ptm/m/it/12 Molec-u-lar Dy-nam-ics Sim-u-la-
 tion: El-e-men-tary Meth-ods\T1/ptm/m/n/12 ; Wiley-Interscience:
  []
 
 
-Overfull \hbox (2.90045pt too wide) in paragraph at lines 1405--1405
-\T1/ptm/m/n/12 er-ties of Lennard-Jones Molecules. \T1/ptm/m/it/12 Phys. Rev. \
-T1/ptm/b/n/12 1967\T1/ptm/m/n/12 , \T1/ptm/m/it/12 159\T1/ptm/m/n/12 , 98^^U103
-, DOI: [][]$\T1/pcr/m/n/12 10 . 1103 /
- []
-
-[38]
-Overfull \hbox (0.71083pt too wide) in paragraph at lines 1405--1405
-[]\T1/ptm/m/n/12 Goldberg, D. What ev-ery com-puter sci-en-tist should know abo
-ut floating-point arith-
- []
-
-
-Overfull \hbox (2.58939pt too wide) in paragraph at lines 1405--1405
-\T1/ptm/m/n/12 disks up to the ninth. \T1/ptm/m/it/12 Phys. Rev. E \T1/ptm/b/n/
+Overfull \hbox (7.9173pt too wide) in paragraph at lines 1502--1502
+\T1/ptm/m/n/12 Disks up to the Ninth. \T1/ptm/m/it/12 Phys. Rev. E \T1/ptm/b/n/
 12 2005\T1/ptm/m/n/12 , \T1/ptm/m/it/12 71\T1/ptm/m/n/12 , 021105, DOI: [][]$\T
 1/pcr/m/n/12 10 . 1103 / PhysRevE .
  []
 
-[39]
+[32] [33]
+Chapter 5.
+Package biblatex Info: Reference section=0 on input line 1504.
+Package biblatex Info: Reference section=5 on input line 1504.
+\openout3 = `main5-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:5' on input line 1504.
+[34
+
+
+] [35] [36] [37]
+Chapter 6.
+Package biblatex Info: Reference section=0 on input line 1681.
+Package biblatex Info: Reference section=6 on input line 1681.
+\openout3 = `main6-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:6' on input line 1681.
+[38
+
+
+]
+Overfull \hbox (19.19632pt too wide) in paragraph at lines 1799--1823
+ [] 
+ []
+
+[39] [40] <figures/ChapelaP.pdf, id=1220, 670.505pt x 342.27875pt>
+File: figures/ChapelaP.pdf Graphic file (type pdf)
+
+<use figures/ChapelaP.pdf>
+<figures/ChapelaU.pdf, id=1222, 679.53876pt x 350.30875pt>
+File: figures/ChapelaU.pdf Graphic file (type pdf)
+
+<use figures/ChapelaU.pdf> [41 <./figures/ChapelaP.pdf> <./figures/ChapelaU.pdf
+>] <figures/probSteps.pdf, id=1261, 705.63625pt x 338.26375pt>
+File: figures/probSteps.pdf Graphic file (type pdf)
+
+<use figures/probSteps.pdf>
+<figures/actionSteps.pdf, id=1263, 705.63625pt x 338.26375pt>
+File: figures/actionSteps.pdf Graphic file (type pdf)
+
+<use figures/actionSteps.pdf>
+<figures/actionNoCoreP.pdf, id=1267, 689.57625pt x 342.27875pt>
+File: figures/actionNoCoreP.pdf Graphic file (type pdf)
+
+<use figures/actionNoCoreP.pdf>
+<figures/actionNoCoreU.pdf, id=1269, 679.53876pt x 350.30875pt>
+File: figures/actionNoCoreU.pdf Graphic file (type pdf)
+
+<use figures/actionNoCoreU.pdf> [42 <./figures/probSteps.pdf>] [43 <./figures/a
+ctionSteps.pdf> <./figures/actionNoCoreP.pdf> <./figures/actionNoCoreU.pdf>]
+<figures/noCoreRDF.pdf, id=1326, 666.49pt x 335.2525pt>
+File: figures/noCoreRDF.pdf Graphic file (type pdf)
+
+<use figures/noCoreRDF.pdf>
+<figures/coresP.pdf, id=1328, 709.65125pt x 342.27875pt>
+File: figures/coresP.pdf Graphic file (type pdf)
+
+<use figures/coresP.pdf>
+<figures/coresU.pdf, id=1330, 709.65125pt x 342.27875pt>
+File: figures/coresU.pdf Graphic file (type pdf)
+
+<use figures/coresU.pdf> [44 <./figures/noCoreRDF.pdf>]
+<figures/ChapelaCompP.pdf, id=1352, 698.61pt x 342.27875pt>
+File: figures/ChapelaCompP.pdf Graphic file (type pdf)
+
+<use figures/ChapelaCompP.pdf>
+<figures/ChapelaCompU.pdf, id=1354, 710.655pt x 342.27875pt>
+File: figures/ChapelaCompU.pdf Graphic file (type pdf)
+
+<use figures/ChapelaCompU.pdf> [45 <./figures/coresP.pdf> <./figures/coresU.pdf
+>] [46 <./figures/ChapelaCompP.pdf> <./figures/ChapelaCompU.pdf>]
+<figures/TempU.pdf, id=1414, 698.61pt x 350.30875pt>
+File: figures/TempU.pdf Graphic file (type pdf)
+ <use figures/TempU.pdf>
+<figures/TempP.pdf, id=1416, 660.4675pt x 673.51625pt>
+File: figures/TempP.pdf Graphic file (type pdf)
+ <use figures/TempP.pdf>
+[47 <./figures/TempU.pdf>]
+<figures/stepComp.pdf, id=1440, 701.62125pt x 489.83pt>
+File: figures/stepComp.pdf Graphic file (type pdf)
+
+<use figures/stepComp.pdf> [48 <./figures/TempP.pdf>] [49 <./figures/stepComp.p
+df>]
+Overfull \hbox (30.2413pt too wide) in paragraph at lines 2183--2183
+\T1/ptm/m/n/12 Jones Po-ten-tial. \T1/ptm/m/it/12 J. Phys. Chem. \T1/ptm/b/n/12
+ 1996\T1/ptm/m/n/12 , \T1/ptm/m/it/12 100\T1/ptm/m/n/12 , 17365^^U17372, DOI: [
+][]$\T1/pcr/m/n/12 10 . 1021 / jp9620476$[][]\T1/ptm/m/n/12 . 
+ []
+
+[50]
+Chapter 7.
+Package biblatex Info: Reference section=0 on input line 2184.
+Package biblatex Info: Reference section=7 on input line 2184.
+\openout3 = `main7-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:7' on input line 2184.
+[51
+
+
+] [52]
 Appendix A.
-[40
+Package biblatex Info: Reference section=0 on input line 2262.
+Package biblatex Info: Reference section=8 on input line 2262.
+\openout3 = `main8-blx.aux'.
+
+Package biblatex Info: Setting label 'refsection:8' on input line 2262.
+[53
 
 
-] [41] (./main.aux)
+]
 
-LaTeX Warning: There were undefined references.
+LaTeX Warning: Empty bibliography on input line 2346.
 
+[54] (./main.aux)
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 13090 strings out of 495061
- 202183 string characters out of 1182621
- 396827 words of memory out of 3000000
- 15764 multiletter control sequences out of 15000+50000
- 53500 words of font info for 63 fonts, out of 3000000 for 9000
+ 13475 strings out of 495061
+ 208541 string characters out of 1182621
+ 413542 words of memory out of 3000000
+ 16004 multiletter control sequences out of 15000+50000
+ 54578 words of font info for 64 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 51i,12n,53p,865b,1208s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 51i,12n,53p,897b,1208s stack positions out of 5000i,500n,10000p,200000b,50000s
 {/usr/share/texmf-texlive/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-texli
 ve/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texmf-texlive/fonts/ty
-pe1/public/amsfonts/cm/cmbx8.pfb></usr/share/texmf-texlive/fonts/type1/public/a
-msfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/
-cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi6.pfb><
-/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/share/t
-exmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-texlive
-/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/fonts/type1/
-public/amsfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfon
-ts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmsy8
-.pfb></usr/share/texmf-texlive/fonts/type1/urw/courier/ucrr8a.pfb></usr/share/t
-exmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-texlive/fonts/t
-ype1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmr8
-a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
-Output written on main.pdf (41 pages, 672198 bytes).
+pe1/public/amsfonts/cm/cmex10.pfb></usr/share/texmf-texlive/fonts/type1/public/
+amsfonts/cm/cmmi12.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm
+/cmmi6.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmmi8.pfb><
+/usr/share/texmf-texlive/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/t
+exmf-texlive/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texmf-texlive/
+fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-texlive/fonts/type1/p
+ublic/amsfonts/cm/cmsy10.pfb></usr/share/texmf-texlive/fonts/type1/public/amsfo
+nts/cm/cmsy8.pfb></usr/share/texmf-texlive/fonts/type1/urw/courier/ucrr8a.pfb><
+/usr/share/texmf-texlive/fonts/type1/urw/times/utmb8a.pfb></usr/share/texmf-tex
+live/fonts/type1/urw/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw
+/times/utmr8a.pfb></usr/share/texmf-texlive/fonts/type1/urw/times/utmri8a.pfb>
+Output written on main.pdf (65 pages, 873323 bytes).
 PDF statistics:
- 1014 PDF objects out of 1200 (max. 8388607)
- 230 named destinations out of 1000 (max. 500000)
- 541 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1657 PDF objects out of 1728 (max. 8388607)
+ 336 named destinations out of 1000 (max. 500000)
+ 871 words of extra memory for PDF output out of 10000 (max. 10000000)
 

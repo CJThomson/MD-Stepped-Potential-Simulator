@@ -1,21 +1,27 @@
 \boolfalse {citerequest}\boolfalse {citetracker}\boolfalse {pagetracker}\boolfalse {backtracker}\relax 
 \defcounter {refsection}{0}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
+\defcounter {refsection}{1}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
+\defcounter {refsection}{2}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
+\defcounter {refsection}{3}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {4.1}{\ignorespaces Table of reduced forms of various quanities used in this dissertation \cite {Haile1997}\relax }}{28}{table.caption.20}
-\defcounter {refsection}{0}\relax 
+\defcounter {refsection}{4}\relax 
+\contentsline {table}{\numberline {4.1}{\ignorespaces Table of reduced quantities}}{32}{table.caption.23}
+\defcounter {refsection}{4}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
+\defcounter {refsection}{5}\relax 
 \addvspace {10\p@ }
-\defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {6.1}{\ignorespaces Comparison of results obtained by the event-driven simulator with literature values. $t_{avg}$ is the average time between collisions, $\delimiter "426830A \mathbf {\mathaccentV {hat}05E{r}} \cdot \Delta \mathbf {v} \delimiter "526930B _{coll}$ is the average momentum transfer per collision, and D is the coefficient of diffusion.\relax }}{36}{table.caption.24}
-\defcounter {refsection}{0}\relax 
-\contentsline {table}{\numberline {6.2}{\ignorespaces Comparison of results obtained by the event-driven simulator with literature values using stepped potentials. Numbers in parenthesis indicate the uncertainty in the final digit. \relax }}{37}{table.caption.25}
-\defcounter {refsection}{0}\relax 
+\defcounter {refsection}{6}\relax 
+\contentsline {table}{\numberline {6.1}{\ignorespaces Force-driven simulator benchmarking results}}{39}{table.caption.24}
+\defcounter {refsection}{6}\relax 
+\contentsline {table}{\numberline {6.2}{\ignorespaces Event-driven simulation hard sphere benchmarking results}}{39}{table.caption.25}
+\defcounter {refsection}{6}\relax 
+\contentsline {table}{\numberline {6.3}{\ignorespaces Event-driven simulation stepped potential benchmarking results}}{40}{table.caption.26}
+\defcounter {refsection}{6}\relax 
+\contentsline {table}{\numberline {6.4}{\ignorespaces Comparison of step energies created by different methods}}{46}{table.caption.33}
+\defcounter {refsection}{6}\relax 
+\addvspace {10\p@ }
+\defcounter {refsection}{7}\relax 
 \addvspace {10\p@ }
