@@ -37,7 +37,7 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::VIRIAL;
+Stepper::StepHeight height_type = Stepper::ENERGY;
 Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
 //Logging:
 const int psteps = 50; //frequency of output to file
@@ -46,14 +46,14 @@ const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions
 //Measuring Properties
 const int startSampling = 5e+5; //step number to start taking samples
 const int sample_interval = 1;
-const double rdf_interval = 0.05;
+const double rdf_interval = 0.001;
 const int diff_interval = 20;
 int readingsTaken = 0;
 int rdfReadings = 0;
 double startSampleTime = 0;
 double currentK = 0;
 double currentU = 0;
-const int noBins = 600; //number of radial bins
+const int noBins = 300; //number of radial bins
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values

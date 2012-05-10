@@ -43,11 +43,11 @@ class Stepper
       genSteps.clear();
 
       //calculate the equivalent hard core
-      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      double r_core = ZERO;
+      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      //double r_core = ZERO;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
       r_core = limit_solver_bisection(&partition_Function, (1.0 - 0.999936657516334) * totalZ,
-	r_cutoff, r_core, 1000, 1e6, 1e-10);
+      	r_cutoff, r_core, 1000, 1e6, 1e-10);
       genSteps.push_back(Steps(r_core,0));
       --number_of_steps;
       switch(step_radius)
@@ -64,8 +64,8 @@ class Stepper
 	case PROBABILITY:
 	  {
 	    //calculate total partition funciton
-
-	    double r_lower = 0.9;
+	    totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
+	    double r_lower = r_core;
 	    for(size_t i(0); i < number_of_steps; ++i) //generate step lengths
 	      {
 		double step = limit_solver(&partition_Function, totalZ / number_of_steps, 
@@ -121,13 +121,13 @@ class Stepper
 		    }
 		  else
 		    {
- 		      /*energy = - 1.0 / beta
+ 		      energy = - 1.0 / beta
 			* log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3)))
 			      * integrator_Simpson(&partition_Function,
 						   step_i->step_radius,
 						   ZERO,
-						   100));*/
-		      energy = 100;
+						   100));
+		      //energy = 100;
 		    }
 		  step_i->step_energy = energy;
 		}
@@ -148,7 +148,7 @@ class Stepper
 		}
 	      else
 		{
-		  /*energy = 4.0 * M_PI
+		  energy = 4.0 * M_PI
 		    * 1.0 / integrator_Simpson(&partition_Function,
 					       step_i->step_radius,
 					       ZERO,
@@ -156,8 +156,8 @@ class Stepper
 		    * integrator_Simpson(&internal_Energy,
 					 step_i->step_radius,
 					 ZERO,
-					 100);*/
-		  energy = 40;
+					 100);
+		  energy = 100;
 		}
 	      step_i->step_energy = energy;
 	      break;
@@ -273,7 +273,7 @@ class Stepper
 	double integral = integrator_Simpson(function,
 						  b, lower_bound, integrator_intervals);
 	double root = integral - target_area;
-	std::cerr << b << " - " << integral << " - " << target_area << std::endl; 
+	//std::cerr << b << " - " << integral << " - " << target_area << std::endl; 
 	if(root - tolerance < 0 &&  root + tolerance > 0)
 	  return b;
 
