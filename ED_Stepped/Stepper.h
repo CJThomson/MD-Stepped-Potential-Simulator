@@ -1,10 +1,25 @@
 #pragma once
+#include <math.h>
+#include <vector>
+#include "polyRoot.h"
+
 /* Class to produce steps model a soft potential */
 struct Steps
 {
 Steps(double r, double h) : step_radius(r), step_energy(h) {}
   double step_energy;
   double step_radius;
+
+  //Operator overloads
+  bool operator<(const Steps& otherStep) const
+  {return step_radius < otherStep.step_radius;}
+  bool operator>(const Steps& otherStep) const
+  {return step_radius > otherStep.step_radius;}
+  bool operator==(const Steps& otherStep) const
+  {return step_radius == otherStep.step_radius;}
+  bool operator==(const double& stepPos) const
+  {return step_radius == stepPos;}
+
 };
 
 class Stepper
@@ -16,13 +31,16 @@ class Stepper
     ENERGY,
     MID,
     AREA,
-    ENERGYACTION
+    ENERGYACTION,
+    CHAPELA_HEIGHT
   } StepHeight;
 
   typedef enum {
     EVEN,
     PROBABILITY,
-    EXPECTEDFORCE
+    EXPECTEDFORCE,
+    EVEN_ENERGY,
+    CHAPELA_WIDTH
   } StepWidth;
   //Constructors:
   // = = variables
@@ -38,18 +56,18 @@ class Stepper
 		     double r_cutoff,
 		     StepHeight step_energy,
 		     StepWidth step_radius,
-		     std::vector<Steps>& genSteps)
+		     std::vector<Steps>& genSteps, double energyStep = 0.5)
     {
       genSteps.clear();
 
       //calculate the equivalent hard core
-      double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
-      //double r_core = ZERO;
+      //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
+      double r_core = ZERO;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
       r_core = limit_solver_bisection(&partition_Function, (1.0 - 0.999936657516334) * totalZ,
-      	r_cutoff, r_core, 1000, 1e6, 1e-10);
-      genSteps.push_back(Steps(r_core,0));
-      --number_of_steps;
+				      r_cutoff, r_core, 1000, 1e6, 1e-10);
+      //genSteps.push_back(Steps(r_core,0));
+      //--number_of_steps;
       switch(step_radius)
 	{
 	case EVEN:
@@ -81,21 +99,55 @@ class Stepper
 	  }
 	  break;
 	case EXPECTEDFORCE:
-	  //calculate total partition funciton
-	  double totalEF = integrator_Simpson(&expected_Force,r_cutoff,  r_core, 1000);
-	  double r_lower = r_core;
-	  for(size_t i(0); i < number_of_steps - 1; ++i) //generate step lengths
-	    {
-	      double step = limit_solver_bisection(&expected_Force, totalEF / number_of_steps, r_cutoff, r_lower, 1000, 1e6, 1e-5);
-	      if(step == 0)
-		break;
-	      else
-		{
-		  genSteps.push_back(Steps(step,0));
-		  r_lower = step;
-		}
-	    }
-	  genSteps.push_back(Steps(r_cutoff,0));
+	  {
+	    //calculate total partition funciton
+	    double totalEF = integrator_Simpson(&expected_Force,r_cutoff,  r_core, 1000);
+	    double r_lower = r_core;
+	    for(size_t i(0); i < number_of_steps - 1; ++i) //generate step lengths
+	      {
+		double step = limit_solver_bisection(&expected_Force, totalEF / number_of_steps, r_cutoff, r_lower, 1000, 1e6, 1e-5);
+		if(step == 0)
+		  break;
+		else
+		  {
+		    genSteps.push_back(Steps(step,0));
+		    r_lower = step;
+		  }
+	      }
+	    genSteps.push_back(Steps(r_cutoff,0));
+	  }
+	  break;
+	case EVEN_ENERGY:
+	  {
+	    PolyRoot rootFinder;
+	    std::vector<double> polynomial(13);
+
+	    polynomial[6] = -4;
+	    polynomial[12] = 4;
+	    std::vector<double> roots;
+	    for(size_t i(0); i < number_of_steps; ++i)
+	      {
+		polynomial[0] = - (-1 + energyStep * i);
+		rootFinder.rootFind(polynomial, roots, 1e-5, 1e2);
+		for(std::vector<double>::iterator j = roots.begin(); j != roots.end(); ++j)
+		  if(*j >= 0 && *j < r_cutoff)
+		    if(find(genSteps.begin(), genSteps.end(), Steps(*j,-polynomial[0])) == genSteps.end())
+		      genSteps.push_back(Steps(*j, -polynomial[0]));
+	      }
+	    sort(genSteps.begin(), genSteps.end());
+	  }
+	  break;
+	case CHAPELA_WIDTH:
+	  genSteps.push_back(Steps(0.80,66.74)); //step 0
+	  genSteps.push_back(Steps(0.85,27.55)); //step 1
+	  genSteps.push_back(Steps(0.90, 10.95)); //step 3
+	  genSteps.push_back(Steps(0.95, 3.81)); //step 4
+	  genSteps.push_back(Steps(1.00, 0.76)); //step 5
+	  genSteps.push_back(Steps(1.05, -0.47)); //step 6
+	  genSteps.push_back(Steps(1.25,-0.98)); //step 7
+	  genSteps.push_back(Steps(1.45,-0.55)); //step 8
+	  genSteps.push_back(Steps(1.75,-0.22)); //step 9
+	  genSteps.push_back(Steps(2.30,-0.06)); //step 10
 	  break;
 	}
 
@@ -107,30 +159,27 @@ class Stepper
 	  switch(step_energy)
 	    {
 	    case VIRIAL:
-	      if(step_i->step_energy == 0)
+	      if(step_i != genSteps.begin())
 		{
-		  if(step_i != genSteps.begin())
-		    {
-		      std::vector<Steps>::iterator step_j = step_i - 1;
-		      energy = - 1.0 / beta
-			* log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3) - pow((*(step_i - 1)).step_radius, 3)))
-			      * integrator_Simpson(&partition_Function,
-						   step_i->step_radius,
-						   step_j->step_radius,
-						   100));
-		    }
-		  else
-		    {
- 		      energy = - 1.0 / beta
-			* log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3)))
-			      * integrator_Simpson(&partition_Function,
-						   step_i->step_radius,
-						   ZERO,
-						   100));
-		      //energy = 100;
-		    }
-		  step_i->step_energy = energy;
+		  std::vector<Steps>::iterator step_j = step_i - 1;
+		  energy = - 1.0 / beta
+		    * log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3) - pow((*(step_i - 1)).step_radius, 3)))
+			  * integrator_Simpson(&partition_Function,
+					       step_i->step_radius,
+					       step_j->step_radius,
+					       100));
 		}
+	      else
+		{
+		  energy = - 1.0 / beta
+		    * log(3.0 / ( 4.0 * M_PI * (pow(step_i->step_radius, 3)))
+			  * integrator_Simpson(&partition_Function,
+					       step_i->step_radius,
+					       ZERO,
+					       100));
+		  energy = 500;
+		}
+	      step_i->step_energy = energy;
 	      break;
 	    case ENERGY:
 	      if(step_i != genSteps.begin())
@@ -198,6 +247,8 @@ class Stepper
 		  energy = expected_Force(step_i->step_radius);
 		}
 	      step_i->step_energy = energy;
+	      break;
+	    case CHAPELA_HEIGHT:
 	      break;
 	    }
 	}

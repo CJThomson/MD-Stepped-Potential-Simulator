@@ -1,11 +1,11 @@
 //----Program Includes----
 #include "Declares.h" //all includes and function declares for event sim
 //Physical Properties:
-double density = 0.85;
-double temperature = 1.34; //temperature of the system
+double density = 0.8;
+double temperature = 1.5; //temperature of the system
 //Simulation:
-int numberParticles = 256; //number of particles
-const int numberEvents = 1.5e+6;
+int numberParticles = 864; //number of particles
+const int numberEvents = 10e+6;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
 int number_of_runs = 1;
@@ -16,7 +16,7 @@ const bool initFile = false; //use an init file instead of random generated valu
 const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
-int no_of_steps = 10;
+int no_of_steps = 500;
 double r_cutoff = 3.0;
 
 //Thermostat:
@@ -37,14 +37,14 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::ENERGY;
-Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
+Stepper::StepHeight height_type = Stepper::VIRIAL;
+Stepper::StepWidth width_type = Stepper::EVEN_ENERGY;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties
-const int startSampling = 5e+5; //step number to start taking samples
+const int startSampling = 3e+6; //step number to start taking samples
 const int sample_interval = 1;
 const double rdf_interval = 0.001;
 const int diff_interval = 20;
@@ -53,7 +53,7 @@ int rdfReadings = 0;
 double startSampleTime = 0;
 double currentK = 0;
 double currentU = 0;
-const int noBins = 300; //number of radial bins
+const int noBins = 1000; //number of radial bins
 //const double maxR  = 0.5 * std::min(systemSize.x, std::min(systemSize.y, systemSize.z)); //maximum radial distribution considered;
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
@@ -96,7 +96,7 @@ int main()
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  initSteps(); //step up system steps
-	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps);
+	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, 0.05);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
@@ -116,6 +116,7 @@ int main()
 	  for(vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
 	    avgResults += *result;
 	  avgResults *= 1.0 / number_of_runs;
+	  cout << eventCount << " events were simulated taking a time of " << t << endl;
 	  cout << "\rAverage Results" << endl;
 	  cout << "Temperature: " << avgResults.temperature << endl;
 	  cout << "Pressure (discont): " << avgResults.pressure_d << endl;
@@ -176,6 +177,7 @@ void resetSim()
 void runSimulation(vector<Results>& results, size_t runNumber)
 {
   //variable declarations
+  bool startSample = false;
   vector<CParticle> particles; //create a vector to store particle info
   vector<vector<eventTimes> > particleEL;
   vector<eventTimes> masterEL; //create a vector to store collision times
@@ -238,7 +240,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 
   cout << "Starting Simulation with " << numberParticles << " particles with a density of "
        << density << " at a target temperature of " << temperature << " in a box with side length of " << length << endl;
-  for(;eventCount < numberEvents;)
+  //for(;eventCount < numberEvents;)
+  for(;t < 50;)
     {
       bool collEvent = false;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
@@ -362,11 +365,12 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  if(eventCount % psteps == 0) //output file logging
 	    logger.write_Location(particles, t, systemSize);
 
-	  if(eventCount == startSampling)
+	  if(t > 20 && startSample)
 	    {
 	      // store particle positions when starting to take readings
 	      for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
 		particle->r0 = particle->r;
+	      startSample = true;
 	      startSampleTime = t;
 	      TA_v = 0; 
 	      TA_T = 0;
@@ -376,7 +380,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  if(eventCount % diff_interval == 0)
 	    coDiff.push_back(Diffusion(calcDiff(particles, t),t));
 
-	  if(eventCount % (int) ceil(numberEvents / 1000) == 0)
+	  if(eventCount % 1000 == 0)
 	    //if(eventCount % 1 == 0)
 	    {
 	      double E_temp = TA_T / (t - startSampleTime);
@@ -385,7 +389,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	      double E_press_coll = mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
 
 
-	      cout << "\rN:" << eventCount << "/" << numberEvents 
+	      cout << "\rN:" << eventCount / 1000 << "k"
+		   << " t: " << t
 		   << " T: " << currentK / (1.5 * numberParticles)
 		   << " <T>: " << E_temp
 		   << " U: " << currentU
@@ -1023,7 +1028,6 @@ void initSteps()
 {
   steps.clear();
   //Steps from Chepela et al, Case 6
-  //steps.push_back(Steps(1.00,500)); //step 0
   steps.push_back(Steps(0.80,66.74)); //step 0
   steps.push_back(Steps(0.85,27.55)); //step 1
   steps.push_back(Steps(0.90, 10.95)); //step 3
@@ -1035,27 +1039,6 @@ void initSteps()
   steps.push_back(Steps(1.75,-0.22)); //step 9
   steps.push_back(Steps(2.30,-0.06)); //step 10
 
-  /*steps.push_back(Steps(0.966872, 4.7605 )); //step 0
-  steps.push_back(Steps(1.20474, -0.75868)); //step 1
-  steps.push_back(Steps(1.38391, -0.670859)); //step 3
-  steps.push_back(Steps(1.55901, -0.358529)); //step 4
-  steps.push_back(Steps(1.7183, -0.19731)); //step 5
-  steps.push_back(Steps(1.86003, -0.118788)); //step 6
-  steps.push_back(Steps(1.98651, -0.0777275)); //step 7
-  steps.push_back(Steps(2.10054, -0.0542997)); //step 8
-  steps.push_back(Steps(2.20443, -0.0398837)); //step 9
-  steps.push_back(Steps(2.3, -0.0304544)); //step 10*/
-
-  /*steps.push_back(Steps(0.966872, 2.08615)); //step 0
-  steps.push_back(Steps(1.20474, -0.813607)); //step 1
-  steps.push_back(Steps(1.38391,   -0.675784)); //step 3
-  steps.push_back(Steps(1.55901, -0.360147)); //step 4
-  steps.push_back(Steps(1.7183, -0.197681)); //step 5
-  steps.push_back(Steps(1.86003, -0.118882)); //step 6
-  steps.push_back(Steps(1.98651, -0.0777557)); //step 7
-  steps.push_back(Steps(2.10054,-0.0543097)); //step 8
-  steps.push_back(Steps(2.20443, -0.0304544)); //step 9
-  steps.push_back(Steps(2.3, -0.0304544)); //step 10*/
 
 
 }
@@ -1184,7 +1167,8 @@ void freeStream(double dt)
   double temp_temperature = currentK / (1.5 * numberParticles);
   TA_T += temp_temperature * dt;
   TA_U += currentU / numberParticles * dt;
-  if(eventCount > startSampling)
+  //if(eventCount > startSampling)
+  if(t > 20)
     {
       if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
       // = Mean Free Time
