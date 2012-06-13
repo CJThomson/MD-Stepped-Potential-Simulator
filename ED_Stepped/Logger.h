@@ -55,12 +55,12 @@ class Logger
   }
 
   void write_RadDist (double rdfd[], int index, double deltaR,
-		      double rho, double T, double n)
+		      double rho, double T, double n, double stepInt = -1)
   {
     std::ofstream grLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "grLog " << rho << " - " << T << " - " << n << "-stepped.dat";
+    fileName << "grLog " << rho << " - " << T << " - " << n << " - " << stepInt <<"-stepped.dat";
     outfileName = fileName.str();
     grLog.open(outfileName.c_str());
     for(int i = 0; i < index; ++i)
@@ -68,12 +68,14 @@ class Logger
     grLog.close();
   }
 
-  void write_Steps(std::vector<Steps>& steps, double T, double rho, double n, Stepper::StepHeight type)
+  void write_Steps(std::vector<Steps>& steps, double T, double rho, double n, 
+		   Stepper::StepHeight type, double stepInt= -1)
   {
     std::ofstream stepLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "stepLog " << rho << " - " << T << " - " << n << " - " << type << "-stepped.dat";
+    fileName << "stepLog " << rho << " - " << T << " - " << n << " - " << type 
+	     << " - " << stepInt << "-stepped.dat";
     outfileName = fileName.str();
     stepLog.open(outfileName.c_str());
     for(std::vector<Steps>::iterator i = steps.begin(); i != steps.end(); ++i)
@@ -82,12 +84,13 @@ class Logger
       }
     stepLog.close();
   }
-  void write_contRDF(std::vector<std::pair<double, double> >& contRDF, double rho, double T, double n)
+  void write_contRDF(std::vector<std::pair<double, double> >& contRDF, double rho, 
+		     double T, double n, double stepInt = -1)
   {
     std::ofstream grLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "contRDFLog " << rho << " - " << T << " - " << n << "-stepped.dat";
+    fileName << "contRDFLog " << rho << " - " << T << " - " << n << " - " << stepInt <<"-stepped.dat";
     outfileName = fileName.str();
     grLog.open(outfileName.c_str());
     for(std::vector<std::pair<double, double> >::iterator i = contRDF.begin(); i != contRDF.end(); ++i)
@@ -96,12 +99,13 @@ class Logger
       }
     grLog.close();
   }
-  void write_ICF(std::vector<std::pair<double, double> >& icf, double rho, double T, double n)
+  void write_ICF(std::vector<std::pair<double, double> >& icf, double rho, 
+		 double T, double n, double stepInt = -1)
   {
     std::ofstream icfLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "ICFLog " << rho << " - " << T << " - " << n << "-stepped.dat";
+    fileName << "ICFLog " << rho << " - " << T << " - " << n << " - " << stepInt <<"-stepped.dat";
     outfileName = fileName.str();
     icfLog.open(outfileName.c_str());
     for(std::vector<std::pair<double, double> >::iterator i = icf.begin(); i != icf.end(); ++i)
@@ -126,7 +130,7 @@ class Logger
     initLog.close();
   }
 
-  void write_Results(std::vector<Results>& results, double rho, double T, int n)
+  void write_Results(std::vector<Results>& results, double rho, double T, int n, double stepInt = -1)
   {
     std::ofstream resultLog;
     std::ostringstream fileName;

@@ -48,7 +48,7 @@ const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions
 const int startSampling = 3e+6; //step number to start taking samples
 const int sample_interval = 1;
 const double rdf_interval = 0.001;
-const int diff_interval = 20;
+const int diff_interval = 2e6;
 int readingsTaken = 0;
 int rdfReadings = 0;
 double startSampleTime = 0;
@@ -98,7 +98,7 @@ int main()
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  initSteps(); //step up system steps
 	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
-	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
+	  logger.write_Steps(steps, temperature, density, numberParticles, height_type, energyInt);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
@@ -124,7 +124,7 @@ int main()
 	  cout << "Pressure (cont): " << avgResults.pressure_c << endl;
 	  cout << "Potential Energy (discont): " << avgResults.potential_d << endl;
 	  cout << "Potential Energy (cont): " << avgResults.potential_c << endl;
-	  logger.write_Results(results, density, temperature, numberParticles);
+	  logger.write_Results(results, density, temperature, numberParticles, energyInt);
 	}
       else if(input == "temperature")
 	cin >> temperature;
@@ -468,9 +468,9 @@ void runSimulation(vector<Results>& results, size_t runNumber)
       }
     }
   cout << "\rWriting Results...";
-  logger.write_contRDF(rdf_c, density, temperature, numberParticles);
-  logger.write_ICF(icf, density, temperature, numberParticles);
-  logger.write_RadDist(TA_rdf_d, noBins, deltaR, density, temperature, numberParticles); //write radial distribution file
+  logger.write_contRDF(rdf_c, density, temperature, numberParticles, energyInt);
+  logger.write_ICF(icf, density, temperature, numberParticles, energyInt);
+  logger.write_RadDist(TA_rdf_d, noBins, deltaR, density, temperature, numberParticles, energyInt); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
   if(overwriteInit)

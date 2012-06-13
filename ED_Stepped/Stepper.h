@@ -134,6 +134,7 @@ class Stepper
 		    if(find(genSteps.begin(), genSteps.end(), Steps(*j,-polynomial[0])) == genSteps.end())
 		      genSteps.push_back(Steps(*j, -polynomial[0]));
 	      }
+	    genSteps.push_back(Steps(r_cutoff, 0));
 	    sort(genSteps.begin(), genSteps.end());
 	  }
 	  break;
