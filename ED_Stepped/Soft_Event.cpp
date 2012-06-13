@@ -5,7 +5,7 @@ double density = 0.8;
 double temperature = 1.5; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int numberEvents = 10e+6;
+const int numberEvents = 1.5e+6;
 int eventCount = 0;
 double length = pow(numberParticles/density, 1.0 / 3.0);
 int number_of_runs = 1;
@@ -16,7 +16,8 @@ const bool initFile = false; //use an init file instead of random generated valu
 const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
-int no_of_steps = 500;
+int no_of_steps = 10;
+double energyInt = 0.5;
 double r_cutoff = 3.0;
 
 //Thermostat:
@@ -38,13 +39,13 @@ double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
 Stepper::StepHeight height_type = Stepper::VIRIAL;
-Stepper::StepWidth width_type = Stepper::EVEN_ENERGY;
+Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties
-const int startSampling = 3e+6; //step number to start taking samples
+const int startSampling = 0.5e+6; //step number to start taking samples
 const int sample_interval = 1;
 const double rdf_interval = 0.001;
 const int diff_interval = 20;
@@ -96,7 +97,7 @@ int main()
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  initSteps(); //step up system steps
-	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, 0.05);
+	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
@@ -137,6 +138,8 @@ int main()
 	cin >> r_cutoff;
       else if(input == "nosteps")
 	cin >> no_of_steps;
+      else if(input == "energystep")
+	cin >> energyInt;
       else
 	cout << "Invalid input" << endl;
     }
@@ -240,8 +243,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 
   cout << "Starting Simulation with " << numberParticles << " particles with a density of "
        << density << " at a target temperature of " << temperature << " in a box with side length of " << length << endl;
-  //for(;eventCount < numberEvents;)
-  for(;t < 50;)
+  for(;eventCount < numberEvents;)
+  //for(;t < 50;)
     {
       bool collEvent = false;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
@@ -494,7 +497,7 @@ int calcCell(CVector3 r)
 
 int calcNewCell(CParticle& particle)
 {
-  cerr << "here" << endl;
+  //cerr << "here" << endl;
   int cells2 = noCells * noCells;
   int cell[3];
   cell[0] = floor(particle.cellNo / cells2);
@@ -502,10 +505,10 @@ int calcNewCell(CParticle& particle)
   cell[2] = particle.cellNo % noCells;
   int sign = (particle.v[particle.nextCell] < 0) ? -1 : 1;
   cell[particle.nextCell] += sign;
-  cerr << cell[particle.nextCell] << endl;
-  cerr << lrint(cell[particle.nextCell] / noCells) << endl;
+  //cerr << cell[particle.nextCell] << endl;
+  //cerr << lrint(cell[particle.nextCell] / noCells) << endl;
   cell[particle.nextCell] -= floor((double)cell[particle.nextCell] / noCells) * noCells;
-  cerr << cell[particle.nextCell] << endl;
+  //cerr << cell[particle.nextCell] << endl;
   return cell[0] * noCells * noCells + cell[1] * noCells + cell[2];
 }
 double calcCellLeave(CParticle& particle)
@@ -521,10 +524,10 @@ double calcCellLeave(CParticle& particle)
   cell[0] = floor(particle.cellNo / cells2);
   cell[1] = floor((particle.cellNo % cells2) / noCells);
   cell[2] = particle.cellNo % noCells;
-   cerr << " = = = START = = =" << endl;
+  /*cerr << " = = = START = = =" << endl;
   cerr << particle.cellNo << endl;
   cerr << cellLength << endl;
-  cerr << "(" << cell[0] << ", " << cell[1] << ", " << cell[2] << ")" << endl;
+  cerr << "(" << cell[0] << ", " << cell[1] << ", " << cell[2] << ")" << endl;*/
   for(size_t i(0); i < 3; ++i)
     {
       if(particle.v[i] < 0)
@@ -538,10 +541,10 @@ double calcCellLeave(CParticle& particle)
 	  t_min[i] = distance / particle.v[i];
 	}
     }
-  cerr << "b=(" << boundary[0] << ", " << boundary[1] << ", " << boundary[2] << ")" << endl;
+  /*cerr << "b=(" << boundary[0] << ", " << boundary[1] << ", " << boundary[2] << ")" << endl;
   cerr << "l=(" << location[0] << ", " << location[1] << ", " << location[2] << ")" << endl;
   cerr << "v=(" << particle.v[0] << ", " << particle.v[1] << ", " << particle.v[2] << ")" << endl;
-  cerr << "v=(" << t_min[0] << ", " << t_min[1] << ", " << t_min[2] << ")" << endl;
+  cerr << "t=(" << t_min[0] << ", " << t_min[1] << ", " << t_min[2] << ")" << endl;*/
   double tMin =  min(t_min[0], min(t_min[1], t_min[2]));
   if(t_min[0] == tMin)
     particle.nextCell = 0;
@@ -549,7 +552,7 @@ double calcCellLeave(CParticle& particle)
     particle.nextCell = 1;
   else if (t_min[2] == tMin)
     particle.nextCell = 2;
-
+  
   return tMin;
 }
 
@@ -1052,24 +1055,33 @@ void generateNeighbourCells(vector<set<int> >& NC)
       int xmain = floor(i / cells2);
       int ymain = floor((i % cells2) / noCells);
       int zmain = i % noCells;
+      cerr << "Cells neighbouring cell " << i << ": "; 
       for(int dx = -1; dx < 2; ++dx)
 	for(int dy = -1; dy < 2; ++dy)
 	  for(int dz = -1; dz < 2; ++dz)
 	    {
 	      int xnew = xmain + dx;
-	      if(xnew < 0) {xnew += noCells;}
-	      else if(xnew >= noCells) {xnew -= noCells;}
+	      if (xnew < 0) 
+		xnew += noCells;
+	      else if (xnew >= noCells)
+		xnew -= noCells;
 
 	      int ynew = ymain + dy;
-	      if(ynew < 0) {ynew += noCells;}
-	      else if(ynew >= noCells) {ynew -= noCells;}
+	      if (ynew < 0) 
+		ynew += noCells;
+	      else if (ynew >= noCells)
+		ynew -= noCells;
 
 	      int znew = zmain + dz;
-	      if(znew < 0) {znew += noCells;}
-	      else if(znew >= noCells) {znew -= noCells;}
-
+	      if (znew < 0) 
+		znew += noCells;
+	      else if (znew >= noCells)
+		znew -= noCells;
+	      cerr << "(" << xnew << ", " << ynew << ", " << znew << ") = ";
+	      cerr << xnew * cells2 + ynew * noCells + znew << " " ;
 	      NC[i].insert(xnew * cells2 + ynew * noCells + znew);
 	    }
+      cerr << endl;
     }
 }
 
@@ -1096,23 +1108,25 @@ void getEvent(CParticle& p1,
   updatePosition(p1);
   double t_min_sent = calcSentinalTime(p1); 
   pEvents[p1.particleNo].push_back(eventTimes(t_min_sent, p1.particleNo, -1, 0, eventTimes::SENTINAL));
-  /*uble t_min_NL = calcCellLeave(p1);
+  double t_min_NL = calcCellLeave(p1);
   pEvents[p1.particleNo].push_back(eventTimes(t_min_NL, p1.particleNo ,-1,0, eventTimes::NEIGHBOURCELL));
   for(it_NC = NC[p1.cellNo].begin(); it_NC != NC[p1.cellNo].end(); ++it_NC)
-  for(p2 = NL[*it_NC].begin(); p2 !=NL[*it_NC].end(); ++p2)*/
-  for(it_particle p2 = particles.begin(); p2 != particles.end(); ++p2)
     {
-      if (p1.particleNo == p2->particleNo) continue;
-      updatePosition(*p2);
-      eventTimes::EventType eventType;
-      double t_min_coll = calcCollisionTime(p1, *p2, eventType);
-      pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));
-      /*if (p1.particleNo == *p2) continue;
-      updatePosition(particles[*p2]);
-      eventTimes::EventType eventType;
-      double t_min_coll = calcCollisionTime(p1, particles[*p2], eventType);
-      pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, *p2, particles[*p2].collNo, eventType));
-      */
+    for(p2 = NL[*it_NC].begin(); p2 !=NL[*it_NC].end(); ++p2)
+      //for(it_particle p2 = particles.begin(); p2 != particles.end(); ++p2)
+      {
+	/*if (p1.particleNo == p2->particleNo) continue;
+	  updatePosition(*p2);
+	  eventTimes::EventType eventType;
+	  double t_min_coll = calcCollisionTime(p1, *p2, eventType);
+	  pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));*/
+	if (p1.particleNo == *p2) continue;
+	updatePosition(particles[*p2]);
+	eventTimes::EventType eventType;
+	double t_min_coll = calcCollisionTime(p1, particles[*p2], eventType);
+	pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, *p2, particles[*p2].collNo, eventType));
+	
+      }
     }
   events[p1.particleNo] = *min_element(pEvents[p1.particleNo].begin(), pEvents[p1.particleNo].end());
 }
@@ -1167,8 +1181,8 @@ void freeStream(double dt)
   double temp_temperature = currentK / (1.5 * numberParticles);
   TA_T += temp_temperature * dt;
   TA_U += currentU / numberParticles * dt;
-  //if(eventCount > startSampling)
-  if(t > 20)
+  if(eventCount > startSampling)
+    //if(t > 20)
     {
       if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
       // = Mean Free Time

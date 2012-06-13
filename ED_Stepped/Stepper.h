@@ -177,7 +177,7 @@ class Stepper
 					       step_i->step_radius,
 					       ZERO,
 					       100));
-		  energy = 500;
+		  //energy = 500;
 		}
 	      step_i->step_energy = energy;
 	      break;
