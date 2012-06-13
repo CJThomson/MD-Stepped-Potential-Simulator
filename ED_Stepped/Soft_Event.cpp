@@ -17,6 +17,7 @@ const bool overwriteInit = false; //create a new init file
 std::vector<Steps> steps; //create a vector to store step propeties
 const int noCells = 3;
 int no_of_steps = 500;
+double energyInt = 0.5;
 double r_cutoff = 3.0;
 
 //Thermostat:
@@ -96,7 +97,7 @@ int main()
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  initSteps(); //step up system steps
-	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, 0.05);
+	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type);
 	  cout << " Complete" << endl;
 	  vector<Results> results;
@@ -137,6 +138,8 @@ int main()
 	cin >> r_cutoff;
       else if(input == "nosteps")
 	cin >> no_of_steps;
+      else if(input == "energystep")
+	cin >> energyInt;
       else
 	cout << "Invalid input" << endl;
     }
