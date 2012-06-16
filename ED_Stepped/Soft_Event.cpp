@@ -42,7 +42,7 @@ Stepper::StepHeight height_type = Stepper::VIRIAL;
 Stepper::StepWidth width_type = Stepper::EXPECTEDFORCE;
 //Logging:
 const int psteps = 50; //frequency of output to file
-const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
+const int writeOutLog = 1;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
 //Measuring Properties
 const int startSampling = 0.5e+6; //step number to start taking samples
@@ -320,7 +320,10 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	    if(writeOutLog >= 1)
 	      logger.outLog << "Particle "<< next_event.particle1 << " changed cell from " << p1.cellNo
 			    << " to " << newCell <<  " at time = "<< t<< endl;
-	    p1.cellNo = newCell;
+	    /*cerr << "Particle "<< next_event.particle1 << " changed cell from " << p1.cellNo
+	      << " to " << newCell <<  " at time = "<< t<< endl;*/
+	    particles[next_event.particle1].cellNo = newCell;
+	    //	    cerr <<"Particle "<< next_event.particle1 << " is now in cell " << particles[next_event.particle1].cellNo << endl;
 	    getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 	    break;
 	  }
@@ -497,7 +500,6 @@ int calcCell(CVector3 r)
 
 int calcNewCell(CParticle& particle)
 {
-  //cerr << "here" << endl;
   int cells2 = noCells * noCells;
   int cell[3];
   cell[0] = floor(particle.cellNo / cells2);
@@ -505,10 +507,9 @@ int calcNewCell(CParticle& particle)
   cell[2] = particle.cellNo % noCells;
   int sign = (particle.v[particle.nextCell] < 0) ? -1 : 1;
   cell[particle.nextCell] += sign;
-  //cerr << cell[particle.nextCell] << endl;
-  //cerr << lrint(cell[particle.nextCell] / noCells) << endl;
-  cell[particle.nextCell] -= floor((double)cell[particle.nextCell] / noCells) * noCells;
-  //cerr << cell[particle.nextCell] << endl;
+
+  cell[particle.nextCell] -= floor((double)cell[particle.nextCell] / noCells) * noCells;  
+  //cerr << "particle " << particle.particleNo << " is moving to cell " << cell[0] * noCells * noCells + cell[1] * noCells + cell[2]<<endl;
   return cell[0] * noCells * noCells + cell[1] * noCells + cell[2];
 }
 double calcCellLeave(CParticle& particle)
@@ -521,6 +522,7 @@ double calcCellLeave(CParticle& particle)
   double cellLength = length / noCells;
   int cells2 = noCells * noCells;
   int cell[3];
+  //cerr << "particle " << particle.particleNo << " is in cell " << particle.cellNo << endl;
   cell[0] = floor(particle.cellNo / cells2);
   cell[1] = floor((particle.cellNo % cells2) / noCells);
   cell[2] = particle.cellNo % noCells;
@@ -1055,7 +1057,6 @@ void generateNeighbourCells(vector<set<int> >& NC)
       int xmain = floor(i / cells2);
       int ymain = floor((i % cells2) / noCells);
       int zmain = i % noCells;
-      cerr << "Cells neighbouring cell " << i << ": "; 
       for(int dx = -1; dx < 2; ++dx)
 	for(int dy = -1; dy < 2; ++dy)
 	  for(int dz = -1; dz < 2; ++dz)
@@ -1077,11 +1078,8 @@ void generateNeighbourCells(vector<set<int> >& NC)
 		znew += noCells;
 	      else if (znew >= noCells)
 		znew -= noCells;
-	      cerr << "(" << xnew << ", " << ynew << ", " << znew << ") = ";
-	      cerr << xnew * cells2 + ynew * noCells + znew << " " ;
 	      NC[i].insert(xnew * cells2 + ynew * noCells + znew);
 	    }
-      cerr << endl;
     }
 }
 
@@ -1104,6 +1102,7 @@ void getEvent(CParticle& p1,
 {
   set<int>::iterator p2;
   set<int>::iterator it_NC;
+  //cerr << "particle " << p1.particleNo << " is in cell " << p1.cellNo << endl;
   pEvents[p1.particleNo].clear();
   updatePosition(p1);
   double t_min_sent = calcSentinalTime(p1); 
