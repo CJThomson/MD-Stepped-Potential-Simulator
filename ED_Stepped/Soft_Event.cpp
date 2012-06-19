@@ -59,6 +59,7 @@ const int noBins = 1000; //number of radial bins
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over
+std::vector<std::pair<unsigned int, unsigned int> > stepCount;
 
 //----Time Averages----
 double TA_rdf_d[noBins];
@@ -75,7 +76,6 @@ double TA_p2 = 0;
 double TA_tavg = 0;
 double TA_tavg2 = 0;
 Logger logger; //create an instance of the logger class
-
 std::map<std::pair<int, int>, int> collStep;
 using namespace std;
 int main()
@@ -99,6 +99,7 @@ int main()
 	  initSteps(); //step up system steps
 	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type, energyInt);
+	  stepCount.resize(steps.size());
 	  cout << " Complete" << endl;
 	  vector<Results> results;
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
@@ -124,7 +125,7 @@ int main()
 	  cout << "Pressure (cont): " << avgResults.pressure_c << endl;
 	  cout << "Potential Energy (discont): " << avgResults.potential_d << endl;
 	  cout << "Potential Energy (cont): " << avgResults.potential_c << endl;
-	  logger.write_Results(results, density, temperature, numberParticles, energyInt);
+	  logger.write_Results(results, density, temperature, numberParticles, eventCount, energyInt);
 	}
       else if(input == "temperature")
 	cin >> temperature;
@@ -204,8 +205,6 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   neighbourCell.resize(cells3);
   generateNeighbourCells(neighbourCell);
   generateNeighbourList(neighbourList, particles);
-
-  cout << "\rInitialising Steps...";
 
   if(length * 0.5 < steps[steps.size()-1].step_radius)
     cout << "Warning system size less than cut-off radius" << endl;
@@ -426,7 +425,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   double E_pot = TA_U / (t - startSampleTime);
   double E_press = density * E_temp 
     + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-  results.push_back(Results(E_temp, E_press, cont_P, E_pot, cont_U));
+  results.push_back(Results(E_temp, E_press, cont_P, E_pot, cont_U, eventCount));
   //Output time averages
   if(false)
     {
@@ -473,6 +472,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   logger.write_RadDist(TA_rdf_d, noBins, deltaR, density, temperature, numberParticles, energyInt); //write radial distribution file
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
+  logger.write_CollCount(stepCount, density, temperature, numberParticles, energyInt);
   if(overwriteInit)
     logger.write_Init(particles); //write final values to log to allow
   cout << "\rAll Tasks Complete";
@@ -814,9 +814,15 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	it_map = collStep.find(pair<int,int>(p1, p2)); //find collision state of particles
 	double dU = 0;
 	if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
-	  dU = -steps.back().step_energy; //energy is the outermost step height
+	  {
+	    dU = -steps.back().step_energy; //energy is the outermost step height
+	    ++stepCount[steps.size() - 1].first;
+	  }
 	else //if not outside then energy change is the difference in step heights
-	  dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
+	  {
+	    dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
+	    ++stepCount[it_map->second].first;
+	  }
 
 	if(writeOutLog >= 2) //if writing full outlog
 	  {
@@ -864,10 +870,11 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
       {
 	it_map = collStep.find(pair<int, int> (p1, p2));
 	double dU = 0;
+	++stepCount[it_map->second].second;
 	if(it_map->second != steps.size() - 1)
-	  dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
+	    dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
 	else
-	  dU = steps[it_map->second].step_energy;
+	    dU = steps[it_map->second].step_energy;
 
 	if(writeOutLog >=2)
 	  {

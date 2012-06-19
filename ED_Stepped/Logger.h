@@ -130,24 +130,39 @@ class Logger
     initLog.close();
   }
 
-  void write_Results(std::vector<Results>& results, double rho, double T, int n, double stepInt = -1)
+  void write_CollCount(std::vector<std::pair<unsigned int, unsigned int> >& eCount, double rho, 
+		       double T, double n, double stepInt = -1)
+  {
+    std::ofstream collLog;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << "collCountLog " << rho << " - " << T << " - " << n << " - " << stepInt <<"-stepped.dat";
+    outfileName = fileName.str();
+    collLog.open(outfileName.c_str());
+    for(std::vector<std::pair<unsigned int, unsigned int> >::iterator i = eCount.begin(); 
+	i != eCount.end(); ++i)
+      {
+	collLog << i->first << "\t" << i->second << std::endl;
+      }
+    collLog.close();
+  }
+
+  void write_Results(std::vector<Results>& results, double rho, double T, int n, int noEvents, double stepInt = -1)
   {
     std::ofstream resultLog;
     std::ostringstream fileName;
     std::string outfileName;
-    fileName << "Results " << rho << " - " << T << "-" << n << "-stepped.dat";
+    fileName << "Results " << rho << " - " << T << "-" << n << " - " << stepInt << "-stepped.dat";
     outfileName = fileName.str();
     resultLog.open(outfileName.c_str());
-    Results avgResults;
     for(std::vector<Results>::iterator result = results.begin(); result != results.end(); ++result)
       {
-
 	resultLog << result->temperature << "\t"
+		  << result->noEvents << "\t"
 		  << result->pressure_d << "\t"
 		  << result->pressure_c << "\t"
 		  << result->potential_d << "\t"
-		  << result->potential_c<< std::endl;
-	avgResults += *result;
+		  << result->potential_c << std::endl;
       }
 
     resultLog.close();

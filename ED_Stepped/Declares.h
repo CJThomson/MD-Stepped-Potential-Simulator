@@ -9,10 +9,10 @@ Diffusion(double D, double t):time(t),coDiff(D){ } //Constructor
 struct Results
 {
   Results() {
-    temperature = 0; pressure_d = 0; pressure_c = 0; potential_d =0; potential_c = 0;
+    temperature = 0; pressure_d = 0; pressure_c = 0; potential_d = 0; potential_c = 0; noEvents = 0;
   }
-Results(double T, double Pd, double Pc, double Ud, double Uc) :
-  temperature(T), pressure_d(Pd), pressure_c(Pc), potential_d(Ud), potential_c(Uc) {}
+Results(double T, double Pd, double Pc, double Ud, double Uc, int noE) :
+  temperature(T), pressure_d(Pd), pressure_c(Pc), potential_d(Ud), potential_c(Uc), noEvents(noE){}
   const Results& operator += (const Results &r)
   {
     temperature += r.temperature;
@@ -20,6 +20,7 @@ Results(double T, double Pd, double Pc, double Ud, double Uc) :
     pressure_c += r.pressure_c;
     potential_d += r.potential_d;
     potential_c += r.potential_c;
+    noEvents += r.noEvents;
     return *this;
   }
   const Results& operator *= (const double &a)
@@ -29,6 +30,7 @@ Results(double T, double Pd, double Pc, double Ud, double Uc) :
     pressure_c *= a;
     potential_d *= a;
     potential_c *= a;
+    noEvents *= a;
     return *this;
   }
   double temperature;
@@ -36,6 +38,7 @@ Results(double T, double Pd, double Pc, double Ud, double Uc) :
   double pressure_c;
   double potential_d;
   double potential_c;
+  int noEvents;
 };
 //----Program Includes----
 #include <vector> //allows use of vector (STL structure)

@@ -127,7 +127,7 @@ class Stepper
 	    std::vector<double> roots;
 	    for(size_t i(0); i < number_of_steps; ++i)
 	      {
-		polynomial[0] = - (-1 + energyStep * i);
+		polynomial[0] = - (-1 + 0.5 * energyStep  + energyStep * i);
 		rootFinder.rootFind(polynomial, roots, 1e-5, 1e2);
 		for(std::vector<double>::iterator j = roots.begin(); j != roots.end(); ++j)
 		  if(*j >= 0 && *j < r_cutoff)
