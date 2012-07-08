@@ -2,12 +2,12 @@
 #include "Declares.h" //declarations for this program
 
 //Physical Properties:
-double density = 0.85;
-double temperature = 4.6; //temperature of the system
+double density = 0.8;
+double temperature = 1.5; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 50000; //length of the Simulation
-const double dt = 0.005; //length of ticme interval
+const int simTime = 5000; //length of the Simulation
+const double dt = 0.01; //length of ticme interval
 double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
 CVector3 systemSize(length, length, length); //size of the system
@@ -40,7 +40,7 @@ const int sample_interval = 10;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 20000; //number of readings to take
+const int startSampling = 2000; //number of readings to take
 double readingTime = 0;
 const int noBins = 600; //number of radial bins
 const double maxR = 3.0;

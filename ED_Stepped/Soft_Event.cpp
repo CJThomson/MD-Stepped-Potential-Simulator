@@ -27,7 +27,7 @@ size_t thermoCount = 0; //counter to change thermostat rate
 size_t thermoLastUpdate = 0;
 double thermoMeanFreeTime = 0.0005;
 //const int thermoOff =3.5e+6;
-const int thermoOff = numberEvents;
+const int thermoOff = std::numeric_limits<int>::max();
 double thermoSetting = 0.05;
 
 //Reduced Unit Definitions
@@ -106,7 +106,7 @@ int main()
 	  for(size_t runs (0); runs < number_of_runs; ++runs)
 	    {
 	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;
-	      
+                      
 	      resetSim();
 	      runSimulation(results, runs);
 	    }
@@ -287,8 +287,8 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 				  << " KEnergy " << calcKinetic(particles)
 				  << endl;
 		  }
-		
-		double temp_pFlux = calcVelocity(particles, next_event);		
+                                
+		double temp_pFlux = calcVelocity(particles, next_event);                            
 		TA_v += temp_pFlux;
 		TA_v2 += temp_pFlux * temp_pFlux;
 
@@ -390,9 +390,14 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	      double E_press_ideal = density * E_temp;
 	      double E_press_coll = mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
 
-
-	      cout << "\rN:" << eventCount / 1000 << "k"
-		   << " t: " << t
+	      if(eventCount > 2E6)
+		cout << "\rN:" << eventCount / 1e6 << "M";
+	      else
+		cout << "\rN:" << eventCount / 1000 << "k";
+	      if(thermostat)
+		cout << "-T";
+		  
+	      cout << " t: " << t
 		   << " T: " << currentK / (1.5 * numberParticles)
 		   << " <T>: " << E_temp
 		   << " U: " << currentU
@@ -401,7 +406,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 		//<< " <P_coll>: " << E_press_coll
 		// << " TE: " << currentK + currentU
 		   << flush;
-	      
+                      
 	    }
 	}
     }
@@ -436,32 +441,32 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
 	double sd_freeTime = sqrt(fabs(freeTime2 - freeTime * freeTime));
 	cout << "Mean free time: " << freeTime << " (" << sd_freeTime << ")" << endl;
-	
+                
 	// = Potential Energy
 	double E_pot = TA_U / (t - startSampleTime);
 	double E_pot2 = TA_U2 / (t - startSampleTime);
 	double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
 	cout << "Ud: " << E_pot << "(" << sd_pot << ")" << endl;
 	cout << "Uc: " << cont_U << endl;
-	
+                
 	// = Temperature
 	double E_temp = TA_T / (t - startSampleTime);
 	double E_temp2 = TA_T2 / (t - startSampleTime);
 	double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
 	cout << "T: " << E_temp << "(" << sd_temp << ")" << endl;
-	
+                
 	// = Momentum flux
 	double E_mf = TA_v / readingsTaken;
 	double E_mf2 = TA_v2 / readingsTaken;
 	double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
 	cout << "<r.v> " << E_mf << "(" << sd_mf << ")" << endl;
-	
+                
 	// = Pressure
 	double E_press = density * E_temp 
 	  + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
 	double sd_press = sqrt( pow(density * sd_temp, 2) 
 				+ pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
-	
+                
 	cout << "Pd: " << E_press  << "(" << sd_press << ")" << endl;
 	cout << "Pc: " << cont_P << endl;
       }
@@ -480,91 +485,104 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 
 void applyBC(CVector3& pos)
 {
+  //Function Description: Apply boundary conditions to a vector, then return the vector
   for (size_t i(0); i < 3; ++i)
-    pos[i] -= lrint(pos[i] / systemSize[i])*systemSize[i];
+    pos[i] -= lrint(pos[i] / systemSize[i]) * systemSize[i];
 }
 
 int calcCell(CVector3 r)
 {
-  int cell[3] = {0,0,0};
-  double cellSize = length / noCells;
-  applyBC(r);
-  for(size_t i(0); i < 3; ++i)
-    cell[i] = floor((r[i] + 0.5 * systemSize[i]) / cellSize);
+  //Function Description: Calculate the cell a particle is currently in
+  int cell[3] = {0,0,0}; //define an array for the cell
+  double cellSize = length / noCells; //calculate the size of the cell
+  applyBC(r); //apply BC on the particle's position
+  //loop through all the dimensions and calculate how many cells in each direction the particle is in
+  for(size_t i(0); i < 3; ++i) 
+    cell[i] = floor((r[i] + 0.5 * systemSize[i]) / cellSize); //+0.5systemsize to move from origin at centre to origin at edge
 
+  //calculate the cell number and return it
+  //cell number is cell_in_x * noofcells**2 + cell_in_y * noofcells + cell_in_z
   return cell[0] * noCells * noCells + cell[1] * noCells + cell[2];
 }
 
 int calcNewCell(CParticle& particle)
 {
-  cerr << "here" << endl;
-  int cells2 = noCells * noCells;
-  int cell[3];
-  cell[0] = floor(particle.cellNo / cells2);
+  //Function Description: Calculate the new cell that a particle is moving/has moved [[FIX]]
+  int cells2 = noCells * noCells; //define the square of the number of cells
+  int cell[3]; //define an array for the cell number in each direction
+  //calculate the cell number in each direction
+  cell[0] = floor(particle.cellNo / cells2); 
   cell[1] = floor((particle.cellNo % cells2) / noCells);
   cell[2] = particle.cellNo % noCells;
-  int sign = (particle.v[particle.nextCell] < 0) ? -1 : 1;
+  //define the direction that the particle is going into
+  int sign = (particle.v[particle.nextCell] < 0) ? -1 : 1; 
+  //add/subtract 1 from the cell to give the next cell (the cell the particle is heading into)
   cell[particle.nextCell] += sign;
-  cerr << cell[particle.nextCell] << endl;
-  cerr << lrint(cell[particle.nextCell] / noCells) << endl;
+  // apply periodic boundary conditions to the cell to eliminate cell number being <0 or >nocells
   cell[particle.nextCell] -= floor((double)cell[particle.nextCell] / noCells) * noCells;
-  cerr << cell[particle.nextCell] << endl;
+ 
+  //return the new particle cell
+  //[SHOULD USE A CALC CELL NUMBER FUNCTION??? ALONG WITH calcCell]
   return cell[0] * noCells * noCells + cell[1] * noCells + cell[2];
 }
 double calcCellLeave(CParticle& particle)
 {
-  updatePosition(particle);
-  CVector3 location = particle.r;
-  applyBC(location);
-  double t_min[3] = {HUGE_VAL, HUGE_VAL, HUGE_VAL};
-  double boundary[3] = {0,0,0};
-  double cellLength = length / noCells;
-  int cells2 = noCells * noCells;
-  int cell[3];
-  cell[0] = floor(particle.cellNo / cells2);
+  //Function Description: Calculate the time when a particle is going to leave the cell they are currently in	
+  updatePosition(particle); //Update the position a particle is in to their present location
+  CVector3 location = particle.r; //create a copy of the particle's position
+  applyBC(location); //apply PBC to the copy of the particle's position (hence needing the copy)
+  double t_min[3] = {HUGE_VAL, HUGE_VAL, HUGE_VAL}; //define the particle leave time as infinity in each direction
+  double boundary[3] = {0,0,0}; //define the boundary the particle is leaving through
+  double cellLength = length / noCells; //calculate the length of each cell side
+  int cells2 = noCells * noCells; //calculate the square of the number of cells
+  int cell[3]; //define an array of the cellno in each direction
+  //calculate the cellno in each direction
+  cell[0] = floor(particle.cellNo / cells2); 
   cell[1] = floor((particle.cellNo % cells2) / noCells);
   cell[2] = particle.cellNo % noCells;
-   cerr << " = = = START = = =" << endl;
-  cerr << particle.cellNo << endl;
-  cerr << cellLength << endl;
-  cerr << "(" << cell[0] << ", " << cell[1] << ", " << cell[2] << ")" << endl;
-  for(size_t i(0); i < 3; ++i)
+  for(size_t i(0); i < 3; ++i) //loop through all the dimensions
     {
-      if(particle.v[i] < 0)
-	boundary[i] = cell[i] * cellLength - 0.5 * length;
+      if(particle.v[i] < 0) //if the particle is going "backwards" 
+	//then the boundary is that of the cell the particle is in
+	boundary[i] = cell[i] * cellLength - 0.5 * length; 
       else if(particle.v[i] > 0)
+	//otherwise the boundar of the cell in "front" of the particle
 	boundary[i] = (cell[i] + 1) * cellLength - 0.5 * length;
 
-      if(particle.v[i] !=0)
+      if(particle.v[i] !=0) //if the particle velocity is not zero (if zero return an infinite time)
 	{
-	  double distance = boundary[i] - location[i];
-	  t_min[i] = distance / particle.v[i];
+	  double distance = boundary[i] - location[i]; //calculate the distance between particle position and boundary
+	  t_min[i] = distance / particle.v[i]; //time until the particle leaves is distance / velocity
 	}
     }
-  cerr << "b=(" << boundary[0] << ", " << boundary[1] << ", " << boundary[2] << ")" << endl;
-  cerr << "l=(" << location[0] << ", " << location[1] << ", " << location[2] << ")" << endl;
-  cerr << "v=(" << particle.v[0] << ", " << particle.v[1] << ", " << particle.v[2] << ")" << endl;
-  cerr << "v=(" << t_min[0] << ", " << t_min[1] << ", " << t_min[2] << ")" << endl;
-  double tMin =  min(t_min[0], min(t_min[1], t_min[2]));
-  if(t_min[0] == tMin)
+
+  double tMin =  min(t_min[0], min(t_min[1], t_min[2])); //calculate the minimum of the times
+  //[[FIX]]currently only allows laterial/longitudenal movement...needs updating to allow diagonal movement
+  //maybe worthwhile calculating the next cell the particle will move into here, and then store it, then on the move 
+  //function just move it...simpler to understand than current method
+  if(t_min[0] == tMin) 
     particle.nextCell = 0;
   else if (t_min[1] == tMin)
     particle.nextCell = 1;
   else if (t_min[2] == tMin)
     particle.nextCell = 2;
 
-  return tMin;
+  return tMin; //return the minimum time
 }
 
 double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes::EventType& eventType)
 {
-  double t_min_out = HUGE_VAL; //set minimum time to infinity
+  //Function Description: Calculate the collision time between two particles
+  //set the minimum time for the inward and outward events to infinity
+  double t_min_out = HUGE_VAL; 
   double t_min_in = HUGE_VAL;
-  map<pair<int, int>, int>::const_iterator it_map;
+  map<pair<int, int>, int>::const_iterator it_map; //create an iterator to the map of particle steps
 
+  //calculate the separation vectors for the both particle postion and velocity
   CVector3 r12 = particle1.r - particle2.r;
   CVector3 v12 = particle1.v - particle2.v;
-  applyBC(r12);
+  applyBC(r12); //apply BC to the separation vector
+  //calculate dot products
   double r12sqr = r12.dotProd(r12);
   double v12sqr = v12.dotProd(v12);
   double vdotr = v12.dotProd(r12);
@@ -585,29 +603,30 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 		    << v12.x << "," << v12.y << "," << v12.z << ")" << endl;
       logger.outLog << "v.r = " << vdotr << endl;
     }
-
+  //find which step the particle pair is on
   it_map = collStep.find(pair<int, int> (min(particle1.particleNo, particle2.particleNo), 
 					 max(particle1.particleNo, particle2.particleNo)));
-  if (it_map == collStep.end()) //if particle is outside steps
+  if (it_map == collStep.end()) //if particles are not in the step map then they must be outside range of influence, calculate when they come together
     {
+      //calculate quadratic root arguments
       double c = r12sqr - steps[steps.size() - 1].step_radius * steps[steps.size() - 1].step_radius;
       double arg = vdotr * vdotr - v12sqr * c;
       if((vdotr < 0) && (arg >= 0)) //if particles come near enough to each other
-	t_min_in = c / (-vdotr + sqrt(arg));
-      if(writeOutLog >= 2)
+	t_min_in = c / (-vdotr + sqrt(arg)); //calculate time when particle's collide
+      if(writeOutLog >= 2) //more output logging
 	{
 	  logger.outLog << "Particle is outside steps"<< endl;
 	  logger.outLog << "c: " << c << " arg: " << arg << endl;
 	  logger.outLog << "t_min_in: " << t_min_in << endl;
 	}
-      eventType = eventTimes::IP_IN;
-      return (t_min_in > 0) ? t + t_min_in : HUGE_VAL;
+      eventType = eventTimes::IP_IN; //set the event type to an inward collision
+      return (t_min_in > 0) ? t + t_min_in : HUGE_VAL; //if minimum time is positive then return time of collision 
     }
-  else
+  else //if particles are in step map
     {
       if(it_map->second != 0) //if there is an innerstep to interact with
 	{
-	  if(vdotr < 0)
+	  if(vdotr < 0) //if coming towards each other
 	    {
 	      //calculate collision time inwards
 	      double c = r12sqr - steps[it_map->second - 1].step_radius * steps[it_map->second - 1].step_radius;
@@ -661,12 +680,13 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 	  logger.outLog << "t_min_out: " << t_min_out << endl;
 	}
 
-      if(t_min_out < t_min_in || t_min_in < 0)
+      if(t_min_out < t_min_in || t_min_in < 0) //if outward time is smaller than inward time (or inward time is invalid)
 	{
+	  //return event is an outward collision and return collision time
 	  eventType = eventTimes::IP_OUT;
 	  return t + t_min_out;
 	}
-      else
+      else //else use the inward collision time
 	{
 	  eventType = eventTimes::IP_IN;
 	  return t + t_min_in;
@@ -676,56 +696,62 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
 
 double calcDiff(vector<CParticle>& particles, double time)
 {
-  double sumDiff = 0;
+  //Function description: calculate the mean square displacement of the particles in system
+  double sumDiff = 0; //set the sum to zero
+  //loop through every particle in the system
   for(vector<CParticle>::iterator particle = particles.begin(); particle != particles.end(); ++particle)
     {
-      CVector3 distTravelled =  particle->r - particle->r0;
-      sumDiff += distTravelled.dotProd(distTravelled);
+      CVector3 distTravelled =  particle->r - particle->r0; //calculate the distance a particle has travelled
+      sumDiff += distTravelled.dotProd(distTravelled); //square (using dot product) this distance
     }
-  return sumDiff / particles.size();
+  return sumDiff / particles.size(); //return the average, square displacement of the system
 }
 
 double calcKinetic(vector<CParticle>& particles)
 {
-  double kinetic = 0;
+  //Function description: calculate the kinetic energy of the system
+  double kinetic = 0; //set the kinetic energy of the system to zero
+  //loop through all the particles and sum their kinetic energy
   for(vector<CParticle>::iterator particle = particles.begin(); particle != particles.end(); ++particle)
     kinetic += particle->kineticEnergy();
 
-  return kinetic;
+  return kinetic; //return this sum [[QUERY]] should this return the kinetic energy per particle
 }
 
 double calcPotential()
 {
-  double potential = 0;
-  map<pair<int, int>, int>::iterator i;
-  for(i = collStep.begin(); i != collStep.end(); ++i)
-    potential += steps[i->second].step_energy;
+  //Function description: calculate the potential energy of the system
+  double potential = 0; //set the sum to zero
+  map<pair<int, int>, int>::iterator i; //define an interator for the step map
+  for(i = collStep.begin(); i != collStep.end(); ++i) //loop through every entry in the step map
+    potential += steps[i->second].step_energy; //sum the potential energy associatated with the entries in the step map
 
-  return potential / numberParticles;
+  return potential / numberParticles; //return the average potential energy per particle
 }
 
 void calcRadDist(vector<CParticle> &particles)
 {
-  for(size_t i (0); i < noBins; ++i)
+  //Function Description:  Calculate the radial distribution function for every particle in the system
+  for(size_t i (0); i < noBins; ++i) //loop through the array of bins and reset the values to zero
     rdf_d[i] = 0; //rezero array
 
-  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
+  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1) // loop through every particle
     {
-      updatePosition(*p1);
-      for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
+      updatePosition(*p1); //update the position of the particle
+      for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2) //loop through every other particle
 	{
-	  updatePosition(*p2);
-	  CVector3 distance = p1->r - p2->r;
-	  applyBC(distance);
-	  if(distance.length() < maxR)
+	  updatePosition(*p2); //update the postion of that particle too
+	  CVector3 distance = p1->r - p2->r; //calculate the distance between the particles
+	  applyBC(distance); //apply PBC to the distance
+	  if(distance.length() < maxR) //if the distance is less than the max radius considered
 	    {
-	      int index = floor(distance.length() * noBins/ maxR);
-	      if(index < 0 || index >= noBins)
+	      int index = floor(distance.length() * noBins/ maxR); //calculate which bin the particle is in
+	      if(index < 0 || index >= noBins) //if an invalid bin then send error
 		{
 		  cerr << "ERROR: Invalid index is calcRadDist: " << index << endl;
 		  exit(1);
 		}
-	      ++rdf_d[index];
+	      ++rdf_d[index]; //add 1 to the bin counter
 	    }
 	}
     }
@@ -733,43 +759,48 @@ void calcRadDist(vector<CParticle> &particles)
 
 void calcStep(CParticle& particle1, CParticle& particle2)
 {
-  int p1 = min(particle1.particleNo, particle2.particleNo);
-  int p2 = max(particle1.particleNo, particle2.particleNo);
-  CVector3 r12 = particle1.r - particle2.r;
+  //Function description: calculates the step that two particles are on and adds it to the step map
+  int p1 = min(particle1.particleNo, particle2.particleNo); //set particle 1 to be the lower particle id
+  int p2 = max(particle1.particleNo, particle2.particleNo); //set particle 2 to be the higher particle id
+  //calculate the separation vectors between the two particles [[QUERY]] should this be OOP'ed?
+  CVector3 r12 = particle1.r - particle2.r; 
   CVector3 v12 = particle1.v - particle2.v;
-  applyBC(r12);
-  double distance = r12.length();
-  for(int i = 0; i < steps.size(); ++i)
+  applyBC(r12); //apply PBC [[QUERY]] should this function be 'inline'd?
+
+  double distance = r12.length(); //calculate the length of the separation vector
+  for(int i = 0; i < steps.size(); ++i) //loop through all the possible steps
     {
-      if(distance <= steps[i].step_radius)
+      if(distance <= steps[i].step_radius) //if the distance is in the step
 	{
-	  currentU += steps[i].step_energy;
-	  collStep.insert(pair<pair<int, int>, int> (pair<int, int> (p1, p2), i));
-	  break;
+	  currentU += steps[i].step_energy; //store the potential energy 
+	  collStep.insert(pair<pair<int, int>, int> (pair<int, int> (p1, p2), i)); //insert into the step map
+	  break; //break the loop
 	}
     }
 }
 
 double calcSentinalTime(CParticle& particle)
 {
-  double t_min = HUGE_VAL;
-  for(size_t dim (0); dim < 3; ++dim)
+  //Function description: Calculate the time of the next sentinal event (when a particle has travelled so long it's events may be invalid)
+  double t_min = HUGE_VAL; //set the minimum time to infinity
+  for(size_t dim (0); dim < 3; ++dim) //loop through all the dimensions
     {
-      double vel = fabs(particle.v[dim]);
-      double t_sent = 0.25 * (systemSize[dim] - particle.radius) / vel;
+      double vel = fabs(particle.v[dim]); //calculate the absolute velocity
+      double t_sent = 0.25 * (systemSize[dim] - particle.radius) / vel; //calculate the time when particle is invalid in that direction
 
-      if (vel != 0)
-	t_min = min(t_min, t_sent);
+      if (vel != 0) //if the velocity is not zero [[QUERY]] should this condition be here not above????
+	t_min = min(t_min, t_sent); //if new calculated time is less than current minimum time
     }
-  return t + t_min;
+  return t + t_min; //return the overall minimum
 }
 
 double calcTemp(vector<CParticle> &particles)
 {
-  double sum = 0;
+  //Function description: calculate the temperature of the system
+  double sum = 0; //define the sum
   for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
-    sum += particle->v.dotProd();
-  return mass / (3 * particles.size()) * sum;
+    sum += particle->v.dotProd(); //calculate the square of the velocity and sum over every particle
+  return mass / (3 * particles.size()) * sum; //return the temperature
 }
 
 double calcVelocity(vector<CParticle>& particle, eventTimes& event)
@@ -777,6 +808,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
   //variable definitions
   map<pair<int, int>, int>::iterator it_map; //iterator for accessing collision state map
 
+  //update the position of particles
   updatePosition(particle[event.particle1]);
   updatePosition(particle[event.particle2]);
 
@@ -784,10 +816,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
   int p1 = min(event.particle1, event.particle2);
   int p2 = max(event.particle1, event.particle2);
 
+  //calculate the separation properties
   CVector3 r12 = particle[p1].r - particle[p2].r;
   CVector3 v12 = particle[p1].v - particle[p2].v;
-  //apply periodic boundary conditions
-  applyBC(r12);
+  applyBC(r12); //apply PBC
   double vdotr = v12.dotProd(r12.normalise());
   //  =  =  Output Logging  =  =
   if(writeOutLog >= 2)
@@ -816,13 +848,13 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
 	  {
 	    dU = -steps.back().step_energy; //energy is the outermost step height
-	    ++stepCount[steps.size() - 1].first;
+	    ++stepCount[steps.size() - 1].first; //add to step counter (inwards)
 	  }
 	else //if not outside then energy change is the difference in step heights
 	  {
 	    dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
-	    ++stepCount[it_map->second].first;
-	  }
+	    ++stepCount[it_map->second].first; //(inwards)
+						 }
 
 	if(writeOutLog >= 2) //if writing full outlog
 	  {
@@ -872,9 +904,9 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	double dU = 0;
 	++stepCount[it_map->second].second;
 	if(it_map->second != steps.size() - 1)
-	    dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
+	  dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
 	else
-	    dU = steps[it_map->second].step_energy;
+	  dU = steps[it_map->second].step_energy;
 
 	if(writeOutLog >=2)
 	  {
@@ -924,23 +956,25 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 
 void correctVelocity(vector<CParticle> &particles)
 {
-  zeroMomentum(particles);
-  double temp = calcTemp(particles); //calculate temp of system
+  //Function Description: Scale particle velocities to match temperature [[FIX]] Rename to make name more fitting to task
+  zeroMomentum(particles); //Zero the linear momentum in the system
+  double temp = calcTemp(particles); //calculate temp of system 
   double factor = sqrt(temperature / temp); //calculated correction factor
   for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
-    for(size_t dim (0); dim < 3; ++dim)
+    for(size_t dim (0); dim < 3; ++dim) //[[FIX]] fix the *= operator in the vector class to remove this loop
       particle->v[dim] *= factor; //scale velocity
 }
 
 void initialise(vector<CParticle> &particles, CRandom& RNG)
 {
+  //Function Description: Initialises particle location to FCC structure //[[NEW]] add different initialisation structures
   int n = ceil(pow(numberParticles/4,(double)1/3)); //find cubic root of number of particles
-  double a = length / n;
+  double a = length / n; //calculate the scale factor
   int j = 0, x = 0, y = 0, z = 0;
-  for(size_t i (0); i < numberParticles; ++i)
+  for(size_t i (0); i < numberParticles; ++i) //for every particle
     {
       CVector3 location;
-      switch (j)
+      switch (j) //sort the particles between the different particles in the FCC root vector
 	{
 	case 0:
 	  location = CVector3(x * a - length * 0.5, y * a - length * 0.5, z * a - length * 0.5);
@@ -956,15 +990,15 @@ void initialise(vector<CParticle> &particles, CRandom& RNG)
 	  j = -1;
 	  break;
 	}
-      ++j;
-      if(j == 0)
-	++x;
+      ++j; 
+      if(j == 0) //once a particle has been placed in every spot in the unit vector
+	++x; //more to the right
       if(x >= n)
 	{
-	  x=0;
+	  x=0; //then move up
 	  ++y;
 	}
-      if(y >= n)
+      if(y >= n) //then move forward
 	{
 	  y=0;
 	  ++z;
@@ -972,22 +1006,23 @@ void initialise(vector<CParticle> &particles, CRandom& RNG)
 
       CVector3 velocity; //assign a random unit vector to the velocity
       for(size_t dim(0); dim < 3; ++dim)
-	velocity[dim] = RNG.var_normal();
+	velocity[dim] = RNG.var_normal(); //give each particle a normally distributed velocity
 
-      particles.push_back(CParticle(location, velocity, radius, mass, i));
+      particles.push_back(CParticle(location, velocity, radius, mass, i)); //add to the particle vector
     }
 
-  correctVelocity(particles);
+  correctVelocity(particles); //scale the velocities to temperature
 }
 
 void initFromFile (vector<CParticle> &particle)
 {
+  //Function description: Initialises particle positions from an init file
   ifstream initLog ("init.dat");
 
-  string line;
+  string line; 
   int strpos = 1;
 
-  while(initLog.good() )
+  while(initLog.good() ) //loop through all the lines in the input file
     {
       int counter = 0; //rezero counter
       CVector3 init_r;
@@ -1036,6 +1071,8 @@ void initFromFile (vector<CParticle> &particle)
 
 void initSteps()
 {
+
+  //Function description: loads in custom steps [[OBSOLETE]] This code should be removed as it is now obsolete
   steps.clear();
   //Steps from Chepela et al, Case 6
   steps.push_back(Steps(0.80,66.74)); //step 0
@@ -1055,18 +1092,20 @@ void initSteps()
 
 void generateNeighbourCells(vector<set<int> >& NC)
 {
-  int cells2 = noCells * noCells;
+  //Function description:  Generates the neighbouring neighbour cells for each cell 
+  int cells2 = noCells * noCells; //calculate the square of the number of cells [[QUERY]] should this be a global variable maybe in a neighbourlist class, as it is being calculated alot
 
-  for(size_t i (0); i < NC.size(); ++i)
+  for(size_t i (0); i < NC.size(); ++i) //loop through all the neighbourlist cells
     {
+      //calculate the cell number in each direction [[QUERY]] is there a better way to store and reuse this code?
       int xmain = floor(i / cells2);
       int ymain = floor((i % cells2) / noCells);
       int zmain = i % noCells;
-      for(int dx = -1; dx < 2; ++dx)
+      for(int dx = -1; dx < 2; ++dx) //loop through the neighbouring x cells (one left, main cell, one right)
 	for(int dy = -1; dy < 2; ++dy)
 	  for(int dz = -1; dz < 2; ++dz)
 	    {
-	      int xnew = xmain + dx;
+	      int xnew = xmain + dx; //genereate a new cell vector of a neighbour cell
 	      if(xnew < 0) {xnew += noCells;}
 	      else if(xnew >= noCells) {xnew -= noCells;}
 
@@ -1078,18 +1117,21 @@ void generateNeighbourCells(vector<set<int> >& NC)
 	      if(znew < 0) {znew += noCells;}
 	      else if(znew >= noCells) {znew -= noCells;}
 
-	      NC[i].insert(xnew * cells2 + ynew * noCells + znew);
+	      NC[i].insert(xnew * cells2 + ynew * noCells + znew); //add to list
+	      //[[FIX]] this can be cleaned up with the use of a neighbour cell location vector
+	      // this should be defined and implemented.  This code can then be reduced to loops
 	    }
     }
 }
 
 void generateNeighbourList(vector<set<int> >& NL, vector<CParticle>& particles)
 {
+  //Function description: Sorts the particles into their appropriate neighbour cells.
   for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
     {
-      int cell = calcCell(particle->r);
-      NL[cell].insert(particle->particleNo);
-      particle->cellNo = cell;
+      int cell = calcCell(particle->r); //calculate the cell a particle is in
+      NL[cell].insert(particle->particleNo); //insert into a neighbour list
+      particle->cellNo = cell; //assign the cell to the particle class.
     }
 }
 
@@ -1100,16 +1142,17 @@ void getEvent(CParticle& p1,
 	      vector<set<int> >& NL, //the particles in each cell
 	      vector<set<int> >& NC) //the cells neighbouring each cell )
 {
-  set<int>::iterator p2;
+  //define set iterators
+  set<int>::iterator p2; 
   set<int>::iterator it_NC;
   pEvents[p1.particleNo].clear();
   updatePosition(p1);
   double t_min_sent = calcSentinalTime(p1); 
   pEvents[p1.particleNo].push_back(eventTimes(t_min_sent, p1.particleNo, -1, 0, eventTimes::SENTINAL));
   /*uble t_min_NL = calcCellLeave(p1);
-  pEvents[p1.particleNo].push_back(eventTimes(t_min_NL, p1.particleNo ,-1,0, eventTimes::NEIGHBOURCELL));
-  for(it_NC = NC[p1.cellNo].begin(); it_NC != NC[p1.cellNo].end(); ++it_NC)
-  for(p2 = NL[*it_NC].begin(); p2 !=NL[*it_NC].end(); ++p2)*/
+    pEvents[p1.particleNo].push_back(eventTimes(t_min_NL, p1.particleNo ,-1,0, eventTimes::NEIGHBOURCELL));
+    for(it_NC = NC[p1.cellNo].begin(); it_NC != NC[p1.cellNo].end(); ++it_NC)
+    for(p2 = NL[*it_NC].begin(); p2 !=NL[*it_NC].end(); ++p2)*/
   for(it_particle p2 = particles.begin(); p2 != particles.end(); ++p2)
     {
       if (p1.particleNo == p2->particleNo) continue;
@@ -1118,10 +1161,10 @@ void getEvent(CParticle& p1,
       double t_min_coll = calcCollisionTime(p1, *p2, eventType);
       pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));
       /*if (p1.particleNo == *p2) continue;
-      updatePosition(particles[*p2]);
-      eventTimes::EventType eventType;
-      double t_min_coll = calcCollisionTime(p1, particles[*p2], eventType);
-      pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, *p2, particles[*p2].collNo, eventType));
+	updatePosition(particles[*p2]);
+	eventTimes::EventType eventType;
+	double t_min_coll = calcCollisionTime(p1, particles[*p2], eventType);
+	pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, *p2, particles[*p2].collNo, eventType));
       */
     }
   events[p1.particleNo] = *min_element(pEvents[p1.particleNo].begin(), pEvents[p1.particleNo].end());
@@ -1151,12 +1194,12 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
 	}
     }
 
- 
+
   updatePosition(particle); //update particle's position
   double factor = sqrt(temperature);
   //assign values for each component of the particle's velocity from Gaussian
   for(size_t dim (0); dim < 3; ++dim) 
-      particle.v[dim] = RNG.var_normal() * factor;
+    particle.v[dim] = RNG.var_normal() * factor;
   //cerr << "old v = (" << oldv.x << ", " << oldv.y << ", " << oldv.z << " ) "
   //     << "new v = (" << particle.v.x << ", " << particle.v.y << ", " << particle.v.z << ")" << endl;
   //cerr << "Change in kinetic energy of system " << 0.5 * particle.mass * (particle.v.dotProd(particle.v)-oldv.dotProd(oldv)) << endl;
@@ -1232,7 +1275,7 @@ void checkCaptureMap(vector<CParticle> &particles)
 	    if(distance <= steps[k].step_radius)
 	      { step = k; break; }
 	  }
-	
+                
 	{
 	  if(it_map == collStep.end())
 	    {
@@ -1246,7 +1289,7 @@ void checkCaptureMap(vector<CParticle> &particles)
 	      else if (it_map->second != step)
 		cerr << "particles " << i << " and " << j << ", step=" << step << ",map_step=" << it_map->second << ", are in wrong step" << endl;
 	    }
-	  
+                  
 	  break;
 	}
 
@@ -1272,7 +1315,7 @@ void indirectCorr(double T)
 	}
       if((distance < stepRad && (i+1) * maxR / noBins < stepRad) || stepRad == 0)
 	{
-	  //	  cerr << distance << " - " << stepRad << " - " << (i+1) * maxR / noBins << endl;
+	  //            cerr << distance << " - " << stepRad << " - " << (i+1) * maxR / noBins << endl;
 	  icf.push_back(pair<double, double> (distance, TA_rdf_d[i] * exp(stepEnergy / T)));
 	}
     }
