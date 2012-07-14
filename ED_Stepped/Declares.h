@@ -64,8 +64,8 @@ Results(double T, double Pd, double Pc, double Ud, double Uc, int noE) :
 typedef std::vector<CParticle>::iterator it_particle;
 
 //----Function Declarations----
-void applyBC(CVector3&);
-int calcCell(CVector3);
+//void applyBC(CVector3&);
+int calcCell(CVector3<double>);
 int calcNewCell(CParticle&);
 double calcCellLeave(CParticle&);
 double calcCollisionTime(CParticle&, CParticle&, eventTimes::EventType&);

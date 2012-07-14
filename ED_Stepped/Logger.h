@@ -167,7 +167,7 @@ class Logger
 
     resultLog.close();
   }
-  void write_Location (std::vector<CParticle>& particles, double sysTime, CVector3 systemSize)
+  void write_Location (std::vector<CParticle>& particles, double sysTime, CVector3<double> systemSize)
   {
     if(locLog.is_open())
       {

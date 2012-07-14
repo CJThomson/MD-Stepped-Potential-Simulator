@@ -5,15 +5,15 @@ class CParticle
 {
  public:
   //Constructors
- CParticle(CVector3 location, CVector3 velocity,
+ CParticle(CVector3<double> location, CVector3<double> velocity,
 	   double radius_in, double mass_in, size_t ID):
   r(location), r0(location), v(velocity), radius(radius_in), mass(mass_in), particleNo(ID), collNo(0), updateTime(0)
     {}
 
   //vectors on particle
-  CVector3 r; //position vector of the particle
-  CVector3 r0; //position vector of the particle
-  CVector3 v; //velocity vector of the particle
+  CVector3<double> r; //position vector of the particle
+  CVector3<double> r0; //position vector of the particle
+  CVector3<double> v; //velocity vector of the particle
 
   //particle constants
   double radius; //radius of the particle
@@ -26,7 +26,7 @@ class CParticle
   //functions
   double kineticEnergy()//return the specific energy of the particle
   {
-    return 0.5 * v.dotProd(v) * mass;
+    return 0.5 * v.lengthSqr() * mass;
   }
 };
 
