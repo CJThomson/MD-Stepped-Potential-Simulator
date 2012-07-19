@@ -130,7 +130,7 @@ class Logger
     initLog.close();
   }
 
-  void write_CollCount(std::vector<std::pair<unsigned int, unsigned int> >& eCount, double rho, 
+  void write_CollCount(std::vector<StepCount>& eCount, double rho, 
 		       double T, double n, double stepInt = -1)
   {
     std::ofstream collLog;
@@ -139,10 +139,11 @@ class Logger
     fileName << "collCountLog " << rho << " - " << T << " - " << n << " - " << stepInt <<"-stepped.dat";
     outfileName = fileName.str();
     collLog.open(outfileName.c_str());
-    for(std::vector<std::pair<unsigned int, unsigned int> >::iterator i = eCount.begin(); 
+    for(std::vector<StepCount>::iterator i = eCount.begin(); 
 	i != eCount.end(); ++i)
       {
-	collLog << i->first << "\t" << i->second << std::endl;
+	collLog << i->in_capture << "\t" << i->in_bounce << "\t" 
+		<< i->out_capture << "\t" << i->out_bounce  << std::endl;
       }
     collLog.close();
   }
