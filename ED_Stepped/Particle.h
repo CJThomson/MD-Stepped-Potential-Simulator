@@ -28,5 +28,12 @@ class CParticle
   {
     return 0.5 * v.lengthSqr() * mass;
   }
+  void reset()
+  {
+    cellNo = 0;
+    collNo = 0;
+    nextCell = 0;
+    updateTime = 0;
+  }
 };
 

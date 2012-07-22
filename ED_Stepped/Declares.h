@@ -104,9 +104,9 @@ void getEvent(CParticle&,
 	      std::vector<eventTimes>&,
 	      std::vector<std::set<int> >&,
 	      std::vector<std::set<int> >&);
-void freeStream(double);
-void resetSim();
-void runSimulation(std::vector<Results>&, size_t);
+void freeStream(double, bool);
+void resetSim(std::vector<CParticle>&);
+void runSimulation(double, bool, std::vector<CParticle>&, std::vector<Results>&, size_t);
 void runThermostat(CParticle&, CRandom&, std::vector<eventTimes>&);
 void updatePosition(CParticle&);
 void zeroMomentum(std::vector<CParticle>&);

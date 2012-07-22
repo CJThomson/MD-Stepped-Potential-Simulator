@@ -44,7 +44,7 @@ Stepper::StepWidth width_type = Stepper::EVEN;
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
 
-//Measuring Properties
+//Measuring Properties-
 const int startSampling = 3e+6; //step number to start taking samples
 const int sample_interval = 1;
 const double rdf_interval = 0.001;
@@ -95,6 +95,18 @@ int main()
 	  time_t startTime;
 	  time(&startTime);
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
+	  //Initialise the particles
+	  vector<CParticle> particles; //create a vector to store particle info
+	  CRandom RNG;
+	  RNG.seed();
+	  cout << "\rInitialising Particles ...";
+	  //Initialise the simulation
+	  if(initFile)
+	    initFromFile(particles);
+	  else
+	    initialise(particles, RNG ); // initialise the system
+	  numberParticles = particles.size();
+	  //Initialise the particle steps.
 	  cout << "Generating " << no_of_steps << " Steps...";
 	  initSteps(); //step up system steps
 	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
@@ -103,13 +115,19 @@ int main()
 	  stepCount.resize(steps.size());
 	  cout << " Complete" << endl;
 	  vector<Results> results;
+	  runSimulation(2, false, particles, results, 0);
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
 	  for(size_t runs (0); runs < number_of_runs; ++runs)
 	    {
-	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;
-                      
-	      resetSim();
-	      runSimulation(results, runs);
+	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;             
+	      resetSim(particles);
+	      runSimulation(5, true, particles, results, runs);
+	      if(runs != (number_of_runs - 1)) //if not the last run
+		{
+		  resetSim(particles);
+		  runSimulation(0.5, false, particles, results, runs);
+		}
+
 	    }
 	  time_t endTime;
 	  time(&endTime);
@@ -146,7 +164,7 @@ int main()
 	cout << "Invalid input" << endl;
     }
 }
-void resetSim()
+void resetSim(vector<CParticle>& particles)
 {
   eventCount = 0;
   length = pow(numberParticles/density, 1.0 / 3.0);
@@ -177,27 +195,24 @@ void resetSim()
   TA_p2 = 0;
   TA_tavg = 0;
   TA_tavg2 = 0;
+
+  for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1)
+    p1->reset();
+
+
 }
 
-void runSimulation(vector<Results>& results, size_t runNumber)
+void runSimulation(double simTime, bool sample, vector<CParticle>& particles, vector<Results>& results, size_t runNumber)
 {
   //variable declarations
   bool startSample = false;
-  vector<CParticle> particles; //create a vector to store particle info
+
   vector<vector<eventTimes> > particleEL;
   vector<eventTimes> masterEL; //create a vector to store collision times
   vector<set<int> > neighbourList; //create a vector of sets to hold particles in  neighbour cell
   vector<set<int> > neighbourCell; //create a vector of sets to hold the cells neighbouring each cell
   cout << "Initialising Random Number Generators";
   CRandom RNG;
-  RNG.seed();
-  cout << "\rInitialising Particles ...";
-  //Initialise the simulation
-  if(initFile)
-    initFromFile(particles);
-  else
-    initialise(particles, RNG ); // initialise the system
-  numberParticles = particles.size();
   currentK = calcKinetic(particles);
 
   cout << "\rInitialising neighbour lists";
@@ -244,7 +259,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
   cout << "Starting Simulation with " << numberParticles << " particles with a density of "
        << density << " at a target temperature of " << temperature << " in a box with side length of " << length << endl;
   //for(;eventCount < numberEvents;)
-  for(;t < 50;)
+  for(;t < simTime;)
     {
       bool collEvent = false;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
@@ -273,7 +288,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	    else //if a valid event
 	      {
 		collEvent = true;
-		freeStream(dt);
+		freeStream(dt,sample);
 		if(writeOutLog >= 1)
 		  {
 		    updatePosition(particles[next_event.particle1]);
@@ -306,12 +321,12 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  if(writeOutLog >= 1)
 	    logger.outLog << "Sentinal event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
 
-	  freeStream(dt);
+	  freeStream(dt,sample);
 	  getEvent(particles[next_event.particle1], particles, particleEL, masterEL, neighbourList, neighbourCell);
 	  break;
 	case eventTimes::NEIGHBOURCELL:
 	  {
-	    freeStream(dt);
+	    freeStream(dt,sample);
 	    CParticle p1 = particles[next_event.particle1];
 	    neighbourList[p1.cellNo].erase(next_event.particle1); //erase particle from previous cell
 	    int newCell = calcNewCell(p1);
@@ -325,7 +340,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  }
 	case eventTimes::THERMOSTAT:
 	  {
-	    freeStream(dt);
+	    freeStream(dt,sample);
 	    if(writeOutLog >= 1)
 	      logger.outLog << "Thermostat event for particle: " << next_event.particle1 << " at time = "<< t<< endl;
 	    runThermostat(particles[next_event.particle1], RNG, masterEL);
@@ -335,7 +350,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  }
 	case eventTimes::RDF:
 	  {
-	    freeStream(dt);
+	    freeStream(dt,sample);
 	    if(eventCount > startSampling)
 	      {
 		if(writeOutLog >=1)
@@ -367,7 +382,7 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  if(eventCount % psteps == 0) //output file logging
 	    logger.write_Location(particles, t, systemSize);
 
-	  if(t > 20 && startSample)
+	  if(!startSample)
 	    {
 	      // store particle positions when starting to take readings
 	      for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
@@ -385,101 +400,110 @@ void runSimulation(vector<Results>& results, size_t runNumber)
 	  if(eventCount % 1000 == 0)
 	    //if(eventCount % 1 == 0)
 	    {
-	      double E_temp = TA_T / (t - startSampleTime);
-	      double E_pot = TA_U / (t - startSampleTime);
-	      double E_press_ideal = density * E_temp;
-	      double E_press_coll = mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-
-	      if(eventCount > 2E6)
-		cout << "\rN:" << eventCount / 1e6 << "M";
-	      else
-		cout << "\rN:" << eventCount / 1000 << "k";
-	      if(thermostat)
-		cout << "-T";
+	      if(sample)
+		{
+		  double E_temp = TA_T / (t - startSampleTime);
+		  double E_pot = TA_U / (t - startSampleTime);
+		  double E_press_ideal = density * E_temp;
+		  double E_press_coll = mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
 		  
-	      cout << " t: " << t
-		   << " T: " << currentK / (1.5 * numberParticles)
-		   << " <T>: " << E_temp
-		   << " U: " << currentU
-		   << " <U>: " << E_pot
-		   << " <P>: " << E_press_ideal + E_press_coll
-		//<< " <P_coll>: " << E_press_coll
-		// << " TE: " << currentK + currentU
-		   << flush;
-                      
+		  if(eventCount > 2E6)
+		    cout << "\rN:" << eventCount / 1e6 << "M";
+		  else
+		    cout << "\rN:" << eventCount / 1000 << "k";
+		  if(thermostat)
+		    cout << "-T";
+		  
+		  cout << " t: " << t
+		       << " T: " << currentK / (1.5 * numberParticles)
+		       << " <T>: " << E_temp
+		       << " U: " << currentU
+		       << " <U>: " << E_pot
+		       << " <P>: " << E_press_ideal + E_press_coll
+		       << flush;
+		}
+	      else
+		{
+		  cout << "\rEquilbrating ... " << " t: " << t << "/" << simTime 
+		       << " T: " << currentK / (1.5 * numberParticles) 
+		       << " U: " << currentU << flush;
+		}
 	    }
 	}
     }
 
   cout << "\rSimulation Complete";
   checkCaptureMap(particles);
-  double deltaR = maxR / noBins; //width of each shell
+  if(sample)
+   {
+      double deltaR = maxR / noBins; //width of each shell
   
-  for(int i = 0; i < noBins; ++i)
-    {
-      double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
-      TA_rdf_d[i] /= (0.5 * numberParticles * rdfReadings * volShell * density);
-    }
+      for(int i = 0; i < noBins; ++i)
+	{
+	  double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
+	  TA_rdf_d[i] /= (0.5 * numberParticles * rdfReadings * volShell * density);
+	}
 
-  cout << "\rGenerating Continuous g(r), U, P";
-  double E_temp = TA_T / (t - startSampleTime);
-  indirectCorr(E_temp);
-  continuousRDF(E_temp);
-  double cont_P = continuousP(E_temp);
-  double cont_U = continuousU();
-  double E_pot = TA_U / (t - startSampleTime);
-  double E_press = density * E_temp 
-    + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-  results.push_back(Results(E_temp, E_press, cont_P, E_pot, cont_U, eventCount));
-  //Output time averages
-  if(false)
-    {
-      cout << "Time Averages:" << endl;
-      {
-	// = Mean free time
-	double freeTime = t * numberParticles / (2 * eventCount);
-	double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
-	double sd_freeTime = sqrt(fabs(freeTime2 - freeTime * freeTime));
-	cout << "Mean free time: " << freeTime << " (" << sd_freeTime << ")" << endl;
+      cout << "\rGenerating Continuous g(r), U, P";
+      double E_temp = TA_T / (t - startSampleTime);
+      indirectCorr(E_temp);
+      continuousRDF(E_temp);
+      double cont_P = continuousP(E_temp);
+      double cont_U = continuousU();
+      double E_pot = TA_U / (t - startSampleTime);
+      double E_press = density * E_temp 
+	+ mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
+      results.push_back(Results(E_temp, E_press, cont_P, E_pot, cont_U, eventCount));
+      //Output time averages
+      if(false)
+	{
+	  cout << "Time Averages:" << endl;
+	  {
+	    // = Mean free time
+	    double freeTime = t * numberParticles / (2 * eventCount);
+	    double freeTime2 = TA_tavg2 * numberParticles / (2 * readingsTaken);
+	    double sd_freeTime = sqrt(fabs(freeTime2 - freeTime * freeTime));
+	    cout << "Mean free time: " << freeTime << " (" << sd_freeTime << ")" << endl;
                 
-	// = Potential Energy
-	double E_pot = TA_U / (t - startSampleTime);
-	double E_pot2 = TA_U2 / (t - startSampleTime);
-	double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
-	cout << "Ud: " << E_pot << "(" << sd_pot << ")" << endl;
-	cout << "Uc: " << cont_U << endl;
+	    // = Potential Energy
+	    double E_pot = TA_U / (t - startSampleTime);
+	    double E_pot2 = TA_U2 / (t - startSampleTime);
+	    double sd_pot = sqrt(fabs(E_pot2 - E_pot * E_pot));
+	    cout << "Ud: " << E_pot << "(" << sd_pot << ")" << endl;
+	    cout << "Uc: " << cont_U << endl;
                 
-	// = Temperature
-	double E_temp = TA_T / (t - startSampleTime);
-	double E_temp2 = TA_T2 / (t - startSampleTime);
-	double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
-	cout << "T: " << E_temp << "(" << sd_temp << ")" << endl;
+	    // = Temperature
+	    double E_temp = TA_T / (t - startSampleTime);
+	    double E_temp2 = TA_T2 / (t - startSampleTime);
+	    double sd_temp = sqrt(fabs(E_temp2 - E_temp * E_temp));
+	    cout << "T: " << E_temp << "(" << sd_temp << ")" << endl;
                 
-	// = Momentum flux
-	double E_mf = TA_v / readingsTaken;
-	double E_mf2 = TA_v2 / readingsTaken;
-	double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
-	cout << "<r.v> " << E_mf << "(" << sd_mf << ")" << endl;
+	    // = Momentum flux
+	    double E_mf = TA_v / readingsTaken;
+	    double E_mf2 = TA_v2 / readingsTaken;
+	    double sd_mf = sqrt(fabs(E_mf2 - E_mf * E_mf));
+	    cout << "<r.v> " << E_mf << "(" << sd_mf << ")" << endl;
                 
-	// = Pressure
-	double E_press = density * E_temp 
-	  + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
-	double sd_press = sqrt( pow(density * sd_temp, 2) 
-				+ pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
+	    // = Pressure
+	    double E_press = density * E_temp 
+	      + mass * density * TA_v / (numberParticles * 3.0 * (t - startSampleTime));
+	    double sd_press = sqrt( pow(density * sd_temp, 2) 
+				    + pow(mass * density / (numberParticles * 3.0 * (t - startSampleTime))  * sd_mf, 2));
                 
-	cout << "Pd: " << E_press  << "(" << sd_press << ")" << endl;
-	cout << "Pc: " << cont_P << endl;
-      }
+	    cout << "Pd: " << E_press  << "(" << sd_press << ")" << endl;
+	    cout << "Pc: " << cont_P << endl;
+	  }
+	}
+      cout << "\rWriting Results...";
+      logger.write_contRDF(rdf_c, density, temperature, numberParticles, energyInt);
+      logger.write_ICF(icf, density, temperature, numberParticles, energyInt);
+      logger.write_RadDist(TA_rdf_d, noBins, deltaR, density, temperature, numberParticles, energyInt); //write radial distribution file
+      logger.write_Diff(coDiff); //write coefficient of diffusion file
+      logger.write_Location(particles, t, systemSize); //write final values to the log
+      logger.write_CollCount(stepCount, density, temperature, numberParticles, energyInt);
+      if(overwriteInit)
+	logger.write_Init(particles); //write final values to log to allow
     }
-  cout << "\rWriting Results...";
-  logger.write_contRDF(rdf_c, density, temperature, numberParticles, energyInt);
-  logger.write_ICF(icf, density, temperature, numberParticles, energyInt);
-  logger.write_RadDist(TA_rdf_d, noBins, deltaR, density, temperature, numberParticles, energyInt); //write radial distribution file
-  logger.write_Diff(coDiff); //write coefficient of diffusion file
-  logger.write_Location(particles, t, systemSize); //write final values to the log
-  logger.write_CollCount(stepCount, density, temperature, numberParticles, energyInt);
-  if(overwriteInit)
-    logger.write_Init(particles); //write final values to log to allow
   cout << "\rAll Tasks Complete";
 }
 
@@ -1209,25 +1233,24 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
   events[numberParticles + 1] = eventTimes(t_min_thermo, particleNo, -1, -1, eventTimes::THERMOSTAT);
 
 }
-void freeStream(double dt)
+void freeStream(double dt, bool sample)
 {
   t += dt; //update system time
-  double temp_temperature = currentK / (1.5 * numberParticles);
-  TA_T += temp_temperature * dt;
-  TA_U += currentU / numberParticles * dt;
-  //if(eventCount > startSampling)
-  if(t > 20)
+  if(sample)
     {
+      double temp_temperature = currentK / (1.5 * numberParticles);
+      TA_T += temp_temperature * dt;
+      TA_U += currentU / numberParticles * dt;
+      //if(eventCount > startSampling)
       if(startSampleTime <0) {cerr<< "ERROR" << endl; exit(1);}
       // = Mean Free Time
       TA_tavg2 += dt * dt;
       // = Temperature
       TA_T2 += temp_temperature * temp_temperature * dt;
-
+      
       // = Potential
       TA_U2 += pow((currentU / numberParticles),2) * dt;
       ++readingsTaken;
-
     }
 }
 void updatePosition(CParticle& particle)
