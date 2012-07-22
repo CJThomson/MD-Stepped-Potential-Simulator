@@ -1,9 +1,9 @@
 TODO for the soft potential simulator
 
-* BUG FIXES [1/2]
-** TODO Counter of the nubmer of collisions on each step is not working
+* BUG FIXES [2/2]
+** DONE Counter of the nubmer of collisions on each step is not working
 ** DONE Thermostat is not remaining on all the time
-* MAINTANANCE [1/11]
+* MAINTANANCE [2/12]
 ** TODO Split up the program and make it more object orientated[0%]
    + [ ] change logging to set file name once on logger initialisation
    + [ ] make a scheduler class that handles all event list operations
@@ -52,6 +52,7 @@ TODO for the soft potential simulator
 ** TODO Add using time or events to end collisions
 ** TODO Add core selection to stepper
 ** TODO Add a special results folder for particular data run
+** DONE Have a single equilibriation period per run
 * NEW FEATURES [0/4]
 ** TODO Add Neighbourlist [0%]
 + [ ] Change neighbourlist implementation

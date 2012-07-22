@@ -85,7 +85,7 @@ void calcStep(CParticle& ,CParticle&);
 double calcSentinalTime(CParticle&);
 double calcTemp(std::vector<CParticle>&);
 double calcThermoTime(CRandom&, int&);
-double calcVelocity(std::vector<CParticle>&, eventTimes&);
+double calcVelocity(std::vector<CParticle>&, eventTimes&, bool);
 void checkCaptureMap(std::vector<CParticle> &);
 double continuousP(double);
 void continuousRDF(double);

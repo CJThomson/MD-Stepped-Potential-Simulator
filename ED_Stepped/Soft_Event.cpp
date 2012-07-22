@@ -824,7 +824,7 @@ double calcTemp(vector<CParticle> &particles)
   return mass / (3 * particles.size()) * sum; //return the temperature
 }
 
-double calcVelocity(vector<CParticle>& particle, eventTimes& event)
+double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 {
   //variable definitions
   map<pair<int, int>, int>::iterator it_map; //iterator for accessing collision state map
@@ -900,7 +900,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	      --(it_map->second); //move particles in one step
 	    currentU -= dU;
 	    currentK += dU;
-	    ++stepCount[it_map->second].in_capture;
+	    if(sample) {++stepCount[it_map->second].in_capture;}
 	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
@@ -910,7 +910,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
-	    ++stepCount[it_map->second].in_bounce;
+	    if(sample) {++stepCount[it_map->second].in_bounce;}
 	    return r12.dotProd(deltav1);
 	  }
 	break;
@@ -951,7 +951,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	      ++(it_map->second); //move particles in one step
 	    currentU -= dU;
 	    currentK += dU;
-	    ++stepCount[it_map->second].out_capture;
+	    if(sample) {++stepCount[it_map->second].out_capture;}
 	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
@@ -961,7 +961,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1; 
-	    ++stepCount[it_map->second].out_bounce;
+	    if(sample) {++stepCount[it_map->second].out_bounce;}
 	    return r12.dotProd(deltav1);
 	  }
 	break;
