@@ -115,17 +115,17 @@ int main()
 	  stepCount.resize(steps.size());
 	  cout << " Complete" << endl;
 	  vector<Results> results;
-	  runSimulation(2, false, particles, results, 0);
+	  runSimulation(20, false, particles, results, 0);
 	  cout << "Running simulation " << number_of_runs << " times " << endl << endl;
 	  for(size_t runs (0); runs < number_of_runs; ++runs)
 	    {
 	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;             
 	      resetSim(particles);
-	      runSimulation(5, true, particles, results, runs);
+	      runSimulation(30, true, particles, results, runs);
 	      if(runs != (number_of_runs - 1)) //if not the last run
 		{
 		  resetSim(particles);
-		  runSimulation(0.5, false, particles, results, runs);
+		  runSimulation(2, false, particles, results, runs);
 		}
 
 	    }
@@ -893,14 +893,14 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    CVector3<double> deltav1 = (A / mass) * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
-
+	    if(sample) {++stepCount[it_map->second].in_capture;}
 	    if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
 	      collStep.insert(pair<pair<int, int>, int>(pair<int, int>(p1, p2), steps.size() - 1)); //insert pair into collStep map
 	    else
 	      --(it_map->second); //move particles in one step
 	    currentU -= dU;
 	    currentK += dU;
-	    if(sample) {++stepCount[it_map->second].in_capture;}
+
 	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
@@ -945,13 +945,13 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    CVector3<double> deltav1 = A / mass * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
+	    if(sample) {++stepCount[it_map->second].out_capture;}
 	    if(it_map->second == steps.size() -1) //if particle is leaving outermost step
 	      collStep.erase(it_map);
 	    else
 	      ++(it_map->second); //move particles in one step
 	    currentU -= dU;
 	    currentK += dU;
-	    if(sample) {++stepCount[it_map->second].out_capture;}
 	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
