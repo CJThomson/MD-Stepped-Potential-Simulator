@@ -907,7 +907,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    currentK += dU;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
 >>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
@@ -923,7 +926,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    particle[p2].v -= deltav1;
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if(sample) {++stepCount[it_map->second].in_bounce;}
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
 >>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
@@ -980,7 +986,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    particle[p2].v -= deltav1; 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if(sample) {++stepCount[it_map->second].out_bounce;}
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
 >>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
