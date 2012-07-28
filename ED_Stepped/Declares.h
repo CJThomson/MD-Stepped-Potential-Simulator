@@ -5,13 +5,6 @@ Diffusion(double D, double t):time(t),coDiff(D){ } //Constructor
   double time;
   double coDiff;
 };
-struct StepCount {
-StepCount(){} //Constructor
-  unsigned int in_capture;
-  unsigned int in_bounce;
-  unsigned int out_capture;
-  unsigned int out_bounce;
-};
 
 struct Results
 {
