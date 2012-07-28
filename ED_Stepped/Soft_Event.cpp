@@ -38,8 +38,8 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::MID;
-Stepper::StepWidth width_type = Stepper::EVEN;
+Stepper::StepHeight height_type = Stepper::VIRIAL;
+Stepper::StepWidth width_type = Stepper::EVEN_ENERGY;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
@@ -59,7 +59,7 @@ const int noBins = 1000; //number of radial bins
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over
-std::vector<StepCount> stepCount;
+std::vector<std::pair<unsigned int, unsigned int> > stepCount;
 
 //----Time Averages----
 double TA_rdf_d[noBins];
@@ -111,7 +111,6 @@ int main()
 	  initSteps(); //step up system steps
 	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type, energyInt);
-	  stepCount.clear();
 	  stepCount.resize(steps.size());
 	  cout << " Complete" << endl;
 	  vector<Results> results;
@@ -867,9 +866,15 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	it_map = collStep.find(pair<int,int>(p1, p2)); //find collision state of particles
 	double dU = 0;
 	if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
-	  dU = -steps.back().step_energy; //energy is the outermost step height
+	  {
+	    dU = -steps.back().step_energy; //energy is the outermost step height
+	    ++stepCount[steps.size() - 1].first; //add to step counter (inwards)
+	  }
 	else //if not outside then energy change is the difference in step heights
-	  dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
+	  {
+	    dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
+	    ++stepCount[it_map->second].first; //(inwards)
+						 }
 
 	if(writeOutLog >= 2) //if writing full outlog
 	  {
@@ -900,7 +905,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	      --(it_map->second); //move particles in one step
 	    currentU -= dU;
 	    currentK += dU;
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 	    return r12.dotProd(deltav1);
 	  }
 	else //if bounce occurs
@@ -910,7 +918,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
+<<<<<<< HEAD
 	    if(sample) {++stepCount[it_map->second].in_bounce;}
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 	    return r12.dotProd(deltav1);
 	  }
 	break;
@@ -919,7 +930,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
       {
 	it_map = collStep.find(pair<int, int> (p1, p2));
 	double dU = 0;
-	
+	++stepCount[it_map->second].second;
 	if(it_map->second != steps.size() - 1)
 	  dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
 	else
@@ -961,7 +972,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1; 
+<<<<<<< HEAD
 	    if(sample) {++stepCount[it_map->second].out_bounce;}
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 	    return r12.dotProd(deltav1);
 	  }
 	break;
