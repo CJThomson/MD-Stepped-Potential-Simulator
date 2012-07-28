@@ -906,7 +906,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    currentU -= dU;
 	    currentK += dU;
 <<<<<<< HEAD
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
 >>>>>>> parent of 0194c34... added/fixed collsion counts
 	    return r12.dotProd(deltav1);
@@ -919,7 +922,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if(sample) {++stepCount[it_map->second].in_bounce;}
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
 >>>>>>> parent of 0194c34... added/fixed collsion counts
 	    return r12.dotProd(deltav1);
@@ -973,7 +979,10 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event, bool sample)
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1; 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    if(sample) {++stepCount[it_map->second].out_bounce;}
+=======
+>>>>>>> parent of 0194c34... added/fixed collsion counts
 =======
 >>>>>>> parent of 0194c34... added/fixed collsion counts
 	    return r12.dotProd(deltav1);
