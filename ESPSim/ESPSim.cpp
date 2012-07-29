@@ -1,0 +1,27 @@
+/* This is my new stepped potential simualator born out of the burned
+out remains of my previous Soft_Event sim */
+
+//These should go in a declares header eventually
+#include <iostream>
+#include <boost/program_options.hpp>
+
+#include "Simulator.h"
+using namespace std;
+
+int main(int argc, char *argv[])
+{
+  cout << "=  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =" << endl;
+  cout << "=                                                        =" << endl;
+  cout << "=  ESPSim - The Equilibrium Stepped Potential Simulator  =" << endl;
+  cout << "=                 Chris J Thomson (2012)                 =" << endl;
+  cout << "=                                                        =" << endl;
+  cout << "=  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =" << endl;
+  cout << endl;
+  Simulator sim;
+
+  sim.loadSettings(argc, argv);  //load all the system settings
+  sim.initialise(); //initialise the system
+  cout << endl;
+  return 0;
+}
+

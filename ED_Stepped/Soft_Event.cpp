@@ -108,7 +108,7 @@ int main()
 	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;
                       
 	      resetSim();
-	      runSimulation(results, runs);
+	      runSimulation(results);
 	    }
 	  time_t endTime;
 	  time(&endTime);
@@ -178,7 +178,7 @@ void resetSim()
   TA_tavg2 = 0;
 }
 
-void runSimulation(vector<Results>& results, size_t runNumber)
+void runSimulation(vector<Results>& results)
 {
   //variable declarations
   bool startSample = false;

@@ -78,7 +78,7 @@ void calcStep(CParticle& ,CParticle&);
 double calcSentinalTime(CParticle&);
 double calcTemp(std::vector<CParticle>&);
 double calcThermoTime(CRandom&, int&);
-double calcVelocity(std::vector<CParticle>&, eventTimes&, bool);
+double calcVelocity(std::vector<CParticle>&, eventTimes&);
 void checkCaptureMap(std::vector<CParticle> &);
 double continuousP(double);
 void continuousRDF(double);
@@ -97,9 +97,9 @@ void getEvent(CParticle&,
 	      std::vector<eventTimes>&,
 	      std::vector<std::set<int> >&,
 	      std::vector<std::set<int> >&);
-void freeStream(double, bool);
-void resetSim(std::vector<CParticle>&);
-void runSimulation(double, bool, std::vector<CParticle>&, std::vector<Results>&, size_t);
+void freeStream(double);
+void resetSim();
+void runSimulation(std::vector<Results>&);
 void runThermostat(CParticle&, CRandom&, std::vector<eventTimes>&);
 void updatePosition(CParticle&);
 void zeroMomentum(std::vector<CParticle>&);
