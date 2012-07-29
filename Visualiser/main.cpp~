@@ -1,0 +1,484 @@
+#include "Declares.h"
+using namespace std;
+
+//----Program Variables----
+HDC hDC=NULL;		// Private GDI device context
+HGLRC hRC=NULL;		// Permanent rendering context
+HWND hWnd=NULL;		// Holds our window handle
+HINSTANCE hInstance;	// Holds the instance of the application
+
+bool keys[256];		// Array used for the keyboard routine
+bool active = true;	// Window Active Flag set to true
+bool done = false;	// Bool Variable to exit loop
+bool pause = false;     // Pause visualisation
+
+float camX = 0, camY = 0, camZ = 0; //camera position
+float rotX = 0, rotY = 0; // rotate camera
+int scrnHeight = 512; //height of window
+int scrnWidth = 512; //width of window
+int n = 0; //event number
+int framerate = 30; //rate events are updated
+string title = "Particle Visualiser"; //window title
+
+clock_t time_now, update_timer = 0;
+GLUquadricObj *quadratic; //allows the drawing of spheres
+vector<Event> events;
+LRESULT	CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM); // Declaration For WndProc
+
+
+
+void ReSizeGLScene(GLsizei width, GLsizei height) // Resize And Initialize The GL Window
+{
+  if (height==0) // if height is zero increase it to 1
+      height=1;
+
+  glViewport(0,0,width,height); // reset the viewport
+  glMatrixMode(GL_PROJECTION); // reset projection matrix
+  glLoadIdentity();
+
+  // calculate window aspect ratio
+  gluPerspective(45.0f,(GLfloat)width/(GLfloat)height,0.1f,100.0f);
+
+  glMatrixMode(GL_MODELVIEW); // reset modelview matrix
+  glLoadIdentity();
+}
+void drawCube(float x, float y, float z, float length)
+{
+  glBegin(GL_QUADS); //start drawing some quads
+  //bottom
+  glVertex3f(x, y, z);
+  glVertex3f(x + length, y, z);
+  glVertex3f(x + length, y, z + length);
+  glVertex3f(x, y, z + length);
+  //top
+  glVertex3f(x, y + length, z);
+  glVertex3f(x + length, y + length, z);
+  glVertex3f(x + length, y + length, z + length);
+  glVertex3f(x, y + length, z + length);
+  //left
+  glVertex3f(x, y, z);
+  glVertex3f(x, y + length, z);
+  glVertex3f(x, y + length, z + length);
+  glVertex3f(x, y, z + length);
+  //right
+  glVertex3f(x + length, y, z);
+  glVertex3f(x + length, y + length, z);
+  glVertex3f(x + length, y + length, z + length);
+  glVertex3f(x + length, y, z + length);
+  //front
+  glVertex3f(x, y, z);
+  glVertex3f(x + length, y, z);
+  glVertex3f(x + length, y + length, z);
+  glVertex3f(x, y + length, z);
+  //back
+  glVertex3f(x, y, z + length);
+  glVertex3f(x + length, y, z + length);
+  glVertex3f(x + length, y + length, z + length);
+  glVertex3f(x, y + length, z + length);
+  glEnd();
+}
+int InitGL() //initialise openGL
+{
+  glShadeModel(GL_SMOOTH); // smooth shading
+  glClearColor(0.9f, 0.9f, 1.0f, 0.5f); //set the background color
+  glClearDepth(1.0f); // clear depth
+  glEnable(GL_DEPTH_TEST); //enable depth testing
+  glDepthFunc(GL_LEQUAL); //depth testing fucntion
+  glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// nice perspective calculations
+  return true;
+}
+
+int DrawGLScene() //Draw the scene
+{
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear colour and depth buffers
+  glLoadIdentity();
+
+  glPushMatrix(); //push 1
+  glTranslatef(camX,camY,camZ); //move the camera
+  //rotate camera
+  glRotatef(rotX,1.0f,0.0f,0.0f);
+  glRotatef(rotY,0.0f,1.0f,0.0f);
+  float length = 5.227579586f; //length of size of boundary box
+  glColor3f(0.0f,1.0f,0.0f); //set colour of the boundary box
+  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); //use wireframe models
+  drawCube(-length * 0.5, -length * 0.5, -length * 0.5, length); //draw the boundary box
+
+  time_now = clock(); //take current time
+
+  if(time_now - update_timer > CLK_TCK/framerate) //limit max framerate
+    {
+      update_timer = time_now;
+      if(!pause) //if simulation is not paused update scene
+	++n;
+
+    }
+  for(int i = 0; i < events[n].particles.size(); ++i)
+    {
+      glColor3f(0.0f,0.0f,1.0f); //sphere colour
+      glPushMatrix(); //push 2
+      glTranslated(events[n].particles[i].x,events[n].particles[i].y,events[n].particles[i].z); //move sphere
+      glPolygonMode( GL_FRONT_AND_BACK, GL_LINE ); //use wireframe models
+      gluSphere(quadratic,0.5f,20,20); //draw particle
+      glPolygonMode( GL_FRONT_AND_BACK, GL_FILL ); //reset to filled models
+      glPopMatrix(); //pop 2
+
+    }
+  if(n == events.size()) //if the last scene
+    done = true; //end visualisation
+
+  glPopMatrix(); //pop 1
+  return true;
+}
+
+GLvoid KillGLWindow() //kill openGL window
+{
+  if (hRC) // if render contex is active, kill it
+    {
+      wglMakeCurrent(NULL,NULL);
+      wglDeleteContext(hRC);
+      hRC=NULL;
+    }
+
+  if (hDC && !ReleaseDC(hWnd,hDC)) //if device contex is active, release it
+    hDC=NULL;
+  if (hWnd && !DestroyWindow(hWnd)) //if window is active, kill it
+    hWnd=NULL;
+
+  if (!UnregisterClass("OpenGL",hInstance)) //unregister the class
+    hInstance=NULL;}
+
+BOOL CreateGLWindow(const char* title, int width, int height, int bits, bool fullscreenflag)
+{
+  GLuint PixelFormat; //pixel format
+  WNDCLASS wc; //window class structure
+  DWORD dwExStyle; //window extended structure
+  DWORD dwStyle; //window style
+  RECT WindowRect; //holds window coords
+  WindowRect.left=(long)0; //set left to zero
+  WindowRect.right=(long)width;	//set right to width of the window
+  WindowRect.top=(long)0; //set top of the window to zero
+  WindowRect.bottom=(long)height; //set bottom to height
+
+  hInstance = GetModuleHandle(NULL); // init windows class
+  wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC; // redraw and own DC
+  wc.lpfnWndProc = (WNDPROC) WndProc; // WndProc to handle any messages
+  wc.cbClsExtra	= 0; //no extra data
+  wc.cbWndExtra = 0;
+  wc.hInstance = hInstance; // set the instance
+  wc.hIcon = LoadIcon(NULL, IDI_WINLOGO); //use the default icon
+  wc.hCursor = LoadCursor(NULL, IDC_ARROW); // load cursor
+  wc.hbrBackground = NULL;	//no background
+  wc.lpszMenuName = NULL; //no menu
+  wc.lpszClassName = "OpenGL"; //name of class
+
+  if (!RegisterClass(&wc)) //register the window class
+    {
+      MessageBox(NULL,"Failed To Register The Window Class.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return false;
+    }
+
+  dwExStyle = WS_EX_APPWINDOW | WS_EX_WINDOWEDGE; //window extended style
+  dwStyle = WS_OVERLAPPEDWINDOW; // window style
+
+  AdjustWindowRectEx(&WindowRect, dwStyle, false, dwExStyle); //adjust window
+
+  // try and create window
+  if (!(hWnd=CreateWindowEx(dwExStyle, //window extended style
+			    "OpenGL", //name of window class
+			    title, //title of window
+			    dwStyle | //window style
+			    WS_CLIPSIBLINGS | WS_CLIPCHILDREN, //required window style
+			    50, 50, //window initial position
+			    WindowRect.right-WindowRect.left, // window width
+			    WindowRect.bottom-WindowRect.top, //window height
+			    NULL, //no parent window
+			    NULL, //no menu
+			    hInstance, //instance
+			    NULL)))//don't pass anything to WM_CREATE
+    {
+      KillGLWindow(); //kill the window
+      MessageBox(NULL,"Window Creation Error.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return false;
+    }
+
+  static	PIXELFORMATDESCRIPTOR pfd=				// pfd Tells Windows How We Want Things To Be
+    {
+      sizeof(PIXELFORMATDESCRIPTOR),				// Size Of This Pixel Format Descriptor
+      1,											// Version Number
+      PFD_DRAW_TO_WINDOW |						// Format Must Support Window
+      PFD_SUPPORT_OPENGL |						// Format Must Support OpenGL
+      PFD_DOUBLEBUFFER,							// Must Support Double Buffering
+      PFD_TYPE_RGBA,								// Request An RGBA Format
+      bits,										// Select Our Color Depth
+      0, 0, 0, 0, 0, 0,							// Color Bits Ignored
+      0,											// No Alpha Buffer
+      0,											// Shift Bit Ignored
+      0,											// No Accumulation Buffer
+      0, 0, 0, 0,									// Accumulation Bits Ignored
+      16,											// 16Bit Z-Buffer (Depth Buffer)
+      0,											// No Stencil Buffer
+      0,											// No Auxiliary Buffer
+      PFD_MAIN_PLANE,								// Main Drawing Layer
+      0,											// Reserved
+      0, 0, 0										// Layer Masks Ignored
+    };
+
+  if (!(hDC=GetDC(hWnd)))							// Did We Get A Device Context?
+    {
+      KillGLWindow();								// Reset The Display
+      MessageBox(NULL,"Can't Create A GL Device Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return FALSE;								// Return FALSE
+    }
+
+  if (!(PixelFormat=ChoosePixelFormat(hDC,&pfd)))	// Did Windows Find A Matching Pixel Format?
+    {
+      KillGLWindow();								// Reset The Display
+      MessageBox(NULL,"Can't Find A Suitable PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return FALSE;								// Return FALSE
+    }
+
+  if(!SetPixelFormat(hDC,PixelFormat,&pfd))		// Are We Able To Set The Pixel Format?
+    {
+      KillGLWindow();								// Reset The Display
+      MessageBox(NULL,"Can't Set The PixelFormat.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return FALSE;								// Return FALSE
+    }
+
+  if (!(hRC=wglCreateContext(hDC)))				// Are We Able To Get A Rendering Context?
+    {
+      KillGLWindow();								// Reset The Display
+      MessageBox(NULL,"Can't Create A GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return FALSE;								// Return FALSE
+    }
+
+  if(!wglMakeCurrent(hDC,hRC))					// Try To Activate The Rendering Context
+    {
+      KillGLWindow();								// Reset The Display
+      MessageBox(NULL,"Can't Activate The GL Rendering Context.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return FALSE;								// Return FALSE
+    }
+
+  ShowWindow(hWnd,SW_SHOW);						// Show The Window
+  SetForegroundWindow(hWnd);						// Slightly Higher Priority
+  SetFocus(hWnd);									// Sets Keyboard Focus To The Window
+  ReSizeGLScene(width, height);					// Set Up Our Perspective GL Screen
+
+  if (!InitGL())									// Initialize Our Newly Created GL Window
+    {
+      KillGLWindow();								// Reset The Display
+      MessageBox(NULL,"Initialization Failed.","ERROR",MB_OK|MB_ICONEXCLAMATION);
+      return FALSE;								// Return FALSE
+    }
+
+  return TRUE;									// Success
+}
+
+LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
+				UINT	uMsg,			// Message For This Window
+				WPARAM	wParam,			// Additional Message Information
+				LPARAM	lParam)			// Additional Message Information
+{
+  switch (uMsg)									// Check For Windows Messages
+    {
+    case WM_ACTIVATE:							// Watch For Window Activate Message
+      {
+        if (!HIWORD(wParam))					// Check Minimization State
+	  {
+            active=TRUE;						// Program Is Active
+	  }
+        else
+	  {
+            active=FALSE;						// Program Is No Longer Active
+	  }
+
+        return 0;								// Return To The Message Loop
+      }
+
+    case WM_SYSCOMMAND:							// Intercept System Commands
+      {
+        switch (wParam)							// Check System Calls
+	  {
+	  case SC_SCREENSAVE:					// Screensaver Trying To Start?
+	  case SC_MONITORPOWER:				// Monitor Trying To Enter Powersave?
+            return 0;							// Prevent From Happening
+	  }
+        break;									// Exit
+      }
+
+    case WM_CLOSE:								// Did We Receive A Close Message?
+      {
+        PostQuitMessage(0);						// Send A Quit Message
+        return 0;								// Jump Back
+      }
+
+    case WM_KEYDOWN:							// Is A Key Being Held Down?
+      {
+        keys[wParam] = TRUE;					// If So, Mark It As TRUE
+        return 0;								// Jump Back
+      }
+
+    case WM_KEYUP:								// Has A Key Been Released?
+      {
+        keys[wParam] = FALSE;					// If So, Mark It As FALSE
+        return 0;								// Jump Back
+      }
+
+    case WM_SIZE:								// Resize The OpenGL Window
+      {
+        ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));  // LoWord=Width, HiWord=Height
+        return 0;								// Jump Back
+      }
+    }
+
+  // Pass All Unhandled Messages To DefWindowProc
+  return DefWindowProc(hWnd,uMsg,wParam,lParam);
+}
+
+int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
+			HINSTANCE	hPrevInstance,		// Previous Instance
+			LPSTR		lpCmdLine,			// Command Line Parameters
+			int			nCmdShow)			// Window Show State
+{
+  MSG		msg;									// Windows Message Structure
+  string input;
+  cout << " - - :Particle simulator: - - " << endl;
+  while(true)
+    {
+      cout << "input: ";
+      cin >> input;
+      if(input == "exit")
+	return(0);
+      else if(input == "framerate")
+	{
+	  cout << "enter new framerate value (as int):";
+	  cin >> framerate;
+	}
+      else if(input == "run") //if run
+	{
+	  cout << "starting visualisation..." << endl;
+	  ifstream log ("locLog.dat");
+	  readFile(log);
+	  quadratic=gluNewQuadric();          // Create A Pointer To The Quadric Object
+	  gluQuadricNormals(quadratic, GLU_SMOOTH);   // Create Smooth Normals
+
+	  if (!CreateGLWindow(title.c_str(),scrnHeight,scrnWidth,16,false))
+	    return 0; //quit if window not created successfully
+
+	  while(!done)
+	    {
+	      if (PeekMessage(&msg,NULL,0,0,PM_REMOVE))	//check for any system messages
+		{
+		  if (msg.message==WM_QUIT) //if a quit message is received then end sim
+		    done=true;
+		  else // if not a quit message deal with it
+		    {
+		      TranslateMessage(&msg);
+		      DispatchMessage(&msg);
+		    }
+		}
+	      else
+		{
+		  if (keys[VK_ESCAPE]) // if escape pressed quit the program
+		    done = true;
+		  else // if still active draw the screen
+		    {
+		      keyPress(); //check for any other keypresses
+		      DrawGLScene(); // draw the scene
+		      SwapBuffers(hDC); // switch buffer (double buffering)
+		    }
+		}
+	    }
+	  // Shutdown
+	  KillGLWindow(); // kill the window
+	  cout<<"Visualisation Over" <<endl;
+	}
+      else
+	{
+	  cout << "ERROR: invalid command" << endl << "Possible commands are: " << endl;
+	  cout << "run - run visualisation" << "\t" << "exit - exit visualisation" << endl;
+	  cout << "framerate - change framerate" << endl;
+        }
+
+
+
+    }
+  return (msg.wParam); // exit the program
+}
+
+void keyPress()
+{
+  //simulation keypresses
+  if(keys['W'])
+    camY -= 0.05f;
+  if(keys['S'])
+    camY += 0.05f;
+  if(keys['A'])
+    camX += 0.05f;
+  if(keys['D'])
+    camX -= 0.05f;
+  if(keys['Q'])
+    camZ += 0.05f;
+  if(keys['E'])
+    camZ -= 0.05f;
+  if(keys[VK_UP])
+    rotX += 0.3f;
+  if(keys[VK_DOWN])
+    rotX -= 0.3f;
+  if(keys[VK_LEFT])
+    rotY += 0.3f;
+  if(keys[VK_RIGHT])
+    rotY -= 0.3f;
+  if(keys['P'])
+    pause = !pause;
+  if(keys['N'])
+    ++n;
+}
+
+void readFile(ifstream& logFile)
+{
+  int counter = 0;
+  double x = 0, y = 0, z = 0;
+  double time = 0;
+  string line;
+  int strpos = 1;
+
+  while( logFile.good() )
+    {
+      counter = 0; //rezero counter
+      getline(logFile, line); //get next line of log
+      vector<Particle> p;
+      for(int i = 0; i < line.size(); ++i)
+        {
+	  if(line[i] == '\t' || line[i] == '\l')
+            {
+	      switch(counter)
+                {
+                case 0: //then system time
+		  time = atof(line.substr(1, i).c_str());
+		  strpos = i + 1;
+		  break;
+                case 1: //then x
+		  x = atof(line.substr(strpos,i - strpos).c_str());
+		  strpos = i + 1;
+		  break;
+                case 2: //then y
+		  y = atof(line.substr(strpos,i - strpos).c_str());
+		  strpos = i + 1;
+		  break;
+                case 3: //then z
+		  z = atof(line.substr(strpos,i - strpos).c_str());
+		  strpos = i + 1;
+		  counter = 0; //get ready for x from next particle
+		  p.push_back(Particle(x,y,z)); //add to particles
+		  break;
+                default:
+		  exit(1);
+		  cout << "error in reading file" << endl;
+                }
+	      ++counter;
+            }
+        }
+      events.push_back(Event(time, p));
+    }
+}
+

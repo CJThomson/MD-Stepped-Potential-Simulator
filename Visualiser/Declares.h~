@@ -1,0 +1,30 @@
+//----Includes----
+#include <iostream>     //allows input/output to screen
+#include <fstream>      //allows file io
+#include <vector>       //allows use of vector structures
+#include <string>       //allows use of strings
+#include <time.h>       //allows use of timing functions
+#include <windows.h>	//allows creation of windows
+#include <gl\gl.h>	//allows use of 3d gfx
+#include <gl\glu.h>	//allows use of 3d gfx utilities
+
+//----Structures----
+struct Particle
+{
+  Particle(double xin, double yin, double zin): x(xin), y(yin), z(zin) {}
+  double x;
+  double y;
+  double z;
+};
+
+struct Event
+{
+  Event(double time, std::vector<Particle>& p): t(time),particles(p) {}
+  double t;
+  std::vector<Particle> particles;
+};
+
+//----Function Declarations----
+void readFile(std::ifstream&);
+void keyPress();
+void drawCube(float, float, float, float);

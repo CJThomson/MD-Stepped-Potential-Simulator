@@ -1,0 +1,46 @@
+# depslib dependency file v1.0
+1330827254 source:c:\users\chris\documents\honours dissertation\programs\visualiser\main.cpp
+	"Declares.h"
+
+1330811935 source:c:\users\chris\documents\honours dissertation\programs\visualiser\lesson1.cpp
+	<windows.h>
+	<gl\gl.h>
+	<gl\glu.h>
+
+1331056561 c:\users\chris\documents\honours dissertation\programs\visualiser\declares.h
+	<iostream>
+	<fstream>
+	<vector>
+	<string>
+	<time.h>
+	<unistd.h>
+	<stdlib.h>
+	<math.h>
+	<GL/freeglut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+
+1332623271 source:c:\users\chris\documents\honours dissertation\programs\visualiser\visualiser.cpp
+	"Declares.h"
+
+1336847985 source:c:\users\chris\documents\honours dissertation\programs\md-stepped-potential-simulator\visualiser\visualiser.cpp
+	"Declares.h"
+
+1336839353 c:\users\chris\documents\honours dissertation\programs\md-stepped-potential-simulator\visualiser\declares.h
+	<iostream>
+	<fstream>
+	<vector>
+	<string>
+	<time.h>
+	<unistd.h>
+	<stdlib.h>
+	<math.h>
+	<GL/freeglut.h>
+	<GL/gl.h>
+	<GL/glu.h>
+	"fileBuffer.h"
+
+1336848029 c:\users\chris\documents\honours dissertation\programs\md-stepped-potential-simulator\visualiser\filebuffer.h
+	<string>
+	<fstream>
+

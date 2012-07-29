@@ -1,0 +1,131 @@
+#!/bin/bash
+
+mkdir -p tmp
+
+if [ -d vector ]; then
+#################### Vector graphics, grace, gnuplot etc
+    for file in $(ls vector/*.svg 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/.svg/.pdf/' | sed -e 's/vector\///')
+	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+            inkscape --export-text-to-path --export-area-page --without-gui --file=$file --export-pdf=$target  2> /dev/null
+	fi
+    done
+
+    for file in $(ls vector/*.agr 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/.agr/.pdf/' | sed -e 's/vector\///')
+	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    gracebat $file -hdevice EPS -printfile tmp/tmp.eps
+	    epstopdf tmp/tmp.eps --outfile=$target 
+	fi
+    done
+
+    for file in $(ls vector/*.eps 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/.eps/.pdf/' | sed -e 's/vector\///')
+	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    epstopdf $file --outfile=$target
+	fi
+    done
+    
+    for file in $(ls vector/*.fig 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/.fig/.pdf/' | sed -e 's/vector\///')
+	target2=$(echo $file | sed -e 's/.fig/.pdf_tex/' | sed -e 's/vector\///')	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    fig2dev -L pdftex $file $target || exit 1
+	    fig2dev -L pdftex_t -p figures/$target $file $target2 || exit 1
+	fi
+    done
+fi
+
+if [ -d bitmap ]; then
+#################### BITMAPS
+    for file in $(ls bitmap/*.ps 2> /dev/null ); do
+    #Make the destination in the tmp dir
+	target=$(echo $file | sed -e 's/.ps/.png/' | sed -e 's/bitmap\///')
+	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    convert $file $target > /dev/null
+	fi
+    done
+    
+    for file in $(ls bitmap/*.eps 2> /dev/null ); do
+    #Make the destination in the tmp dir
+	target=$(echo $file | sed -e 's/.eps/.png/' | sed -e 's/bitmap\///')
+	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    convert $file $target > /dev/null
+	fi
+    done
+    
+    for file in $(ls bitmap/*.svg 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/.svg/.png/' | sed -e 's/bitmap\///')
+	
+	if [ ! -e $target ] || [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    inkscape $file --export-png=$target --export-dpi=125 > /dev/null
+	fi
+    done
+    
+    for file in $(ls bitmap/*.png 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/bitmap\///')
+	if [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    cp $file $target
+	fi
+    done
+    
+    for file in $(ls bitmap/*.jpeg 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/bitmap\///')
+	if [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    cp $file $target
+	fi
+    done
+    
+    for file in $(ls bitmap/*.jpg 2> /dev/null ); do
+    #Now make the final destination
+	target=$(echo $file | sed -e 's/bitmap\///')
+	if [ $file -nt $target ]; then
+	    echo $file ">>>" $target
+	    cp $file $target
+	fi
+    done
+fi
+
+#####Latex files
+if [ -d latex ]; then
+    cd latex
+    for file in $(ls *.tex 2> /dev/null ); do
+    #Now make the final destinatio
+	dvi=$(echo $file | sed -e 's/.tex/.dvi/')
+	pdf=$(echo $file | sed -e 's/.tex/.pdf/')
+	ps=$(echo $file | sed -e 's/.tex/.ps/')
+	eps=$(echo $file | sed -e 's/.tex/.eps/')
+	if [ $file -nt ../$eps ]; then
+	    echo $file ">>>" $eps
+	    latex $file
+	    dvips -E $dvi
+	    ps2eps -f -B $ps
+	    epstopdf $eps
+	    cp $pdf ../$pdf
+	    rm $eps $ps	    
+	fi
+    done
+fi
+
+rm -Rf tmp
