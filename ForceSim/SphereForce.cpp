@@ -6,10 +6,11 @@ double density = 0.8;
 double temperature = 1.5; //temperature of the system
 //Simulation:
 int numberParticles = 864; //number of particles
-const int simTime = 5000; //length of the Simulation
+const int simTime = 50000; //length of the Simulation
 const double dt = 0.01; //length of ticme interval
 double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
+
 CVector3 systemSize(length, length, length); //size of the system
 const bool initFile = false; //use an init file
 const bool overwriteInit = false; //create a new initfile
@@ -30,7 +31,7 @@ const double mass = 1.0; //mass of a particle
 const double radius = 0.5; //radius of a particle (set for diameter = 1)
 const double epsilon = 1.0; //minimum energy of Lennard Jones Potential
 const double sigma = 1.0; //distance for Lennard Jones root
-
+const double lj_shift = 4.0 * epsilon * (pow(sigma / r_cut, 12) - pow(sigma / r_cut, 6));
 //Logging:
 Logger logger; //create instance of the logger class
 const int out_interval = 20; //frequency of output to file
@@ -40,7 +41,7 @@ const int sample_interval = 10;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 2000; //number of readings to take
+const int startSampling = 20000; //number of readings to take
 double readingTime = 0;
 const int noBins = 600; //number of radial bins
 const double maxR = 3.0;
@@ -468,7 +469,7 @@ double calcPotential(vector<CParticle> &particles, vector<int> &NL, int NLpos[])
 	  CVector3 distance = particle->r - particles[NL[j]].r; //vector between particles
 	  applyBC(distance);
 	  if(distance.length() <= 6 * radius)
-	    potential += 4.0 * epsilon * (pow(sigma / distance.length(), 12) - pow(sigma / distance.length(), 6));
+	    potential += 4.0 * epsilon * (pow(sigma / distance.length(), 12) - pow(sigma / distance.length(), 6)) - lj_shift;
 	}
     }
   return potential / particles.size();

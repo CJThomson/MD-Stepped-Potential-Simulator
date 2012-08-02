@@ -22,6 +22,7 @@ class Simulator
 
   void loadSettings(int, char*[]);
   void initialise();
+  void equilibrate();
 
  private:
   SimSet simSettings;
@@ -29,7 +30,10 @@ class Simulator
   std::vector<Particle> particles;
   std::vector<std::pair<double, double> > steps;
   Random RNG;
+  Stepmap stepmap;
+
   void zeroMomentum();
+  bool runSim();
 };
 
 

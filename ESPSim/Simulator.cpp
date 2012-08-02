@@ -67,15 +67,24 @@ void Simulator::initialise()
     delete potential;
   }
   std::cout << "\rInitialising => Pair Step Map              " << std::flush;
-  Stepmap stepmap;
   stepmap.populateMap(particles, steps, simProperties.getLength());
   std::cout << "\rInitialising => Pair Step Map => Checking  " << std::flush;
   stepmap.checkMap(particles, steps, simProperties.getLength());
   std::cout << "\rInitialising => Complete                   " << std::flush;
 
+}
+void Simulator::equilbriate()
+{
+  std::cout << "\rEquilibration => Resetting Particles       " << std::flush;
+  for(it_p p = particles.begin();p != particles.end(); ++p)
+    p->reset();
+  std::cout << "\rEquilibration => Initialising Engine       " << std::flush;
+  Engine engine(this, &particles);
+  std::cout << "\rEquilibration => Starting Simulation       " << std::flush;
+    
+  std::cout << "\rEquilibration => Complete                  " << std::flush;
 
 }
-
 void Simulator::zeroMomentum()
 {
   Vector3<double> sum;
@@ -84,4 +93,12 @@ void Simulator::zeroMomentum()
   
   for(it_p p = particles.begin(); p != particles.end(); ++p) 
     p->setV() -= sum / particles.size();
+}
+
+bool Simulator::isRunning(double t, unsigned long long N, bool equilibration)
+{
+  if(simSettings.isTime()) //if simulator is running for a certain length of time
+    return (equilibration ? t < simSettings.getEQTime() : t < simSettings.getRunTime());
+  else
+    return (equilibration ? N < simSettings.getEQEvent() : N < simSettings.getRunEvent());
 }

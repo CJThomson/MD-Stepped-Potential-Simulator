@@ -38,8 +38,9 @@ const double lj_epsilon = 1.0;
 double Stepper::lj_eps = 1.0;
 double Stepper::lj_sig = 1.0;
 double Stepper::beta = 1.0 / temperature;
-Stepper::StepHeight height_type = Stepper::VIRIAL;
-Stepper::StepWidth width_type = Stepper::EVEN_ENERGY;
+double Stepper::lj_shift = 4.0 * (pow(1 / 3, 12) - pow(1 / 3, 6));
+Stepper::StepHeight height_type = Stepper::MID;
+Stepper::StepWidth width_type = Stepper::EVEN;
 //Logging:
 const int psteps = 50; //frequency of output to file
 const int writeOutLog = 0;//level of outLog, 0 = nothing, 1 = event discriptions, 2 = full
@@ -59,8 +60,7 @@ const int noBins = 1000; //number of radial bins
 const double maxR = 3.0;
 double rdf_d[noBins]; //radial distribution values
 std::vector<Diffusion> coDiff; //coefficient of diffusion over
-std::vector<std::pair<unsigned int, unsigned int> > stepCount;
-
+std::vector<CollisionCount> stepCount;
 //----Time Averages----
 double TA_rdf_d[noBins];
 std::vector<std::pair<double, double> > icf;
@@ -91,6 +91,8 @@ int main()
       else if(input == "start")
 	{
 	  Stepper::beta = 1.0 / temperature;
+	  Stepper::lj_shift = 4.0 * Stepper::lj_eps * (pow(Stepper::lj_sig / r_cutoff, 12) 
+						       - pow(Stepper::lj_sig / r_cutoff, 6));
 	  Stepper stepper;
 	  time_t startTime;
 	  time(&startTime);
@@ -108,7 +110,7 @@ int main()
 	      cout << "\rRun number: " << runs + 1 << " of " << number_of_runs << endl;
                       
 	      resetSim();
-	      runSimulation(results);
+	      runSimulation(50, results);
 	    }
 	  time_t endTime;
 	  time(&endTime);
@@ -178,7 +180,7 @@ void resetSim()
   TA_tavg2 = 0;
 }
 
-void runSimulation(vector<Results>& results)
+void runSimulation(double simTime, vector<Results>& results)
 {
   //variable declarations
   bool startSample = false;
@@ -243,7 +245,7 @@ void runSimulation(vector<Results>& results)
   cout << "Starting Simulation with " << numberParticles << " particles with a density of "
        << density << " at a target temperature of " << temperature << " in a box with side length of " << length << endl;
   //for(;eventCount < numberEvents;)
-  for(;t < 50;)
+  for(;t < simTime;)
     {
       bool collEvent = false;
       eventTimes next_event = *min_element(masterEL.begin(), masterEL.end());
@@ -366,9 +368,10 @@ void runSimulation(vector<Results>& results)
 	  if(eventCount % psteps == 0) //output file logging
 	    logger.write_Location(particles, t, systemSize);
 
-	  if(t > 20 && startSample)
+	  if(t > 20 && !startSample)
 	    {
 	      // store particle positions when starting to take readings
+	      cerr << endl << "starting to sample" << endl;
 	      for(it_particle particle = particles.begin(); particle != particles.end(); ++particle)
 		particle->r0 = particle->r;
 	      startSample = true;
@@ -376,6 +379,11 @@ void runSimulation(vector<Results>& results)
 	      TA_v = 0; 
 	      TA_T = 0;
 	      TA_U = 0;
+	      for(vector<CollisionCount>::iterator i = stepCount.begin(); i != stepCount.end();
+		  ++i)
+		i->reset();
+	      eventCount = 0;
+	      thermoLastUpdate = 0; 
 	    }
 
 	  if(eventCount % diff_interval == 0)
@@ -842,15 +850,9 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	it_map = collStep.find(pair<int,int>(p1, p2)); //find collision state of particles
 	double dU = 0;
 	if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
-	  {
 	    dU = -steps.back().step_energy; //energy is the outermost step height
-	    ++stepCount[steps.size() - 1].first; //add to step counter (inwards)
-	  }
 	else //if not outside then energy change is the difference in step heights
-	  {
 	    dU = steps[it_map->second].step_energy - steps[it_map->second - 1].step_energy;
-	    ++stepCount[it_map->second].first; //(inwards)
-						 }
 
 	if(writeOutLog >= 2) //if writing full outlog
 	  {
@@ -874,7 +876,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = (A / mass) * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
-
+	    ++stepCount[it_map->second - 1].in_capture; //(inwards)
 	    if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
 	      collStep.insert(pair<pair<int, int>, int>(pair<int, int>(p1, p2), steps.size() - 1)); //insert pair into collStep map
 	    else
@@ -890,6 +892,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
+	  ++stepCount[it_map->second - 1].in_bounce;
 	    return r12.dotProd(deltav1);
 	  }
 	break;
@@ -898,7 +901,6 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
       {
 	it_map = collStep.find(pair<int, int> (p1, p2));
 	double dU = 0;
-	++stepCount[it_map->second].second;
 	if(it_map->second != steps.size() - 1)
 	  dU = steps[it_map->second].step_energy - steps[it_map->second + 1].step_energy; //step particle is going to - step particle is on
 	else
@@ -924,6 +926,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = A / mass * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
+	    ++stepCount[it_map->second].out_release;
 	    if(it_map->second == steps.size() -1) //if particle is leaving outermost step
 	      collStep.erase(it_map);
 	    else
@@ -939,6 +942,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1; 
+	    ++stepCount[it_map->second].out_bounce;
 	    return r12.dotProd(deltav1);
 	  }
 	break;

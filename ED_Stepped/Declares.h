@@ -6,6 +6,20 @@ Diffusion(double D, double t):time(t),coDiff(D){ } //Constructor
   double coDiff;
 };
 
+struct CollisionCount 
+{
+CollisionCount() : in_capture(0), in_bounce(0), out_release(0), out_bounce(0){};
+  void reset()
+  {
+    in_capture = in_bounce = out_release = out_bounce = 0;
+  }
+  
+  unsigned int in_capture;
+  unsigned int in_bounce;
+  unsigned int out_release;
+  unsigned int out_bounce;
+};
+
 struct Results
 {
   Results() {
@@ -99,7 +113,7 @@ void getEvent(CParticle&,
 	      std::vector<std::set<int> >&);
 void freeStream(double);
 void resetSim();
-void runSimulation(std::vector<Results>&);
+void runSimulation(double, std::vector<Results>&);
 void runThermostat(CParticle&, CRandom&, std::vector<eventTimes>&);
 void updatePosition(CParticle&);
 void zeroMomentum(std::vector<CParticle>&);

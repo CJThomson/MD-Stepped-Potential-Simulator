@@ -47,6 +47,7 @@ class Stepper
   static double lj_eps; // lennard jones minimum energy
   static double lj_sig; // lennard jones distance of root
   static double beta; // inverse reduced temperature
+  static double lj_shift;
   //Functions
   double generatePlot(double r, double r0)
   {
@@ -64,8 +65,8 @@ class Stepper
       //double r_core =  integrator_Simpson(&BHequivalentDiameter, lj_sig, ZERO, 1000);
       double r_core = ZERO;
       totalZ = integrator_Simpson(&partition_Function, r_cutoff, r_core, 1000);
-      r_core = limit_solver_bisection(&partition_Function, (1.0 - 0.999936657516334) * totalZ,
-				      r_cutoff, r_core, 1000, 1e6, 1e-10);
+      //r_core = limit_solver_bisection(&partition_Function, (1.0 - 0.999936657516334) * totalZ,
+      //r_cutoff, r_core, 1000, 1e6, 1e-10);
       //genSteps.push_back(Steps(r_core,0));
       //--number_of_steps;
       switch(step_radius)
@@ -282,7 +283,7 @@ class Stepper
   // = Lennard Jones Potential
   static inline double potential(double r)
   {
-    return 4.0 * lj_eps * (pow(lj_sig / r, 12) - pow(lj_sig / r, 6));
+    return 4.0 * lj_eps * (pow(lj_sig / r, 12) - pow(lj_sig / r, 6)) - lj_shift;
   }
   // = Lennard Jones Force
   static inline double force(double r)
