@@ -1,6 +1,7 @@
 //Class to allow 3D vector calculations
 #pragma once
 #include<math.h>
+#include<cstdlib>
 //declarations that classes and operator overloads are templates...this is so the compiler knows what to expect
 template <class T> class Vector3;
 template <class T> Vector3<T> operator* (const T c,const Vector3<T> &v);

@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <boost/program_options.hpp>
 #include <math.h>
@@ -19,16 +20,29 @@ class SimSet: public Settings
 {
  private:
   int writeOutLog;
-
+  bool runForTime;
+  unsigned long long simEvents;
+  unsigned long long eqEvents;
+  double simTime;
+  double eqTime;
  public:
   //constructor
  SimSet(): writeOutLog(-1){}
 
   //get access
-  int getOutLOg() { return writeOutLog; }
+  int getOutLog() { return writeOutLog; }
+  unsigned long long getRunEvent() { return simEvents; }
+  unsigned long long getEQEvent() { return eqEvents; }
+  double getRunTime() { return simTime; }
+  double getEQTime() { return eqTime; }
 
+  bool isTime(bool eq) { return (eq) ? eqTime != 0 : simTime != 0;  }
   //set access
   void setOutLog(int value) { writeOutLog = value; }
+  void setRunEvent(unsigned long long value) { simEvents = value; }
+  void setEQEvent(unsigned long long value) { eqEvents = value; }
+  void setRunTime(double value) { simTime = value; }
+  void setEQTime(double value) { eqTime = value; }
 
   virtual void setOptions(boost::program_options::options_description& simOpts)
   {
@@ -57,7 +71,8 @@ class SimProp:public Settings
   double systemLength;
  public:
   //constructor - just use default
- SimProp() : temperature (0), density(0), numberOfParticles(0), systemLength(0){}
+ SimProp() : temperature (0), density(0), numberOfParticles(0), systemLength(0)
+    {}
 
   //get access
   double getT() { return temperature; }
@@ -66,35 +81,39 @@ class SimProp:public Settings
   double getLength() 
   { 
     //check if systemLength has been calculated before
-    if(systemLength == 0) { pow(numberOfParticles / density, 1.0 / 3.0);}
+    if(systemLength == 0) { systemLength = pow(numberOfParticles / density, 1.0 / 3.0);}
     return systemLength;
   }
-
+  void setT(double value) { temperature = value; }
+  void setDensity(double value) { density = value; }
+  void setN(unsigned int value) { numberOfParticles = value; }
   virtual void setOptions(boost::program_options::options_description& simOpts)
   {
     namespace po = boost::program_options;
     simOpts.add_options()
       ("temperature,T", po::value<double>(), "System temperature")
-      ("density, rho", po::value<double>(), "System Density")
-      ("particles, N", po::value<unsigned int>(), "Number of particles")
+      ("density,d", po::value<double>(), "System Density")
+      ("particles,N", po::value<unsigned int>(), "Number of particles")
       ;
   }
 
   virtual void loadCLSettings(boost::program_options::variables_map& vm)
   {
-    if(vm.count("temperature") && temperature == 0)
+    if(vm.count("temperature"))
       temperature = vm["temperature"].as<double>();
-    else
+
+    if(temperature == 0)
       optionError("No temperature specified");
 
-    if(vm.count("density") && density == 0)
+    if(vm.count("density"))
       density = vm["density"].as<double>();
-    else
+    
+    if(density == 0)
       optionError("No density specified");
 
-    if(vm.count("particles") && numberOfParticles == 0)
+    if(vm.count("particles"))
       numberOfParticles = vm["particles"].as<unsigned int>();
-    else
+    if(numberOfParticles == 0)
       optionError("Number of particles not specified");
   }
 

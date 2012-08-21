@@ -1,9 +1,10 @@
 #include "Simulator.h"
-
+#include "Engine.h"
 void Simulator::loadSettings(int argc, char *argv[])
 {
-    
-  //Then code the config file/cmdline using boost
+  //load the config file
+  parseXML config(simSettings, simProperties, particles);
+  config.parseFile();
   namespace po = boost::program_options;
     
   //define all the program options classes
@@ -37,9 +38,9 @@ void Simulator::loadSettings(int argc, char *argv[])
 
 void Simulator::initialise()
 {
-  std::cout << "\rInitialising => Random Number Generator    " << std::flush;
+  std::cout << "\rInitialisation => Random Number Generator    " << std::flush;
   RNG.seed();
-  std::cout << "\rInitialising => Particle => Positions      " << std::flush;
+  std::cout << "\rInitialisation => Particle => Positions      " << std::flush;
 
   particles.resize(simProperties.getN());
   Lattice* initPos = new FCC; 
@@ -47,11 +48,11 @@ void Simulator::initialise()
     initPos->placeParticles(particles, simProperties.getLength()); //initialise particle locations
     delete initPos; //release memory
   }
-  std::cout << "\rInitialising => Particle => Velocity       " << std::flush;
+  std::cout << "\rInitialisation => Particle => Velocity       " << std::flush;
   for(it_p p = particles.begin();p != particles.end(); ++p)
     p->resetV(RNG);
   zeroMomentum();
-  std::cout << "\rInitialising => Potential                  " << std::flush;
+  std::cout << "\rInitialisation => Potential                  " << std::flush;
   ContPotential* potential = new LennardJones(1,1);
   {
     Stepper::Stepper* stepper = new Stepper::Pos_Even(3.0, 10);
@@ -66,23 +67,29 @@ void Simulator::initialise()
     }
     delete potential;
   }
-  std::cout << "\rInitialising => Pair Step Map              " << std::flush;
+  std::cout << "\rInitialisation => Pair Step Map              " << std::flush;
   stepmap.populateMap(particles, steps, simProperties.getLength());
-  std::cout << "\rInitialising => Pair Step Map => Checking  " << std::flush;
+
+  std::cout << "\rInitialisation => Pair Step Map => Checking  " << std::flush;
   stepmap.checkMap(particles, steps, simProperties.getLength());
-  std::cout << "\rInitialising => Complete                   " << std::flush;
+  if(!stepmap.checkMap(particles, steps, simProperties.getLength()))
+    {
+      std::cerr << "Error: Cannot create a valid capture map." << std::endl;
+      exit(3);
+    }
+  std::cout << "\rInitialisation => Complete                   " << std::endl;
 
 }
-void Simulator::equilbriate()
+void Simulator::equilibrate()
 {
-  std::cout << "\rEquilibration => Resetting Particles       " << std::flush;
+  std::cout << "\rEquilibration => Resetting Particles         " << std::flush;
   for(it_p p = particles.begin();p != particles.end(); ++p)
     p->reset();
-  std::cout << "\rEquilibration => Initialising Engine       " << std::flush;
-  Engine engine(this, &particles);
-  std::cout << "\rEquilibration => Starting Simulation       " << std::flush;
-    
-  std::cout << "\rEquilibration => Complete                  " << std::flush;
+  std::cout << "\rEquilibration => Initialising Engine         " << std::flush;
+  Engine::Engine engine(this);
+  std::cout << "\rEquilibration => Starting Simulation         " << std::flush;
+  engine.equilibrate();
+  std::cout << "\rEquilibration => Complete                    " << std::endl;
 
 }
 void Simulator::zeroMomentum()
@@ -97,8 +104,17 @@ void Simulator::zeroMomentum()
 
 bool Simulator::isRunning(double t, unsigned long long N, bool equilibration)
 {
-  if(simSettings.isTime()) //if simulator is running for a certain length of time
+  if(simSettings.isTime(equilibration)) //if simulator is running for a certain length of time
     return (equilibration ? t < simSettings.getEQTime() : t < simSettings.getRunTime());
   else
     return (equilibration ? N < simSettings.getEQEvent() : N < simSettings.getRunEvent());
+}
+
+double Simulator::progress(double t, unsigned long long N, bool equilibration)
+{
+  if(simSettings.isTime(equilibration)) //if simulator is running for a certain length of time
+    return (equilibration ? t / simSettings.getEQTime() : t / simSettings.getRunTime());
+  else
+    return (equilibration ? (double) N / simSettings.getEQEvent() 
+	    : (double) N / simSettings.getRunEvent());
 }
