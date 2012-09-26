@@ -42,19 +42,19 @@ namespace Scheduler
       eventType(NONE)
       {}
 
-    bool operator<(const Event& otherevent) const  
+    inline bool operator<(const Event& otherevent) const  
     { return collisionTime < otherevent.collisionTime; }
 
-    bool operator>(const Event& otherevent) const
+    inline bool operator>(const Event& otherevent) const
     { return collisionTime > otherevent.collisionTime; }
 	     
-    double getCollisionTime () {return collisionTime;}
-    unsigned int getP1() {return particle1;}
-    unsigned int getP2() {return particle2;}
-    unsigned long long getP2Coll() { return p2coll; }
-    EventType getEventType () { return eventType; }
+    inline double getCollisionTime () {return collisionTime;}
+    inline unsigned int getP1() {return particle1;}
+    inline unsigned int getP2() {return particle2;}
+    inline unsigned long long getP2Coll() { return p2coll; }
+    inline EventType getEventType () { return eventType; }
   
-    void setCollisionTime(double value) {collisionTime = value;}
+    inline void setCollisionTime(double value) {collisionTime = value;}
   private:
     double collisionTime;
     unsigned int particle1;
@@ -72,12 +72,13 @@ namespace Scheduler
     void initialise ();
     void update (double, unsigned int); //update for one particles
     void update (double, unsigned int, unsigned int); //update for two particles
+    double getInteractionTime (unsigned int, unsigned int, Event::EventType&);
   private:
     Simulator* simulator;
     std::vector<Event> masterEL;
     Event getMinTime (double, unsigned int);
     double getSentinal (unsigned int);
-    double getInteractionTime (unsigned int, unsigned int, Event::EventType&);
+
     //Schduler::Event getThermostat (Thermostat&);
     //Schduler::Event getRDF (RDF&);
   };

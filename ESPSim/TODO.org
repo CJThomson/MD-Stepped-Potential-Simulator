@@ -1,0 +1,25 @@
+* Improvements[0%]
+** TODO Rewrite Stepper base class, move parameters into derived classes
+** TODO Add Cubic arrangement
+* New Features[0%]
+** TODO Add Thermostat[0/3]
+- [ ] Add Andersen Thermostat
+- [ ] Add Isokinetic Thermostat
+- [ ] Add Nose-Hoover Thermostat
+** TODO Add Production Runs
+** TODO Add output logging [0/5]
+- [ ] Copy of input data
+- [ ] Results per run and average
+- [ ] RDF Data
+- [ ] Particle Position Data
+- [ ] Collision Statistics
+** TODO Complete Sampler [0/2]
+- [ ] RDF
+- [ ] Collision Statistics
+** TODO Input Data [0/4]
+- [ ] Read Stepper settings + implementation
+- [ ] Read Sampler settings
+- [ ] Read Output log settings
+- [ ] Read Particle Data + implementation
+* Bugs [0%]
+** TODO Possible negative time interval...unconfirmed

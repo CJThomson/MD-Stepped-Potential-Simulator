@@ -102,7 +102,6 @@ void indirectCorr(double);
 void initialise(std::vector<CParticle>&, CRandom&);
 void initFromFile (std::vector<CParticle>&);
 void initSettings(std::vector<std::pair<double, double> >&);
-void initSteps();
 void generateNeighbourCells(std::vector<std::set<int> >&);
 void generateNeighbourList(std::vector<std::set<int> >&,  std::vector<CParticle>&);
 void getEvent(CParticle&,

@@ -43,7 +43,7 @@ void Simulator::initialise()
   std::cout << "\rInitialisation => Particle => Positions      " << std::flush;
 
   particles.resize(simProperties.getN());
-  Lattice* initPos = new FCC; 
+  Lattice* initPos = new FCC; //[[REPLACE]] boost smart pointers 
   {
     initPos->placeParticles(particles, simProperties.getLength()); //initialise particle locations
     delete initPos; //release memory
@@ -72,11 +72,7 @@ void Simulator::initialise()
 
   std::cout << "\rInitialisation => Pair Step Map => Checking  " << std::flush;
   stepmap.checkMap(particles, steps, simProperties.getLength());
-  if(!stepmap.checkMap(particles, steps, simProperties.getLength()))
-    {
-      std::cerr << "Error: Cannot create a valid capture map." << std::endl;
-      exit(3);
-    }
+
   std::cout << "\rInitialisation => Complete                   " << std::endl;
 
 }

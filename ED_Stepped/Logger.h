@@ -67,7 +67,21 @@ class Logger
       grLog << i * deltaR << "\t" << rdfd[i] << std::endl;
     grLog.close();
   }
-
+  void writeScriptInput(std::vector<Steps>& steps, std::vector<CollisionCount>& eCount, unsigned int stepNo)
+  {
+    std::ofstream scriptInput;
+    std::ostringstream fileName;
+    std::string outfileName;
+    fileName << stepNo << "Steps.dat";
+    outfileName = fileName.str();
+    scriptInput.open(outfileName.c_str());
+    for(size_t i(0); i < steps.size(); ++i)
+      {
+	scriptInput << steps[i].step_radius << "\t" << steps[i].step_energy  << "\t"
+		    << eCount[i].in_bounce + eCount[i].out_bounce << std::endl;
+      }
+    scriptInput.close();
+  }
   void write_Steps(std::vector<Steps>& steps, double T, double rho, double n, 
 		   Stepper::StepHeight type, double stepInt= -1)
   {

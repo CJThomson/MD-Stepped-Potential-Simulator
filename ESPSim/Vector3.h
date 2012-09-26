@@ -81,7 +81,7 @@ class Vector3
   {
     x = 0; y = 0; z = 0;
   }
-  double length()
+  double length() const
   {
     return sqrt( pow(x, 2) + pow(y, 2) + pow(z, 2) );
   }
@@ -93,12 +93,12 @@ class Vector3
     double z1=z/abs;
     return Vector3(x1,y1,z1);
   }
-  T dotProd(const Vector3 &v)
+  T dotProd(const Vector3 &v) const
   {
     return x * v.x + y * v.y + z * v.z;
   }
 
-  T lengthSqr()
+  T lengthSqr() const
   {
     return x * x + y * y + z * z;
   }

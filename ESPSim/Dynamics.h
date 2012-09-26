@@ -9,6 +9,7 @@
 #include "Particle.h"
 #include "Stepmap.h"
 #include "Simulator.h"
+#include "Sampler.h"
 
 namespace Engine
 {
@@ -17,9 +18,13 @@ namespace Engine
   public:
   Dynamics(Simulator* sim) :
     simulator(sim) {};
-    void interact(double t, Scheduler::Event& event)
+    void interact(double t, Scheduler::Event& event, Sampler::Sampler& sampler)
     {
-      double mass = simulator->getParticles()[0].getMass();
+      double mass = simulator->getParticles()[event.getP1()].getMass();
+      double dU = 0;
+      double KE0 =  simulator->getParticles()[event.getP1()].kineticEnergy() 
+	+ simulator->getParticles()[event.getP2()].kineticEnergy();
+
       //update particle positions
       simulator->setParticles()[event.getP1()].move(t);
       simulator->setParticles()[event.getP2()].move(t);
@@ -31,58 +36,70 @@ namespace Engine
       Vector3<double> v12 = simulator->getParticles()[event.getP1()].getV() 
 	- simulator->getParticles()[event.getP2()].getV();
       double vdotr = v12.dotProd(r12.normalise());
-      unsigned int step = simulator->getStepMap().getStep(event.getP1(), event.getP2());
+      Stepmap::it_map it_step = simulator->setStepMap().setStepPntr(event.getP1(), event.getP2());
       switch(event.getEventType())
 	{
 	case Scheduler::Event::IP_IN:
 	  {
-	    double dU = 0;
-	    if(step == -1) //if no collision state found then particles must be outside outer step
+	    if(it_step == simulator->setStepMap().getEndPntr()) //if no collision state found then particles must be outside outer step
 	      dU = simulator->getSteps()[0].second; //energy is the outermost step height
 	    else //if not outside then energy change is the difference in step heights
-	      dU = simulator->getSteps()[step].second - simulator->getSteps()[step + 1].second;
+	      dU = simulator->getSteps()[it_step->second + 1].second 
+		- simulator->getSteps()[it_step->second].second;
 
-	    if((vdotr * vdotr + 4.0 / mass * -dU) > 0) //if particles go over the step
+	    if((vdotr * vdotr - 4.0 / mass * dU) > 0) //if particles go over the step
 	      {
-		double A = -0.5 / mass * (vdotr + sqrt(vdotr * vdotr +  4.0 / mass * -dU)); //change in momentum
+		double A = -0.5 / mass * (vdotr + sqrt(vdotr * vdotr - 4.0 / mass * dU)); //change in momentum
 		//update particle velocities
 		Vector3<double> deltav1 = (A / mass) * r12.normalise();
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
-		simulator->setStepMap().moveInwards(event.getP1(), event.getP2());
+		sampler.changeMomentumFlux(r12.dotProd(deltav1));
+		sampler.changePotential(dU);
+		if(it_step == simulator->setStepMap().getEndPntr())
+		  simulator->setStepMap().addToMap(event.getP1(), event.getP2());
+		else
+		  ++(it_step->second);
 	      }
 	    else //if bounce occurs
 	      {
 		Vector3<double> deltav1 = - vdotr * r12.normalise();
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
+		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 	      }
 	    break;
 	  }
 	case Scheduler::Event::IP_OUT:
 	  {
-	
-	    double dU = 0;
-	    if(step == 0)
-	      dU = -simulator->getSteps()[step].second;
-	    else
-	      dU = simulator->getSteps()[step - 1].second - simulator->getSteps()[step].second; 
 
-	    if((vdotr * vdotr + 4.0 / mass * -dU) > 0) //if particles go over the step
+	    if(it_step->second == 0)
+	      dU = -simulator->getSteps()[it_step->second].second;
+	    else
+	      dU = simulator->getSteps()[it_step->second - 1].second 
+		- simulator->getSteps()[it_step->second].second; 
+
+	    if((vdotr * vdotr - 4.0 / mass * dU) > 0) //if particles go over the step
 	      {
-		double A = -0.5 / mass * (vdotr - sqrt(vdotr * vdotr +  4.0 / mass * -dU)); //change in momentum
+		double A = -0.5 / mass * (vdotr - sqrt(vdotr * vdotr - 4.0 / mass * dU)); //change in momentum
 
 		//update particle velocities
 		Vector3<double> deltav1 = A / mass * r12.normalise();
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
-		simulator->setStepMap().moveOutwards(event.getP1(), event.getP2());
+		sampler.changeMomentumFlux(r12.dotProd(deltav1));
+		sampler.changePotential(dU);
+		if(it_step->second == 0)
+		  simulator->setStepMap().deletePntr(it_step);
+		else
+		  --(it_step->second);
 	      }
 	    else //if bounce occurs
 	      {
 		Vector3<double> deltav1 = - vdotr * r12.normalise();
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
+		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 	      }
 	    break;
 	  }

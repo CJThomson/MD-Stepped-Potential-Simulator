@@ -13,14 +13,14 @@ class Random
   Random()
     {}
   boost::mt19937 randomNumberGenerator; //random number generator
-  double var_normal()
+  inline double var_normal()
   {
     //initialise normally distributed random numbers
     boost::normal_distribution <double> nd(0.0, 1.0);
     boost::variate_generator<boost::mt19937&, boost::normal_distribution<double> > var_nor(randomNumberGenerator, nd);
     return var_nor();
   }
-  double var_01()
+  inline double var_01()
   {
     //initialise uniformly distributed random numbers between 0 and 1
     boost::uniform_real<double> ud_real(0.0, 1.0);
@@ -28,13 +28,13 @@ class Random
 
     return var_01();
   }
-  double var_uniformInt(int lower, int upper)
+  inline double var_uniformInt(int lower, int upper)
   {
     boost::uniform_int<int> ud_int(lower, upper);
     boost::variate_generator<boost::mt19937&, boost::uniform_int<int> > uni_int(randomNumberGenerator, ud_int);
     return uni_int();
   }
-  void seed()
+  inline void seed()
   {
     randomNumberGenerator.seed(time(NULL));
   }

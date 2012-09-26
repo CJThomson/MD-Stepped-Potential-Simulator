@@ -3,11 +3,13 @@
 #include <vector>
 #include <iomanip>
 #include <iostream>
+#include <fstream>
 
 #include "Particle.h"
 #include "Simulator.h"
 #include "Scheduler.h"
 #include "Dynamics.h"
+#include "Sampler.h"
 
 namespace Engine
 {
@@ -25,9 +27,10 @@ namespace Engine
     double t;
     unsigned long long eventCount;
 
-    void handleEvent(Scheduler::Event&, Scheduler::Scheduler&);
-    void handleInteraction(Scheduler::Event&, Scheduler::Scheduler&);
+    void handleEvent(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
+    void handleInteraction(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
     void handleSentinal(Scheduler::Event&, Scheduler::Scheduler&);
+    void freeStream(double, Sampler::Sampler&);
     void freeStream(double);
   };
 }

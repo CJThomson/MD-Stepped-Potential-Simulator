@@ -24,17 +24,17 @@ class Particle
     {}
  Particle() : r(), r0(), v(), radius(1), mass(1), id(-1), noColl(0), lastUpdate(0){ }
   //GET access functions
-  Vector3<double> getR() {return r;}
-  Vector3<double> getR0() {return r0;}
-  Vector3<double> getV() {return v;}
+  inline const Vector3<double>& getR() const { return r; }
+  inline const Vector3<double>& getR0() const { return r0; }
+  inline const Vector3<double>& getV() const { return v; }
 
-  double getRadius() {return radius;}
-  double getMass() {return mass;}
-  unsigned int getID() {return id;}
-  unsigned int getCellNo() {return cellNo;}
-  unsigned long long getNoColl() {return noColl;}
-  unsigned int getNextCell() {return nextCell;}
-  double getLastUpdate() {return lastUpdate;}
+  inline double getRadius() const { return radius; }
+  inline double getMass() const { return mass; }
+  inline unsigned int getID() const { return id; }
+  unsigned int getCellNo() const { return cellNo; }
+  unsigned long long getNoColl() const { return noColl; }
+  unsigned int getNextCell() const { return nextCell; }
+  double getLastUpdate() const { return lastUpdate; }
 
   //SET access functions
   void setR(Vector3<double> &newr) { r = newr;}
@@ -49,7 +49,7 @@ class Particle
   void incrNoColl() { ++noColl; }
 
   //functions
-  double kineticEnergy()//return the specific energy of the particle
+  double kineticEnergy() const //return the specific energy of the particle
   {
     return 0.5 * v.lengthSqr() * mass;
   }
@@ -61,7 +61,7 @@ class Particle
     lastUpdate = 0;
   }
 
-  void move(double sysTime)
+  void move(const double sysTime)
   {
     if(sysTime != lastUpdate)
       {

@@ -98,7 +98,6 @@ int main()
 	  time(&startTime);
 	  cout << "Starting simulation at " << asctime(localtime(&startTime)) << endl;
 	  cout << "Generating " << no_of_steps << " Steps...";
-	  initSteps(); //step up system steps
 	  stepper.generateSteps(no_of_steps, r_cutoff, height_type, width_type, steps, energyInt);
 	  logger.write_Steps(steps, temperature, density, numberParticles, height_type, energyInt);
 	  stepCount.resize(steps.size());
@@ -485,17 +484,11 @@ void runSimulation(double simTime, vector<Results>& results)
   logger.write_Diff(coDiff); //write coefficient of diffusion file
   logger.write_Location(particles, t, systemSize); //write final values to the log
   logger.write_CollCount(stepCount, density, temperature, numberParticles, energyInt);
+  logger.writeScriptInput(steps, stepCount, no_of_steps);
   if(overwriteInit)
     logger.write_Init(particles); //write final values to log to allow
   cout << "\rAll Tasks Complete";
 }
-
-/*void applyBC(CVector3& pos)
-{
-  //Function Description: Apply boundary conditions to a vector, then return the vector
-  for (size_t i(0); i < 3; ++i)
-    pos[i] -= lrint(pos[i] / systemSize[i]) * systemSize[i];
-    }*/
 
 int calcCell(PBCVector<double> r)
 {
@@ -876,11 +869,11 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = (A / mass) * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
-	    ++stepCount[it_map->second - 1].in_capture; //(inwards)
 	    if(it_map == collStep.end()) //if no collision state found then particles must be outside outer step
 	      collStep.insert(pair<pair<int, int>, int>(pair<int, int>(p1, p2), steps.size() - 1)); //insert pair into collStep map
 	    else
 	      --(it_map->second); //move particles in one step
+	    ++stepCount[it_map->second].in_capture; //(inwards)
 	    currentU -= dU;
 	    currentK += dU;
 	    return r12.dotProd(deltav1);
@@ -892,7 +885,7 @@ double calcVelocity(vector<CParticle>& particle, eventTimes& event)
 	    CVector3<double> deltav1 = - vdotr * r12.normalise();
 	    particle[p1].v += deltav1;
 	    particle[p2].v -= deltav1;
-	  ++stepCount[it_map->second - 1].in_bounce;
+	    ++stepCount[it_map->second - 1].in_bounce;
 	    return r12.dotProd(deltav1);
 	  }
 	break;
@@ -1069,26 +1062,6 @@ void initFromFile (vector<CParticle> &particle)
     }
 }
 
-void initSteps()
-{
-
-  //Function description: loads in custom steps [[OBSOLETE]] This code should be removed as it is now obsolete
-  steps.clear();
-  //Steps from Chepela et al, Case 6
-  steps.push_back(Steps(0.80,66.74)); //step 0
-  steps.push_back(Steps(0.85,27.55)); //step 1
-  steps.push_back(Steps(0.90, 10.95)); //step 3
-  steps.push_back(Steps(0.95, 3.81)); //step 4
-  steps.push_back(Steps(1.00, 0.76)); //step 5
-  steps.push_back(Steps(1.05, -0.47)); //step 6
-  steps.push_back(Steps(1.25,-0.98)); //step 7
-  steps.push_back(Steps(1.45,-0.55)); //step 8
-  steps.push_back(Steps(1.75,-0.22)); //step 9
-  steps.push_back(Steps(2.30,-0.06)); //step 10
-
-
-
-}
 
 void generateNeighbourCells(vector<set<int> >& NC)
 {
@@ -1149,10 +1122,6 @@ void getEvent(CParticle& p1,
   updatePosition(p1);
   double t_min_sent = calcSentinalTime(p1); 
   pEvents[p1.particleNo].push_back(eventTimes(t_min_sent, p1.particleNo, -1, 0, eventTimes::SENTINAL));
-  /*uble t_min_NL = calcCellLeave(p1);
-    pEvents[p1.particleNo].push_back(eventTimes(t_min_NL, p1.particleNo ,-1,0, eventTimes::NEIGHBOURCELL));
-    for(it_NC = NC[p1.cellNo].begin(); it_NC != NC[p1.cellNo].end(); ++it_NC)
-    for(p2 = NL[*it_NC].begin(); p2 !=NL[*it_NC].end(); ++p2)*/
   for(it_particle p2 = particles.begin(); p2 != particles.end(); ++p2)
     {
       if (p1.particleNo == p2->particleNo) continue;
@@ -1160,12 +1129,7 @@ void getEvent(CParticle& p1,
       eventTimes::EventType eventType;
       double t_min_coll = calcCollisionTime(p1, *p2, eventType);
       pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, p2->particleNo, p2->collNo, eventType));
-      /*if (p1.particleNo == *p2) continue;
-	updatePosition(particles[*p2]);
-	eventTimes::EventType eventType;
-	double t_min_coll = calcCollisionTime(p1, particles[*p2], eventType);
-	pEvents[p1.particleNo].push_back(eventTimes(t_min_coll, p1.particleNo, *p2, particles[*p2].collNo, eventType));
-      */
+
     }
   events[p1.particleNo] = *min_element(pEvents[p1.particleNo].begin(), pEvents[p1.particleNo].end());
 }
@@ -1200,9 +1164,6 @@ void runThermostat(CParticle& particle, CRandom& RNG, vector<eventTimes> &events
   //assign values for each component of the particle's velocity from Gaussian
   for(size_t dim (0); dim < 3; ++dim) 
     particle.v[dim] = RNG.var_normal() * factor;
-  //cerr << "old v = (" << oldv[0] << ", " << oldv[1] << ", " << oldv[2] << " ) "
-  //     << "new v = (" << particle.v[0] << ", " << particle.v[1] << ", " << particle.v[2] << ")" << endl;
-  //cerr << "Change in kinetic energy of system " << 0.5 * particle.mass * (particle.v.dotProd(particle.v)-oldv.dotProd(oldv)) << endl;
   currentK += 0.5 * particle.mass * (particle.v.lengthSqr()-oldv.lengthSqr());
   int particleNo = -1;
   double t_min_thermo = calcThermoTime(RNG, particleNo);
