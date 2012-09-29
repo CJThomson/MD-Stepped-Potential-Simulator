@@ -5,12 +5,12 @@ namespace Sampler
   class TAProperty
   {
   public:
-    TAProperty() { curValue = 0; }
-    TAProperty(const double& value) { curValue = value; }
+    TAProperty() { curValue = t = average = stdDev = 0; }
+    TAProperty(const double& value) { TAProperty(); curValue = value; }
     TAProperty& operator= (const double& value) { curValue = value; return *this; }
-    TAProperty& operator+= (const double& value) { operator=(curValue + value); }
-    TAProperty& operator-= (const double& value) { operator=(curValue - value); }
-    void stream (const double& dt) 
+    TAProperty& operator+= (const double& value) { curValue += value; return *this; }
+    TAProperty& operator-= (const double& value) { curValue -= value; return *this; }
+    void stream (const double dt) 
     { 
       t += dt;
       average += current() * dt;
@@ -18,8 +18,8 @@ namespace Sampler
     }
 
     double current() const { return curValue; }
-    double mean() const { return t == 0 ? current() : average / t; }
-    double meanSqr() const { return t == 0 ? current() * current() : stdDev / t; }
+    double mean() const { return t == 0 ? curValue : average / t; }
+    double meanSqr() const { return t == 0 ? curValue * curValue : stdDev / t; }
     double time() const { return t; }
   private:
     double t;

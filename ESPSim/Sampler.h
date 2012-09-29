@@ -15,8 +15,9 @@ namespace Sampler
   class Sampler
   {
   public:
-  Sampler(unsigned int noParticles, bool countColl, bool gr) :
-    numberParticles(noParticles), collCount(countColl), RDF(gr) {};
+  Sampler(unsigned int noParticles, double m, double rho, bool countColl, bool gr) :
+    numberParticles(noParticles), mass(m), density(rho), 
+      collCount(countColl), RDF(gr) {};
     void initialise (const std::vector<Particle>&, 
 		     const std::vector<std::pair<double, double> >&,
 		     const Stepmap&);
@@ -25,9 +26,14 @@ namespace Sampler
     inline void changeKinetic (const double deltaKE) 
     { kineticEnergy += deltaKE; potentialEnergy -= deltaKE; }
     inline void changeMomentumFlux (double deltaP) { momentumFlux += deltaP;}
-    inline double getU() const { return potentialEnergy.current(); }
+    inline double getU() const { return potentialEnergy.current() / numberParticles; }
     inline double getKE() const  { return kineticEnergy; }
     inline double getT() const { return calcTemp(); }
+    inline double getMeanT() const { return temperature.mean(); }
+    inline double getMeanU() const { return potentialEnergy.mean() / numberParticles; }
+    inline double getMomFlux() const { return momentumFlux.current(); }
+    inline double getFluxTime() const { return momentumFlux.time(); }
+    inline double getP() const { return calcPressure(); }
     void eventCount (int, unsigned int,  bool);
     void freeStream(double);
 
@@ -36,14 +42,33 @@ namespace Sampler
     //settings
     bool collCount;
     bool RDF;
-    
-    TAProperty potentialEnergy;
-    unsigned int numberParticles;
-    double kineticEnergy;
-    double momentumFlux;
 
+    unsigned int numberParticles;    
+    double mass;
+    double density;
+
+    TAProperty potentialEnergy;
+    double kineticEnergy;
+    TAProperty momentumFlux;
     TAProperty temperature;
     std::vector<CollisionCount> eventCounts;
+    
+    inline double calcPressure() const
+    { 
+      double pressure = density * temperature.mean() + mass * density * momentumFlux.current() 
+	/ (numberParticles * 3.0 * momentumFlux.time()); 
+
+      if(abs(pressure) > 1E10)
+	{
+	  std::cerr << density << " - " << temperature.mean() << " - " << mass
+		    << " - " << density << " - " << momentumFlux.mean() 
+		    << " - " << momentumFlux.current()
+		    << " - " << momentumFlux.time();
+	  exit(0);
+	}
+      return pressure;
+    }
+
 
     inline double calcTemp() const
     { return kineticEnergy / (1.5 * numberParticles); }

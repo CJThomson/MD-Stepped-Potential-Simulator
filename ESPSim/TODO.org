@@ -22,4 +22,10 @@
 - [ ] Read Output log settings
 - [ ] Read Particle Data + implementation
 * Bugs [0%]
-** TODO Possible negative time interval...unconfirmed
+** TODO Possible negative time interval: - confirmed
+   Only happens with particles 0 or 1, check initialisation of the
+   particles, try changing the loop to loop from 0 to numParticles
+   Hopefully this should fix the problem...but why are iterators not
+   working????? Maybe have it output all the particles' initial
+   positions and velocities and check they all have them...
+   

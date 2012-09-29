@@ -20,10 +20,12 @@ namespace Engine
     simulator(sim) {};
     void interact(double t, Scheduler::Event& event, Sampler::Sampler& sampler)
     {
-      double mass = simulator->getParticles()[event.getP1()].getMass();
+      //get the masses of the particles
+      double p1mass = simulator->getParticles()[event.getP1()].getMass();
+      double p2mass = simulator->getParticles()[event.getP2()].getMass();
+      double mass = 2 * p1mass * p2mass / (p1mass + p2mass);//fix to correct mu
+
       double dU = 0;
-      double KE0 =  simulator->getParticles()[event.getP1()].kineticEnergy() 
-	+ simulator->getParticles()[event.getP2()].kineticEnergy();
 
       //update particle positions
       simulator->setParticles()[event.getP1()].move(t);
@@ -56,10 +58,7 @@ namespace Engine
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 		sampler.changePotential(dU);
-		if(it_step == simulator->setStepMap().getEndPntr())
-		  simulator->setStepMap().addToMap(event.getP1(), event.getP2());
-		else
-		  ++(it_step->second);
+		simulator->setStepMap().moveInwards(event.getP1(), event.getP2());
 	      }
 	    else //if bounce occurs
 	      {
@@ -89,10 +88,7 @@ namespace Engine
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 		sampler.changePotential(dU);
-		if(it_step->second == 0)
-		  simulator->setStepMap().deletePntr(it_step);
-		else
-		  --(it_step->second);
+		simulator->setStepMap().moveOutwards(event.getP1(), event.getP2());
 	      }
 	    else //if bounce occurs
 	      {

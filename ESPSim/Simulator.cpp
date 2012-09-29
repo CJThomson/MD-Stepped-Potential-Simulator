@@ -51,6 +51,7 @@ void Simulator::initialise()
   std::cout << "\rInitialisation => Particle => Velocity       " << std::flush;
   for(it_p p = particles.begin();p != particles.end(); ++p)
     p->resetV(RNG);
+
   zeroMomentum();
   std::cout << "\rInitialisation => Potential                  " << std::flush;
   ContPotential* potential = new LennardJones(1,1);
@@ -88,6 +89,21 @@ void Simulator::equilibrate()
   std::cout << "\rEquilibration => Complete                    " << std::endl;
 
 }
+
+void Simulator::productionRun()
+{
+  std::cout << "\rRunning => Resetting Particles               " << std::flush;
+  for(it_p p = particles.begin();p != particles.end(); ++p)
+    p->reset();
+  std::cout << "\rRunning => Initialising Engine               " << std::flush;
+  Engine::Engine engine(this);
+  std::cout << "\rRunning => Starting Simulation               " << std::flush;
+  engine.productionRun();
+  std::cout << "\rRunning => Complete                          " << std::endl;
+
+}
+
+
 void Simulator::zeroMomentum()
 {
   Vector3<double> sum;

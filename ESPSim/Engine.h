@@ -19,6 +19,7 @@ namespace Engine
     Engine(Simulator* sim) : 
     simulator(sim), t(), eventCount(){}; 
     void equilibrate();
+    void productionRun();
     void simulation();
     
   private:
@@ -26,11 +27,10 @@ namespace Engine
     //pointer to the sampler class
     double t;
     unsigned long long eventCount;
-
+    bool equilibration;
     void handleEvent(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
     void handleInteraction(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
-    void handleSentinal(Scheduler::Event&, Scheduler::Scheduler&);
+    void handleSentinal(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler&);
     void freeStream(double, Sampler::Sampler&);
-    void freeStream(double);
   };
 }

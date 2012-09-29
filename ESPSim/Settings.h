@@ -75,9 +75,9 @@ class SimProp:public Settings
     {}
 
   //get access
-  double getT() { return temperature; }
-  double getDensity() { return density; }
-  unsigned int getN() { return numberOfParticles; }
+  double getT() const { return temperature; }
+  double getDensity() const { return density; }
+  unsigned int getN() const { return numberOfParticles; }
   double getLength() 
   { 
     //check if systemLength has been calculated before

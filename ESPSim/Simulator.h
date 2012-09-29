@@ -24,11 +24,13 @@ class Simulator
   void loadSettings(int, char*[]);
   void initialise();
   void equilibrate();
+  void productionRun();
 
   inline const std::vector<Particle>& getParticles() const { return particles; }
   inline const Stepmap& getStepMap() const { return stepmap; }
   inline const std::vector<std::pair<double, double> >& getSteps() const { return steps; }
   inline double getSysLength() { return simProperties.getLength(); }
+  inline double getDensity() const { return simProperties.getDensity(); } 
   bool isRunning(double, unsigned long long , bool);
   double progress(double, unsigned long long , bool);
 

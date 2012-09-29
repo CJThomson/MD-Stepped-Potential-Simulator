@@ -22,6 +22,7 @@ int main(int argc, char *argv[])
   sim.loadSettings(argc, argv);  //load all the system settings
   sim.initialise(); //initialise the system
   sim.equilibrate(); //equilibrate the system
+  sim.productionRun(); //run the production runs
   cout << endl;
   return 0;
 }

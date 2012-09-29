@@ -5,13 +5,16 @@ namespace Sampler
   {
     kineticEnergy = 0;
     potentialEnergy = 0;
+    temperature = 0;
+    momentumFlux = 0;
     for(unsigned int p1 = 0; p1 < particles.size(); ++p1)
       {
 	kineticEnergy += particles[p1].kineticEnergy();
 	for(unsigned int p2 = p1 + 1; p2 < particles.size(); ++p2)
 	  {
-	    int stepID(pairStepMap.getStep(p1,p2));
-	    potentialEnergy += steps[stepID].second;
+	    int stepID(pairStepMap.getStep(p1,p2)); 
+	    if(stepID != -1)
+	      potentialEnergy += steps[stepID].second;
 	  }
       }
 
@@ -30,6 +33,7 @@ namespace Sampler
     temperature = calcTemp();
     temperature.stream(deltaTime);
     potentialEnergy.stream(deltaTime);
+    momentumFlux.stream(deltaTime);
   }
 
   void Sampler::sampleRDF(std::vector<Particle>& particles )
