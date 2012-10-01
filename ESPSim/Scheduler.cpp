@@ -3,14 +3,39 @@ namespace Scheduler
 {
   Event Scheduler::getNextEvent ()
   {
-    return *std::min_element(masterEL.begin(), masterEL.end());
-  }
+    size_t minIndex(0);
+    double minTime(HUGE_VAL);
+    for(size_t i(0); i < masterEL.size(); ++i)
+      {
+	if(masterEL[i].getCollisionTime() < minTime)
+	  {
+	    minTime = masterEL[i].getCollisionTime();
+	    minIndex = i;
+	  }
+      }
 
-  void Scheduler::initialise()
+    return masterEL[minIndex];    
+  }
+  void Scheduler::regenerate(double t, unsigned long long eventCount)
   {
     masterEL.clear();
     BOOST_FOREACH(Particle p1, simulator->getParticles())
-      masterEL.push_back(getMinTime(0, p1.getID()));
+      masterEL.push_back(getMinTime(t, p1.getID()));
+    if(masterEL.size() != simulator->getParticles().size())
+      {
+	std::cerr << "MasterEL not correct size" << std::endl;
+	exit(3);
+      }
+    if(simulator->setThermostat()->is_initialised())
+      {
+	masterEL.push_back(Event());
+	thermoPoint = masterEL.size() - 1;
+	getThermoEvent(t, eventCount);
+      }
+  }
+  void Scheduler::initialise()
+  {
+    regenerate(0,0);
   }
 
   void Scheduler::update(double t, unsigned int p1)
@@ -28,17 +53,14 @@ namespace Scheduler
 	      << "," << simulator->getParticles()[p1].getR()[1]
 	      << "," << simulator->getParticles()[p1].getR()[2]
 	      << ")";*/
-    simulator->setParticles()[p1].move(t); //move particle to current position
     //std::cerr << "minimum time for particle: " << p1;
     double earliest_time = getSentinal(p1);
     unsigned int earliest_p2 = -1;
     Event::EventType earliest_Event = Event::SENTINAL;
-    //BOOST_FOREACH(Particle p2, simulator->setParticles())
     for(std::vector<Particle>::iterator p2 = simulator->setParticles().begin();
-	p2 != simulator->setParticles().end(); ++p2)
+    	p2 != simulator->setParticles().end(); ++p2)
       {
 	if(p1 == p2->getID()) continue; //if particle is itself move on
-	p2->move(t);
 	Event::EventType eventType;
 	double t_min_coll = getInteractionTime(p1, p2->getID(), eventType);
 	if(t_min_coll < earliest_time)
@@ -69,13 +91,15 @@ namespace Scheduler
       }
     return t_min; 
   }
-  /*
-    Event Scheduler::getThermostat(CRandom& RNG, int& particleNo)
+  
+  void Scheduler::getThermoEvent(double t, unsigned long long eventCount)
     {
-    //thermostat::createEvent()
-    //return Event(thermostat::getTime(), thermostat::getParticle(), -1, Scheduler::Event::THERMOSTAT);
+      
+      Scheduler::masterEL[thermoPoint] 
+	= Event(t + simulator->setThermostat()->getThermoTime(eventCount), 
+		-1, -1, -1, Event::THERMOSTAT);
     }
-    Event Scheduler::getRDF()
+  /*Event Scheduler::getRDF()
     {
     //sampler::createRDFEvent();
     //return Event(sampler::RDF::getTime(), -1, -1, Scheduler::Event::RDF);
@@ -94,6 +118,7 @@ namespace Scheduler
       - simulator->getParticles()[p2].getV();
     //calculate dot products
     double r12sqr = r12.lengthSqr();
+    if(r12sqr != r12.dotProd(r12)) {std::cerr << "r12^2 != r12.r12" << std::endl; }
     double v12sqr = v12.lengthSqr();
     double vdotr = v12.dotProd(r12);
     int step = simulator->getStepMap().getStep(p1, p2);

@@ -19,7 +19,7 @@ namespace Sampler
       }
 
   }
-  void Sampler::eventCount ( int type, unsigned int stepNo, bool inwards )
+  void Sampler::eventCount (const int type, unsigned int stepNo, const bool inwards )
   {
     if(collCount)
       {

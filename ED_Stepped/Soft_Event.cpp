@@ -77,6 +77,7 @@ double TA_tavg = 0;
 double TA_tavg2 = 0;
 Logger logger; //create an instance of the logger class
 std::map<std::pair<int, int>, int> collStep;
+Stepmap pairStepMap;
 using namespace std;
 int main()
 {
@@ -188,6 +189,7 @@ void runSimulation(double simTime, vector<Results>& results)
   vector<eventTimes> masterEL; //create a vector to store collision times
   vector<set<int> > neighbourList; //create a vector of sets to hold particles in  neighbour cell
   vector<set<int> > neighbourCell; //create a vector of sets to hold the cells neighbouring each cell
+
   cout << "Initialising Random Number Generators";
   CRandom RNG;
   RNG.seed();
@@ -216,6 +218,8 @@ void runSimulation(double simTime, vector<Results>& results)
     for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2)
       calcStep(*p1,*p2);
   checkCaptureMap(particles);
+  pairStepMap.populateMap();
+  pairStepMap.checkMap();
   cout << "\rInitialising Output Logs...";
   //logger.initialise(Logger::LOCATIONS); //initialise location logger
   logger.initialise(Logger::OUTPUTLOG);
@@ -601,9 +605,10 @@ double calcCollisionTime(CParticle& particle1, CParticle& particle2, eventTimes:
       logger.outLog << "v.r = " << vdotr << endl;
     }
   //find which step the particle pair is on
-  it_map = collStep.find(pair<int, int> (min(particle1.particleNo, particle2.particleNo), 
-					 max(particle1.particleNo, particle2.particleNo)));
-  if (it_map == collStep.end()) //if particles are not in the step map then they must be outside range of influence, calculate when they come together
+  /*it_map = collStep.find(pair<int, int> (min(particle1.particleNo, particle2.particleNo), 
+    max(particle1.particleNo, particle2.particleNo)));*/
+  it_map = pairStepMap.setStepPntr(particle1.particleNo, particle2.particleNo);
+  if (it_map == pairStepMap.getEndPntr()) //if particles are not in the step map then they must be outside range of influence, calculate when they come together
     {
       //calculate quadratic root arguments
       double c = r12sqr - steps[steps.size() - 1].step_radius * steps[steps.size() - 1].step_radius;

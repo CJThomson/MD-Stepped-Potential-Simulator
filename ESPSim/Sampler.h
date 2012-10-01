@@ -80,11 +80,8 @@ class CollisionCount
     CollisionCount() { reset(); }
     void reset()
     {
-      _Core = 0;
       _Capture = 0;
       _Release = 0;
-      _Disassociation = 0;
-      _Association = 0;
       _BounceIn = 0;
       _BounceOut = 0;
     }
@@ -92,20 +89,11 @@ class CollisionCount
     {
       switch(type)
 	{
-	case 1: //Core event
-	  ++_Core;
-	  break;
 	case 2: 
 	  if(inwards) //Capture event
 	    ++_Capture;
 	  else //Release event
 	    ++_Release;
-	    break;
-	case 3:
-	  if(inwards) //Association
-	    ++_Association;
-	  else //Dissociation
-	    ++_Disassociation;
 	    break;
 	case 4: //bounce (in/out)
 	  if(inwards)
@@ -119,11 +107,8 @@ class CollisionCount
     }
 
   private:
-    unsigned int _Core;
     unsigned int _Capture;
     unsigned int _Release;
-    unsigned int _Disassociation;
-    unsigned int _Association;
     unsigned int _BounceIn;
     unsigned int _BounceOut;
   };

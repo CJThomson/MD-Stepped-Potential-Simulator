@@ -1,10 +1,11 @@
 #pragma once
 
 #include <vector>
-
+#include <boost/shared_ptr.hpp>
 #include "pugixml/pugixml.hpp"
 #include "Particle.h"
 #include "Settings.h"
+#include "Thermostat/Thermostat.h"
 class parseXML
 {
  public: 
@@ -29,10 +30,16 @@ class parseXML
 
   void parseSettings(pugi::xml_node set)
   {
+    //Equilibrium/Production Lengths
     settings.setRunEvent(set.child("RunLength").attribute("event").as_uint());
     settings.setRunTime(set.child("RunLength").attribute("time").as_double());
     settings.setEQEvent(set.child("EqLength").attribute("event").as_uint());
     settings.setEQTime(set.child("EqLength").attribute("time").as_double());
+    //Thermostat
+    settings.setThermoControl(set.child("Thermostat").attribute("ThermoUpdate").as_bool());
+    settings.setThermoFreq(set.child("Thermostat").attribute("ThermoFreq").as_double());
+    settings.setThermoType(set.child("Thermostat").attribute("type").as_string());
+ 
   }
 
   void parseProperties(pugi::xml_node prop)

@@ -63,6 +63,7 @@ class Particle
 
   void move(const double sysTime)
   {
+    std::cerr << "still being called" << std::endl;
     if(sysTime != lastUpdate)
       {
 	r += v * (sysTime - lastUpdate);

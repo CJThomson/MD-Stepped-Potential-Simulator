@@ -28,9 +28,6 @@ namespace Engine
       double dU = 0;
 
       //update particle positions
-      simulator->setParticles()[event.getP1()].move(t);
-      simulator->setParticles()[event.getP2()].move(t);
-
       //calculate the separation properties
       PBCVector<double>r12(simulator->getSysLength(), true, 
 			   simulator->getParticles()[event.getP1()].getR() 
@@ -58,6 +55,8 @@ namespace Engine
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 		sampler.changePotential(dU);
+		sampler.eventCount(2, (it_step == simualtor->setStepMap().getEndPntr() 
+				       ? -1 : it_step->second), true);
 		simulator->setStepMap().moveInwards(event.getP1(), event.getP2());
 	      }
 	    else //if bounce occurs
@@ -66,6 +65,8 @@ namespace Engine
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
+		sampler.eventCount(4, (it_step == simualtor->setStepMap().getEndPntr() 
+				       ? -1 : it_step->second), true);
 	      }
 	    break;
 	  }
@@ -88,7 +89,8 @@ namespace Engine
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 		sampler.changePotential(dU);
-		simulator->setStepMap().moveOutwards(event.getP1(), event.getP2());
+		sampler.eventCount(2, it_step->second, false);
+		simulator->setStepMap().moveOutwards(event.getP1(), event.getP2()); 
 	      }
 	    else //if bounce occurs
 	      {
@@ -96,6 +98,7 @@ namespace Engine
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
+		sampler.eventCount(4, it_step->second, false);
 	      }
 	    break;
 	  }

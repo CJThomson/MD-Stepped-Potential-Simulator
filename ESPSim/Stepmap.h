@@ -141,7 +141,7 @@ class Stepmap
 		       const std::vector<std::pair<double, double> >& steps, double length) const
   {
     //CAPTURE TEST
-
+    bool invalid = false;
     for(int i = 0; i < particles.size();++i)
       for(int j = i + 1; j < particles.size(); ++j)
 	{
@@ -150,7 +150,6 @@ class Stepmap
 	    = pairStepMap.find(std::pair<int,int>(i, j)); //find collision state of particles
 	  double distance = r12.length();
 	  int size = steps.size();
-	  bool invalid = false;
 
 	  //if particles aren't pairstepmap but should be
 	  if(it_map == pairStepMap.end() && 
@@ -194,7 +193,10 @@ class Stepmap
 	      return false;
 	    }
 	}
-    return true;
+    if(invalid)
+      return false;
+    else
+      return true;
   }
 };
   

@@ -41,18 +41,26 @@ namespace Scheduler
       p2coll(0),
       eventType(NONE)
       {}
-
+    inline const Event operator=(const Event &otherevent) 
+      {
+	collisionTime = otherevent.getCollisionTime();
+	particle1 = otherevent.getP1();
+	particle2 = otherevent.getP2();
+	p2coll = otherevent.getP2Coll();
+	eventType = otherevent.getEventType(); 
+	return *this;
+      }
     inline bool operator<(const Event& otherevent) const  
     { return collisionTime < otherevent.collisionTime; }
 
     inline bool operator>(const Event& otherevent) const
     { return collisionTime > otherevent.collisionTime; }
 	     
-    inline double getCollisionTime () {return collisionTime;}
-    inline unsigned int getP1() {return particle1;}
-    inline unsigned int getP2() {return particle2;}
-    inline unsigned long long getP2Coll() { return p2coll; }
-    inline EventType getEventType () { return eventType; }
+    inline double getCollisionTime () const { return collisionTime; }
+    inline unsigned int getP1() const { return particle1; }
+    inline unsigned int getP2() const { return particle2; }
+    inline unsigned long long getP2Coll() const { return p2coll; }
+    inline EventType getEventType () const { return eventType; }
   
     inline void setCollisionTime(double value) {collisionTime = value;}
   private:
@@ -60,7 +68,7 @@ namespace Scheduler
     unsigned int particle1;
     unsigned int particle2;
     unsigned long long p2coll;
-    EventType eventType;
+    EventType eventType; 
   };
 
   class Scheduler
@@ -70,16 +78,18 @@ namespace Scheduler
     simulator(sim) {};
     Event getNextEvent();
     void initialise ();
+    void regenerate(double, unsigned long long);
     void update (double, unsigned int); //update for one particles
     void update (double, unsigned int, unsigned int); //update for two particles
-    double getInteractionTime (unsigned int, unsigned int, Event::EventType&);
+    void getThermoEvent(double, unsigned long long);
   private:
+    size_t thermoPoint;
     Simulator* simulator;
     std::vector<Event> masterEL;
     Event getMinTime (double, unsigned int);
     double getSentinal (unsigned int);
-
-    //Schduler::Event getThermostat (Thermostat&);
+    double getInteractionTime (unsigned int, unsigned int, Event::EventType&);
+    
     //Schduler::Event getRDF (RDF&);
   };
 

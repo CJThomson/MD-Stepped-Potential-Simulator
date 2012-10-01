@@ -1,8 +1,11 @@
 #pragma once
 #include <iostream>
 #include <boost/program_options.hpp>
+#include <boost/shared_ptr.hpp>
 #include <math.h>
+#include <string>
 
+#include "Thermostat/Thermostat.h"
 class Settings
 {
  public:
@@ -25,17 +28,21 @@ class SimSet: public Settings
   unsigned long long eqEvents;
   double simTime;
   double eqTime;
+  bool thermoControl;
+  bool thermoFreq;
+  boost::shared_ptr<Thermostat::Thermostat> thermostat;
  public:
   //constructor
  SimSet(): writeOutLog(-1){}
 
-  //get access
-  int getOutLog() { return writeOutLog; }
-  unsigned long long getRunEvent() { return simEvents; }
-  unsigned long long getEQEvent() { return eqEvents; }
-  double getRunTime() { return simTime; }
-  double getEQTime() { return eqTime; }
-
+  //get access 
+  inline int getOutLog() const { return writeOutLog; }
+  inline unsigned long long getRunEvent() const { return simEvents; }
+  inline unsigned long long getEQEvent() const { return eqEvents; }
+  inline double getRunTime() const { return simTime; }
+  inline double getEQTime() const { return eqTime; }
+  inline boost::shared_ptr<Thermostat::Thermostat> getThermostat()
+  { return thermostat; }
   bool isTime(bool eq) { return (eq) ? eqTime != 0 : simTime != 0;  }
   //set access
   void setOutLog(int value) { writeOutLog = value; }
@@ -43,7 +50,19 @@ class SimSet: public Settings
   void setEQEvent(unsigned long long value) { eqEvents = value; }
   void setRunTime(double value) { simTime = value; }
   void setEQTime(double value) { eqTime = value; }
-
+  void setThermoControl(bool value) { thermoControl = value; }
+  void setThermoFreq(double value) { thermoFreq = value; }
+  void setThermoType(const char* type) 
+  { 
+    if(strcmp(type,"Andersen") == 0 )
+      { 
+	boost::shared_ptr<Thermostat::Thermostat> 
+	  tempThermo(new Thermostat::Andersen(thermoFreq, thermoControl)); 
+	thermostat = tempThermo;
+      }
+    else
+      { std::cerr << type<< "- Error: Invalid thermostat type"; exit(4); }
+ }
   virtual void setOptions(boost::program_options::options_description& simOpts)
   {
     simOpts.add_options()

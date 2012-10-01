@@ -74,6 +74,7 @@ Results(double T, double Pd, double Pc, double Ud, double Uc, int noE) :
 #include "Events.h" //Event class
 #include "Logger.h" //allows logging
 #include "Random.h" //allows use of random numbers
+#include "Stepmap.h" // my stepmap class
 //----TypeDef----
 typedef std::vector<CParticle>::iterator it_particle;
 
