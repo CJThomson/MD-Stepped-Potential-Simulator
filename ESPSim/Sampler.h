@@ -4,6 +4,7 @@
 #include <vector>
 #include <utility>
 #include <boost/foreach.hpp>
+#include <ctime>
 
 #include "Particle.h"
 #include "TAProperty.h"
@@ -21,6 +22,7 @@ namespace Sampler
     void initialise (const std::vector<Particle>&, 
 		     const std::vector<std::pair<double, double> >&,
 		     const Stepmap&);
+    void terminate (const unsigned long long, const double);
     inline void changePotential (const double deltaU) 
     { kineticEnergy -= deltaU; potentialEnergy += deltaU; }
     inline void changeKinetic (const double deltaKE) 
@@ -30,11 +32,28 @@ namespace Sampler
     inline double getKE() const  { return kineticEnergy; }
     inline double getT() const { return calcTemp(); }
     inline double getMeanT() const { return temperature.mean(); }
+    inline double getMeanSqrT() const {return temperature.meanSqr(); }
     inline double getMeanU() const { return potentialEnergy.mean() / numberParticles; }
+    inline double getMeanSqrU() const 
+    {return potentialEnergy.meanSqr() / (numberParticles * numberParticles); }
     inline double getMomFlux() const { return momentumFlux.current(); }
     inline double getFluxTime() const { return momentumFlux.time(); }
     inline double getP() const { return calcPressure(); }
-    void eventCount (int, unsigned int,  bool);
+    inline double getEventPS() const { return eventPS; }
+    inline double getTimePS() const { return timePS; }
+    inline char* getStartTime() const 
+    { char* retVal = asctime(localtime(&startTime));
+      retVal[strlen(retVal)-1] = '\0';
+      return retVal; }
+    inline char* getEndTime() const 
+    { char* retVal = asctime(localtime(&endTime));
+      retVal[strlen(retVal)-1] = '\0';
+      return retVal; }
+    inline double getTime() const { return simTime; }
+    inline unsigned int getEventCount() const { return eventCnt; }
+    inline double getMeanFreeTime() const { return simTime / eventCnt; }
+    inline const std::vector<CollisionCount>& getCollCount() const {return eventCounts; }
+    void eventCount (const int, int,  const bool);
     void freeStream(double);
 
     void sampleRDF(std::vector<Particle>&);
@@ -52,7 +71,12 @@ namespace Sampler
     TAProperty momentumFlux;
     TAProperty temperature;
     std::vector<CollisionCount> eventCounts;
-    
+    double eventPS;
+    double timePS;
+    time_t startTime;
+    time_t endTime;
+    unsigned int eventCnt;
+    double simTime;
     inline double calcPressure() const
     { 
       double pressure = density * temperature.mean() + mass * density * momentumFlux.current() 
@@ -78,12 +102,40 @@ class CollisionCount
   {
   public:
     CollisionCount() { reset(); }
+  CollisionCount(unsigned int id, double pos, double enr) :
+    _ID(id), _r(pos), _U(enr)
+      {
+	reset();
+      }
     void reset()
     {
       _Capture = 0;
       _Release = 0;
       _BounceIn = 0;
       _BounceOut = 0;
+    }
+    unsigned int getID() const { return _ID; }
+    double getR() const { return _r; }
+    double getU() const { return _U; }
+    unsigned int getCount(int type, bool inwards) const
+    {
+      switch(type)
+	{
+	case 2: 
+	  if(inwards) //Capture event
+	    return _Capture;
+	  else //Release event
+	    return _Release;
+	    break;
+	case 4: //bounce (in/out)
+	  if(inwards)
+	    return _BounceIn;
+	  else
+	    return _BounceOut;
+	  break;
+	default: //error
+	  break;
+	}
     }
     void incrCount(int type, bool inwards)
     {
@@ -107,6 +159,9 @@ class CollisionCount
     }
 
   private:
+    unsigned int _ID;
+    double _r;
+    double _U;
     unsigned int _Capture;
     unsigned int _Release;
     unsigned int _BounceIn;

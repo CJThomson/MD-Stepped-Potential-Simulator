@@ -42,7 +42,9 @@ namespace Engine
   }
   void Engine::productionRun()
   {
+    Logger::Logger logger;
     equilibration = false;
+    logger.init_Results(simulator->getSettings().getSampleColl());
     std::cout << "\rRunning => Initialising Thermostat                " << std::flush;
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
@@ -52,7 +54,8 @@ namespace Engine
 
     Sampler::Sampler sampler(simulator->getParticles().size(),
 			     simulator->getParticles()[0].getMass(),
-			     simulator->getDensity(),false, false);
+			     simulator->getDensity(), 
+			     simulator->getSettings().getSampleColl(), false);
     sampler.initialise(simulator->getParticles(), simulator->getSteps(),
 		       simulator->getStepMap());
 
@@ -83,8 +86,13 @@ namespace Engine
 		      << std::flush;
 	  }
       }
-    std::cout << "\rRunning => Complete                          " 
-	      << "         " << std::flush;
+    std::cout << "\rRunning => Logger => Writing Results            " 
+	      << "                  " << std::flush;
+    sampler.terminate(eventCount, t);
+    logger.update_Results(sampler,simulator->getSettings().getSampleColl());
+    logger.write_Results(simulator->getSettings().getSampleColl());
+    std::cout << "\rRunning => Complete                             " 
+	      << "                  " << std::flush;
   }
   void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,
 			   Sampler::Sampler& sampler)

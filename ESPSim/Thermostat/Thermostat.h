@@ -16,6 +16,7 @@ namespace Thermostat
     virtual double getThermoTime(unsigned long long eventCount) = 0;
     virtual void initialise(const double setT, const Random& rng) = 0;
     virtual bool is_initialised() = 0;
+    virtual const char* getType() const = 0; 
   protected:
     Thermostat() {}; //constructor should never be called except by derived classes
   };
@@ -28,7 +29,7 @@ namespace Thermostat
     proportionEvents(propThermo), autoControl(autoCtrl),
       updateFreq(100), thermofreq(0.0005),
       thermoCount(0), initialised(false) {};
-     
+    virtual const char* getType() const { return "Andersen"; } 
      virtual void initialise(const double setT, const Random& rng)
      {
        thermoCount = 0;

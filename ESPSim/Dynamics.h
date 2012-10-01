@@ -55,7 +55,7 @@ namespace Engine
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 		sampler.changePotential(dU);
-		sampler.eventCount(2, (it_step == simualtor->setStepMap().getEndPntr() 
+		sampler.eventCount(2, (it_step == simulator->setStepMap().getEndPntr() 
 				       ? -1 : it_step->second), true);
 		simulator->setStepMap().moveInwards(event.getP1(), event.getP2());
 	      }
@@ -65,7 +65,7 @@ namespace Engine
 		simulator->setParticles()[event.getP1()].setV() += deltav1;
 		simulator->setParticles()[event.getP2()].setV() -= deltav1;
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
-		sampler.eventCount(4, (it_step == simualtor->setStepMap().getEndPntr() 
+		sampler.eventCount(4, (it_step == simulator->setStepMap().getEndPntr() 
 				       ? -1 : it_step->second), true);
 	      }
 	    break;

@@ -24,12 +24,13 @@ class SimSet: public Settings
  private:
   int writeOutLog;
   bool runForTime;
+  bool sampleColl;
   unsigned long long simEvents;
   unsigned long long eqEvents;
   double simTime;
   double eqTime;
   bool thermoControl;
-  bool thermoFreq;
+  double thermoFreq;
   boost::shared_ptr<Thermostat::Thermostat> thermostat;
  public:
   //constructor
@@ -43,15 +44,19 @@ class SimSet: public Settings
   inline double getEQTime() const { return eqTime; }
   inline boost::shared_ptr<Thermostat::Thermostat> getThermostat()
   { return thermostat; }
+  inline bool getThermoControl() const {return thermoControl; }
+  inline double getThermoFreq() const { return thermoFreq; }
+  inline bool getSampleColl() const { return sampleColl; }
   bool isTime(bool eq) { return (eq) ? eqTime != 0 : simTime != 0;  }
   //set access
   void setOutLog(int value) { writeOutLog = value; }
+  void setSampleColl(bool value) { sampleColl = value; }
   void setRunEvent(unsigned long long value) { simEvents = value; }
   void setEQEvent(unsigned long long value) { eqEvents = value; }
   void setRunTime(double value) { simTime = value; }
   void setEQTime(double value) { eqTime = value; }
   void setThermoControl(bool value) { thermoControl = value; }
-  void setThermoFreq(double value) { thermoFreq = value; }
+  void setThermoFreq(double value) { thermoFreq = value;  }
   void setThermoType(const char* type) 
   { 
     if(strcmp(type,"Andersen") == 0 )

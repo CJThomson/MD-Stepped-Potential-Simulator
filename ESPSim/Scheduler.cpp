@@ -118,7 +118,6 @@ namespace Scheduler
       - simulator->getParticles()[p2].getV();
     //calculate dot products
     double r12sqr = r12.lengthSqr();
-    if(r12sqr != r12.dotProd(r12)) {std::cerr << "r12^2 != r12.r12" << std::endl; }
     double v12sqr = v12.lengthSqr();
     double vdotr = v12.dotProd(r12);
     int step = simulator->getStepMap().getStep(p1, p2);

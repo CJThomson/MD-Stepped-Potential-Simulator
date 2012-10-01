@@ -7,6 +7,7 @@
 #include "Settings.h"
 #include "Particle.h"
 #include "Lattice.h"
+#include "Logger.h"
 #include "Stepmap.h"
 #include "ParseXML.h"
 #include "Stepper/include.h"
@@ -34,6 +35,7 @@ class Simulator
   inline double getSysLength() { return simProperties.getLength(); }
   inline double getDensity() const { return simProperties.getDensity(); } 
   inline double getTemperature() const { return simProperties.getT(); }
+  inline const SimSet& getSettings() { return simSettings; }
   inline const Random& getRNG() const { return RNG; }
   bool isRunning(double, unsigned long long , bool);
   double progress(double, unsigned long long , bool);

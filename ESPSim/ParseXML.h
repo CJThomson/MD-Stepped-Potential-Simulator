@@ -19,6 +19,7 @@ class parseXML
       {
 	parseSettings(config.child("ESPSimConfig").child("SimSettings"));
 	parseProperties(config.child("ESPSimConfig").child("SimProperties"));
+	parseSampler(config.child("ESPSimConfig").child("SamplerSettings"));
       }
     //else
     //throw error
@@ -36,12 +37,15 @@ class parseXML
     settings.setEQEvent(set.child("EqLength").attribute("event").as_uint());
     settings.setEQTime(set.child("EqLength").attribute("time").as_double());
     //Thermostat
-    settings.setThermoControl(set.child("Thermostat").attribute("ThermoUpdate").as_bool());
-    settings.setThermoFreq(set.child("Thermostat").attribute("ThermoFreq").as_double());
+    settings.setThermoControl(set.child("Thermostat").attribute("autoUpdate").as_bool());
+    settings.setThermoFreq(set.child("Thermostat").attribute("thermoFreq").as_double());
     settings.setThermoType(set.child("Thermostat").attribute("type").as_string());
- 
-  }
 
+  }
+  void parseSampler(pugi::xml_node samp)
+  {
+    settings.setSampleColl(samp.child("CollisionCounts").attribute("active").as_bool());
+  }
   void parseProperties(pugi::xml_node prop)
   {
     properties.setT(prop.child("Temperature").attribute("value").as_double());

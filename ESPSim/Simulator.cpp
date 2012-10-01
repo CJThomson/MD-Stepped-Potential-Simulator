@@ -38,9 +38,9 @@ void Simulator::loadSettings(int argc, char *argv[])
 
 void Simulator::initialise()
 {
-  std::cout << "\rInitialisation => Random Number Generator    " << std::flush;
+  std::cout << "\rInitialisation => Random Number Generator      " << std::flush;
   RNG.seed();
-  std::cout << "\rInitialisation => Particle => Positions      " << std::flush;
+  std::cout << "\rInitialisation => Particle => Positions        " << std::flush;
 
   particles.resize(simProperties.getN());
   Lattice* initPos = new FCC; //[[REPLACE]] boost smart pointers 
@@ -48,12 +48,12 @@ void Simulator::initialise()
     initPos->placeParticles(particles, simProperties.getLength()); //initialise particle locations
     delete initPos; //release memory
   }
-  std::cout << "\rInitialisation => Particle => Velocity       " << std::flush;
+  std::cout << "\rInitialisation => Particle => Velocity         " << std::flush;
   for(it_p p = particles.begin();p != particles.end(); ++p)
     p->resetV(RNG);
 
   zeroMomentum();
-  std::cout << "\rInitialisation => Potential                  " << std::flush;
+  std::cout << "\rInitialisation => Potential                    " << std::flush;
   ContPotential* potential = new LennardJones(1,1);
   {
     Stepper::Stepper* stepper = new Stepper::Pos_Even(3.0, 10);
@@ -68,13 +68,16 @@ void Simulator::initialise()
     }
     delete potential;
   }
-  std::cout << "\rInitialisation => Pair Step Map              " << std::flush;
+  std::cout << "\rInitialisation => Pair Step Map                " << std::flush;
   stepmap.populateMap(particles, steps, simProperties.getLength());
 
-  std::cout << "\rInitialisation => Pair Step Map => Checking  " << std::flush;
+  std::cout << "\rInitialisation => Pair Step Map => Checking    " << std::flush;
   stepmap.checkMap(particles, steps, simProperties.getLength());
 
-  std::cout << "\rInitialisation => Complete                   " << std::endl;
+  std::cout << "\rInitialisation => Logger => Create Out Config  " << std::flush;
+  Logger::Logger logger;
+  logger.write_outConfig(simSettings, simProperties);
+  std::cout << "\rInitialisation => Complete                     " << std::endl;
 
 }
 void Simulator::equilibrate()

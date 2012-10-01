@@ -18,12 +18,27 @@ namespace Sampler
 	  }
       }
 
+    if(collCount)
+      for(size_t i(0); i < steps.size(); ++i )
+	eventCounts.push_back(CollisionCount(i, steps[i].first, steps[i].second));
+    time(&startTime);
   }
-  void Sampler::eventCount (const int type, unsigned int stepNo, const bool inwards )
+  void Sampler::terminate(const unsigned long long eventCount, const double t)
+  {
+    time(&endTime);
+
+    double timeDiff = difftime(endTime, startTime);
+    eventPS = eventCount / timeDiff;
+    timePS = t / timeDiff;
+    eventCnt = eventCount;
+    simTime = t;
+  }
+
+  void Sampler::eventCount (const int type, int stepNo, const bool inwards )
   {
     if(collCount)
       {
-	if(!inwards) { ++stepNo; } //if an outward event increase stepNo to get correct step
+	if(inwards) { ++stepNo; } //if an inward event increase stepNo to get correct step
 	eventCounts[stepNo].incrCount(type, inwards); //increment step Count
       }
   }
