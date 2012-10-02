@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 #include <limits>
+#include <boost/shared_ptr.hpp>
 
 #include "ContPotential.h"
 #include "../Maths/Functions.h"
@@ -17,7 +18,7 @@ namespace Stepper
     virtual void genPotential(std::vector<std::pair<double, double> >& steps) = 0;
   protected:
   Stepper(double s, double e, double l, double rCutoff, unsigned int n, 
-	  ContPotential* pot = NULL) : 
+	  boost::shared_ptr<ContPotential> pot = boost::shared_ptr<ContPotential> ()) : 
     sigma(s), epsilon(e), lambda(l),rCut(rCutoff), noSteps(n), potential(pot) 
     {};
 
@@ -25,7 +26,7 @@ namespace Stepper
     double epsilon; //holds well energy
     double lambda; //holds misc other values, length of well (square well) energy interval (energy stepping), temperature
     double rCut; //holds the cut off radius
-    ContPotential* potential; //the continuous potential to be used
+    boost::shared_ptr<ContPotential> potential; //the continuous potential to be used
     unsigned int noSteps;
   };
 

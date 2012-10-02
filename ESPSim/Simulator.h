@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <iostream>
+#include <string>
 #include <boost/foreach.hpp>
 #include <boost/shared_ptr.hpp>
 
@@ -49,6 +50,7 @@ class Simulator
  private:
   SimSet simSettings;
   SimProp simProperties;
+  SimPotential simPot;
   std::vector<Particle> particles;
   std::vector<std::pair<double, double> > steps;
   Random RNG;
@@ -56,6 +58,7 @@ class Simulator
 
   void zeroMomentum();
   bool runSim();
+  void initSteps();
 
 };
 

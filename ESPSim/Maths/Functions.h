@@ -1,7 +1,7 @@
 #pragma once
 
 #include <math.h>
-
+#include <boost/shared_ptr.hpp>
 #include "../Stepper/ContPotential.h" 
 
 class Functions
@@ -9,17 +9,17 @@ class Functions
  public:
   virtual double f(double r) = 0;
  protected:
- Functions(double T, ContPotential* pot) :
+ Functions(double T, boost::shared_ptr<ContPotential> pot) :
   beta(1/T), potential(pot) {};
   double beta;
-  ContPotential* potential;
+  boost::shared_ptr<ContPotential> potential;
 
 };
 
 class Partition: public Functions
 {
  public:
- Partition(double T, ContPotential* pot) :
+ Partition(double T, boost::shared_ptr<ContPotential> pot) :
   Functions(T, pot) {};
 
   virtual inline double f(double r)
@@ -31,7 +31,7 @@ class Partition: public Functions
 class ExpForce: public Functions
 {
  public:
- ExpForce(double T, ContPotential* pot) :
+ ExpForce(double T, boost::shared_ptr<ContPotential> pot) :
   Functions(T, pot) {};
 
   virtual inline double f(double r)

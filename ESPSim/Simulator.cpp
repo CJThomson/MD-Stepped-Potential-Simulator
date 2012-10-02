@@ -3,7 +3,7 @@
 void Simulator::loadSettings(int argc, char *argv[])
 {
   //load the config file
-  parseXML config(simSettings, simProperties, particles);
+  parseXML config(simSettings, simProperties, simPot, particles);
   config.parseFile();
   namespace po = boost::program_options;
     
@@ -54,20 +54,7 @@ void Simulator::initialise()
 
   zeroMomentum();
   std::cout << "\rInitialisation => Potential                    " << std::flush;
-  ContPotential* potential = new LennardJones(1,1);
-  {
-    Stepper::Stepper* stepper = new Stepper::Pos_Even(3.0, 10);
-    {
-      stepper->genPositions(steps);
-      delete stepper;
-    }
-    stepper = new Stepper::Enr_Mid(potential);
-    {
-      stepper->genEnergy(steps);
-      delete stepper;
-    }
-    delete potential;
-  }
+  initSteps();
   std::cout << "\rInitialisation => Pair Step Map                " << std::flush;
   stepmap.populateMap(particles, steps, simProperties.getLength());
 
@@ -132,4 +119,39 @@ double Simulator::progress(double t, unsigned long long N, bool equilibration)
   else
     return (equilibration ? (double) N / simSettings.getEQEvent() 
 	    : (double) N / simSettings.getRunEvent());
+}
+void Simulator::initSteps()
+{
+  boost::shared_ptr<ContPotential> potential;
+  const char* option = simPot.getContPotential();
+  if(strcmp(option,"LennardJones") == 0)
+    potential.reset(new LennardJones(simPot.getSigma(), simPot.getEpsilon()));
+  else if(strcmp(option,"LennardJones_shifted") == 0)
+    potential.reset(new LennardJonesShifted(simPot.getSigma(), simPot.getEpsilon(),
+					    simPot.getRCutOff()));
+  boost::shared_ptr<Stepper::Stepper> stepper;
+  option = simPot.getStepPositions();
+  if(strcmp(option, "Even") == 0)
+    {
+      stepper.reset(new Stepper::Pos_Even(simPot.getRCutOff(), simPot.getNoStep()));
+    }
+  else if(strcmp(option,"MeanForce") == 0)
+    stepper.reset(new Stepper::Pos_ExpForce(simProperties.getT(),simPot.getRCutOff(), 
+					    simPot.getNoStep(), potential));
+  else if(strcmp(option,"EvenEnergy") == 0)
+    stepper.reset(new Stepper::Pos_EvenEnergy(simPot.getEnergyInterval(), 
+				      simPot.getRCutOff(), potential));
+  else 
+    exit(0);
+  stepper->genPositions(steps);
+  option = simPot.getStepEnergies();
+  if(strcmp(option, "Mid") == 0)
+    stepper.reset(new Stepper::Enr_Mid(potential));
+  else if (strcmp(option,"Virial") == 0 )
+    stepper.reset(new Stepper::Enr_Virial(simProperties.getT(), potential));
+  else if (strcmp(option,"Average") == 0)
+    stepper.reset(new Stepper::Enr_Average(potential));
+  stepper->genEnergy(steps);
+  
+
 }

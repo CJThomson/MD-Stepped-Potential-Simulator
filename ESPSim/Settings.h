@@ -85,7 +85,68 @@ class SimSet: public Settings
   }
 
 };
+class SimPotential: public Settings
+{
+ public:
+  SimPotential() {};
+  virtual void setOptions(boost::program_options::options_description& simOpts)
+  {
 
+  }
+
+  virtual void loadCLSettings(boost::program_options::variables_map& vm)
+  {
+  }
+  //get
+  inline const char* getContPotential() const { return contPotential.c_str(); }
+  inline const char* getStepPositions() const { return stepPositions.c_str(); }
+  inline const char* getStepEnergies() const { return stepEnergies.c_str(); }
+  inline const char* getStepCore() const { return stepCore.c_str(); }
+  inline const char* getStepPotential() const { return stepPotential.c_str(); }
+  inline const unsigned int getNoStep() const { return noSteps; }
+  inline const double getEpsilon() const { return epsilon; }
+  inline const double getSigma() const { return sigma; }
+  inline const double getRCutOff() const { return rCutOff; }
+  inline const double getEnergyInterval() const { return energyInterval; }
+  inline const double getCorePos() const { return corePos; }
+  inline const int getCoreNoSigm() const { return coreNoSigma; }
+
+  //set
+  void setContPotential(const char* type, const double cut, const double e, const double r)
+  {
+    contPotential = type;
+    rCutOff = cut;
+    epsilon = e;
+    sigma = r;
+  }
+  void setStepPositions(const char* type, const unsigned int n) 
+  { stepPositions = type; noSteps = n; }
+  void setStepPositions(const char* type, const double de) 
+  { stepPositions = type; energyInterval = de; }
+  void setStepEnergies(const char* type) 
+  { stepEnergies = type; }
+  void setStepCore(const char* type, double pos = 0) 
+  { stepCore = type; corePos = pos; }
+  void setStepCore(const char* type, unsigned int sigma) 
+  { stepCore = type; coreNoSigma = sigma; }
+  void setStepPotential(const char* type)
+  { stepPotential = type; }
+
+ private:
+  std::string contPotential;
+  std::string stepPositions;
+  std::string stepEnergies;
+  std::string stepCore;
+  std::string stepPotential;
+  unsigned int noSteps;
+  double epsilon;
+  double sigma;
+  double rCutOff;
+  double energyInterval;
+  double corePos;
+  double coreNoSigma;
+  
+};
 class SimProp:public Settings
 {
  private:
@@ -93,6 +154,8 @@ class SimProp:public Settings
   double density;
   unsigned int numberOfParticles;
   double systemLength;
+
+  
  public:
   //constructor - just use default
  SimProp() : temperature (0), density(0), numberOfParticles(0), systemLength(0)

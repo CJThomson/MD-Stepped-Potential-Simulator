@@ -10,12 +10,12 @@ using namespace std;
 
 int main(int argc, char *argv[])
 {
-  cout << "=  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =" << endl;
-  cout << "=                                                        =" << endl;
-  cout << "=  ESPSim - The Equilibrium Stepped Potential Simulator  =" << endl;
-  cout << "=                 Chris J Thomson (2012)                 =" << endl;
-  cout << "=                                                        =" << endl;
-  cout << "=  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =" << endl;
+  cout << "=  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =" << endl;
+  cout << "=                                                           =" << endl;
+  cout << "=   ESPSim - The Event-driven Stepped Potential Simulator   =" << endl;
+  cout << "=                   Chris J Thomson (2012)                  =" << endl;
+  cout << "=                                                           =" << endl;
+  cout << "=  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =  =" << endl;
   cout << endl;
   Simulator sim;
 

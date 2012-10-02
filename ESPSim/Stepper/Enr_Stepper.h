@@ -3,7 +3,7 @@
 #include <vector>
 #include <utility>
 #include <math.h>
-#include <iostream> //DELETE
+#include <boost/shared_ptr.hpp>
 
 #include "Stepper.h"
 #include "ContPotential.h"
@@ -22,7 +22,7 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
   public:
-  Enr_Virial(double temp, ContPotential* pot) :
+  Enr_Virial(double temp, boost::shared_ptr<ContPotential> pot) :
     Stepper(0, 0, temp, 0, 0, pot) {};
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
@@ -59,7 +59,7 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
   public:
-  Enr_Mid(ContPotential* pot) :
+  Enr_Mid(boost::shared_ptr<ContPotential> pot) :
     Stepper(0, 0, 0, 0, 0, pot) {};
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
@@ -87,7 +87,7 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
   public:
-  Enr_Average(ContPotential* pot) :
+  Enr_Average(boost::shared_ptr<ContPotential> pot) :
     Stepper(0, 0, 0, 0, 0, pot) {};
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)

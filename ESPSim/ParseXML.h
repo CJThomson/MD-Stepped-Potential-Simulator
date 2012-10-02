@@ -9,8 +9,8 @@
 class parseXML
 {
  public: 
- parseXML(SimSet& set, SimProp& prop, std::vector<Particle>& part) :
-  settings(set), properties(prop), particles(part) {};
+ parseXML(SimSet& set, SimProp& prop, SimPotential& pot,std::vector<Particle>& part) :
+  settings(set), properties(prop), potential(pot), particles(part) {};
   void parseFile()
   {
     pugi::xml_document config;
@@ -20,6 +20,7 @@ class parseXML
 	parseSettings(config.child("ESPSimConfig").child("SimSettings"));
 	parseProperties(config.child("ESPSimConfig").child("SimProperties"));
 	parseSampler(config.child("ESPSimConfig").child("SamplerSettings"));
+	parseStepper(config.child("ESPSimConfig").child("StepperSettings"));
       }
     //else
     //throw error
@@ -27,6 +28,7 @@ class parseXML
  private:
   SimSet& settings;
   SimProp& properties;
+  SimPotential& potential;
   std::vector<Particle> particles;
 
   void parseSettings(pugi::xml_node set)
@@ -45,6 +47,29 @@ class parseXML
   void parseSampler(pugi::xml_node samp)
   {
     settings.setSampleColl(samp.child("CollisionCounts").attribute("active").as_bool());
+  }
+  void parseStepper(pugi::xml_node step)
+  {
+    pugi::xml_node childNode = step.child("Continuous");
+    potential.setContPotential(childNode.attribute("type").as_string(),
+			       childNode.attribute("r_cutoff").as_double(),
+			       childNode.attribute("epsilon").as_double(),
+			       childNode.attribute("sigma").as_double());
+    childNode = step.child("Discrete");
+    const char* pos = childNode.attribute("position").as_string();
+    if(pos == "EvenEnergy")
+      potential.setStepPositions(pos, childNode.attribute("energyInterval").as_double());
+    else
+      potential.setStepPositions(pos, childNode.attribute("noSteps").as_uint());
+    potential.setStepEnergies(childNode.attribute("energy").as_string());
+    const char* core = childNode.attribute("core").as_string();
+    if(core == "Sigma")
+      potential.setStepCore(core, childNode.attribute("noSigma").as_uint());
+    else if(core == "Manual")
+      potential.setStepCore(core, childNode.attribute("corePosition").as_double());
+    else
+      potential.setStepCore(core);
+    potential.setStepPotential(childNode.attribute("potential").as_string());
   }
   void parseProperties(pugi::xml_node prop)
   {
