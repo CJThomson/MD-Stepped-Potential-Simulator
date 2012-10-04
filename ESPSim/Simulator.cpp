@@ -10,7 +10,8 @@ void Simulator::loadSettings(int argc, char *argv[])
   //define all the program options classes
   po::options_description genericOpts("Generic options"), 
     simSetOpts("Simulator Settings"),
-    simPropOpts("Simulation Properties");
+    simPropOpts("Simulation Properties"),
+    simPotOpts("Potential Properties");
 
   //Add all the available options
   genericOpts.add_options()
@@ -19,18 +20,19 @@ void Simulator::loadSettings(int argc, char *argv[])
     
   simSettings.setOptions(simSetOpts);
   simProperties.setOptions(simPropOpts);
-    
+  simPot.setOptions(simPotOpts);
   po::options_description cmdline_options;
-  cmdline_options.add(genericOpts).add(simPropOpts).add(simSetOpts);
-
-  po::options_description config_file_options;
-  config_file_options.add(simSetOpts).add(simPropOpts);
+  cmdline_options.add(genericOpts).add(simPropOpts).add(simSetOpts).add(simPotOpts);
 
   //put input into variables map
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, cmdline_options), vm);
   po::notify(vm);
-
+  if(vm.count("help")) 
+    {
+      std::cout << cmdline_options << "\n";
+      exit(0);
+    }
   //process the variables map
   simSettings.loadCLSettings(vm);
   simProperties.loadCLSettings(vm);

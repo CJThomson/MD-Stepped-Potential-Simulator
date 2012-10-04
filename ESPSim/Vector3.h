@@ -48,7 +48,7 @@ class Vector3
     v2.z = z / c;
     return v2;
   };
-  const Vector3 operator= (const Vector3 &v)
+  const Vector3& operator= (const Vector3 &v)
     {
       x = v.x; y = v.y; z = v.z;
       return *this;
@@ -85,7 +85,7 @@ class Vector3
   {
     return sqrt( pow(x, 2) + pow(y, 2) + pow(z, 2) );
   }
-  Vector3 normalise()
+  Vector3 normalise() const
   {
     double abs = sqrt(x*x+y*y+z*z);
     double x1=x/abs;
@@ -102,14 +102,14 @@ class Vector3
   {
     return x * x + y * y + z * z;
   }
-  Vector3 crossProd(const Vector3 &v)
+  Vector3 crossProd(const Vector3 &v) const
   {
     double x1 = y * v.z - z * v.y;
     double y1 = x * v.z - z * v.y;
     double z1 = x * v.y - y * v.x;
     return Vector3(x1, y1, z1);
   }
-  double angle(const Vector3 &v)
+  double angle(const Vector3 &v) const
   {
     return acos((x*v.x + y*v.y+z*v.z)/(sqrt(pow(x,2)+pow(y,2)+pow(z,2))*sqrt(pow(v.x,2)+pow(v.y,2)+pow(v.z,2))));
   }

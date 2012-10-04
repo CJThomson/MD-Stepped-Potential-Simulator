@@ -71,17 +71,31 @@ class SimSet: public Settings
   virtual void setOptions(boost::program_options::options_description& simOpts)
   {
     simOpts.add_options()
-      ("outlog", boost::program_options::value<int>()->default_value(0), 
-       "level of output logging: \n\t0:no logging\n\t1:event descriptions\n\t2:full descriptions")
+      ("eqevents", boost::program_options::value<unsigned int>(),
+       "Equilibration Length (events)")
+      ("runevents", boost::program_options::value<unsigned int>(),
+       "Production Run Length (events)")
+      ("eqtime", boost::program_options::value<double>(),
+       "Equilibration Length (time)")
+      ("runtime", boost::program_options::value<double>(),
+       "Production Run Length (time)")
+      /*("thermotype", boost::program_options::value<int>(),
+	"Thermostat Type: \n\t1: Andersen" << - Add at some point*/
       ;
   }
 
   virtual void loadCLSettings(boost::program_options::variables_map& vm)
   {
-    if(vm.count("outlog") && writeOutLog == -1)
-      writeOutLog = vm["outlog"].as<int>();
-    else
-      optionWarning("no output logging level specified, default value of 0 used.");
+    if(vm.count("eqevents"))
+      eqEvents = vm["eqevents"].as<unsigned int>();
+    if(vm.count("eqtime"))
+      eqTime = vm["eqtime"].as<double>();
+    if(vm.count("runevents"))
+      simTime = vm["runevents"].as<unsigned int>();
+    if(vm.count("runtime"))
+      simEvents = vm["runtime"].as<double>();
+
+
   }
 
 };
@@ -91,7 +105,26 @@ class SimPotential: public Settings
   SimPotential() {};
   virtual void setOptions(boost::program_options::options_description& simOpts)
   {
-
+    simOpts.add_options()
+      ("potential", boost::program_options::value<int>(),
+       "Continuous potential: \n\t0: Lennard Jones\n\t1: Shifted LJ")
+      ("epsilon,e", boost::program_options::value<double>(),
+       "Potential minimum")
+      ("sigma,s", boost::program_options::value<double>(),
+       "Potential root")
+      ("rcut,r", boost::program_options::value<double>(),
+       "Cut-off radius")
+      ("steppos", boost::program_options::value<int>(),
+       "Stepped potential positions: \n\t0: Even\n\t1: Even Energy\n\t2: Exp Mean Force")
+      ("stepenr", boost::program_options::value<int>(),
+       "Stepped potential energies: \n\t0: Mid Values\n\t1: Virial")
+      ("stepcore", boost::program_options::value<int>(),
+       "Stepped potential core: \n\t0: None\n\t1: Manual")
+      ("corepos", boost::program_options::value<double>(),
+       "Position of core in stepped potential")
+      ("nosteps,n", boost::program_options::value<unsigned int>(),
+       "Number of discontinuities in stepped potential\n\t(Number of steps in attractive well - Even Energy only")
+      ;
   }
 
   virtual void loadCLSettings(boost::program_options::variables_map& vm)
