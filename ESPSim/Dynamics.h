@@ -8,7 +8,6 @@
 #include "Vector3.h"
 #include "Particle.h"
 #include "Stepmap.h"
-#include "Simulator.h"
 #include "Sampler.h"
 
 namespace Engine

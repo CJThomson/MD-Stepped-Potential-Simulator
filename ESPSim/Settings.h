@@ -91,9 +91,9 @@ class SimSet: public Settings
     if(vm.count("eqtime"))
       eqTime = vm["eqtime"].as<double>();
     if(vm.count("runevents"))
-      simTime = vm["runevents"].as<unsigned int>();
+      simEvents = vm["runevents"].as<unsigned int>();
     if(vm.count("runtime"))
-      simEvents = vm["runtime"].as<double>();
+      simTime = vm["runtime"].as<double>();
 
 
   }
@@ -123,12 +123,41 @@ class SimPotential: public Settings
       ("corepos", boost::program_options::value<double>(),
        "Position of core in stepped potential")
       ("nosteps,n", boost::program_options::value<unsigned int>(),
-       "Number of discontinuities in stepped potential\n\t(Number of steps in attractive well - Even Energy only")
+       "Number of discontinuities in stepped potential")
+      ("energyinterval,u", boost::program_options::value<double>(),
+       "Energy interval between steps (EvenEnergy only")
       ;
   }
 
   virtual void loadCLSettings(boost::program_options::variables_map& vm)
   {
+    if(vm.count("potential"))
+      { switch (vm["potential"].as<int>()) {
+	case 0: contPotential = "LennardJones"; break;
+	case 1: contPotential = "LennardJones_shifted"; break; }
+      }
+    if(vm.count("epsilon"))
+      epsilon = vm["epsilon"].as<double>();
+    if(vm.count ("sigma"))
+      epsilon = vm["sigma"].as<double>();
+    if(vm.count("rcut"))
+      rCutOff = vm["rcut"].as<double>();
+    if(vm.count("steppos"))
+      { switch (vm["steppos"].as<int>()) { 
+	case 0: stepPositions = "Even"; break;
+	case 1: stepPositions = "EvenEnergy"; break; }
+      }
+    if(vm.count("stepenr"))
+      { switch (vm["stepenr"].as<int>()) { 
+	case 0: stepEnergies = "Mid"; break;
+	case 1: stepEnergies = "Virial"; break;
+	case 2: stepEnergies = "Average"; break; }
+      }
+    if(vm.count("nosteps"))
+      noSteps = vm["nosteps"].as<unsigned int>();
+    if(vm.count("energyinterval"))
+      noSteps = vm["energyInterval"].as<double>();
+    
   }
   //get
   inline const char* getContPotential() const { return contPotential.c_str(); }

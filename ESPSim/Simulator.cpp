@@ -4,7 +4,7 @@ void Simulator::loadSettings(int argc, char *argv[])
 {
   //load the config file
   parseXML config(simSettings, simProperties, simPot, particles);
-  config.parseFile();
+
   namespace po = boost::program_options;
     
   //define all the program options classes
@@ -16,6 +16,7 @@ void Simulator::loadSettings(int argc, char *argv[])
   //Add all the available options
   genericOpts.add_options()
     ("help", "produce help message")
+    ("config,f", po::value<std::string>(),"config file to use")
     ;
     
   simSettings.setOptions(simSetOpts);
@@ -33,9 +34,14 @@ void Simulator::loadSettings(int argc, char *argv[])
       std::cout << cmdline_options << "\n";
       exit(0);
     }
+  if(vm.count("config"))
+      config.parseFile(vm["config"].as<std::string>().c_str());
+  else
+    config.parseFile(NULL);
   //process the variables map
   simSettings.loadCLSettings(vm);
   simProperties.loadCLSettings(vm);
+  simPot.loadCLSettings(vm);
 }
 
 void Simulator::initialise()
@@ -65,7 +71,7 @@ void Simulator::initialise()
 
   std::cout << "\rInitialisation => Logger => Create Out Config  " << std::flush;
   Logger::Logger logger;
-  logger.write_outConfig(simSettings, simProperties);
+  logger.write_outConfig(simSettings, simProperties, simPot);
   std::cout << "\rInitialisation => Complete                     " << std::endl;
 
 }

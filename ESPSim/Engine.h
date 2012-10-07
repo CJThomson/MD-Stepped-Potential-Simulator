@@ -9,7 +9,6 @@
 #include "Simulator.h"
 #include "Scheduler.h"
 #include "Dynamics.h"
-#include "Sampler.h"
 #include "Logger.h"
 namespace Engine
 {

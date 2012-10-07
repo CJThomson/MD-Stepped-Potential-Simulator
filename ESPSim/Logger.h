@@ -84,7 +84,7 @@ namespace Logger
 	  
       
     }
-    void write_outConfig(SimSet& simSettings, SimProp& simProperties)
+    void write_outConfig(SimSet& simSettings, SimProp& simProperties, SimPotential& simPot)
       {
 	pugi::xml_document outConfig;
 	pugi::xml_node node_Main = outConfig.append_child("ESPSimConfig");
@@ -117,6 +117,28 @@ namespace Logger
 	node_Thermostat.append_attribute("type") = simSettings.getThermostat()->getType();
 	node_Thermostat.append_attribute("AutoUpdate") = simSettings.getThermoControl();
 	node_Thermostat.append_attribute("ThermoFreq") = simSettings.getThermoFreq();
+	
+	pugi::xml_node node_Sampler = node_Main.append_child("SamplerSettings");
+	
+	pugi::xml_node node_CollCount = node_Sampler.append_child("CollisionCounts");
+	node_CollCount.append_attribute("active") = simSettings.getSampleColl();
+
+	pugi::xml_node node_Potential = node_Main.append_child("StepperSettings");
+	
+	pugi::xml_node node_Cont = node_Potential.append_child("Continuous");
+	node_Cont.append_attribute("type") = simPot.getContPotential();
+	node_Cont.append_attribute("epsilon") = simPot.getEpsilon();
+	node_Cont.append_attribute("sigma") = simPot.getSigma();
+	node_Cont.append_attribute("r_cutoff") = simPot.getRCutOff();
+
+	pugi::xml_node node_DisCont = node_Potential.append_child("Discrete");
+	node_DisCont.append_attribute("position") = simPot.getStepPositions();
+	node_DisCont.append_attribute("energy") = simPot.getStepEnergies();
+	node_DisCont.append_attribute("core") = simPot.getStepCore();
+	if(strcmp(simPot.getStepPositions(), "EvenEnergy") == 0)
+	  node_DisCont.append_attribute("energyInterval") = simPot.getEnergyInterval();
+	else
+	  node_DisCont.append_attribute("noSteps") = simPot.getNoStep();
 	
 	saveXML(outConfig, "Out.Config.xml");
       }

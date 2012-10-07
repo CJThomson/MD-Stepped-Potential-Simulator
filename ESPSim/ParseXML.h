@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <string>
 #include <boost/shared_ptr.hpp>
 #include "pugixml/pugixml.hpp"
 #include "Particle.h"
@@ -11,10 +12,14 @@ class parseXML
  public: 
  parseXML(SimSet& set, SimProp& prop, SimPotential& pot,std::vector<Particle>& part) :
   settings(set), properties(prop), potential(pot), particles(part) {};
-  void parseFile()
+  void parseFile(const char* loc)
   {
     pugi::xml_document config;
-    pugi::xml_parse_result result = config.load_file("config.xml");
+    pugi::xml_parse_result result;
+    if(loc == NULL)
+      result = config.load_file("config.xml");
+    else
+      result = config.load_file(loc);
     if(result)
       {
 	parseSettings(config.child("ESPSimConfig").child("SimSettings"));
@@ -22,8 +27,11 @@ class parseXML
 	parseSampler(config.child("ESPSimConfig").child("SamplerSettings"));
 	parseStepper(config.child("ESPSimConfig").child("StepperSettings"));
       }
-    //else
-    //throw error
+    else
+      {
+	std::cerr << "Error: Config file not found" << std::endl; 
+	exit(1);
+      }
   }
  private:
   SimSet& settings;
