@@ -3,10 +3,13 @@
 #include <vector>
 #include <iostream>
 #include <boost/foreach.hpp>
+#include <boost/shared_ptr.hpp>
+
 #include "Simulator.h"
 #include "Particle.h"
 #include "Stepmap.h"
 #include "Vector3.h"
+#include "NeighbourList.h"
 
 typedef std::vector<Particle>::iterator it_p;
 namespace Scheduler
@@ -74,8 +77,8 @@ namespace Scheduler
   class Scheduler
   {
   public: 
-    Scheduler(Simulator* sim) : 
-    simulator(sim) {};
+  Scheduler(Simulator* sim, boost::shared_ptr<NL::NL> nlist) : 
+    simulator(sim), nl(nlist){};
     Event getNextEvent();
     void initialise ();
     void regenerate(double, unsigned long long);
@@ -89,7 +92,7 @@ namespace Scheduler
     Event getMinTime (double, unsigned int);
     double getSentinal (unsigned int);
     double getInteractionTime (unsigned int, unsigned int, Event::EventType&);
-    
+    boost::shared_ptr<NL::NL> nl;
     //Schduler::Event getRDF (RDF&);
   };
 

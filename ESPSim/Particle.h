@@ -20,7 +20,7 @@ class Particle
   //Constructors
  Particle(Vector3<double> location, Vector3<double> velocity,
 	  double radius_in, double mass_in, unsigned int particleID):
-  r(location), r0(location), v(velocity), radius(radius_in), mass(mass_in), id(particleID), noColl(0), lastUpdate(0)
+  r(location), r0(location), v(velocity), radius(radius_in), mass(mass_in), id(particleID), noColl(0), lastUpdate(0), cellNo(0)
     {}
  Particle() : r(), r0(), v(), radius(1), mass(1), id(-1), noColl(0), lastUpdate(0){ }
   //GET access functions
@@ -31,7 +31,7 @@ class Particle
   inline double getRadius() const { return radius; }
   inline double getMass() const { return mass; }
   inline unsigned int getID() const { return id; }
-  unsigned int getCellNo() const { return cellNo; }
+  unsigned int getCell() const { return cellNo; }
   unsigned long long getNoColl() const { return noColl; }
   unsigned int getNextCell() const { return nextCell; }
   double getLastUpdate() const { return lastUpdate; }

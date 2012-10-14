@@ -10,6 +10,7 @@
 #include "Scheduler.h"
 #include "Dynamics.h"
 #include "Logger.h"
+#include "NeighbourList.h"
 namespace Engine
 {
   class Engine

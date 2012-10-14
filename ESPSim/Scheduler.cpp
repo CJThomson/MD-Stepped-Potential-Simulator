@@ -49,30 +49,24 @@ namespace Scheduler
 
   Event Scheduler::getMinTime(double t, unsigned int p1)
   {
-    /*std::cerr << "t="<<t<<" particle: " << p1 << " r1=(" << simulator->getParticles()[p1].getR()[0] 
-	      << "," << simulator->getParticles()[p1].getR()[1]
-	      << "," << simulator->getParticles()[p1].getR()[2]
-	      << ")";*/
-    //std::cerr << "minimum time for particle: " << p1;
     double earliest_time = getSentinal(p1);
     unsigned int earliest_p2 = -1;
     Event::EventType earliest_Event = Event::SENTINAL;
-    for(std::vector<Particle>::iterator p2 = simulator->setParticles().begin();
-    	p2 != simulator->setParticles().end(); ++p2)
+    nl->genNL(simulator->getParticles()[p1].getCell());
+    for(std::vector<unsigned int>::iterator p2 = nl->getNeighbours().begin();
+    	p2 != nl->getNeighbours().end(); ++p2)
       {
-	if(p1 == p2->getID()) continue; //if particle is itself move on
+	if(p1 == simulator->getParticles()[*p2].getID()) continue; //if particle is itself move on
 	Event::EventType eventType;
-	double t_min_coll = getInteractionTime(p1, p2->getID(), eventType);
+	double t_min_coll = getInteractionTime(p1, simulator->getParticles()[*p2].getID(), 
+					       eventType);
 	if(t_min_coll < earliest_time)
 	  {
 	    earliest_time = t_min_coll;
-	    earliest_p2 = p2->getID();
+	    earliest_p2 = simulator->getParticles()[*p2].getID();
 	    earliest_Event = eventType;
 	  }
       }
-    /*std::cerr << "p2: " << earliest_p2 << " Nocoll: " 
-      << simulator->getParticles()[earliest_p2].getNoColl() << std::endl;*/
-    //std::cerr << " is: " << earliest_time << " with particle:" << earliest_p2 << std::endl;
     return Event(t + earliest_time, p1, earliest_p2, 
 		 simulator->getParticles()[earliest_p2].getNoColl(), earliest_Event);
   }

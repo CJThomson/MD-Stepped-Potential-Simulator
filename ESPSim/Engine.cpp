@@ -10,8 +10,11 @@ namespace Engine
     std::cout << "\rEquilibration => Initialising Thermostat           " << std::flush;
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
+    std::cout << "\rEquilibration => Initialising Neighbout List       " << std::flush;
+    boost::shared_ptr<NL::NL> nl(new NL::NL_None());
+    nl->initialise(simulator);
     std::cout << "\rEquilibration => Generating Event List             " << std::flush;
-    Scheduler::Scheduler eventList(simulator);
+    Scheduler::Scheduler eventList(simulator, nl);
     eventList.initialise();
     Sampler::Sampler sampler(simulator->getParticles().size(),
 			     simulator->getParticles()[0].getMass(),
@@ -48,8 +51,11 @@ namespace Engine
     std::cout << "\rRunning => Initialising Thermostat                " << std::flush;
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
+    std::cout << "\rRunning => Initialising Neighbout List            " << std::flush;
+    boost::shared_ptr<NL::NL> nl(new NL::NL_None());
+    nl->initialise(simulator);
     std::cout << "\rRunning => Generating Event List                  " << std::flush;
-    Scheduler::Scheduler eventList(simulator);
+    Scheduler::Scheduler eventList(simulator, nl);
     eventList.initialise();
 
     Sampler::Sampler sampler(simulator->getParticles().size(),
