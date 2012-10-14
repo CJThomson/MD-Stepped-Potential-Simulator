@@ -19,7 +19,7 @@ namespace Engine
     Engine(Simulator* sim) : 
     simulator(sim), t(), eventCount(){}; 
     void equilibrate();
-    void productionRun();
+    void productionRun(bool, Logger::Logger&);
     void simulation();
     
   private:

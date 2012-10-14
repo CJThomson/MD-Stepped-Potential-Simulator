@@ -46,6 +46,7 @@ class parseXML
     settings.setRunTime(set.child("RunLength").attribute("time").as_double());
     settings.setEQEvent(set.child("EqLength").attribute("event").as_uint());
     settings.setEQTime(set.child("EqLength").attribute("time").as_double());
+    settings.setRuns(set.child("Runs").attribute("number").as_uint());
     //Thermostat
     settings.setThermoControl(set.child("Thermostat").attribute("autoUpdate").as_bool());
     settings.setThermoFreq(set.child("Thermostat").attribute("thermoFreq").as_double());

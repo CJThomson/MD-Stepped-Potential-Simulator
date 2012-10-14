@@ -90,15 +90,20 @@ void Simulator::equilibrate()
 
 void Simulator::productionRun()
 {
-  std::cout << "\rRunning => Resetting Particles               " << std::flush;
-  for(it_p p = particles.begin();p != particles.end(); ++p)
-    p->reset();
-  std::cout << "\rRunning => Initialising Engine               " << std::flush;
-  Engine::Engine engine(this);
-  std::cout << "\rRunning => Starting Simulation               " << std::flush;
-  engine.productionRun();
-  std::cout << "\rRunning => Complete                          " << std::endl;
-
+  Logger::Logger logger;
+  for(size_t i(0); i < simSettings.getRuns(); ++i) //loop through several runs
+    {
+      std::cout << "\rRun Number: " << i+1 <<"                     " << std::endl;
+      std::cout << "\rRunning => Resetting Particles               " << std::flush;
+      for(it_p p = particles.begin();p != particles.end(); ++p)
+	p->reset();
+      
+      std::cout << "\rRunning => Initialising Engine               " << std::flush;
+      Engine::Engine engine(this);
+      std::cout << "\rRunning => Starting Simulation               " << std::flush;
+      engine.productionRun((i == 0 ? true : false ), logger);
+      std::cout << "\rRunning => Complete                          " << std::flush;
+    }
 }
 
 

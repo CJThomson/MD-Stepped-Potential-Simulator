@@ -3,26 +3,31 @@
 ** TODO Use Boost Smart Pointers
 ** TODO Use iterators more consistantly rather than a combination of int/iterators/foreach
 ** TODO Add Cubic arrangement
-* New Features[20%]
+* New Features[16%]
 ** TODO Add Thermostat[1/3]
 - [X] Add Andersen Thermostat
 - [ ] Add Isokinetic Thermostat
 - [ ] Add Nose-Hoover Thermostat
 ** DONE Add Production Runs
-** TODO Add output logging [0/5]
-- [ ] Copy of input data
-- [ ] Results per run and average
+** TODO Add output logging [3/5]
+- [X] Copy of input data
+- [X] Results per run and average
 - [ ] RDF Data
 - [ ] Particle Position Data
-- [ ] Collision Statistics
+- [X] Collision Statistics
 ** TODO Complete Sampler [1/2]
 - [ ] RDF
 - [X] Collision Statistics
-** TODO Input Data [1/4]
-- [ ] Read Stepper settings + implementation
+** TODO Input Data [3/4]
+- [X] Read Stepper settings + implementation
 - [X] Read Sampler settings
-- [ ] Read Output log settings
+- [X] Read Output log settings
 - [ ] Read Particle Data + implementation
+** TODO Neighbour List [1/4]
+- [X] None
+- [ ] Simple
+- [ ] Overlapping
+- [ ] Multiple Neighbours
 * Bugs [100%]
 ** DONE Possible negative time interval: - confirmed
    Only happens with particles 0 or 1, check initialisation of the

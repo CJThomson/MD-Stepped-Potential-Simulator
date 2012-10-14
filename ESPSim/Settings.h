@@ -27,6 +27,7 @@ class SimSet: public Settings
   bool sampleColl;
   unsigned long long simEvents;
   unsigned long long eqEvents;
+  unsigned int noRuns;
   double simTime;
   double eqTime;
   bool thermoControl;
@@ -47,6 +48,7 @@ class SimSet: public Settings
   inline bool getThermoControl() const {return thermoControl; }
   inline double getThermoFreq() const { return thermoFreq; }
   inline bool getSampleColl() const { return sampleColl; }
+  inline unsigned int getRuns() const { return noRuns; }
   bool isTime(bool eq) { return (eq) ? eqTime != 0 : simTime != 0;  }
   //set access
   void setOutLog(int value) { writeOutLog = value; }
@@ -55,6 +57,7 @@ class SimSet: public Settings
   void setEQEvent(unsigned long long value) { eqEvents = value; }
   void setRunTime(double value) { simTime = value; }
   void setEQTime(double value) { eqTime = value; }
+  void setRuns(unsigned int value) { noRuns = value; }
   void setThermoControl(bool value) { thermoControl = value; }
   void setThermoFreq(double value) { thermoFreq = value;  }
   void setThermoType(const char* type) 
@@ -79,6 +82,8 @@ class SimSet: public Settings
        "Equilibration Length (time)")
       ("runtime", boost::program_options::value<double>(),
        "Production Run Length (time)")
+      ("noRuns,R", boost::program_options::value<unsigned int>(),
+       "Number of Production Runs to Simulate")
       /*("thermotype", boost::program_options::value<int>(),
 	"Thermostat Type: \n\t1: Andersen" << - Add at some point*/
       ;
@@ -94,7 +99,8 @@ class SimSet: public Settings
       simEvents = vm["runevents"].as<unsigned int>();
     if(vm.count("runtime"))
       simTime = vm["runtime"].as<double>();
-
+    if(vm.count("noRuns"))
+      noRuns = vm["noRuns"].as<unsigned int>();
 
   }
 

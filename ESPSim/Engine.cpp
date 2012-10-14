@@ -43,11 +43,12 @@ namespace Engine
 	      << "         " << std::flush;
     equiLog.close(); //close the file
   }
-  void Engine::productionRun()
+  void Engine::productionRun(bool firstRun, Logger::Logger& logger)
   {
-    Logger::Logger logger;
+
     equilibration = false;
-    logger.init_Results(simulator->getSettings().getSampleColl());
+    if(firstRun)
+      logger.init_Results(simulator->getSettings().getSampleColl());
     std::cout << "\rRunning => Initialising Thermostat                " << std::flush;
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
