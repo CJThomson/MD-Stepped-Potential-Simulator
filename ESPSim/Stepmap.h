@@ -40,14 +40,6 @@ class Stepmap
       }
     return check1;
   }
-  void deleteFromMap(unsigned int p1, unsigned int p2)
-  {
-    unsigned int i = std::min(p1, p2);
-    unsigned int j = std::max(p1, p2);
-    std::map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator it_map 
-      = pairStepMap.find(std::make_pair(i, j)); //find collision state of particles
-     pairStepMap.erase(it_map); 
-  }
   void deletePntr(it_map pntr)
   {
     pairStepMap.erase(pntr);
@@ -59,35 +51,11 @@ class Stepmap
     unsigned int j = std::max(p1, p2);
     pairStepMap.insert(std::make_pair(std::make_pair(i, j), 0)); 
   }
-  void moveInwards(unsigned int p1, unsigned int p2)
-  {
-    unsigned int i = std::min(p1, p2);
-    unsigned int j = std::max(p1, p2);
-    std::map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator it_map 
-      = pairStepMap.find(std::make_pair(i, j)); //find collision state of particles
-    if(it_map == pairStepMap.end()) 
-      pairStepMap.insert(std::make_pair(std::make_pair(i, j), 0)); 
-    else
-      ++(it_map->second); //move particles in one step
-
-  }
-  void moveOutwards(unsigned int p1, unsigned int p2)
-  {
-    unsigned int i = std::min(p1, p2);
-    unsigned int j = std::max(p1, p2);
-    std::map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator it_map 
-      = pairStepMap.find(std::make_pair(i, j)); //find collision state of particles
-    if(it_map->second == 0)
-      pairStepMap.erase(it_map);
-    else
-      --(it_map->second);
-  }
   int getStep (unsigned int p1, unsigned int p2) const
   {
     unsigned int i = std::min(p1, p2);
     unsigned int j = std::max(p1, p2);
-    std::map<std::pair<unsigned int, unsigned int>, unsigned int>::const_iterator it_map 
-      = pairStepMap.find(std::make_pair(i, j)); //find collision state of particles
+    cit_map it_map = pairStepMap.find(std::make_pair(i, j)); //find collision state of particles
     if(it_map == pairStepMap.end())
       return -1;
     return it_map->second;
@@ -104,7 +72,7 @@ class Stepmap
     unsigned int j = std::max(p1, p2);
     return pairStepMap.find(std::make_pair(i, j)); //find collision state of particles
   }
-  inline it_map getEndPntr() { return pairStepMap.end(); }
+  inline cit_map getEndPntr() const { return pairStepMap.end(); }
  private:
   std::map<std::pair<unsigned int, unsigned int>, unsigned int> pairStepMap;
   std::map<std::pair<unsigned int, unsigned int>, unsigned int>::iterator it_last;

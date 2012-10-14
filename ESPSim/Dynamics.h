@@ -56,7 +56,10 @@ namespace Engine
 		sampler.changePotential(dU);
 		sampler.eventCount(2, (it_step == simulator->setStepMap().getEndPntr() 
 				       ? -1 : it_step->second), true);
-		simulator->setStepMap().moveInwards(event.getP1(), event.getP2());
+		if(it_step == simulator->getStepMap().getEndPntr())
+		  simulator->setStepMap().addToMap(event.getP1(), event.getP2());
+		else
+		  ++(it_step->second);
 	      }
 	    else //if bounce occurs
 	      {
@@ -89,7 +92,10 @@ namespace Engine
 		sampler.changeMomentumFlux(r12.dotProd(deltav1));
 		sampler.changePotential(dU);
 		sampler.eventCount(2, it_step->second, false);
-		simulator->setStepMap().moveOutwards(event.getP1(), event.getP2()); 
+		if(it_step->second == 0)
+		  simulator->setStepMap().deletePntr(it_step);
+		else
+		  --(it_step->second);
 	      }
 	    else //if bounce occurs
 	      {
