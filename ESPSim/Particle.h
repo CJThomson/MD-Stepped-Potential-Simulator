@@ -43,7 +43,8 @@ class Particle
   Vector3<double>& setV() { return v; }
   void resetR0() {r0 = r;}
   void setID(unsigned int value) { id = value; }
-  void setNextCell(int newCell) {nextCell = newCell;}
+  void setCell(unsigned int value) { cellNo = value; }
+  void setNextCell(unsigned int newCell) { nextCell = newCell; }
   void setLastUpdate(double currentTime) {lastUpdate = currentTime;}
 
   void incrNoColl() { ++noColl; }

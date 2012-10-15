@@ -1,6 +1,6 @@
 //Class to allow 3D vector calculations
 #pragma once
-#include<math.h>
+#include<cmath>
 #include<cstdlib>
 //declarations that classes and operator overloads are templates...this is so the compiler knows what to expect
 template <class T> class Vector3;
@@ -175,5 +175,10 @@ class PBCVector:public Vector3<T>
       this->x = v[0]; this->y = v[1]; this->z = v[2];
       applyPBC();
     }
-  
+  const PBCVector operator+ (const PBCVector &v) const
+  {
+    PBCVector v2(sysLen, centreOrigin, 
+		 Vector3<T> (this->x + v[0], this->y + v[1], this->z + v[2]));
+    return v2;
+  };
 };

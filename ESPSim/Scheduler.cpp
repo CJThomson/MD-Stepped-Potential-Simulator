@@ -19,8 +19,16 @@ namespace Scheduler
   void Scheduler::regenerate(double t, unsigned long long eventCount)
   {
     masterEL.clear();
+    particleEL.clear(); 
+    particleEL.resize(simulator->getParticles().size());
+    sentPoint = simulator->getParticles().size();
+    cellPoint = sentPoint + 1;
     BOOST_FOREACH(Particle p1, simulator->getParticles())
-      masterEL.push_back(getMinTime(t, p1.getID()));
+      {
+	particleEL[p1.getID()].resize(cellPoint + 1);
+	masterEL.push_back(getMinTime(t, p1.getID()));
+      }
+    
     if(masterEL.size() != simulator->getParticles().size())
       {
 	std::cerr << "MasterEL not correct size" << std::endl;
@@ -49,26 +57,23 @@ namespace Scheduler
 
   Event Scheduler::getMinTime(double t, unsigned int p1)
   {
-    double earliest_time = getSentinal(p1);
-    unsigned int earliest_p2 = -1;
-    Event::EventType earliest_Event = Event::SENTINAL;
+
     nl->genNL(simulator->getParticles()[p1].getCell());
     for(std::vector<unsigned int>::iterator p2 = nl->getNeighbours().begin();
     	p2 != nl->getNeighbours().end(); ++p2)
       {
-	if(p1 == simulator->getParticles()[*p2].getID()) continue; //if particle is itself move on
+	if(p1 == *p2) continue; //if particle is itself move on
 	Event::EventType eventType;
-	double t_min_coll = getInteractionTime(p1, simulator->getParticles()[*p2].getID(), 
+	double t_min_coll = getInteractionTime(p1, *p2, 
 					       eventType);
-	if(t_min_coll < earliest_time)
-	  {
-	    earliest_time = t_min_coll;
-	    earliest_p2 = simulator->getParticles()[*p2].getID();
-	    earliest_Event = eventType;
-	  }
+	particleEL[p1][*p2] = Event(t + t_min_coll, p1, *p2, 
+				    simulator->getParticles()[*p2].getNoColl(), eventType);
       }
-    return Event(t + earliest_time, p1, earliest_p2, 
-		 simulator->getParticles()[earliest_p2].getNoColl(), earliest_Event);
+    double sent_time = getSentinal(p1);
+    particleEL[p1][sentPoint] = Event(t + sent_time, p1, -1, -1, Event::SENTINAL);
+    double cell_time = nl->getCellTime(p1);
+    particleEL[p1][sentPoint] = Event(t + cell_time, p1, -1, -1, Event::NEIGHBOURCELL);
+    return *min_element(particleEL[p1].begin(), particleEL[p1].end());
   }
 
   double Scheduler::getSentinal(unsigned int p1)
