@@ -11,6 +11,7 @@ namespace Engine
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
     std::cout << "\rEquilibration => Initialising Neighbout List       " << std::flush;
+    //boost::shared_ptr<NL::NL> nl(new NL::NL_Simple(simulator->getSteps()[0].first));
     boost::shared_ptr<NL::NL> nl(new NL::NL_None());
     nl->initialise(simulator);
     std::cout << "\rEquilibration => Generating Event List             " << std::flush;
@@ -25,9 +26,9 @@ namespace Engine
     while(simulator->isRunning(t, eventCount, true))
       {
 	Scheduler::Event nextEvent= eventList.getNextEvent();
-	handleEvent(nextEvent, eventList, sampler);
+	handleEvent(nextEvent, eventList, sampler, nl);
 
-	if(int(simulator->progress(t, eventCount, true) * 10000) % 50 == 0)
+	if(eventCount % 1000 == 0)
 	  {
 	    std::cout << "\rEquilibration => " << std::setprecision(4) 
 		      << std::setprecision(3)<< std::setfill(' ') <<std::setw(5)
@@ -53,7 +54,7 @@ namespace Engine
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
     std::cout << "\rRunning => Initialising Neighbout List            " << std::flush;
-    boost::shared_ptr<NL::NL> nl(new NL::NL_None());
+    boost::shared_ptr<NL::NL> nl(new NL::NL_Simple(simulator->getSteps()[0].first));
     nl->initialise(simulator);
     std::cout << "\rRunning => Generating Event List                  " << std::flush;
     Scheduler::Scheduler eventList(simulator, nl);
@@ -70,7 +71,7 @@ namespace Engine
     while(simulator->isRunning(t, eventCount, false))
       {
 	Scheduler::Event nextEvent= eventList.getNextEvent();
-	handleEvent(nextEvent, eventList, sampler);
+	handleEvent(nextEvent, eventList, sampler, nl);
 	if(eventCount % 1000 == 0)
 	  {
 	    if(eventCount > 2E6)
@@ -102,7 +103,7 @@ namespace Engine
 	      << "                  " << std::flush;
   }
   void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,
-			   Sampler::Sampler& sampler)
+			   Sampler::Sampler& sampler, boost::shared_ptr<NL::NL> nl)
   {
     switch (currentEvent.getEventType())
       {
@@ -128,6 +129,17 @@ namespace Engine
 	  break;
 	}
       case Scheduler::Event::NEIGHBOURCELL:
+	{
+	  freeStream(currentEvent.getCollisionTime(), sampler);
+	  /*std::cerr << currentEvent.getP1() << " - " 
+		    << currentEvent.getCollisionTime() << " - "
+		    << simulator->getParticles()[currentEvent.getP1()].getCell() << " - "
+		    << simulator->getParticles()[currentEvent.getP1()].getNextCell()
+		    << std::endl;*/
+	  nl->moveParticle(currentEvent.getP1());
+	  el.update(t, currentEvent.getP1());
+	  break;
+	}
       case Scheduler::Event::RDF:
       case Scheduler::Event::NONE:
       default:
@@ -140,11 +152,19 @@ namespace Engine
   {
     if(currentEvent.getP2Coll() != simulator->getParticles()[currentEvent.getP2()].getNoColl()) //check if collision is valid
       {
+	/*std::cerr << "invalid collision" << std::endl; 
+	std::cerr << "t = " << t << " pID = " << currentEvent.getP1() 
+	  << " & " << currentEvent.getP2()<<std::endl;
+	std::cerr << currentEvent.getP2Coll() << " - "
+	<<  simulator->getParticles()[currentEvent.getP2()].getNoColl();*/
+	el.invalidateEvent(currentEvent.getP1(), currentEvent.getP2());
 	el.update(t, currentEvent.getP1(), currentEvent.getP2());
       }
     else //if a valid event
       {
 	freeStream(currentEvent.getCollisionTime(), sampler);
+	/*std::cerr << "t = " << t << "pID = " << currentEvent.getP1() 
+	  << " & " << currentEvent.getP2()<<std::endl;*/
 	Dynamics dynamics(simulator);
 	dynamics.interact(t, currentEvent, sampler);
 	simulator->setParticles()[currentEvent.getP1()].incrNoColl();
@@ -158,7 +178,6 @@ namespace Engine
 			      Sampler::Sampler& sampler)
   {
     freeStream(currentEvent.getCollisionTime(), sampler);
-    simulator->setParticles()[currentEvent.getP1()].incrNoColl();
     el.update(t, currentEvent.getP1());
   }
   void Engine::freeStream(double newT, Sampler::Sampler& sampler)

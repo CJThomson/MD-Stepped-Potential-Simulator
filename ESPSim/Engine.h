@@ -4,6 +4,7 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <boost/shared_ptr.hpp>
 
 #include "Particle.h"
 #include "Simulator.h"
@@ -28,7 +29,8 @@ namespace Engine
     double t;
     unsigned long long eventCount;
     bool equilibration;
-    void handleEvent(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
+    void handleEvent(Scheduler::Event&, Scheduler::Scheduler&, 
+		     Sampler::Sampler&, boost::shared_ptr<NL::NL> );
     void handleInteraction(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
     void handleSentinal(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler&);
     void freeStream(double, Sampler::Sampler&);

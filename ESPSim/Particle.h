@@ -45,6 +45,7 @@ class Particle
   void setID(unsigned int value) { id = value; }
   void setCell(unsigned int value) { cellNo = value; }
   void setNextCell(unsigned int newCell) { nextCell = newCell; }
+  void moveCell() { cellNo = nextCell; }
   void setLastUpdate(double currentTime) {lastUpdate = currentTime;}
 
   void incrNoColl() { ++noColl; }

@@ -33,6 +33,7 @@ class SimSet: public Settings
   bool thermoControl;
   double thermoFreq;
   boost::shared_ptr<Thermostat::Thermostat> thermostat;
+  std::string nlType;
  public:
   //constructor
  SimSet(): writeOutLog(-1){}
@@ -49,6 +50,7 @@ class SimSet: public Settings
   inline double getThermoFreq() const { return thermoFreq; }
   inline bool getSampleColl() const { return sampleColl; }
   inline unsigned int getRuns() const { return noRuns; }
+  inline const char* getNLType() const { return nlType.c_str(); }
   bool isTime(bool eq) { return (eq) ? eqTime != 0 : simTime != 0;  }
   //set access
   void setOutLog(int value) { writeOutLog = value; }
@@ -60,6 +62,7 @@ class SimSet: public Settings
   void setRuns(unsigned int value) { noRuns = value; }
   void setThermoControl(bool value) { thermoControl = value; }
   void setThermoFreq(double value) { thermoFreq = value;  }
+  void setNLType(const char* value) { nlType = value; }
   void setThermoType(const char* type) 
   { 
     if(strcmp(type,"Andersen") == 0 )
@@ -84,6 +87,8 @@ class SimSet: public Settings
        "Production Run Length (time)")
       ("noRuns,R", boost::program_options::value<unsigned int>(),
        "Number of Production Runs to Simulate")
+      ("NL", boost::program_options::value<int>(),
+       "Type of neighbour list: \n\t0: None\n\t1: Simple")
       /*("thermotype", boost::program_options::value<int>(),
 	"Thermostat Type: \n\t1: Andersen" << - Add at some point*/
       ;
@@ -101,7 +106,11 @@ class SimSet: public Settings
       simTime = vm["runtime"].as<double>();
     if(vm.count("noRuns"))
       noRuns = vm["noRuns"].as<unsigned int>();
-
+    if(vm.count("NL"))
+      { switch (vm["NL"].as<int>()) { 
+	case 0: nlType = "None"; break;
+	case 1: nlType = "Simple"; break; }
+      }
   }
 
 };

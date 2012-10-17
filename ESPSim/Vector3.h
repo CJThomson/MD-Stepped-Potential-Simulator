@@ -153,23 +153,25 @@ class PBCVector:public Vector3<T>
  private:
   T sysLen;
   bool centreOrigin;
+ 
+ public:
+
+ PBCVector(T length, bool cenOri, Vector3<T> vec) : Vector3<T>(vec), sysLen(length), centreOrigin(cenOri) {applyPBC();}
   void applyPBC()
   {
     if(centreOrigin)
       {
-	this->x -= lrint(this->x / sysLen) * sysLen;
-	this->y -= lrint(this->y / sysLen) * sysLen;
-	this->z -= lrint(this->z / sysLen) * sysLen;		
+	this->x -= lrint((double)this->x / sysLen) * sysLen;
+	this->y -= lrint((double)this->y / sysLen) * sysLen;
+	this->z -= lrint((double)this->z / sysLen) * sysLen;		
       }
     else
       {
-	this->x -= floor(this->x / sysLen) * sysLen;
-	this->y -= floor(this->y / sysLen) * sysLen;
-	this->z -= floor(this->z / sysLen) * sysLen;
+	this->x -= floor((double)this->x / sysLen) * sysLen;
+	this->y -= floor((double)this->y / sysLen) * sysLen;
+	this->z -= floor((double)this->z / sysLen) * sysLen;
       }
   }
- public:
- PBCVector(T length, bool cenOri, Vector3<T> vec) : Vector3<T>(vec), sysLen(length), centreOrigin(cenOri) {applyPBC();}
   const PBCVector operator= (const Vector3<T> &v)
     {
       this->x = v[0]; this->y = v[1]; this->z = v[2];
@@ -179,6 +181,7 @@ class PBCVector:public Vector3<T>
   {
     PBCVector v2(sysLen, centreOrigin, 
 		 Vector3<T> (this->x + v[0], this->y + v[1], this->z + v[2]));
+    v2.applyPBC();
     return v2;
   };
 };

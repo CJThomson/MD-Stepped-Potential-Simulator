@@ -57,7 +57,6 @@ namespace Scheduler
 
   Event Scheduler::getMinTime(double t, unsigned int p1)
   {
-
     nl->genNL(simulator->getParticles()[p1].getCell());
     for(std::vector<unsigned int>::iterator p2 = nl->getNeighbours().begin();
     	p2 != nl->getNeighbours().end(); ++p2)
@@ -68,6 +67,7 @@ namespace Scheduler
 					       eventType);
 	particleEL[p1][*p2] = Event(t + t_min_coll, p1, *p2, 
 				    simulator->getParticles()[*p2].getNoColl(), eventType);
+	//std::cerr << p1 << " & " << *p2 << " = " << t_min_coll + t << std::endl;
       }
     double sent_time = getSentinal(p1);
     particleEL[p1][sentPoint] = Event(t + sent_time, p1, -1, -1, Event::SENTINAL);
@@ -104,7 +104,10 @@ namespace Scheduler
     //return Event(sampler::RDF::getTime(), -1, -1, Scheduler::Event::RDF);
     }
   */
-
+  void Scheduler::invalidateEvent(double p1, double p2)
+  {
+    particleEL[p1][p2].setCollisionTime(HUGE_VAL);
+  }
   double Scheduler::getInteractionTime(unsigned int p1, unsigned int p2, Event::EventType& eventType)
   {
     double t_min_out = HUGE_VAL, t_min_in = HUGE_VAL;

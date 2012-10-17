@@ -85,6 +85,7 @@ namespace Scheduler
     void update (double, unsigned int); //update for one particles
     void update (double, unsigned int, unsigned int); //update for two particles
     void getThermoEvent(double, unsigned long long);
+    void invalidateEvent(double, double);
   private:
     size_t thermoPoint;
     size_t sentPoint;
