@@ -51,11 +51,8 @@ void Simulator::initialise()
   std::cout << "\rInitialisation => Particle => Positions        " << std::flush;
 
   particles.resize(simProperties.getN());
-  Lattice* initPos = new FCC; //[[REPLACE]] boost smart pointers 
-  {
-    initPos->placeParticles(particles, simProperties.getLength()); //initialise particle locations
-    delete initPos; //release memory
-  }
+  boost::scoped_ptr<Lattice> initPos( new FCC);  
+  initPos->placeParticles(particles, simProperties.getLength()); //initialise particle locations
   std::cout << "\rInitialisation => Particle => Velocity         " << std::flush;
   for(it_p p = particles.begin();p != particles.end(); ++p)
     p->resetV(RNG);
