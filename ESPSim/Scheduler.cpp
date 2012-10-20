@@ -19,15 +19,8 @@ namespace Scheduler
   void Scheduler::regenerate(double t, unsigned long long eventCount)
   {
     masterEL.clear();
-    particleEL.clear(); 
-    particleEL.resize(simulator->getParticles().size());
-    sentPoint = simulator->getParticles().size();
-    cellPoint = sentPoint + 1;
     BOOST_FOREACH(Particle p1, simulator->getParticles())
-      {
-	particleEL[p1.getID()].resize(cellPoint + 1);
-	masterEL.push_back(getMinTime(t, p1.getID()));
-      }
+      masterEL.push_back(getMinTime(t, p1.getID()));
     
     if(masterEL.size() != simulator->getParticles().size())
       {
@@ -57,23 +50,40 @@ namespace Scheduler
 
   Event Scheduler::getMinTime(double t, unsigned int p1)
   {
-    nl->genNL(simulator->getParticles()[p1].getCell());
-    for(std::vector<unsigned int>::iterator p2 = nl->getNeighbours().begin();
-    	p2 != nl->getNeighbours().end(); ++p2)
-      {
-	if(p1 == *p2) continue; //if particle is itself move on
-	Event::EventType eventType;
-	double t_min_coll = getInteractionTime(p1, *p2, 
-					       eventType);
-	particleEL[p1][*p2] = Event(t + t_min_coll, p1, *p2, 
-				    simulator->getParticles()[*p2].getNoColl(), eventType);
-	//std::cerr << p1 << " & " << *p2 << " = " << t_min_coll + t << std::endl;
-      }
+    //get the earliest collision time of neighbour cell and 
+    //sentinal events
+    double earliest_p2 = -1;
+    Event::EventType earliest_event = Event::NEIGHBOURCELL;
+    double earliest_t = nl->getCellTime(p1);
     double sent_time = getSentinal(p1);
-    particleEL[p1][sentPoint] = Event(t + sent_time, p1, -1, -1, Event::SENTINAL);
-    double cell_time = nl->getCellTime(p1);
-    particleEL[p1][sentPoint] = Event(t + cell_time, p1, -1, -1, Event::NEIGHBOURCELL);
-    return *min_element(particleEL[p1].begin(), particleEL[p1].end());
+    if(sent_time < earliest_t)
+      earliest_event = Event::SENTINAL;
+    unsigned int p1Cell = simulator->getParticles()[p1].getCell();
+    for(std::vector<unsigned int>::iterator cell = 
+	  nl->getNeighbourCells(p1Cell).begin();
+	cell != nl->getNeighbourCells(p1Cell).end();
+	++cell)
+      for(std::vector<unsigned int>::iterator p2 = nl->getParticles(*cell).begin(); 
+	  p2 != nl->getParticles(*cell).end(); 
+	  ++p2)
+	{
+	  if(p1 == *p2) continue; //if particle is itself move on
+	  Event::EventType eventType;
+	  double t_min_coll = getInteractionTime(p1, *p2, 
+						 eventType);
+	  if(t_min_coll < earliest_t)
+	    {
+	      earliest_t = t_min_coll;
+	      earliest_event = eventType;
+	      earliest_p2 = *p2;
+	    }
+	}
+    double earliest_collCount = 0;
+    if(earliest_p2 != -1)
+      earliest_collCount = simulator->getParticles()[earliest_p2].getNoColl();
+    return Event(t + earliest_t, p1, earliest_p2, 
+		 earliest_collCount,
+		 earliest_event);
   }
 
   double Scheduler::getSentinal(unsigned int p1)
@@ -104,10 +114,7 @@ namespace Scheduler
     //return Event(sampler::RDF::getTime(), -1, -1, Scheduler::Event::RDF);
     }
   */
-  void Scheduler::invalidateEvent(double p1, double p2)
-  {
-    particleEL[p1][p2].setCollisionTime(HUGE_VAL);
-  }
+
   double Scheduler::getInteractionTime(unsigned int p1, unsigned int p2, Event::EventType& eventType)
   {
     double t_min_out = HUGE_VAL, t_min_in = HUGE_VAL;

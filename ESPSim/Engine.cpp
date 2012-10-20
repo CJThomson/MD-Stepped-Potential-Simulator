@@ -11,8 +11,8 @@ namespace Engine
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
     std::cout << "\rEquilibration => Initialising Neighbout List       " << std::flush;
-    //boost::shared_ptr<NL::NL> nl(new NL::NL_Simple(simulator->getSteps()[0].first));
-    boost::shared_ptr<NL::NL> nl(new NL::NL_None());
+    boost::shared_ptr<NL::NL> nl = loadNL();
+    //boost::shared_ptr<NL::NL> nl(new NL::NL_None());
     nl->initialise(simulator);
     std::cout << "\rEquilibration => Generating Event List             " << std::flush;
     Scheduler::Scheduler eventList(simulator, nl);
@@ -54,7 +54,7 @@ namespace Engine
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
     std::cout << "\rRunning => Initialising Neighbout List            " << std::flush;
-    boost::shared_ptr<NL::NL> nl(new NL::NL_Simple(simulator->getSteps()[0].first));
+    boost::shared_ptr<NL::NL> nl = loadNL();
     nl->initialise(simulator);
     std::cout << "\rRunning => Generating Event List                  " << std::flush;
     Scheduler::Scheduler eventList(simulator, nl);
@@ -157,7 +157,6 @@ namespace Engine
 	  << " & " << currentEvent.getP2()<<std::endl;
 	std::cerr << currentEvent.getP2Coll() << " - "
 	<<  simulator->getParticles()[currentEvent.getP2()].getNoColl();*/
-	el.invalidateEvent(currentEvent.getP1(), currentEvent.getP2());
 	el.update(t, currentEvent.getP1(), currentEvent.getP2());
       }
     else //if a valid event
@@ -189,5 +188,12 @@ namespace Engine
     if(!equilibration)
       sampler.freeStream(dt);
     t = newT; //update system time
+  }
+  boost::shared_ptr<NL::NL> Engine::loadNL()
+  {
+    boost::shared_ptr<NL::NL> nl(new NL::NL_None);
+    if(strcmp(simulator->getSettings().getNLType(),"Simple") == 0)
+      nl = boost::shared_ptr<NL::NL>(new NL::NL_Simple(simulator->getSteps()[0].first));
+    return nl;
   }
 } 

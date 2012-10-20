@@ -34,5 +34,6 @@ namespace Engine
     void handleInteraction(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
     void handleSentinal(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler&);
     void freeStream(double, Sampler::Sampler&);
+    boost::shared_ptr<NL::NL> loadNL();
   };
 }

@@ -85,14 +85,12 @@ namespace Scheduler
     void update (double, unsigned int); //update for one particles
     void update (double, unsigned int, unsigned int); //update for two particles
     void getThermoEvent(double, unsigned long long);
-    void invalidateEvent(double, double);
   private:
     size_t thermoPoint;
     size_t sentPoint;
     size_t cellPoint;
     Simulator* simulator;
     std::vector<Event> masterEL;
-    std::vector<std::vector<Event> > particleEL;
     Event getMinTime (double, unsigned int);
     double getSentinal (unsigned int);
     double getInteractionTime (unsigned int, unsigned int, Event::EventType&);

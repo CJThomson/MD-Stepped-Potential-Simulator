@@ -12,9 +12,9 @@ namespace NL
   {
   public:
     virtual void initialise(Simulator* sim) = 0;
-    virtual void genNL(unsigned int cell) = 0;
     virtual double getCellTime(unsigned int p) = 0;
-    virtual std::vector<unsigned int>& getNeighbours() = 0;
+    virtual std::vector<unsigned int>& getNeighbourCells(unsigned int cell) = 0;
+    virtual std::vector<unsigned int>& getParticles(unsigned int cell) = 0;
     virtual void moveParticle(unsigned int p) = 0;
   protected:
     NL() {};
@@ -32,18 +32,23 @@ namespace NL
 	{
 	  nl.push_back(p->getID()); //get a vector of every particle ID
 	}
+      nc.push_back(0);
     }
-    virtual void genNL(unsigned int cell) {}
-    virtual double getCellTime(unsigned int p) { return HUGE_VAL;}
-    virtual void moveParticle(unsigned int p) {}
-    virtual std::vector<unsigned int>& getNeighbours()
+    virtual std::vector<unsigned int>& getNeighbourCells(unsigned int cell)
+      {
+	return nc;
+      }
+    virtual std::vector<unsigned int>& getParticles(unsigned int cell)
       {
 	return nl;
       }
+    virtual double getCellTime(unsigned int p) { return HUGE_VAL;}
+    virtual void moveParticle(unsigned int p) {}
+
   private:
     Simulator* simulator;
     std::vector<unsigned int> nl;
-
+    std::vector<unsigned int> nc;
   };
 
   class NL_Simple: public NL
@@ -66,6 +71,16 @@ namespace NL
       
     }
     virtual double getCellTime(unsigned int p);
+    virtual std::vector<unsigned int>& getNeighbourCells(unsigned int cell)
+      {
+	return nc[cell];
+
+      }
+
+    virtual std::vector<unsigned int>& getParticles(unsigned int cell)
+      {
+	return nl[cell];
+      }
     virtual void moveParticle(unsigned int p) 
     {
       unsigned int cellID = simulator->getParticles()[p].getCell();
@@ -75,25 +90,7 @@ namespace NL
       nl[simulator->getParticles()[p].getNextCell()].push_back(p);
       simulator->setParticles()[p].moveCell();
     }
-    virtual void genNL(unsigned int cell)
-    {
-      tempNL.clear();
 
-      for(size_t i(0); i < nc[cell].size(); ++i)
-	{
-	  /*std::cerr << "i = " << i << " - ";
-	  std::cerr << tempNL.size() << " - "; 
-	  std::cerr << nl.size() << " - ";
-	  std::cerr << nl[i].size() << std::endl;*/
-	  tempNL.reserve(tempNL.size() + nl[i].size());
-	  tempNL.insert(tempNL.end(), nl[i].begin(), nl[i].end());
-	}
-      
-    }
-    virtual std::vector<unsigned int>& getNeighbours()
-      {
- 	return tempNL;
-      }
   private:
     Simulator* simulator;
     std::vector<unsigned int> tempNL;
