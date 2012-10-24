@@ -7,6 +7,7 @@ class ContPotential
  public:
   virtual double energy(double r) = 0;
   virtual double force(double r) = 0;
+  virtual double shift() = 0;
  protected:
   ContPotential() {};
 };
@@ -23,6 +24,10 @@ class LennardJones: public ContPotential
   virtual inline double force(double r)
   {
     return 24.0 * lj_eps / lj_sig * (2.0 * pow(lj_sig / r, 13) - pow(lj_sig / r, 7));
+  }
+  virtual inline double shift()
+  {
+    return 0;
   }
  private: 
   double lj_eps;
@@ -43,6 +48,10 @@ class LennardJonesShifted: public ContPotential
   virtual inline double force(double r)
   {
     return 24.0 * lj_eps / lj_sig * (2.0 * pow(lj_sig / r, 13) - pow(lj_sig / r, 7));
+  }
+  virtual inline double shift()
+  {
+    return lj_shift;
   }
 
  private:

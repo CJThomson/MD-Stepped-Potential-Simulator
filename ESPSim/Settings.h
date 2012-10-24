@@ -32,11 +32,12 @@ class SimSet: public Settings
   double eqTime;
   bool thermoControl;
   double thermoFreq;
+  bool reduceOut;
   boost::shared_ptr<Thermostat::Thermostat> thermostat;
   std::string nlType;
  public:
   //constructor
- SimSet(): writeOutLog(-1){}
+ SimSet(): reduceOut(0){}
 
   //get access 
   inline int getOutLog() const { return writeOutLog; }
@@ -50,6 +51,7 @@ class SimSet: public Settings
   inline double getThermoFreq() const { return thermoFreq; }
   inline bool getSampleColl() const { return sampleColl; }
   inline unsigned int getRuns() const { return noRuns; }
+  inline bool getReducedOut() const { return reduceOut; }
   inline const char* getNLType() const { return nlType.c_str(); }
   bool isTime(bool eq) { return (eq) ? eqTime != 0 : simTime != 0;  }
   //set access
@@ -63,6 +65,7 @@ class SimSet: public Settings
   void setThermoControl(bool value) { thermoControl = value; }
   void setThermoFreq(double value) { thermoFreq = value;  }
   void setNLType(const char* value) { nlType = value; }
+  void setReducedOut(bool value) { reduceOut = value; }
   void setThermoType(const char* type) 
   { 
     if(strcmp(type,"Andersen") == 0 )
@@ -89,6 +92,8 @@ class SimSet: public Settings
        "Number of Production Runs to Simulate")
       ("NL", boost::program_options::value<int>(),
        "Type of neighbour list: \n\t0: None\n\t1: Simple")
+      ("ReducedOut", boost::program_options::value<bool>(),
+       "Suppress the output freq for cluster scripting")
       /*("thermotype", boost::program_options::value<int>(),
 	"Thermostat Type: \n\t1: Andersen" << - Add at some point*/
       ;
@@ -106,6 +111,8 @@ class SimSet: public Settings
       simTime = vm["runtime"].as<double>();
     if(vm.count("noRuns"))
       noRuns = vm["noRuns"].as<unsigned int>();
+    if(vm.count("ReducedOut"))
+      reduceOut = vm["ReducedOut"].as<bool>();
     if(vm.count("NL"))
       { switch (vm["NL"].as<int>()) { 
 	case 0: nlType = "None"; break;
@@ -139,8 +146,8 @@ class SimPotential: public Settings
        "Position of core in stepped potential")
       ("nosteps,n", boost::program_options::value<unsigned int>(),
        "Number of discontinuities in stepped potential")
-      ("energyinterval,u", boost::program_options::value<double>(),
-       "Energy interval between steps (EvenEnergy only")
+      ("energyInt,u", boost::program_options::value<double>(),
+       "Energy interval between steps (EvenEnergy only)")
       ;
   }
 
@@ -170,8 +177,9 @@ class SimPotential: public Settings
       }
     if(vm.count("nosteps"))
       noSteps = vm["nosteps"].as<unsigned int>();
-    if(vm.count("energyinterval"))
-      noSteps = vm["energyInterval"].as<double>();
+    if(vm.count("energyInt"))
+	energyInterval = vm["energyInt"].as<double>();
+
     
   }
   //get

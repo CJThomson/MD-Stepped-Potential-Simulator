@@ -117,7 +117,9 @@ namespace Logger
 	node_Thermostat.append_attribute("type") = simSettings.getThermostat()->getType();
 	node_Thermostat.append_attribute("AutoUpdate") = simSettings.getThermoControl();
 	node_Thermostat.append_attribute("ThermoFreq") = simSettings.getThermoFreq();
-	
+	pugi::xml_node node_NL = node_SimSet.append_child("NL");
+	node_NL.append_attribute("type") = simSettings.getNLType();
+
 	pugi::xml_node node_Sampler = node_Main.append_child("SamplerSettings");
 	
 	pugi::xml_node node_CollCount = node_Sampler.append_child("CollisionCounts");

@@ -72,26 +72,24 @@ namespace Stepper
     virtual void genPositions(std::vector<std::pair<double, double> >& steps)
     {
       Polynomial rootFinder;
-      double maxEnergy;
-      size_t i(2);
+      double maxEnergy = 0;
+      size_t i(0);
       std::vector<double> polynomial(13);
       polynomial[6] = -4;
       polynomial[12] = 4;
       std::vector<double> roots;
-
       steps.clear();
-      steps.resize(noSteps);  
-      steps.begin()->first = rCut; //add the cut off radius
-      while(maxEnergy < 200)
+      steps.push_back(std::make_pair(rCut,0)); //add the cutoff radius
+      while(maxEnergy < 50)
 	{
-	  polynomial[0] = - (-1 + 0.5 * lambda  + lambda * i);
-	  maxEnergy = polynomial[0];
+	  polynomial[0] = - (-1 + 0.5 * lambda  + lambda * i) - potential->shift();
+	  maxEnergy = -polynomial[0];
 	  rootFinder.rootFind(polynomial, roots, 1e-5, 1e2);
 	  for(std::vector<double>::iterator j = roots.begin(); j != roots.end(); ++j)
 	    if(*j >= 0 && *j < rCut)
 	      if(find(steps.begin(), steps.end(), 
 		      std::pair<double, double>(*j, 0))==steps.end())
-		steps[noSteps - i].first = *j;
+		steps.push_back(std::make_pair(*j, 0));
 	  if(maxEnergy <= 0)
 	    sort(steps.begin(), steps.end(), std::greater<std::pair<double, double> >());
 	  ++i;

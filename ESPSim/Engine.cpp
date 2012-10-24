@@ -3,16 +3,13 @@ namespace Engine
 {
   void Engine::equilibrate()
   {
-    std::ofstream equiLog;
-    equiLog.open ("equiLog.dat"); //open file
-
     equilibration = true;
     std::cout << "\rEquilibration => Initialising Thermostat           " << std::flush;
     simulator->setThermostat()->initialise(simulator->getTemperature(), 
 					   simulator->getRNG());
     std::cout << "\rEquilibration => Initialising Neighbout List       " << std::flush;
     boost::shared_ptr<NL::NL> nl = loadNL();
-    //boost::shared_ptr<NL::NL> nl(new NL::NL_None());
+
     nl->initialise(simulator);
     std::cout << "\rEquilibration => Generating Event List             " << std::flush;
     Scheduler::Scheduler eventList(simulator, nl);
@@ -27,8 +24,8 @@ namespace Engine
       {
 	Scheduler::Event nextEvent= eventList.getNextEvent();
 	handleEvent(nextEvent, eventList, sampler, nl);
-
-	if(eventCount % 1000 == 0)
+	unsigned int outRate = simulator->getSettings().getReducedOut() ? 1E5 : 1E3;
+	if(eventCount % outRate == 0)
 	  {
 	    std::cout << "\rEquilibration => " << std::setprecision(4) 
 		      << std::setprecision(3)<< std::setfill(' ') <<std::setw(5)
@@ -42,7 +39,6 @@ namespace Engine
       }
     std::cout << "\rEquilibration => Complete                         " 
 	      << "         " << std::flush;
-    equiLog.close(); //close the file
   }
   void Engine::productionRun(bool firstRun, Logger::Logger& logger)
   {
@@ -72,7 +68,8 @@ namespace Engine
       {
 	Scheduler::Event nextEvent= eventList.getNextEvent();
 	handleEvent(nextEvent, eventList, sampler, nl);
-	if(eventCount % 1000 == 0)
+	unsigned int outRate = simulator->getSettings().getReducedOut() ? 1E5 : 1E3;
+	if(eventCount % outRate == 0)
 	  {
 	    if(eventCount > 2E6)
 	      {
@@ -101,8 +98,7 @@ namespace Engine
     logger.write_Results(simulator->getSettings().getSampleColl());
     std::cout << "\rRunning => Complete                             " 
 	      << "                  " << std::flush;
-  }
-  void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,
+  }  void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,
 			   Sampler::Sampler& sampler, boost::shared_ptr<NL::NL> nl)
   {
     switch (currentEvent.getEventType())
