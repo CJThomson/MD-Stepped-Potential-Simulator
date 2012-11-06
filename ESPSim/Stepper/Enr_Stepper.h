@@ -8,7 +8,7 @@
 #include "Stepper.h"
 #include "ContPotential.h"
 #include "../Maths/NumTech.h"
-#include "../Maths/Functions.h"
+#include "../Maths/Functor.h"
 #include "../Maths/polyRoot.h"
 
 typedef std::vector<std::pair<double, double> >::iterator it_step;
@@ -27,7 +27,7 @@ namespace Stepper
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
     {
-      Functions* func = new Partition(lambda, potential);
+      boost::shared_ptr<Functor> func (new Partition(lambda, potential) );
       {
 	Maths::NumTech integrator;
 	for(it_step i = steps.begin(); i != steps.end(); ++i)
@@ -48,7 +48,6 @@ namespace Stepper
 	      }
 	    i->second = energy;
 	  }
-	delete func;
       }
     }
   };
@@ -92,7 +91,7 @@ namespace Stepper
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
     {
-      Functions* func = new Partition(lambda, potential);
+      boost::shared_ptr<Functor> func ( new Partition(lambda, potential) ); 
       {
 	Maths::NumTech integrator;
 	for(it_step i = steps.begin(); i != steps.end(); ++i)
@@ -113,7 +112,6 @@ namespace Stepper
 	      }
 	    i->second = energy;
 	  }
-	delete func;
       }
     }
   };

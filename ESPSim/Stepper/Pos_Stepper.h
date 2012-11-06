@@ -7,7 +7,7 @@
 #include "Stepper.h"
 #include "ContPotential.h"
 #include "../Maths/NumTech.h"
-#include "../Maths/Functions.h"
+#include "../Maths/Functor.h"
 #include "../Maths/polyRoot.h"
 
 #define ZERO 1e-16
@@ -19,9 +19,10 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps) {}
+    double rCut;
+    unsigned int noSteps;
   public:
-  Pos_Even(double rCut, unsigned int n) :
-    Stepper(0,0, 0, rCut, n) {};
+  Pos_Even(double _rCut, unsigned int _noSteps) : rCut(_rCut), noSteps(_noSteps){};
     virtual void genPositions(std::vector<std::pair<double, double> >& steps)
     {
       steps.clear();
@@ -38,51 +39,62 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps) {}
+    double T;
+    double rCut;
+    double noSteps;
+    boost::shared_ptr<ContPotential> potential;
   public:
-  Pos_ExpForce(double temp, double rCut, unsigned int n, boost::shared_ptr<ContPotential> pot) :
-    Stepper(0, 0, temp, rCut, n, pot) {};
+  Pos_ExpForce(double _T, double _rCut, unsigned int _noSteps, 
+	       boost::shared_ptr<ContPotential> _potential) :
+    T(_T), rCut(_rCut), noSteps(_noSteps), potential(_potential) {};
 
     virtual void genPositions(std::vector<std::pair<double, double> >& steps)
     {
-      Functions* func = new ExpForce(lambda, potential);
-      {
-	Maths::NumTech integrator;
-	steps.clear();
-	steps.resize(noSteps);
-	double totalEF = integrator.integrator(func, ZERO, rCut, 100);
-	double r_lower = ZERO;
-	for(size_t i(1); i <= noSteps; ++i)
-	  {
-	    double step = integrator.limitSolver(func, totalEF / noSteps,
-						 r_lower, rCut, 100, 1e3, 1e-5);
-	    if(step != 0)
-	      steps[noSteps - i].first = r_lower = step;
-	  }
-	delete func;
-      }
+      boost::shared_ptr<Functor> f(new ExpForce(T, potential) );
+      Maths::NumTech integrator;
+      steps.clear();
+      steps.resize(noSteps);
+      double totalEF = integrator.integrator(f, ZERO, rCut, 100);
+      double r_lower = ZERO;
+      for(size_t i(1); i <= noSteps; ++i)
+	{
+	  boost::shared_ptr<Functor> f2( new IntegralEq(f, 100, r_lower) );
+	  double step = integrator.rootFinder(f2, r_lower, rCut, 
+					      1e3, 1e-5, totalEF / noSteps);
+	  if(step != 0)
+	    steps[noSteps - i].first = r_lower = step;
+	}
     }
  
   };
   class Pos_EvenEnergy: public Stepper
   {
   public:
-  Pos_EvenEnergy(double energyStep, double rCut, boost::shared_ptr<ContPotential> pot) :
-    Stepper(0,0, energyStep, rCut, 0, pot) {};
+  Pos_EvenEnergy(double _energyInt, double _rCut, 
+		 boost::shared_ptr<ContPotential> _potential) :
+    energyInt(_energyInt), rCut(_rCut), potential(_potential) {}
 
     virtual void genPositions(std::vector<std::pair<double, double> >& steps)
     {
       Polynomial rootFinder;
       double maxEnergy = 0;
       size_t i(0);
+      if(energyInt == 0)
+	{
+	  std::cerr << "Error: Energy interval of 0 passed to EvenEnergy Stepper" << std::endl;
+	  exit(3);
+	}
+      //define polynomial of Lennard Jones
       std::vector<double> polynomial(13);
       polynomial[6] = -4;
       polynomial[12] = 4;
+
       std::vector<double> roots;
       steps.clear();
       steps.push_back(std::make_pair(rCut,0)); //add the cutoff radius
       while(maxEnergy < 50)
 	{
-	  polynomial[0] = - (-1 + 0.5 * lambda  + lambda * i) - potential->shift();
+	  polynomial[0] = - (-1 + 0.5 * energyInt  + energyInt * i) - potential->shift();
 	  maxEnergy = -polynomial[0];
 	  rootFinder.rootFind(polynomial, roots, 1e-5, 1e2);
 	  for(std::vector<double>::iterator j = roots.begin(); j != roots.end(); ++j)
@@ -98,6 +110,9 @@ namespace Stepper
   private:
     bool sortPair(std::pair<double, double> a, std::pair<double, double> b)
     { return a.first > b.first; }
+    double energyInt;
+    double rCut;
+    boost::shared_ptr<ContPotential> potential;
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps) {}

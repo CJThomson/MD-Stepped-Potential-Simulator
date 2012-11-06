@@ -59,7 +59,7 @@ vdivide={\topMargin,*,\bottomMargin}]{geometry}
 \RequirePackage[Bjarne]{fncychap} %% Chapter style
 
 %%% Reference sections
-\RequirePackage[style=chem-acs, doi=true, articletitle=true, %
+\RequirePackage[backend=bibtex,style=chem-acs, doi=true, articletitle=true, %
 biblabel=brackets,refsection=chapter]{biblatex}
 %\RequirePackage[style=nature, article-title=true]{biblatex}
 \defbibheading{thesisChapterBib}{\section{References}}

@@ -36,3 +36,4 @@
 
 ** DONE Fix multiple outputs per 0.5% on the equilibriation time
 ** DONE Remove equiLog.dat << Empty file
+** DONE Infinite loop on energy stepping

@@ -177,10 +177,16 @@ class SimPotential: public Settings
       }
     if(vm.count("nosteps"))
       noSteps = vm["nosteps"].as<unsigned int>();
-    if(vm.count("energyInt"))
-	energyInterval = vm["energyInt"].as<double>();
 
-    
+    if(vm.count("energyInt"))
+      energyInterval = vm["energyInt"].as<double>();
+    if(vm.count("energyInt"))
+      {
+	energyInterval = vm["energyInt"].as<double>();
+	std::cerr << "I got here" << std::endl;
+      }
+
+    std::cerr << "I didn't get here" << energyInterval << std::endl;
   }
   //get
   inline const char* getContPotential() const { return contPotential.c_str(); }

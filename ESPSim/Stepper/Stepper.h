@@ -6,7 +6,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "ContPotential.h"
-#include "../Maths/Functions.h"
+#include "../Maths/Functor.h"
 namespace Stepper
 {
   class Stepper
@@ -17,6 +17,7 @@ namespace Stepper
     virtual void genEnergy(std::vector<std::pair<double, double> >& steps) = 0;
     virtual void genPotential(std::vector<std::pair<double, double> >& steps) = 0;
   protected:
+    Stepper() {};
   Stepper(double s, double e, double l, double rCutoff, unsigned int n, 
 	  boost::shared_ptr<ContPotential> pot = boost::shared_ptr<ContPotential> ()) : 
     sigma(s), epsilon(e), lambda(l),rCut(rCutoff), noSteps(n), potential(pot) 
