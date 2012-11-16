@@ -2,11 +2,11 @@
 #include "Declares.h" //declarations for this program
 
 //Physical Properties:
-double density = 0.8;
+double density = 0.5;
 double temperature = 1.5; //temperature of the system
 //Simulation:
-int numberParticles = 864; //number of particles
-const int simTime = 500000; //length of the Simulation
+int numberParticles = 1372; //number of particles
+const int simTime = 70000; //length of the Simulation
 const double dt = 0.001; //length of ticme interval
 double length = pow(numberParticles / density, 1.0 / 3.0);
 const double r_cut = 3.0;
@@ -41,7 +41,7 @@ const int sample_interval = 10;
 const bool writeLoc = false;
 
 //Measuring Properties:
-const int startSampling = 200000; //number of readings to take
+const int startSampling = 20000; //number of readings to take
 double readingTime = 0;
 const int noBins = 600; //number of radial bins
 const double maxR = 3.0;

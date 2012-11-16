@@ -100,7 +100,7 @@ namespace Stepper
 	  for(std::vector<double>::iterator j = roots.begin(); j != roots.end(); ++j)
 	    if(*j >= 0 && *j < rCut)
 	      if(find(steps.begin(), steps.end(), 
-		      std::pair<double, double>(*j, 0))==steps.end())
+		      std::pair<double, double>(*j, 0)) == steps.end())
 		steps.push_back(std::make_pair(*j, 0));
 	  if(maxEnergy <= 0)
 	    sort(steps.begin(), steps.end(), std::greater<std::pair<double, double> >());
@@ -117,6 +117,23 @@ namespace Stepper
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps) {}
   };
-
+  class Pos_Chapela: public Stepper
+  {
+  public:
+    Pos_Chapela() {};
+ 
+    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps)
+    {
+      steps.clear();
+      double chapelaR[10] = {0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.25, 1.45, 1.75, 2.3};
+      for(size_t i(9); i >= 0; ++i)
+	steps.push_back(std::make_pair(chapelaR[i],0));
+      
+    }
+  private:
+    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
+  };
 
 }

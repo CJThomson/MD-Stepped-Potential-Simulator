@@ -37,7 +37,7 @@ namespace Engine
 		      << std::flush;
 	  }
       }
-    std::cout << "\rEquilibration => Complete                         " 
+    std::cout << "\rEquilibration => Complete                           " 
 	      << "         " << std::flush;
   }
   void Engine::productionRun(bool firstRun, Logger::Logger& logger)
@@ -97,7 +97,7 @@ namespace Engine
     logger.update_Results(sampler,simulator->getSettings().getSampleColl());
     logger.write_Results(simulator->getSettings().getSampleColl());
     std::cout << "\rRunning => Complete                             " 
-	      << "                  " << std::flush;
+	      << "                        " << std::flush;
   }  void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,
 			   Sampler::Sampler& sampler, boost::shared_ptr<NL::NL> nl)
   {
@@ -127,11 +127,6 @@ namespace Engine
       case Scheduler::Event::NEIGHBOURCELL:
 	{
 	  freeStream(currentEvent.getCollisionTime(), sampler);
-	  /*std::cerr << currentEvent.getP1() << " - " 
-		    << currentEvent.getCollisionTime() << " - "
-		    << simulator->getParticles()[currentEvent.getP1()].getCell() << " - "
-		    << simulator->getParticles()[currentEvent.getP1()].getNextCell()
-		    << std::endl;*/
 	  nl->moveParticle(currentEvent.getP1());
 	  el.update(t, currentEvent.getP1());
 	  break;
@@ -147,19 +142,10 @@ namespace Engine
 				 Sampler::Sampler& sampler)
   {
     if(currentEvent.getP2Coll() != simulator->getParticles()[currentEvent.getP2()].getNoColl()) //check if collision is valid
-      {
-	/*std::cerr << "invalid collision" << std::endl; 
-	std::cerr << "t = " << t << " pID = " << currentEvent.getP1() 
-	  << " & " << currentEvent.getP2()<<std::endl;
-	std::cerr << currentEvent.getP2Coll() << " - "
-	<<  simulator->getParticles()[currentEvent.getP2()].getNoColl();*/
-	el.update(t, currentEvent.getP1(), currentEvent.getP2());
-      }
+      el.update(t, currentEvent.getP1(), currentEvent.getP2());
     else //if a valid event
       {
 	freeStream(currentEvent.getCollisionTime(), sampler);
-	/*std::cerr << "t = " << t << "pID = " << currentEvent.getP1() 
-	  << " & " << currentEvent.getP2()<<std::endl;*/
 	Dynamics dynamics(simulator);
 	dynamics.interact(t, currentEvent, sampler);
 	simulator->setParticles()[currentEvent.getP1()].incrNoColl();

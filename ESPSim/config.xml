@@ -7,7 +7,7 @@
   </SimProperties>
   <SimSettings>
     <EqLength time="20"/>
-    <RunLength time="50"/>
+    <RunLength event="1000000"/>
     <Runs number="1"/>
     <Thermostat type="Andersen" autoUpdate="true" thermoFreq="0.05"/>
     <NL type="Simple"/>
@@ -17,7 +17,8 @@
   </SamplerSettings>
   <StepperSettings>
     <Continuous type="LennardJones_shifted" epsilon="1" sigma="1" r_cutoff="3.0"/>
-    <Discrete position="EvenEnergy" energy="Mid" core="None" noSteps="10" energyInterval="0.5"/>
+    <!-- <Discrete position="EvenEnergy" energy="Mid" core="None" noSteps="10" energyInterval="0.5"/>-->
+    <Discrete potential="HardSphere" sigma="1.0"/>
   </StepperSettings>
   <Output/>
 </ESPSimConfig>

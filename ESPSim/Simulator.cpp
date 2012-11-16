@@ -132,36 +132,56 @@ double Simulator::progress(double t, unsigned long long N, bool equilibration)
 }
 void Simulator::initSteps()
 {
-  boost::shared_ptr<ContPotential> potential;
-  const char* option = simPot.getContPotential();
-  if(strcmp(option,"LennardJones") == 0)
-    potential.reset(new LennardJones(simPot.getSigma(), simPot.getEpsilon()));
-  else if(strcmp(option,"LennardJones_shifted") == 0)
-    potential.reset(new LennardJonesShifted(simPot.getSigma(), simPot.getEpsilon(),
-					    simPot.getRCutOff()));
   boost::shared_ptr<Stepper::Stepper> stepper;
-  option = simPot.getStepPositions();
-  if(strcmp(option, "Even") == 0)
+  bool genPotential = true;
+  const char* option = simPot.getStepPotential();
+  if(strcmp(option,"HardSphere") == 0)
+    stepper.reset(new Stepper::Pot_HardCore(simPot.getSigma()));
+  else if(strcmp(option, "SquareWell") == 0)
+    stepper.reset(new Stepper::Pot_SquareWell(simPot.getSigma(), simPot.getEpsilon(),
+					      simPot.getRCutOff()));
+  else if(strcmp(option, "Chapela") == 0)
+    stepper.reset(new Stepper::Pot_Chapela());
+  else
+    genPotential = false;
+
+  if(genPotential)
+    stepper->genPotential(steps);
+  else
     {
-      stepper.reset(new Stepper::Pos_Even(simPot.getRCutOff(), simPot.getNoStep()));
+      boost::shared_ptr<ContPotential> potential;
+      option = simPot.getContPotential();
+      if(strcmp(option,"LennardJones") == 0)
+	potential.reset(new LennardJones(simPot.getSigma(), simPot.getEpsilon()));
+      else if(strcmp(option,"LennardJones_shifted") == 0)
+	potential.reset(new LennardJonesShifted(simPot.getSigma(), simPot.getEpsilon(),
+						simPot.getRCutOff()));
+      
+      option = simPot.getStepPositions();
+      if(strcmp(option, "Even") == 0)
+	stepper.reset(new Stepper::Pos_Even(simPot.getRCutOff(), simPot.getNoStep()));
+      else if(strcmp(option,"MeanForce") == 0)
+	stepper.reset(new Stepper::Pos_ExpForce(simProperties.getT(),simPot.getRCutOff(), 
+						simPot.getNoStep(), potential));
+      else if(strcmp(option,"EvenEnergy") == 0)
+	stepper.reset(new Stepper::Pos_EvenEnergy(simPot.getEnergyInterval(), 
+						  simPot.getRCutOff(), potential));
+      else if(strcmp(option,"Chapela") == 0)
+	stepper.reset(new Stepper::Pos_Chapela());
+      else 
+	exit(0);
+      stepper->genPositions(steps);
+      option = simPot.getStepEnergies();
+      if(strcmp(option, "Mid") == 0)
+	stepper.reset(new Stepper::Enr_Mid(potential));
+      else if (strcmp(option,"Virial") == 0 )
+	stepper.reset(new Stepper::Enr_Virial(simProperties.getT(), potential));
+      else if (strcmp(option,"Average") == 0)
+	stepper.reset(new Stepper::Enr_Average(potential));
+      else if (strcmp(option,"Chapela") == 0)
+	stepper.reset(new Stepper::Enr_Chapela());
+      stepper->genEnergy(steps);
     }
-  else if(strcmp(option,"MeanForce") == 0)
-    stepper.reset(new Stepper::Pos_ExpForce(simProperties.getT(),simPot.getRCutOff(), 
-					    simPot.getNoStep(), potential));
-  else if(strcmp(option,"EvenEnergy") == 0)
-    stepper.reset(new Stepper::Pos_EvenEnergy(simPot.getEnergyInterval(), 
-				      simPot.getRCutOff(), potential));
-  else 
-    exit(0);
-  stepper->genPositions(steps);
-  option = simPot.getStepEnergies();
-  if(strcmp(option, "Mid") == 0)
-    stepper.reset(new Stepper::Enr_Mid(potential));
-  else if (strcmp(option,"Virial") == 0 )
-    stepper.reset(new Stepper::Enr_Virial(simProperties.getT(), potential));
-  else if (strcmp(option,"Average") == 0)
-    stepper.reset(new Stepper::Enr_Average(potential));
-  stepper->genEnergy(steps);
   
 
 }

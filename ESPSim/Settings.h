@@ -167,13 +167,15 @@ class SimPotential: public Settings
     if(vm.count("steppos"))
       { switch (vm["steppos"].as<int>()) { 
 	case 0: stepPositions = "Even"; break;
-	case 1: stepPositions = "EvenEnergy"; break; }
+	case 1: stepPositions = "EvenEnergy"; break; 
+	case 2: stepPositions = "Chapela"; break; }
       }
     if(vm.count("stepenr"))
       { switch (vm["stepenr"].as<int>()) { 
 	case 0: stepEnergies = "Mid"; break;
 	case 1: stepEnergies = "Virial"; break;
-	case 2: stepEnergies = "Average"; break; }
+	case 2: stepEnergies = "Average"; break; 
+	case 3: stepEnergies = "Chapela"; break; }
       }
     if(vm.count("nosteps"))
       noSteps = vm["nosteps"].as<unsigned int>();
@@ -181,12 +183,7 @@ class SimPotential: public Settings
     if(vm.count("energyInt"))
       energyInterval = vm["energyInt"].as<double>();
     if(vm.count("energyInt"))
-      {
-	energyInterval = vm["energyInt"].as<double>();
-	std::cerr << "I got here" << std::endl;
-      }
-
-    std::cerr << "I didn't get here" << energyInterval << std::endl;
+      energyInterval = vm["energyInt"].as<double>();
   }
   //get
   inline const char* getContPotential() const { return contPotential.c_str(); }
