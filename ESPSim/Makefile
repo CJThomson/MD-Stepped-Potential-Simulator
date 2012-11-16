@@ -12,7 +12,7 @@ LINK=-l boost_program_options
 full: $(FILE)
 	$(COMP) $(FILE) $(PUGI) -o $(OUT) $(LINK) $(FLAGS)
 static: $(FILE)
-	$(COMP) $(FLAGS) $(FILE) $(PUGI) -o -Wl, -Bstatic $(LINK) -Wl, -Bdynamic
+	$(COMP) $(FLAGS) $(FILE) $(PUGI) -o $(OUT) -Wl, -Bstatic $(LINK) -Wl, -Bdynamic
 sim: $(FILE) $(OUT)
 $(OUT): $(OBJECTS)
 	$(COMP) $(OBJECTS) $(PUGI) $(FLAGS) -o $(OUT) $(LINK)
