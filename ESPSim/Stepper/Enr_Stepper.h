@@ -90,8 +90,8 @@ namespace Stepper
 	  double energy;
 	  if(i != steps.end() - 1)
 	    {
-	      ravg = pow(0.5 * ( pow(i->first, 3 )+ pow( (i + 1)->first^3), 3 ), 
-			 1.0 / 3.0 );
+	      double ravg = pow(0.5 * ( pow(i->first, 3) + pow((i + 1)->first, 3) ), 
+				1.0 / 3.0 );
 	      energy = energy = potential->energy(ravg);
 	    }
 	  else
