@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "pugixml/pugixml.hpp"
 #include "Thermostat/Thermostat.h"
@@ -44,10 +45,14 @@ namespace Logger
       pugi::xml_node node_Temp = node_Run.append_child("Temperature");
       node_Temp.append_attribute("Mean") = sampler.getMeanT();
       node_Temp.append_attribute("MeanSqr") = sampler.getMeanSqrT();
+      node_Temp.append_attribute("StdDev") = sqrt(sampler.getMeanSqrT() 
+						  - pow(sampler.getMeanT(), 2));
 
       pugi::xml_node node_U = node_Run.append_child("Potential");
       node_U.append_attribute("Mean") = sampler.getMeanU();
       node_U.append_attribute("MeanSqr") = sampler.getMeanSqrU();
+      node_U.append_attribute("StdDev") = sqrt(sampler.getMeanSqrU() 
+					       - pow(sampler.getMeanU(), 2));
       pugi::xml_node node_P = node_Run.append_child("Pressure");
       node_P.append_attribute("Mean") = sampler.getP();
  

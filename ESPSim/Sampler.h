@@ -24,9 +24,9 @@ namespace Sampler
 		     const Stepmap&);
     void terminate (const unsigned long long, const double);
     inline void changePotential (const double deltaU) 
-    { kineticEnergy -= deltaU; potentialEnergy += deltaU; }
+    { potentialEnergy += deltaU; }
     inline void changeKinetic (const double deltaKE) 
-    { kineticEnergy += deltaKE; potentialEnergy -= deltaKE; }
+    { kineticEnergy += deltaKE; }
     inline void changeMomentumFlux (double deltaP) { momentumFlux += deltaP;}
     inline double getU() const { return potentialEnergy.current() / numberParticles; }
     inline double getKE() const  { return kineticEnergy; }
