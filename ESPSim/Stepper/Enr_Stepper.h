@@ -76,11 +76,11 @@ namespace Stepper
     boost::shared_ptr<ContPotential> potential;
   };
 
-  class Enr_Average: public Stepper
+  class Enr_AverageVol: public Stepper
   {
 
   public:
-  Enr_Average(boost::shared_ptr<ContPotential> _potential) :
+  Enr_AverageVol(boost::shared_ptr<ContPotential> _potential) :
     potential(_potential) {};
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
@@ -106,7 +106,44 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
   };
-
+  class Enr_AverageEnr: public Stepper
+  {
+  public:
+  Enr_AverageEnr(boost::shared_ptr<ContPotential> _potential) :
+    potential(_potential) {};
+    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
+    {
+      boost::shared_ptr<Functor> func (new PotentialVolInt(potential) );
+      Maths::NumTech integrator;
+      for(it_step i = steps.begin(); i != steps.end(); ++i)
+	{	  
+	  double energy;
+	  if(i != steps.end() - 1)
+	    {
+	      double volume = 4.0 / 3.0 * M_PI *
+		(pow(i->first, 3) - pow((i + 1)->first, 3));
+	      energy = integrator.integrator(func, 
+					     (i + 1)->first, i->first,
+					     100);
+	      energy /= volume;
+	    }
+	  else
+	    {
+	      double volume = 4.0 / 3.0 * M_PI * pow(i->first, 3);
+	      energy = integrator.integrator(func, 
+					     0, i->first,
+					     100);
+	      energy /= volume;
+	    }
+	  i->second = energy;
+	}
+    }
+  private:
+    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
+    boost::shared_ptr<ContPotential> potential;
+  };
   class Enr_Chapela: public Stepper
   {
   public:

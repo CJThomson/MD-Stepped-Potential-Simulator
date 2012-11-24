@@ -17,8 +17,7 @@
   </SamplerSettings>
   <StepperSettings>
     <Continuous type="LennardJones_shifted" epsilon="1" sigma="1" r_cutoff="3.0"/>
-    <!-- <Discrete position="EvenEnergy" energy="Mid" core="None" noSteps="10" energyInterval="0.5"/>-->
-    <Discrete potential="HardSphere" sigma="1.0"/>
+    <Discrete position="EvenEnergy" energy="AverageEnr" core="None" noSteps="10" energyInt="0.5"/>
   </StepperSettings>
   <Output/>
 </ESPSimConfig>

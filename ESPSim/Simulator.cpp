@@ -176,8 +176,10 @@ void Simulator::initSteps()
 	stepper.reset(new Stepper::Enr_Mid(potential));
       else if (strcmp(option,"Virial") == 0 )
 	stepper.reset(new Stepper::Enr_Virial(simProperties.getT(), potential));
-      else if (strcmp(option,"Average") == 0)
-	stepper.reset(new Stepper::Enr_Average(potential));
+      else if (strcmp(option,"AverageV") == 0)
+	stepper.reset(new Stepper::Enr_AverageVol(potential));
+      else if (strcmp(option,"AverageEnr") == 0)
+	stepper.reset(new Stepper::Enr_AverageEnr(potential));
       else if (strcmp(option,"Chapela") == 0)
 	stepper.reset(new Stepper::Enr_Chapela());
       stepper->genEnergy(steps);

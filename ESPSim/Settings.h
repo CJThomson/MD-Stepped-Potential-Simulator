@@ -137,9 +137,9 @@ class SimPotential: public Settings
       ("rcut,r", boost::program_options::value<double>(),
        "Cut-off radius")
       ("steppos", boost::program_options::value<int>(),
-       "Stepped potential positions: \n\t0: Even\n\t1: Even Energy\n\t2: Exp Mean Force")
+       "Stepped potential positions: \n\t0: Even\n\t1: Even Energy\n\t2: Exp Mean Force\n\t3:Chapela")
       ("stepenr", boost::program_options::value<int>(),
-       "Stepped potential energies: \n\t0: Mid Values\n\t1: Virial")
+       "Stepped potential energies: \n\t0: Mid Values\n\t1: Virial\n\t2:Average Volume\n\t3:Volume Averaged Energy\n\t4:Chapela")
       ("stepcore", boost::program_options::value<int>(),
        "Stepped potential core: \n\t0: None\n\t1: Manual")
       ("corepos", boost::program_options::value<double>(),
@@ -168,14 +168,15 @@ class SimPotential: public Settings
       { switch (vm["steppos"].as<int>()) { 
 	case 0: stepPositions = "Even"; break;
 	case 1: stepPositions = "EvenEnergy"; break; 
-	case 2: stepPositions = "Chapela"; break; }
+	case 3: stepPositions = "Chapela"; break; }
       }
     if(vm.count("stepenr"))
       { switch (vm["stepenr"].as<int>()) { 
 	case 0: stepEnergies = "Mid"; break;
 	case 1: stepEnergies = "Virial"; break;
-	case 2: stepEnergies = "Average"; break; 
-	case 3: stepEnergies = "Chapela"; break; }
+	case 2: stepEnergies = "AverageV"; break; 
+	case 3: stepEnergies = "AverageEnr"; break; 
+	case 4: stepEnergies = "Chapela"; break; }
       }
     if(vm.count("nosteps"))
       noSteps = vm["nosteps"].as<unsigned int>();

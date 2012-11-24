@@ -44,6 +44,18 @@ class ExpForce: public Functor
   double T;
   boost::shared_ptr<ContPotential> potential;
 };
+class PotentialVolInt: public Functor
+{
+ public:
+ PotentialVolInt(boost::shared_ptr<ContPotential> _potential) :
+  potential(_potential) {};
+  virtual inline double operator()(double r)
+  {
+    return 4 * M_PI * r * r * potential->energy(r);
+  }
+ private:
+  boost::shared_ptr<ContPotential> potential;
+};
 #include "NumTech.h"
 class IntegralEq: public Functor
 {
