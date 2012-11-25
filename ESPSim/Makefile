@@ -7,12 +7,12 @@ OBJECTS=$(FILE:.cpp=.o)
 PUGI = pugixml/pugixml.o
 FLAGS=-O3
 OUT=ESPSim
-LINK=-l boost_program_options
+LINK=-lboost_program_options
 
 full: $(FILE)
 	$(COMP) $(FILE) $(PUGI) -o $(OUT) $(LINK) $(FLAGS)
 static: $(FILE)
-	$(COMP) $(FLAGS) $(FILE) $(PUGI) -o $(OUT) -Wl, -Bstatic $(LINK) -Wl, -Bdynamic
+	$(COMP) $(FLAGS) $(FILE) $(PUGI) -o $(OUT) /usr/lib64/libboost_program_options-mt-a
 sim: $(FILE) $(OUT)
 $(OUT): $(OBJECTS)
 	$(COMP) $(OBJECTS) $(PUGI) $(FLAGS) -o $(OUT) $(LINK)

@@ -7,7 +7,7 @@
   </SimProperties>
   <SimSettings>
     <EqLength time="20"/>
-    <RunLength event="1000000"/>
+    <RunLength time="50"/>
     <Runs number="1"/>
     <Thermostat type="Andersen" autoUpdate="true" thermoFreq="0.05"/>
     <NL type="Simple"/>
