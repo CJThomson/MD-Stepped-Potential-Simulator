@@ -44,6 +44,21 @@ class ExpForce: public Functor
   double T;
   boost::shared_ptr<ContPotential> potential;
 };
+class ExpEnergy: public Functor
+{
+ public:
+ ExpEnergy(double _T, boost::shared_ptr<ContPotential> _potential) :
+  T(_T), potential(_potential) {};
+  virtual inline double operator()(double r)
+  {
+    double beta = 1 /T;
+    return potential->energy(r) * exp(-beta * potential->energy(r)) * r * r;
+  }
+ private:
+  double T;
+  boost::shared_ptr<ContPotential> potential;
+};
+
 class PotentialVolInt: public Functor
 {
  public:

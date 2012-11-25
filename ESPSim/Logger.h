@@ -32,10 +32,10 @@ namespace Logger
       pugi::xml_node node_Run = node_Main.append_child(ss.str().c_str() );
  
       pugi::xml_node node_Time = node_Run.append_child("Time");
-      node_Time.append_attribute("startTime") = sampler.getStartTime();
-      node_Time.append_attribute("endTime") = sampler.getEndTime();
-      node_Time.append_attribute("Events/s") = sampler.getEventPS();
-      node_Time.append_attribute("Sim_Time/sec") = sampler.getTimePS();
+      node_Time.append_attribute("StartTime") = sampler.getStartTime();
+      node_Time.append_attribute("EndTime") = sampler.getEndTime();
+      node_Time.append_attribute("Events/sec") = sampler.getEventPS();
+      node_Time.append_attribute("SimTime/sec") = sampler.getTimePS();
      
       pugi::xml_node node_Length = node_Run.append_child("Length");
       node_Length.append_attribute("Time") = sampler.getTime();

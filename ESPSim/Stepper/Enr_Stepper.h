@@ -15,6 +15,74 @@ typedef std::vector<std::pair<double, double> >::iterator it_step;
 
 namespace Stepper
 {
+  class Enr_Mid: public Stepper
+  {
+  public:
+  Enr_Mid(boost::shared_ptr<ContPotential> _potential) :
+    potential(_potential) {};
+ 
+    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
+    {
+      for(it_step i = steps.begin(); i != steps.end(); ++i)
+	{	  
+	  double energy;
+	  if(i != steps.end() - 1)
+	    energy = potential->energy((i->first + (i + 1)->first) * 0.5);
+	  else
+	    energy = potential->energy(i->first);
+	  i->second = energy;
+	}
+    }
+  private:
+    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
+    boost::shared_ptr<ContPotential> potential;
+  };
+
+  class Enr_Left: public Stepper
+  {
+  public:
+  Enr_Left(boost::shared_ptr<ContPotential> _potential) :
+    potential(_potential) {};
+ 
+    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
+    {
+      for(it_step i = steps.begin(); i != steps.end(); ++i)
+	{	  
+	  double energy;
+	  if(i != steps.end() - 1)
+	    energy = potential->energy((i + 1)->first);
+	  else
+	    energy = potential->energy(i->first);
+	  i->second = energy;
+	}
+    }
+  private:
+    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
+    boost::shared_ptr<ContPotential> potential;
+  };
+
+  class Enr_Right: public Stepper
+  {
+  public:
+  Enr_Right(boost::shared_ptr<ContPotential> _potential) :
+    potential(_potential) {};
+ 
+    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
+    {
+      for(it_step i = steps.begin(); i != steps.end(); ++i)
+	i->second = potential->energy(i->first);
+    }
+  private:
+    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
+    boost::shared_ptr<ContPotential> potential;
+  };
+
   class Enr_Virial: public Stepper
   {
   public:
@@ -51,36 +119,11 @@ namespace Stepper
     boost::shared_ptr<ContPotential> potential;
   };
 
-  class Enr_Mid: public Stepper
-  {
-  public:
-  Enr_Mid(boost::shared_ptr<ContPotential> _potential) :
-    potential(_potential) {};
- 
-    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
-    {
-      for(it_step i = steps.begin(); i != steps.end(); ++i)
-	{	  
-	  double energy;
-	  if(i != steps.end() - 1)
-	    energy = potential->energy((i->first + (i + 1)->first) * 0.5);
-	  else
-	    energy = potential->energy(i->first);
-	  i->second = energy;
-	}
-    }
-  private:
-    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps) {}
-    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
-    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
-    boost::shared_ptr<ContPotential> potential;
-  };
-
-  class Enr_AverageVol: public Stepper
+  class Enr_AvgVol: public Stepper
   {
 
   public:
-  Enr_AverageVol(boost::shared_ptr<ContPotential> _potential) :
+  Enr_AvgVol(boost::shared_ptr<ContPotential> _potential) :
     potential(_potential) {};
  
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
@@ -106,10 +149,10 @@ namespace Stepper
     virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
   };
-  class Enr_AverageEnr: public Stepper
+  class Enr_AvgEnr: public Stepper
   {
   public:
-  Enr_AverageEnr(boost::shared_ptr<ContPotential> _potential) :
+  Enr_AvgEnr(boost::shared_ptr<ContPotential> _potential) :
     potential(_potential) {};
     virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
     {
@@ -144,6 +187,44 @@ namespace Stepper
     virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
     boost::shared_ptr<ContPotential> potential;
   };
+
+  class Enr_ExpEnr: public Stepper
+  {
+  public:
+  Enr_ExpEnr(double _T, boost::shared_ptr<ContPotential> _potential) :
+    T(_T), potential(_potential) {};
+    virtual inline void genEnergy(std::vector<std::pair<double, double> >& steps)
+    {
+      boost::shared_ptr<Functor> funcExpEnergy (new ExpEnergy(T, potential) );
+      boost::shared_ptr<Functor> funcPartition (new Partition(T, potential) );
+      Maths::NumTech integrator;
+      for(it_step i = steps.begin(); i != steps.end(); ++i)
+	{	  
+	  double energy;
+	  if(i != steps.end() - 1)
+	    {
+	      it_step j = i + 1;
+	      energy = 4.0 * M_PI / integrator.integrator(funcPartition, 
+							  j->first, i->first, 100) *
+		integrator.integrator(funcExpEnergy,j->first, i->first, 100);
+	    }
+	  else
+	    {
+	      energy = 4.0 * M_PI / integrator.integrator(funcPartition, 
+							  1e-16, i->first, 100) *
+		integrator.integrator(funcExpEnergy, 1e-16, i->first, 100);
+	    }
+	  i->second = energy;
+	}
+    }
+  private:
+    virtual inline void genPositions(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void genPotential(std::vector<std::pair<double, double> >& steps) {}
+    virtual inline void addCore(std::vector<std::pair<double, double> >& steps) {}
+    double T;
+    boost::shared_ptr<ContPotential> potential;
+  };
+
   class Enr_Chapela: public Stepper
   {
   public:

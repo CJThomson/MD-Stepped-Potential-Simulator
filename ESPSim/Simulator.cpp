@@ -174,12 +174,18 @@ void Simulator::initSteps()
       option = simPot.getStepEnergies();
       if(strcmp(option, "Mid") == 0)
 	stepper.reset(new Stepper::Enr_Mid(potential));
+      else if(strcmp(option, "Left") == 0)
+	stepper.reset(new Stepper::Enr_Left(potential));
+      else if(strcmp(option, "Right") == 0)
+	stepper.reset(new Stepper::Enr_Right(potential));
+      else if (strcmp(option,"AvgVol") == 0)
+	stepper.reset(new Stepper::Enr_AvgVol(potential));
+      else if (strcmp(option,"AvgEnr") == 0)
+	stepper.reset(new Stepper::Enr_AvgEnr(potential));
+      else if (strcmp(option,"ExpEnr") == 0)
+	stepper.reset(new Stepper::Enr_ExpEnr(simProperties.getT(), potential));
       else if (strcmp(option,"Virial") == 0 )
 	stepper.reset(new Stepper::Enr_Virial(simProperties.getT(), potential));
-      else if (strcmp(option,"AverageV") == 0)
-	stepper.reset(new Stepper::Enr_AverageVol(potential));
-      else if (strcmp(option,"AverageEnr") == 0)
-	stepper.reset(new Stepper::Enr_AverageEnr(potential));
       else if (strcmp(option,"Chapela") == 0)
 	stepper.reset(new Stepper::Enr_Chapela());
       stepper->genEnergy(steps);

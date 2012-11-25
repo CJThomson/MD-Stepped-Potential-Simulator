@@ -1,9 +1,10 @@
-* Improvements[75%]
+* Improvements[60%]
 ** DONE Rewrite Stepper base class, move parameters into derived classes
 ** DONE Use Boost Smart Pointers
 ** DONE Use iterators more consistantly rather than a combination of int/iterators/foreach
 ** TODO Add Cubic arrangement
-* New Features[20%]
+** TODO Make sure all settings are outputted to Out.config
+* New Features[16%]
 ** TODO Add Thermostat[1/3]
 - [X] Add Andersen Thermostat
 - [ ] Add Isokinetic Thermostat
@@ -32,6 +33,11 @@
 ** TODO Create Debug Code
 ** DONE Significantly Reduce Output for Cluster Scripting
 ** TODO Include event type counters
+** TODO Create a "pretend" mode to create config files
+** TODO Add new stepping modes [0/3]
+- [ ] Left Stepping heights
+- [ ] Right Stepping heights
+- [ ] Expected Energy heights
 * Bugs [100%]
 ** DONE Possible negative time interval: - confirmed
 
