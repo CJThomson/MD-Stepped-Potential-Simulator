@@ -2,22 +2,23 @@
 <ESPSimConfig>
   <SimProperties>
     <Temperature value="1.5"/>
-    <Density value="0.5"/>
+    <Density value="0.1"/>
     <NumberOfParticles value="1372"/>
   </SimProperties>
   <SimSettings>
-    <EqLength time="20"/>
+    <EqLength time="2"/>
     <RunLength time="50"/>
     <Runs number="1"/>
-    <Thermostat type="Andersen" autoUpdate="true" thermoFreq="0.05"/>
+    <Thermostat type="None" autoUpdate="true" thermoFreq="0.05"/>
     <NL type="Simple"/>
   </SimSettings>
   <SamplerSettings>
     <CollisionCounts active="true"/>
+    <RDF active="true" noBins="300" maxR="3.0" timeInt="0.05"/>
   </SamplerSettings>
   <StepperSettings>
     <Continuous type="LennardJones_shifted" epsilon="1" sigma="1" r_cutoff="3.0"/>
-    <Discrete position="EvenEnergy" energy="AverageEnr" core="None" noSteps="10" energyInt="0.5"/>
+    <Discrete position="EvenEnergy" energy="AvgEnr" core="None" noSteps="10" energyInt="0.25"/>
   </StepperSettings>
   <Output/>
 </ESPSimConfig>

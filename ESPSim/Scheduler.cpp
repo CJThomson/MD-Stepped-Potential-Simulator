@@ -27,12 +27,21 @@ namespace Scheduler
 	std::cerr << "MasterEL not correct size" << std::endl;
 	exit(3);
       }
-    if(simulator->setThermostat()->is_initialised())
+    //if thermostat is active, initialise its events
+    if(simulator->setThermostat()->is_initialised()) 
       {
 	masterEL.push_back(Event());
 	thermoPoint = masterEL.size() - 1;
 	getThermoEvent(t, eventCount);
       }
+    //if measuring RDF, initialise its events
+    if(simulator->getSettings().getSampleRDF())
+      {
+	masterEL.push_back(Event());
+	RDFPoint = masterEL.size() - 1;
+	getRDF(0);
+      }
+    
   }
   void Scheduler::initialise()
   {
@@ -108,13 +117,11 @@ namespace Scheduler
 	= Event(t + simulator->setThermostat()->getThermoTime(eventCount), 
 		-1, -1, -1, Event::THERMOSTAT);
     }
-  /*Event Scheduler::getRDF()
+  void Scheduler::getRDF(double time)
     {
-    //sampler::createRDFEvent();
-    //return Event(sampler::RDF::getTime(), -1, -1, Scheduler::Event::RDF);
+      Scheduler::masterEL[RDFPoint] = Event(time, -1, -1, -1, Event::RDF);
     }
-  */
-
+  
   double Scheduler::getInteractionTime(unsigned int p1, unsigned int p2, Event::EventType& eventType)
   {
     double t_min_out = HUGE_VAL, t_min_in = HUGE_VAL;

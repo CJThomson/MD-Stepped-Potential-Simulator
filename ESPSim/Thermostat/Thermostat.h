@@ -20,7 +20,18 @@ namespace Thermostat
   protected:
     Thermostat() {}; //constructor should never be called except by derived classes
   };
-
+  //No Thermostat
+  class None: public Thermostat
+  {
+  public:
+    None(){};
+    virtual unsigned int runThermostat(std::vector<Particle>& particles,
+				       Sampler::Sampler& sampler) {}
+    virtual double getThermoTime(unsigned long long eventCount) { return 0;}
+    virtual void initialise(const double setT, const Random& rng) {}
+    virtual bool is_initialised() { return false;}
+    virtual const char* getType() const { return "None";}
+  };
   //Andersen Thermostat
   class Andersen: public Thermostat
   {

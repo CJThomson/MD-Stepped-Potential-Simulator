@@ -85,10 +85,12 @@ namespace Scheduler
     void update (double, unsigned int); //update for one particles
     void update (double, unsigned int, unsigned int); //update for two particles
     void getThermoEvent(double, unsigned long long);
+    void getRDF(double); //update the RDF time
   private:
     size_t thermoPoint;
     size_t sentPoint;
     size_t cellPoint;
+    size_t RDFPoint;
     Simulator* simulator;
     std::vector<Event> masterEL;
     Event getMinTime (double, unsigned int);

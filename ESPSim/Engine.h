@@ -30,7 +30,7 @@ namespace Engine
     unsigned long long eventCount;
     bool equilibration;
     void handleEvent(Scheduler::Event&, Scheduler::Scheduler&, 
-		     Sampler::Sampler&, boost::shared_ptr<NL::NL> );
+		     Sampler::Sampler&, boost::shared_ptr<NL::NL>, bool);
     void handleInteraction(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler& );
     void handleSentinal(Scheduler::Event&, Scheduler::Scheduler&, Sampler::Sampler&);
     void freeStream(double, Sampler::Sampler&);

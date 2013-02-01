@@ -4,7 +4,7 @@
 ** DONE Use iterators more consistantly rather than a combination of int/iterators/foreach
 ** TODO Add Cubic arrangement
 ** TODO Make sure all settings are outputted to Out.config
-* New Features[16%]
+* New Features[25%]
 ** TODO Add Thermostat[1/3]
 - [X] Add Andersen Thermostat
 - [ ] Add Isokinetic Thermostat
@@ -34,10 +34,10 @@
 ** DONE Significantly Reduce Output for Cluster Scripting
 ** TODO Include event type counters
 ** TODO Create a "pretend" mode to create config files
-** TODO Add new stepping modes [0/3]
-- [ ] Left Stepping heights
-- [ ] Right Stepping heights
-- [ ] Expected Energy heights
+** DONE Add new stepping modes [3/3]
+- [X] Left Stepping heights
+- [X] Right Stepping heights
+- [X] Expected Energy heights
 * Bugs [100%]
 ** DONE Possible negative time interval: - confirmed
 

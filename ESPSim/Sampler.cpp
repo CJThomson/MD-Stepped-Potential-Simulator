@@ -50,29 +50,44 @@ namespace Sampler
     potentialEnergy.stream(deltaTime);
     momentumFlux.stream(deltaTime);
   }
-
-  void Sampler::sampleRDF(std::vector<Particle>& particles )
+  void Sampler::initialiseRDF(const double noBins, const double maxR, const double timeInt)
   {
-    
-    /*for(it_particle p1 = particles.begin(); p1 != particles.end(); ++p1) // loop through every particle
+    RDF_timeInt = timeInt;
+    RDF_maxR = maxR;
+    RDF_bins = noBins;
+    RDF_noReadings = 0;
+    RDF_data.clear();
+    RDF_data.resize(noBins);
+  }
+  
+  void Sampler::sampleRDF(const std::vector<Particle>& particles, const double sysLength )
+  {
+    ++RDF_noReadings;
+    double bin_per_width = RDF_bins / RDF_maxR;
+    for(unsigned int p1 = 0; p1 < particles.size(); ++p1)
+      for(unsigned int p2 = p1 + 1; p2 < particles.size(); ++p2)
+	{
+	  //Calculate the distance between two particles
+	  PBCVector<double> distance(sysLength, true, particles[p1].getR() - particles[p2].getR());
+	  if(distance.length() < RDF_maxR)
+	    {
+	      //Calculate which bin the particle pair is in
+	      int index = floor(distance.length() * bin_per_width);
+	      //and increment value
+	      ++RDF_data[index];
+	    }
+	}
+  }
+  
+  std::vector<double> Sampler::getRDF(unsigned int numberParticles, double density)
+  {
+    double deltaR = RDF_maxR / RDF_bins;
+    std::vector<double> RDF_return;
+    RDF_return.resize(RDF_data.size());
+    for(size_t i = 0; i < RDF_bins; ++ i)
       {
-	updatePosition(*p1); //update the position of the particle
-	for(it_particle p2 = p1 + 1; p2 != particles.end(); ++p2) //loop through every other particle
-	  {
-	    updatePosition(*p2); //update the postion of that particle too
-	    PBCVector<double> distance(length, true, p1->r - p2->r); //calculate the distance between the particles
-	    //applyBC(distance); //apply PBC to the distance
-	    if(distance.length() < maxR) //if the distance is less than the max radius considered
-	      {
-		int index = floor(distance.length() * noBins/ maxR); //calculate which bin the particle is in
-		if(index < 0 || index >= noBins) //if an invalid bin then send error
-		  {
-		    cerr << "ERROR: Invalid index is calcRadDist: " << index << endl;
-		    exit(1);
-		  }
-		++rdf_d[index]; //add 1 to the bin counter
-	      }
-	  }
-	  }*/
+	double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
+	RDF_return[i] = RDF_data[i] / (0.5 * numberParticles * RDF_noReadings * volShell * density);  
+      }
   }
 }

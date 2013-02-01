@@ -52,11 +52,14 @@ namespace Sampler
     inline double getTime() const { return simTime; }
     inline unsigned int getEventCount() const { return eventCnt; }
     inline double getMeanFreeTime() const { return simTime / eventCnt; }
-    inline const std::vector<CollisionCount>& getCollCount() const {return eventCounts; }
+    inline const std::vector<CollisionCount>& getCollCount() const { return eventCounts; }
+    inline const bool getRDF() const { return RDF; }
     void eventCount (const int, int,  const bool);
     void freeStream(double);
-
-    void sampleRDF(std::vector<Particle>&);
+    void initialiseRDF(const double noBins, const double maxR, const double timeInt);
+    void sampleRDF(const std::vector<Particle>&, const double);
+    std::vector<double> getRDF(const unsigned int, const double);
+    inline double getRDFTime(const double time) const { return time + RDF_timeInt; }
   private:
     //settings
     bool collCount;
@@ -77,6 +80,13 @@ namespace Sampler
     time_t endTime;
     unsigned int eventCnt;
     double simTime;
+    
+    double RDF_timeInt;
+    double RDF_maxR;
+    unsigned int RDF_bins;
+    unsigned int RDF_noReadings;
+    
+    std::vector<unsigned int> RDF_data;
     inline double calcPressure() const
     { 
       double pressure = density * temperature.mean() + mass * density * momentumFlux.current() 

@@ -4,9 +4,12 @@ namespace Engine
   void Engine::equilibrate()
   {
     equilibration = true;
-    std::cout << "\rEquilibration => Initialising Thermostat           " << std::flush;
-    simulator->setThermostat()->initialise(simulator->getTemperature(), 
-					   simulator->getRNG());
+    if(simulator->getSettings().activeThermo())
+      {
+	std::cout << "\rEquilibration => Initialising Thermostat           " << std::flush;
+	simulator->setThermostat()->initialise(simulator->getTemperature(), 
+					       simulator->getRNG());
+      }
     std::cout << "\rEquilibration => Initialising Neighbout List       " << std::flush;
     boost::shared_ptr<NL::NL> nl = loadNL();
 
@@ -23,7 +26,7 @@ namespace Engine
     while(simulator->isRunning(t, eventCount, true))
       {
 	Scheduler::Event nextEvent= eventList.getNextEvent();
-	handleEvent(nextEvent, eventList, sampler, nl);
+	handleEvent(nextEvent, eventList, sampler, nl, false);
 	unsigned int outRate = simulator->getSettings().getReducedOut() ? 1E5 : 1E3;
 	if(eventCount % outRate == 0)
 	  {
@@ -46,9 +49,12 @@ namespace Engine
     equilibration = false;
     if(firstRun)
       logger.init_Results(simulator->getSettings().getSampleColl());
-    std::cout << "\rRunning => Initialising Thermostat                " << std::flush;
-    simulator->setThermostat()->initialise(simulator->getTemperature(), 
-					   simulator->getRNG());
+    if(simulator->getSettings().activeThermo())
+      {
+	std::cout << "\rRunning => Initialising Thermostat                " << std::flush;
+	simulator->setThermostat()->initialise(simulator->getTemperature(), 
+					       simulator->getRNG());
+      }
     std::cout << "\rRunning => Initialising Neighbout List            " << std::flush;
     boost::shared_ptr<NL::NL> nl = loadNL();
     nl->initialise(simulator);
@@ -59,16 +65,21 @@ namespace Engine
     Sampler::Sampler sampler(simulator->getParticles().size(),
 			     simulator->getParticles()[0].getMass(),
 			     simulator->getDensity(), 
-			     simulator->getSettings().getSampleColl(), false);
+			     simulator->getSettings().getSampleColl(), 
+			     simulator->getSettings().getSampleRDF());
     sampler.initialise(simulator->getParticles(), simulator->getSteps(),
 		       simulator->getStepMap());
-
+    if(sampler.getRDF())
+      sampler.initialiseRDF(simulator->getSettings().getRDF_bins(), simulator->getSettings().getRDF_maxR(),
+			    simulator->getSettings().getRDF_timeInt());
+    
     std::cout << "\rRunning => Starting Simulation                    " << std::flush;
     while(simulator->isRunning(t, eventCount, false))
       {
 	Scheduler::Event nextEvent= eventList.getNextEvent();
-	handleEvent(nextEvent, eventList, sampler, nl);
+	handleEvent(nextEvent, eventList, sampler, nl, true);
 	unsigned int outRate = simulator->getSettings().getReducedOut() ? 1E5 : 1E3;
+
 	if(eventCount % outRate == 0)
 	  {
 	    if(eventCount > 2E6)
@@ -99,7 +110,8 @@ namespace Engine
     std::cout << "\rRunning => Complete                             " 
 	      << "                        " << std::flush;
   }  void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,
-			   Sampler::Sampler& sampler, boost::shared_ptr<NL::NL> nl)
+			      Sampler::Sampler& sampler, boost::shared_ptr<NL::NL> nl, 
+			      bool production)
   {
     switch (currentEvent.getEventType())
       {
@@ -109,8 +121,8 @@ namespace Engine
 	  handleInteraction(currentEvent, el, sampler);
 	  break;
 	}
-      case Scheduler::Event::SENTINAL:
-        {
+      case Scheduler::Event::SENTINAL:       
+	{
 	  handleSentinal(currentEvent, el, sampler);
 	  break;
 	}
@@ -132,6 +144,18 @@ namespace Engine
 	  break;
 	}
       case Scheduler::Event::RDF:
+	{
+	  if(production && sampler.getRDF())
+	    {
+	      freeStream(currentEvent.getCollisionTime(), sampler);
+	      sampler.sampleRDF(simulator->getParticles(), simulator->getSysLength());
+	      el.getRDF(sampler.getRDFTime(currentEvent.getCollisionTime()));
+	    }
+	  else
+	    el.getRDF(HUGE_VAL);
+
+	  break;
+	}
       case Scheduler::Event::NONE:
       default:
 	std::cerr << "ERROR: Invalid event type encountered" << std::endl;

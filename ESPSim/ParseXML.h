@@ -58,6 +58,12 @@ class parseXML
   void parseSampler(pugi::xml_node samp)
   {
     settings.setSampleColl(samp.child("CollisionCounts").attribute("active").as_bool());
+    if(samp.child("RDF").attribute("active").as_bool()) //if measuring RDF
+      {
+	settings.setSampleRDF(samp.child("RDF").attribute("noBins").as_uint(),
+			      samp.child("RDF").attribute("maxR").as_double(),
+			      samp.child("RDF").attribute("timeInt").as_double());
+      }
   }
   void parseStepper(pugi::xml_node step)
   {

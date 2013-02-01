@@ -117,7 +117,6 @@ namespace Logger
 	  node_RunLength.append_attribute("time") = simSettings.getRunTime();
 	else
 	  node_RunLength.append_attribute("event") = (unsigned int)simSettings.getRunEvent();
-
 	pugi::xml_node node_Thermostat = node_SimSet.append_child("Thermostat");
 	node_Thermostat.append_attribute("type") = simSettings.getThermostat()->getType();
 	node_Thermostat.append_attribute("AutoUpdate") = simSettings.getThermoControl();

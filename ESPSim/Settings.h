@@ -25,11 +25,16 @@ class SimSet: public Settings
   int writeOutLog;
   bool runForTime;
   bool sampleColl;
+  bool sampleRDF;
+  unsigned int RDF_bins;
+  double RDF_maxR;
+  double RDF_timeInt;
   unsigned long long simEvents;
   unsigned long long eqEvents;
   unsigned int noRuns;
   double simTime;
   double eqTime;
+  bool thermoOn;
   bool thermoControl;
   double thermoFreq;
   bool reduceOut;
@@ -47,9 +52,14 @@ class SimSet: public Settings
   inline double getEQTime() const { return eqTime; }
   inline boost::shared_ptr<Thermostat::Thermostat> getThermostat()
   { return thermostat; }
+  inline bool activeThermo() const { return thermoOn; }
   inline bool getThermoControl() const {return thermoControl; }
   inline double getThermoFreq() const { return thermoFreq; }
   inline bool getSampleColl() const { return sampleColl; }
+  inline bool getSampleRDF() const { return sampleRDF; }
+  inline unsigned int getRDF_bins() const { return RDF_bins; }
+  inline double getRDF_maxR() const { return RDF_maxR; }
+  inline double getRDF_timeInt() const { return RDF_timeInt; }
   inline unsigned int getRuns() const { return noRuns; }
   inline bool getReducedOut() const { return reduceOut; }
   inline const char* getNLType() const { return nlType.c_str(); }
@@ -57,6 +67,11 @@ class SimSet: public Settings
   //set access
   void setOutLog(int value) { writeOutLog = value; }
   void setSampleColl(bool value) { sampleColl = value; }
+  void setSampleRDF(unsigned int bins, double maxR, double timeInt) 
+  { 
+    sampleRDF = true; RDF_bins = bins; RDF_maxR = maxR; RDF_timeInt = timeInt;
+  }
+
   void setRunEvent(unsigned long long value) { simEvents = value; }
   void setEQEvent(unsigned long long value) { eqEvents = value; }
   void setRunTime(double value) { simTime = value; }
@@ -68,8 +83,16 @@ class SimSet: public Settings
   void setReducedOut(bool value) { reduceOut = value; }
   void setThermoType(const char* type) 
   { 
-    if(strcmp(type,"Andersen") == 0 )
+    if(strcmp(type, "None") == 0)
+      {
+	thermoOn = false;
+    	boost::shared_ptr<Thermostat::Thermostat> 
+	  tempThermo(new Thermostat::None()); 
+	thermostat = tempThermo;
+      }
+    else if(strcmp(type,"Andersen") == 0 )
       { 
+	thermoOn = true;
 	boost::shared_ptr<Thermostat::Thermostat> 
 	  tempThermo(new Thermostat::Andersen(thermoFreq, thermoControl)); 
 	thermostat = tempThermo;
