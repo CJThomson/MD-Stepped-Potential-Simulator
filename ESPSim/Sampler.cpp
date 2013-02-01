@@ -79,7 +79,7 @@ namespace Sampler
 	}
   }
   
-  std::vector<double> Sampler::getRDF(unsigned int numberParticles, double density)
+  std::vector<double> Sampler::calcRDF(unsigned int numberParticles, double density) const
   {
     double deltaR = RDF_maxR / RDF_bins;
     std::vector<double> RDF_return;
@@ -89,5 +89,6 @@ namespace Sampler
 	double volShell = 4.0 / 3.0 * M_PI * (pow(deltaR * (i + 1), 3) - pow(deltaR * i, 3));
 	RDF_return[i] = RDF_data[i] / (0.5 * numberParticles * RDF_noReadings * volShell * density);  
       }
+    return RDF_return;
   }
 }

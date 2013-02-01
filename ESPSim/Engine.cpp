@@ -48,7 +48,7 @@ namespace Engine
 
     equilibration = false;
     if(firstRun)
-      logger.init_Results(simulator->getSettings().getSampleColl());
+      logger.init_Results(simulator->getSettings().getSampleColl(), simulator->getSettings().getSampleRDF());
     if(simulator->getSettings().activeThermo())
       {
 	std::cout << "\rRunning => Initialising Thermostat                " << std::flush;
@@ -105,8 +105,10 @@ namespace Engine
     std::cout << "\rRunning => Logger => Writing Results            " 
 	      << "                  " << std::flush;
     sampler.terminate(eventCount, t);
-    logger.update_Results(sampler,simulator->getSettings().getSampleColl());
-    logger.write_Results(simulator->getSettings().getSampleColl());
+    bool sampleColl = simulator->getSettings().getSampleColl();
+    bool sampleRDF = simulator->getSettings().getSampleRDF();
+    logger.update_Results(sampler, simulator->getProperties(), sampleColl, sampleRDF);
+    logger.write_Results(sampleColl, sampleRDF );
     std::cout << "\rRunning => Complete                             " 
 	      << "                        " << std::flush;
   }  void Engine::handleEvent(Scheduler::Event& currentEvent, Scheduler::Scheduler& el,

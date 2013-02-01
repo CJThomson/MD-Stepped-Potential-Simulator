@@ -15,15 +15,16 @@ namespace Logger
   class Logger
   {
   public:
-    void init_Results(bool collisionStats)
+    void init_Results(bool collisionStats, bool RDFStats)
     {
       runCount = 0;
       results.append_child("ESPSimResults");
       if(collisionStats)
 	collStat.append_child("ESPSimCollisionStats");
-	
+      if(RDFStats)
+	RDFStat.append_child("ESPSimRDFStats");
     }
-    void update_Results(Sampler::Sampler& sampler, bool collisionStats)
+    void update_Results(Sampler::Sampler& sampler, SimProp properties, bool collisionStats, bool RDFStats)
     {
       ++runCount;
       pugi::xml_node node_Main = results.child("ESPSimResults");
@@ -58,12 +59,16 @@ namespace Logger
  
       if(collisionStats)
 	write_Collisions(sampler);
+      if(RDFStats)
+	write_RDF(sampler, properties);
     }
-    void write_Results(bool collisionStats)
+    void write_Results(bool collisionStats, bool RDFStats)
     {
       saveXML(results,"Results.xml");
       if(collisionStats)
 	saveXML(collStat,"CollisionStatistics.xml");
+      if(RDFStats)
+	saveXML(RDFStat, "RDFStatistics.xml");
     }
     void write_Collisions(Sampler::Sampler& sampler)
     {
@@ -86,8 +91,22 @@ namespace Logger
 	  node_collBounce.append_attribute("In") = i->getCount(4,true);
 	  node_collBounce.append_attribute("Out") = i->getCount(4,false);
 	}
-	  
-      
+    }
+    void write_RDF(Sampler::Sampler& sampler, SimProp properties)
+    {
+      std::stringstream ss;
+      ss << "run" << runCount;
+      pugi::xml_node node_Main = RDFStat.child("ESPSimRDFStats");
+      pugi::xml_node node_Run = node_Main.append_child(ss.str().c_str() );
+      std::vector<double> RDF_data = sampler.calcRDF(properties.getN(), properties.getDensity());
+      double binWidth = sampler.getBinWidth();
+      for(size_t i = 0; i < RDF_data.size(); ++i)
+	{
+	  pugi::xml_node node_Bin = node_Run.append_child("Bin");
+	  node_Bin.append_attribute("R") = i * binWidth;
+	  node_Bin.append_attribute("RDF") = RDF_data[i];
+	}
+
     }
     void write_outConfig(SimSet& simSettings, SimProp& simProperties, SimPotential& simPot)
       {
@@ -150,7 +169,8 @@ namespace Logger
       }
   private:
     pugi::xml_document results; //results document
-      pugi::xml_document collStat; //collision statistics document
+    pugi::xml_document collStat; //collision statistics document
+    pugi::xml_document RDFStat; //RDF statistics document
     unsigned int runCount;
     void saveXML(pugi::xml_document& doc, const char* name)
     {

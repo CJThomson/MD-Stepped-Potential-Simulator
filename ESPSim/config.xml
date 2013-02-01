@@ -6,8 +6,8 @@
     <NumberOfParticles value="1372"/>
   </SimProperties>
   <SimSettings>
-    <EqLength time="2"/>
-    <RunLength time="50"/>
+    <EqLength time="10"/>
+    <RunLength time="20"/>
     <Runs number="1"/>
     <Thermostat type="None" autoUpdate="true" thermoFreq="0.05"/>
     <NL type="Simple"/>

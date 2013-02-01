@@ -38,6 +38,7 @@ class Simulator
   inline double getDensity() const { return simProperties.getDensity(); } 
   inline double getTemperature() const { return simProperties.getT(); }
   inline const SimSet& getSettings() { return simSettings; }
+  inline const SimProp& getProperties() { return simProperties; }
   inline const Random& getRNG() const { return RNG; }
   bool isRunning(double, unsigned long long , bool);
   double progress(double, unsigned long long , bool);

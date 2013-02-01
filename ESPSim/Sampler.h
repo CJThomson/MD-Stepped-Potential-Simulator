@@ -58,7 +58,8 @@ namespace Sampler
     void freeStream(double);
     void initialiseRDF(const double noBins, const double maxR, const double timeInt);
     void sampleRDF(const std::vector<Particle>&, const double);
-    std::vector<double> getRDF(const unsigned int, const double);
+    std::vector<double> calcRDF(const unsigned int, const double) const;
+    inline double getBinWidth() const { return RDF_maxR / RDF_bins; }
     inline double getRDFTime(const double time) const { return time + RDF_timeInt; }
   private:
     //settings
