@@ -74,15 +74,15 @@ class parseXML
 			       childNode.attribute("sigma").as_double());
     childNode = step.child("Discrete");
     const char* pos = childNode.attribute("position").as_string();
-    if(pos == "EvenEnergy")
-      potential.setStepPositions(pos, childNode.attribute("energyInterval").as_double());
+    if(strcmp(pos, "EvenEnergy") == 0)
+      potential.setStepPositions(pos, childNode.attribute("energyInt").as_double());
     else
       potential.setStepPositions(pos, childNode.attribute("noSteps").as_uint());
     potential.setStepEnergies(childNode.attribute("energy").as_string());
     const char* core = childNode.attribute("core").as_string();
-    if(core == "Sigma")
+    if(strcmp(core, "Sigma") == 0 )
       potential.setStepCore(core, childNode.attribute("noSigma").as_uint());
-    else if(core == "Manual")
+    else if(strcmp(core, "Manual") == 0)
       potential.setStepCore(core, childNode.attribute("corePosition").as_double());
     else
       potential.setStepCore(core);
