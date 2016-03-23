@@ -134,8 +134,15 @@ biblabel=brackets,refsection=chapter]{biblatex}
 \renewcommand{\epigraphsize}{\footnotesize}
 
 %%% Nomenclature
+\RequirePackage{ifthen}
 \RequirePackage[noprefix,refpage]{nomencl} %My version of the Nomencl package
 \setlength{\nomitemsep}{-\parsep} %single line spacing nomencl
+\renewcommand{\nomgroup}[1]{%
+ \ifthenelse{\equal{#1}{A}}{\vspace{10pt} \item[\textbf{Acronyms/Terminology}]}{%
+ \ifthenelse{\equal{#1}{F}}{\vspace{10pt} \item[\textbf{Functions}]}{%
+ \ifthenelse{\equal{#1}{O}}{\vspace{10pt} \item[\textbf{Operators}]}{%
+ \ifthenelse{\equal{#1}{S}}{\vspace{10pt} \item[\textbf{Notation}]}{%
+ \ifthenelse{\equal{#1}{V}}{\vspace{10pt} \item[\textbf{Variables/Constants}]}{}}}}}}
 
 %%% Stop links being colored in the pdf, place
 \RequirePackage{color}
